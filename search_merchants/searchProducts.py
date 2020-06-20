@@ -49,7 +49,7 @@ def getSearchResults(mysql,name,merchantid,search_option,filters,radius):
     else:
         merchant=name
         if filters:
-            cur.execute("SELECT distinct Location,Merchant.MerchantID,Merchant.Name from Merchant,Product,Offer,OfferOnProduct WHERE Merchant.Name LIKE %s and Merchant.MerchantID <> %s and Product.MerchantID=Merchant.MerchantID and Product.ProductID = OfferOnProduct.ProductID and OfferOnProduct.offerID = Offer.offerID and CURDATE()<=ValidTill and Location.MerchantID=Merchant.MerchantID", ("%"+merchant+"%", merchantid))
+            cur.execute("SELECT distinct LocationID, Latitude, Longitude ,Merchant.MerchantID,Merchant.Name from Location,Merchant,Product,Offer,OfferOnProduct WHERE Merchant.Name LIKE %s and Merchant.MerchantID <> %s and Product.MerchantID=Merchant.MerchantID and Product.ProductID = OfferOnProduct.ProductID and OfferOnProduct.offerID = Offer.offerID and CURDATE()<=ValidTill and Location.MerchantID=Merchant.MerchantID", ("%"+merchant+"%", merchantid))
             data = list(cur.fetchall())
         else:
             # add exact matches then based on name then see similarity in name
