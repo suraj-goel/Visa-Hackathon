@@ -20,13 +20,14 @@ def login():
 @app.route('/search', methods=['POST','GET'])
 def showAll():
     currentMerchantID = 2
+    merchants = getAllMerchants(mysql, currentMerchantID)
     if request.method == "POST":
         product = request.form['product']
         data=getSearchResults(mysql,product, currentMerchantID)
-        return render_template('./search_merchants/search.html', data=data,product=product)
+        return render_template('./search_merchants/search.html', data=data,product=product,merchants=merchants)
     # get the currentMerchantID from session.
-    print(getAllMerchants(mysql,currentMerchantID))
-    return render_template("./search_merchants/search.html")
+
+    return render_template("./search_merchants/search.html",merchants=merchants)
 
 
 @app.route('/home/place_order')

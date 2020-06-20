@@ -1,7 +1,7 @@
 {% include "./common/header.html" %}
        <link rel="stylesheet" href= "{{ url_for('static',filename='./search_merchants/search_style.css') }}">
 <body>
-        <h1><center>Merchants</center></h1>
+        <h1><center>Nearby merchants</center></h1>
          <center>
         <form class="example" method="post" action=""
          style="margin:auto;max-width:600px">
@@ -9,6 +9,7 @@
             <button type="submit"><i class="fa fa-search"></i>
             </button>
         </form>
+                <div id="map"></div>
         <p>
             {% if product %}
              Search result for {{product}} <br>
@@ -33,3 +34,56 @@
         </center>
     </body>
 </html>
+
+ <script>
+        var data = '{{ merchants|tojson }}';
+        var jsonData = JSON.parse(data);
+
+        function initMap() {
+
+            var india = {
+                lat: 20.5937,
+                lng: 78.9629
+            };
+            var map;
+            if (jsonData.length == 0)
+                map = new google.maps.Map(
+                    document.getElementById('map'), {
+                        zoom: 4,
+                        center: india
+                    });
+            else
+                map = new google.maps.Map(
+                    document.getElementById('map'), {
+                        zoom: 7,
+                        center: {
+                            lat: parseFloat(jsonData[0].Latitude),
+                            lng: parseFloat(jsonData[0].Longitude)
+                        }
+                    });
+
+
+            var infowindow = new google.maps.InfoWindow();
+
+            var marker, i;
+
+            for (i = 0; i < jsonData.length; i++) {
+                marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(parseFloat(jsonData[i].Latitude), parseFloat(jsonData[i].Longitude)),
+                    map: map
+                });
+
+
+
+                google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                    return function() {
+                        infowindow.setContent(jsonData[i].RegisteredName);
+                        infowindow.open(map, marker);
+                    }
+                })(marker, i));
+            }
+
+
+        }
+    </script>
+ <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAntxrxhQu11TxFD9wEe7JxxW1UZ0HQXRY&callback=initMap"></script>

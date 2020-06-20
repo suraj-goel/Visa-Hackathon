@@ -1,4 +1,9 @@
 /* CSS for search file */
+#map {
+            height: 400px;
+            width: 100%;
+        }
+
 body {
   font-family: Arial;
 }
