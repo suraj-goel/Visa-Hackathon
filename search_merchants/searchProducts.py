@@ -1,3 +1,6 @@
+from builtins import list, len
+
+
 def getSearchResults(mysql,product,merchantid,filters=False):
     cur = mysql.connection.cursor()
 
@@ -25,7 +28,7 @@ def getSearchResults(mysql,product,merchantid,filters=False):
         product_tags=product.split(" ")
         if len(product_tags)>1:
             for i in product_tags:
-                cur.execute("SELECT * from Merchant,Product WHERE Category LIKE %s and MerchantID <> %s", ( i,merchantid))
+                cur.execute("SELECT * from Merchant,Product WHERE Category LIKE %s and Product.MerchantID <> %s", ( i,merchantid))
                 x=list(cur.fetchall())
                 data.extend(x)
 

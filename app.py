@@ -1,28 +1,22 @@
 import jinja2
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from services.db.db_connection import set_connection
 from search_merchants.searchMerchant import getAllMerchants
 from place_order.displayProduct import displayAllProducts
+from search_merchants.searchProducts import getSearchResults
 app=Flask(__name__)
 
-app = Flask(__name__,static_folder = 'common')
+app = Flask(__name__,static_folder = '')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader,jinja2.FileSystemLoader(['.'])])
 
 
 mysql = set_connection(app)
 
-@app.route('/')
-def index():
-    cur = mysql.connection.cursor()
-    cur.execute("select * from hello;")
-    a=cur.fetchall()
-    cur.close()
-    return render_template("./manage_inventory/inventory.html", name=a[1]['name'])
-
 @app.route('/login')
 def login():
     return render_template("./login_registration/login.html")
 
+@app.route('/' ,methods=['POST','GET'])
 @app.route('/search', methods=['POST','GET'])
 def showAll():
     currentMerchantID = 2
