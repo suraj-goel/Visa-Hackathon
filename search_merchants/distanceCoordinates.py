@@ -8,3 +8,4 @@ def distanceInKMBetweenCoordinates(lat1,long1,lat2,long2):
     a = math.sin(dLat/2) * math.sin(dLat/2) + math.sin(dLon/2) * math.sin(dLon/2) * math.cos(lat1) * math.cos(lat2)
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
     return earthRadiusKm * c
+    

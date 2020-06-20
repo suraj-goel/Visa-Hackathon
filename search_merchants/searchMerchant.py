@@ -5,9 +5,10 @@ def getAllMerchants(mysql,merchantID,radius=100):
     cur.execute("select Latitude,Longitude FROM Location WHERE MerchantID = " + str(merchantID))
     a=cur.fetchall()
     currentLatitude = float(a[0]["Latitude"])
-    print(currentLatitude)
+    
     currentLongitude = float(a[0]["Longitude"])
     cur.close()
+
     
     cur = mysql.connection.cursor()
     cur.execute("select LocationID,Latitude,Longitude,Merchant.MerchantID,Name,RegisteredName,EmailID,ContactNumber from Location INNER JOIN Merchant ON Location.MerchantID =Merchant.MerchantID;")
