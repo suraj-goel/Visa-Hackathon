@@ -1,21 +1,113 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+    <!-- <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="../common/css/style.css" /> -->
+
+    <title>Place Order</title>
+
     <style>
         body {
             color: black;
         }
+        
+        input {
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        
+        h2 {
+            text-align: center;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        th,
+        td {
+            text-align: left;
+            padding: 8px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2
+        }
+        
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
     </style>
+</head>
 
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-    </head>
+<body>
+    <h2> Place your Orders here </h2>
+    <table align="center" id="table" border="1">
+    </table>
+    <p id="showData"></p>
 
-    <body>
-        You have searched
-    </body>
+    <script>
+        var data = '{{ products|tojson }}';
+        var jsonData = JSON.parse(data);
+
+        console.log(data);
+        console.log("Parsed value");
+        console.log(jsonData);
+        console.log(jsonData[0].length);
+
+        var cols = ["ProductID", "Name", "Description", "Price", "Quantity", "Category", "Add"];
+        console.log(cols);
+
+        // Create a table element 
+        var table = document.createElement("table");
+
+        // Create table row tr element of a table 
+        var tr = table.insertRow(-1);
+
+        for (var i = 0; i < cols.length; i++) {
+
+            // Create the table header th element 
+            var theader = document.createElement("th");
+            theader.innerHTML = cols[i];
+
+            // Append columnName to the table row 
+            tr.appendChild(theader);
+        }
+
+        // Adding the data to the table 
+        for (var i = 0; i < jsonData.length; i++) {
+
+            // Create a new row 
+            trow = table.insertRow(-1);
+            for (var j = 0; j < cols.length; j++) {
+                var cell = trow.insertCell(-1);
+
+                // Inserting the cell at particular place 
+                cell.innerHTML = jsonData[i][cols[j]];
+            }
+
+            var x = document.createElement("input");
+            x.setAttribute("type", "number");
+            x.setAttribute("value", "0");
+            x.setAttribute("min", "0");
+            // document.body.appendChild(x);
+            cell.innerHTML = "";
+            cell.appendChild(x);
+
+        }
+
+        // Add the newely created table containing json data 
+        var el = document.getElementById("table");
+        el.innerHTML = "";
+        el.appendChild(table);
+        // el.className += "tableStyle";
+    </script>
+
+</body>
 
 </html>

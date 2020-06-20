@@ -36,8 +36,10 @@ def showAll():
 def showPlaceOrder():
     currentSelectedMerchantID = 1
     # get the currentSelectedMerchantID from session. 
-    print(displayAllProducts(mysql, currentSelectedMerchantID))
-    return render_template("./place_order/place_order.html")
+    products = displayAllProducts(mysql, currentSelectedMerchantID)
+    for r in products:
+        print(r)
+    return render_template("./place_order/place_order.html", products = products)
 
 
 if __name__ == '__main__':
