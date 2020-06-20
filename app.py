@@ -23,13 +23,16 @@ def index():
 def login():
     return render_template("./login_registration/login.html")
 
-@app.route('/home')
+@app.route('/search', methods=['POST','GET'])
 def showAll():
-    currentMerchantID = 1
-    # get the currentMerchantID from session. 
-    merchants = getAllMerchants(mysql,currentMerchantID)
-    print(merchants)
-    return render_template("./merchant_home_page/home.html",merchants = merchants)
+    currentMerchantID = 2
+    if request.method == "POST":
+        product = request.form['product']
+        data=getSearchResults(mysql,product, currentMerchantID)
+        return render_template('./search_merchants/search.html', data=data,product=product)
+    # get the currentMerchantID from session.
+    print(getAllMerchants(mysql,currentMerchantID))
+    return render_template("./search_merchants/search.html")
 
 
 @app.route('/home/place_order')
