@@ -1,5 +1,6 @@
 /*Styling links*/
-navbar a{
+
+navbar a {
     font-size: 16px;
     font-weight: 300;
     font-family: "Montserrat", sans-serif;
@@ -9,28 +10,34 @@ navbar a{
     -o-transition: all 0.2s ease;
     transition: all 0.2s ease;
     padding: 10px;
-    -webkit-border-radius:2px;
-    -moz-border-radius:2px;
-    border-radius:2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    cursor:pointer;
+    cursor: pointer;
     margin: 4px;
 }
-navbar a:hover, navbar a:active, navbar a{
+
+navbar a:hover,
+navbar a:active,
+navbar a {
     text-decoration: none;
-    color: rgba(0,0,0,0.6);
+    color: rgba(0, 0, 0, 0.6);
 }
-navbar a:hover{
-    background: rgba(0,0,0,0.06);
+
+navbar a:hover {
+    background: rgba(0, 0, 0, 0.06);
 }
-navbar a:active{
-    color: rgba(0,0,0,0.9);
-    background: rgba(0,0,0,0.1);
+
+navbar a:active {
+    color: rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.1);
 }
-navbar a{
+
+navbar a {
     color: white;
     font-family: "Montserrat", sans-serif;
     font-weight: 500;
@@ -38,27 +45,34 @@ navbar a{
     float: right;
 }
 
+
 /*Shadow*/
+
 navbar .paper-shadow-bottom-z-2 {
-    box-shadow: 0 8px 17px 0 rgba(0,0,0,.2);
+    box-shadow: 0 8px 17px 0 rgba(0, 0, 0, .2);
 }
 
+
 /*Setting Up Navbar Layouts*/
-navbar .navbar-inverse{
+
+navbar .navbar-inverse {
     color: #5bc0de;
     background: black;
-    border:none;
+    border: none;
     min-height: 50px;
     max-height: 50px;
     height: 50px;
 }
-navbar .container-fluid{
+
+navbar .container-fluid {
     position: absolute;
-    top:0; bottom: 0;
-    right:0;
-    left:0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
 }
-navbar .navbar-body{
+
+navbar .navbar-body {
     display: flex;
     display: -webkit-flex;
     flex-direction: row;
@@ -68,12 +82,14 @@ navbar .navbar-body{
     height: 100%;
     position: relative;
 }
-navbar div.navbar-end{
+
+navbar div.navbar-end {
     align-items: flex-start;
     -webkit-align-items: flex-start;
 }
+
 navbar div.navbar-start,
-navbar div.navbar-end{
+navbar div.navbar-end {
     flex: 1;
     -webkit-flex: 1;
     display: flex;
@@ -83,73 +99,81 @@ navbar div.navbar-end{
     -webkit-align-items: center;
     justify-content: space-around;
 }
-navbar div.navbar-start .logo{
+
+navbar div.navbar-start .logo {
     opacity: 0.6;
-    width:30px;
+    width: 30px;
 }
 
+
 /*Integrating Two Navbars Together*/
-navbar .nav{
+
+navbar .nav {
     z-index: 1;
 }
-navbar .tabs{
+
+navbar .tabs {
     margin-top: 50px;
     z-index: 1;
     position: relative;
 }
-navbar .tabs .navbar-body{
+
+navbar .tabs .navbar-body {
     padding: 0;
     margin-bottom: 0;
 }
 
-
-
-navbar .ico-btn{
+navbar .ico-btn {
     position: relative;
     width: 30px;
-    height:30px;
-    -webkit-border-radius:50%;
-    -moz-border-radius:50%;
-    border-radius:50%;
-    padding:5px;
+    height: 30px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    padding: 5px;
 }
-navbar .ico-btn.search-btn, .ico-btn.clear-btn{
-    padding:2px;
+
+navbar .ico-btn.search-btn,
+.ico-btn.clear-btn {
+    padding: 2px;
     margin: 1px;
     opacity: 0;
     visibility: hidden;
-
 }
-navbar .ico-btn.clear-btn{
+
+navbar .ico-btn.clear-btn {
     margin-right: -30px;
-    -webkit-animation:0.3s SwiftSlideToRight cubic-bezier(0.21, 0.61, 0.36, 1) 0.2s;
-    -o-animation:0.3s SwiftSlideToRight cubic-bezier(0.21, 0.61, 0.36, 1) 0.2s;
-    animation:0.3s SwiftSlideToRight cubic-bezier(0.21, 0.61, 0.36, 1) 0.2s;
+    -webkit-animation: 0.3s SwiftSlideToRight cubic-bezier(0.21, 0.61, 0.36, 1) 0.2s;
+    -o-animation: 0.3s SwiftSlideToRight cubic-bezier(0.21, 0.61, 0.36, 1) 0.2s;
+    animation: 0.3s SwiftSlideToRight cubic-bezier(0.21, 0.61, 0.36, 1) 0.2s;
     -webkit-animation-delay: 0.2s;
     -moz-animation-delay: 0.2s;
     -o-animation-delay: 0.2s;
     animation-delay: 0.2s;
 }
-navbar div.search.focused.not-null.multi-char .ico-btn.clear-btn{
+
+navbar div.search.focused.not-null.multi-char .ico-btn.clear-btn {
     margin-right: 0;
     opacity: 1;
     visibility: visible;
-    -webkit-animation:0.3s SwiftSlide cubic-bezier(0.21, 0.61, 0.36, 1);
-    -o-animation:0.3s SwiftSlide cubic-bezier(0.21, 0.61, 0.36, 1);
-    animation:0.3s SwiftSlide cubic-bezier(0.21, 0.61, 0.36, 1);
+    -webkit-animation: 0.3s SwiftSlide cubic-bezier(0.21, 0.61, 0.36, 1);
+    -o-animation: 0.3s SwiftSlide cubic-bezier(0.21, 0.61, 0.36, 1);
+    animation: 0.3s SwiftSlide cubic-bezier(0.21, 0.61, 0.36, 1);
     -webkit-animation-delay: 0.2s;
     -moz-animation-delay: 0.2s;
     -o-animation-delay: 0.2s;
     animation-delay: 0.2s;
 }
-navbar .ico-btn{
+
+navbar .ico-btn {
     -webkit-transition: all 0.2s cubic-bezier(0.21, 0.61, 0.36, 1);
     -moz-transition: all 0.2s cubic-bezier(0.21, 0.61, 0.36, 1);
     -ms-transition: all 0.2s cubic-bezier(0.21, 0.61, 0.36, 1);
     -o-transition: all 0.2s cubic-bezier(0.21, 0.61, 0.36, 1);
     transition: all 0.2s cubic-bezier(0.21, 0.61, 0.36, 1);
 }
-navbar div.search.focused.not-null .ico-btn.search-btn{
+
+navbar div.search.focused.not-null .ico-btn.search-btn {
     visibility: visible;
     opacity: 1;
     -webkit-transition-duration: 0.6s;
@@ -159,32 +183,41 @@ navbar div.search.focused.not-null .ico-btn.search-btn{
     transition-duration: 0.6s;
 }
 
+
 /*Styling Tabs*/
-navbar .tabs .navbar-body li.active a{
+
+navbar .tabs .navbar-body li.active a {
     color: yellow;
 }
-navbar .tabs .navbar-body li{
+
+navbar .tabs .navbar-body li {
     -webkit-transition: all 0.2s cubic-bezier(0.21, 0.61, 0.36, 1);
     -moz-transition: all 0.2s cubic-bezier(0.21, 0.61, 0.36, 1);
     -ms-transition: all 0.2s cubic-bezier(0.21, 0.61, 0.36, 1);
     -o-transition: all 0.2s cubic-bezier(0.21, 0.61, 0.36, 1);
     transition: all 0.2s cubic-bezier(0.21, 0.61, 0.36, 1);
 }
-navbar .tabs .navbar-body li:hover{
-    background: rgba(0,0,0,0.02);
+
+navbar .tabs .navbar-body li:hover {
+    background: rgba(0, 0, 0, 0.02);
 }
-navbar .tabs .navbar-body li:active{
-    background: rgba(0,0,0,0.05);
+
+navbar .tabs .navbar-body li:active {
+    background: rgba(0, 0, 0, 0.05);
 }
-navbar .tabs .navbar-body li a:hover, .tabs .navbar-body li a:active{
-    background: rgba(0,0,0,0);
+
+navbar .tabs .navbar-body li a:hover,
+.tabs .navbar-body li a:active {
+    background: rgba(0, 0, 0, 0);
     color: #5bc0de;
 }
 
+
 /*Styling Tab Highlighter*/
-navbar .tab-highlighter{
-    height:2px;
-    color:yellow;
+
+navbar .tab-highlighter {
+    height: 2px;
+    color: yellow;
     width: 50px;
     margin-top: -2px;
     background: white;
@@ -196,21 +229,19 @@ navbar .tab-highlighter{
     transition: all 0.6s cubic-bezier(0.21, 0.61, 0.36, 1);
 }
 
+
 /*Keyframes*/
+
 @keyframes SwiftSlide {
-    100%{
+    100% {
         margin-right: 0;
         opacity: 1;
     }
 }
+
 @keyframes SwiftSlideToRight {
-    100%{
-        opacity:0;
+    100% {
+        opacity: 0;
         margin-right: -30px;
     }
 }
-
-
-
-
-
