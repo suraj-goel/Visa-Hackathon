@@ -1,13 +1,23 @@
-{% include "./common/header.html" %}
-       <link rel="stylesheet" href= "{{ url_for('static',filename='./search_merchants/search_style.css') }}">
+  <link rel="stylesheet" href= "{{ url_for('static',filename='./search_merchants/search_style.css') }}">
 <body>
         <h1><center>Nearby merchants</center></h1>
          <center>
         <form class="example" method="post" action=""
          style="margin:auto;max-width:600px">
-            <input type="text" placeholder="Search by product name" name="product">
+
+            <select name="search">
+    <option value="product">Search by Product</option>
+    <option value="merchant">Search by merchant</option> <br>
+  </select><br>
+
+<input type="number" name="radius" placeholder="Search radius in km">
+            <br><br>
+              <input type="checkbox"  name="offerbox" value="True">
+  <label > Only display results of merchants who give offers</label><br>
+            <input type="text" placeholder="Search by product name" name="name">
             <button type="submit"><i class="fa fa-search"></i>
             </button>
+
         </form>
                 <div id="map"></div>
         <p>
@@ -17,13 +27,13 @@
             <table border="1">
              <tr>
                  <th>Name</th>
-                 <th>Product</th>
-                 <th>Category</th>
+                {% if search_option=='product' %}  <th>Product</th> 
+                 <th>Category</th>{% endif %}
              </tr>
         {% for item in data %}
             <tr>
                 <td> {{item['Name']}}</td>
-                <td> {{item['Product.Name']}}</td>
+             {% if search_option=='product' %}   <td> {{item['Product.Name']}}</td> {% endif %}
 <td> {{item['Category']}}</td>
                 </br>
             </tr>
