@@ -5,20 +5,9 @@
          <center>
         <form class="example" method="post" action=""
          style="margin:auto;max-width:600px">
-
-            <select name="search">
-    <option value="product">Search by Product</option>
-    <option value="merchant">Search by merchant</option> <br>
-  </select><br>
-
-<input type="number" name="radius" placeholder="Search radius in km">
-            <br><br>
-              <input type="checkbox"  name="offerbox" value="True">
-  <label > Only display results of merchants who give offers</label><br>
-            <input type="text" placeholder="Search by product name" name="name">
+            <input type="text" placeholder="Search by product name" name="product">
             <button type="submit"><i class="fa fa-search"></i>
             </button>
-
         </form>
                 <div id="map"></div>
         <p>
@@ -86,16 +75,27 @@
                 if(parseInt(jsonData[i].distance)===0){
                   
                     marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png')
-                }else{
-                    console.log(jsonData[i]);
                 }
                     
-                
-
-                google.maps.event.addListener(marker, 'click', (function(marker, i) {
+              
+                google.maps.event.addListener(marker, 'mouseover', (function(marker, i) {
                     return function() {
                         infowindow.setContent(jsonData[i].RegisteredName);
                         infowindow.open(map, marker);
+                    }
+                })(marker, i));
+
+                google.maps.event.addListener(marker, 'mouseout', (function(marker, i) {
+                    return function() {
+                        infowindow.close();
+                    }
+                })(marker, i));
+            
+
+                google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                    return function() {
+                        if(parseInt(jsonData[i].distance)!==0)
+                        window.location.href = '/merchant/'+jsonData[i].MerchantID;
                     }
                 })(marker, i));
             }
