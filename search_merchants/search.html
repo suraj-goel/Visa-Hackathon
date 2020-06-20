@@ -72,8 +72,14 @@
                     position: new google.maps.LatLng(parseFloat(jsonData[i].Latitude), parseFloat(jsonData[i].Longitude)),
                     map: map
                 });
-
-
+                if(parseInt(jsonData[i].distance)===0){
+                  
+                    marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png')
+                }else{
+                    console.log(jsonData[i]);
+                }
+                    
+                
 
                 google.maps.event.addListener(marker, 'click', (function(marker, i) {
                     return function() {
