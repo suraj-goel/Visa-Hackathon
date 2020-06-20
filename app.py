@@ -26,8 +26,8 @@ def showAll():
         filter=request.form.get('offerbox')
         radius=request.form['radius']
         product = request.form['name']
-        data=getSearchResults(mysql,product, currentMerchantID,search_option,filter)
-        return render_template('./search_merchants/search.html', data=data,product=product,merchants=merchants,radius=radius)
+        data=getSearchResults(mysql,product, currentMerchantID,search_option,filter, radius)
+        return render_template('./search_merchants/search.html', data=data, product=product, merchants=merchants , search_option=search_option)
     # get the currentMerchantID from session.
 
     return render_template("./search_merchants/search.html",merchants=merchants)
@@ -46,3 +46,4 @@ def showPlaceOrder():
 if __name__ == '__main__':
     #threaded allows multiple users (for hosting)
     app.run(debug=True,threaded=True, port=5000)
+
