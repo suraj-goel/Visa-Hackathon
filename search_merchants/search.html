@@ -5,9 +5,20 @@
          <center>
         <form class="example" method="post" action=""
          style="margin:auto;max-width:600px">
-            <input type="text" placeholder="Search by product name" name="product">
+
+            <select name="search">
+    <option value="product">Search by Product</option>
+    <option value="merchant">Search by merchant</option> <br>
+  </select><br>
+
+<input type="number" name="radius" placeholder="Search radius in km">
+            <br><br>
+              <input type="checkbox"  name="offerbox" value="True">
+  <label > Only display results of merchants who give offers</label><br>
+            <input type="text" placeholder="Search by product name" name="name">
             <button type="submit"><i class="fa fa-search"></i>
             </button>
+
         </form>
                 <div id="map"></div>
         <p>

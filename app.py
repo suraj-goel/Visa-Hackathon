@@ -22,9 +22,12 @@ def showAll():
     currentMerchantID = 2
     merchants = getAllMerchants(mysql, currentMerchantID)
     if request.method == "POST":
-        product = request.form['product']
-        data=getSearchResults(mysql,product, currentMerchantID)
-        return render_template('./search_merchants/search.html', data=data,product=product,merchants=merchants)
+        search_option = request.form['search']
+        filter=request.form.get('offerbox')
+        radius=request.form['radius']
+        product = request.form['name']
+        data=getSearchResults(mysql,product, currentMerchantID,search_option,filter)
+        return render_template('./search_merchants/search.html', data=data,product=product,merchants=merchants,radius=radius)
     # get the currentMerchantID from session.
 
     return render_template("./search_merchants/search.html",merchants=merchants)
