@@ -12,10 +12,12 @@ def getSearchResults(mysql,name,merchantid,search_option,filters,radius):
                         ("%" + product + "%", "%" + product + "%", merchantid))
             data = list(cur.fetchall())
             print(data)
+
             # similar category search
             product_tags = product.split(" ")
             if len(product_tags) > 1:
                 for i in product_tags:
+
                     cur.execute("SELECT * from Location,Merchant,Product,Offer,OfferOnProduct WHERE Category LIKE %s and MerchantID <> %s and Product.ProductID = OfferOnProduct.ProductID and OfferOnProduct.offerID = Offer.offerID and CURDATE()<=ValidTill and Location.MerchantID=Merchant.MerchantID", (i, merchantid))
                     x = list(cur.fetchall())
                     data.extend(x)
