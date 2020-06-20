@@ -19,6 +19,7 @@ def login():
 @app.route('/' ,methods=['POST','GET'])
 @app.route('/search', methods=['POST','GET'])
 def showAll():
+    # get the currentMerchantID from session.
     currentMerchantID = 2
     merchants = getAllMerchants(mysql, currentMerchantID)
     if request.method == "POST":
@@ -28,8 +29,6 @@ def showAll():
         product = request.form['name']
         data=getSearchResults(mysql,product, currentMerchantID,search_option,filter, radius)
         return render_template('./search_merchants/search.html', data=data, product=product, merchants=merchants , search_option=search_option)
-    # get the currentMerchantID from session.
-
     return render_template("./search_merchants/search.html",merchants=merchants)
 
 
