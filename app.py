@@ -33,13 +33,11 @@ def showAll():
 
 
 
-@app.route('/place_order')
-def showPlaceOrder():
-    currentSelectedMerchantID = 1
-    # get the currentSelectedMerchantID from session. 
+@app.route('/merchant/<merchant_id>')
+def showPlaceOrder(merchant_id):
+    currentSelectedMerchantID = merchant_id
+    # get the currentSelectedMerchantID from function
     products = displayAllProducts(mysql, currentSelectedMerchantID)
-    for r in products:
-        print(r)
     return render_template("./place_order/place_order.html", products = products)
 
 
