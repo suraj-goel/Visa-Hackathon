@@ -10,7 +10,7 @@ def displayAllProducts(mysql,selectedMerchant):
     currentQuantity = str(a[0]["Quantity"])
     currentCategory = str(a[0]["Category"])
 
-    print("\n1st row ->", currentProductID, currentName, currentDescription, currentPrice, currentQuantity, currentCategory, "\n")
+    # print("\n1st row ->", currentProductID, currentName, currentDescription, currentPrice, currentQuantity, currentCategory, "\n")
     cur.close()
     
     productList = []
@@ -32,3 +32,9 @@ def displayAllProducts(mysql,selectedMerchant):
         productList.append(temp)
         
     return productList
+
+def displayAllOffers(mysql, selectedMerchant):
+    # cur = mysql.connection.cursor()
+    # cur.execute("select ProductID, Name, Description, Price, Quantity, Category FROM Product WHERE MerchantID = " + str(selectedMerchant))
+    # a=cur.fetchall()
+    return []

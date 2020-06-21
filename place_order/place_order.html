@@ -24,7 +24,7 @@
                 <td> {{item['Price']}} </td>
                 <td> {{item['Quantity']}} </td>
                 <td> {{item['Category']}} </td>
-                <td> <input type="number" min="0" value="0"> </td>
+                <td> <input type="number" value="0" min="0" max={{item[ 'Quantity']}}> </td>
             </tr>
             {% endfor %}
         </table>
