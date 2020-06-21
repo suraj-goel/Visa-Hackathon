@@ -24,32 +24,28 @@
                 <td> {{item['Description']}} </td>
                 <td> {{item['Price']}} </td>
 
-                {% if offers %}
                 <td>
+
+                    {% if offers[item['ProductID']]|length > 0 %}
                     <select name="offerOptions" id="offerOptions">
-
-                        {% for row in offers %}
-                        {% if item['ProductID'] == row['ProductID'] %}
-                        {% for offer in row['OffersAvailable'] %}
-                        
-                        <option value={{offer[OfferID]}}> {{offer['OfferID']}} </option>
-                        
+                        {% for offer in offers[item['ProductID']] %}
+                        <option value={{offers[OfferID]}}> {{offer['OfferID']}} </option>
                         {% endfor %}
-                        {% endif %}
-                        {% endfor %}
+                    </select> {% else %} {{"No offers"}} {% endif %}
 
-                    </select>
                 </td>
-                {% endif %}
 
                 <td> {{item['Quantity']}} </td>
                 <td> {{item['Category']}} </td>
-                <td> <input type="number" value="0" min="0" max={{item[ 'Quantity']}}> </td>
+                <td> <input name="qty" id="qty" type="number" min="0" max={{item[ 'Quantity']}} step="1"> </td>
             </tr>
             {% endfor %}
         </table>
     </div>
     {% endif %}
 </body>
+
+<script>
+</script>
 
 </html>
