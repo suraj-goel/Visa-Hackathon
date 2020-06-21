@@ -1,74 +1,5 @@
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./search_merchants/search_style.css') }}">
-
-<head>
-    <style>
-        body {
-            color: black;
-        }
-        
-        input {
-            padding: 6px 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        
-        h2 {
-            text-align: center;
-        }
-        
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            max-width: 800px;
-        }
-        
-        th,
-        td {
-            text-align: left;
-            padding: 8px;
-        }
-        
-        tr:nth-child(even) {
-            background-color: #f2f2f2
-        }
-        
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
-        
-        .collapsible {
-            background-color: #777;
-            color: white;
-            cursor: pointer;
-            padding: 8px;
-            margin: 10px;
-            /* width: 100%; */
-            border: none;
-            text-align: center;
-            align-items: center;
-            align-content: center;
-            vertical-align: middle;
-            text-align-last: center;
-            outline: none;
-            font-size: 15px;
-        }
-        
-        .active,
-        .collapsible:hover {
-            background-color: #555;
-        }
-        
-        .content {
-            padding: 0 18px;
-            display: block;
-            overflow: hidden;
-            background-color: #f1f1f1;
-        }
-    </style>
-</head>
-
 <body>
     <h1>
         <center>Nearby merchants</center>
@@ -91,50 +22,44 @@
 
         </form>
         <div id="map"></div>
-        <button type="button" class="collapsible" id="HideTrigger">Hide Results</button>
-        <p>
-            {% if product %} Search result for {{product}} <br>
+{% if product %} Search result for {{product}}
+<div class="container">
+  <table class="table table-bordered">
+      {% for item in data %}
+    <tr class="header">
+      <td colspan="2"><h3>{{item['Name']}}</h3><br>{% if search_option=='product' %}<br>{{item['Product.Name']}} {% endif %}</td>
+    </tr>
+      {% if item['Offers'] %}
+       {% for x in item['Offers'] %}
+    <tr>
+      <td>{{x}}</td>
+      <td>Discount</td>
+    </tr>
+       {% endfor %}
+      {% else %}
+      <tr>
+      <td>No discounts available</td>
+          </tr>
+      {% endif %}
 
-            <table border="1" class="hiddenContent">
-                <tr>
-                    <th>Name</th>
-                    {% if search_option=='product' %}
-                    <th>Product</th>
-                    <th>Category</th>{% endif %}
-                </tr>
-                {% for item in data %}
-                <tr>
-                    <td> {{item['Name']}}</td>
-                    {% if search_option=='product' %}
-                    <td> {{item['Product.Name']}}</td> {% endif %}
-                    <td> {{item['Category']}}</td>
-                    </br>
-                </tr>
-                {% endfor %}
-
-            </table>
-            {% endif %}
+       {% endfor %}
+  </table>
+</div>
+ {% endif %}
     </center>
-
     <script>
-        var coll = document.getElementsByClassName("collapsible");
-        var i;
-
-        for (i = 0; i < coll.length; i++) {
-            coll[i].addEventListener("click", function() {
-                this.classList.toggle("active");
-                var content = this.nextElementSibling;
-                if (content.style.display === "block") {
-                    content.style.display = "none";
-                    document.getElementById("HideTrigger").innerHTML = "Show Results";
-                    console.log("Hide")
-                } else {
-                    content.style.display = "block";
-                    document.getElementById("HideTrigger").innerHTML = "Hide Results";
-                    console.log("Show")
-                }
-            });
-        }
+    $(document).ready(function() {
+  //Fixing jQuery Click Events for the iPad
+  var ua = navigator.userAgent,
+    event = (ua.match(/iPad/i)) ? "touchstart" : "click";
+  if ($('.table').length > 0) {
+    $('.table .header').on(event, function() {
+      $(this).toggleClass("active", "").nextUntil('.header').css('display', function(i, v) {
+        return this.style.display === 'table-row' ? 'none' : 'table-row';
+      });
+    });
+  }
+})
     </script>
 </body>
 
