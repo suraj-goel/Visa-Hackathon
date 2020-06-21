@@ -5,10 +5,6 @@ from search_merchants.searchMerchant import getAllMerchants
 from search_merchants.searchMerchant import getCurrentLocation
 from place_order.displayProduct import displayAllProducts, displayAllOffers
 from search_merchants.searchProducts import getSearchResults
-<<<<<<< HEAD
-
-=======
->>>>>>> 61279ac71214b7fa88d1ddb01adea1a5ab84d90f
 
 app = Flask(__name__,static_folder = '')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader,jinja2.FileSystemLoader(['.'])])
