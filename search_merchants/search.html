@@ -29,7 +29,7 @@
                 {% for item in data %}
                 <tr class="header">
                     <td colspan="2">
-                        <h2>{{item['Name']}}</h2><a title="click to visit {{item['RegisteredName']}}" href="/merchant/{{item['MerchantID']}}"><h3>{{item['RegisteredName']}}</h3></a>{% if search_option=='product' %}<br>{{item['Product.Name']}} {% endif %}</td>
+                        <h2>{{item['Name']}}</h2><h3><a title="click to visit {{item['RegisteredName']}}" href="/merchant/{{item['MerchantID']}}">{{item['RegisteredName']}}</a></h3><br>{% if search_option=='product' %}{{item['Product.Name']}} {% endif %}</td>
                 </tr>
                 {% if item['Offers'] %} {% for x in item['Offers'] %}
                 <tr>
