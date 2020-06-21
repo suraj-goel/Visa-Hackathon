@@ -7,6 +7,9 @@
 body {
     font-family: Arial;
     background-color: aquamarine;
+  color: #6a6c6f;
+  margin-top: 30px;
+}
 }
 
 * {
@@ -44,9 +47,7 @@ form.example::after {
     display: table;
 }
 
-body {
-    color: black;
-}
+
 
 input {
     padding: 6px 10px;
@@ -54,27 +55,71 @@ input {
     border-radius: 4px;
 }
 
-h2 {
-    text-align: center;
+.container {
+  max-width: 960px;
 }
 
-table {
-    border-collapse: collapse;
-    width: 100%;
-    max-width: 800px;
+.table>tbody>tr.active>td,
+.table>tbody>tr.active>th,
+.table>tbody>tr>td.active,
+.table>tbody>tr>th.active,
+.table>tfoot>tr.active>td,
+.table>tfoot>tr.active>th,
+.table>tfoot>tr>td.active,
+.table>tfoot>tr>th.active,
+.table>thead>tr.active>td,
+.table>thead>tr.active>th,
+.table>thead>tr>td.active,
+.table>thead>tr>th.active {
+  background-color: #fff;
 }
 
-th,
-td {
-    text-align: left;
-    padding: 8px;
+.table-bordered > tbody > tr > td,
+.table-bordered > tbody > tr > th,
+.table-bordered > tfoot > tr > td,
+.table-bordered > tfoot > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > thead > tr > th {
+  border-color: #e4e5e7;
 }
 
-tr:nth-child(even) {
-    background-color: #f2f2f2
+.table tr.header {
+  font-weight: bold;
+  background-color: #fff;
+  cursor: pointer;
+  -webkit-user-select: none;
+  /* Chrome all / Safari all */
+  -moz-user-select: none;
+  /* Firefox all */
+  -ms-user-select: none;
+  /* IE 10+ */
+  user-select: none;
+  /* Likely future */
 }
 
-th {
-    background-color: #4CAF50;
-    color: white;
+.table tr:not(.header) {
+  display: none;
+}
+
+.table .header td:after {
+  content: "\002b";
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  float: right;
+  color: #999;
+  text-align: center;
+  padding: 3px;
+  transition: transform .25s linear;
+  -webkit-transition: -webkit-transform .25s linear;
+}
+
+.table .header.active td:after {
+  content: "\2212";
 }
