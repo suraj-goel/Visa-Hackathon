@@ -24,9 +24,14 @@ __to link CSS__
 <link rel="stylesheet" href= "{{ url_for('static',filename='css/stylefile.css') }}"> 
 ```
 
-__install dependencies__
+__dependencies__
+1. install
 ```
 pip install -r requirements.txt
+```
+2.update
+```
+pip freeze> requirements.txt
 ```
 
 __deployment__
