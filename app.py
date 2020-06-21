@@ -32,7 +32,7 @@ def showAll():
     return render_template("./search_merchants/search.html",merchants=merchants)
 
 
-@app.route('/home/place_order')
+@app.route('/place_order')
 def showPlaceOrder():
     currentSelectedMerchantID = 1
     # get the currentSelectedMerchantID from session. 
