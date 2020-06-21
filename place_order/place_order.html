@@ -38,7 +38,7 @@
 
                 <td> {{item['Quantity']}} </td>
                 <td> {{item['Category']}} </td>
-                <td> <input name="qty" id="qty" type="number" min="0" max={{item[ 'Quantity']}} step="1"> </td>
+                <td> <input name="qty" id="qty" type="number" min="0" max={{item['Quantity']}} step="1" onchange="check()"> </td>
             </tr>
             {% endfor %}
         </table>
@@ -47,6 +47,16 @@
 </body>
 
 <script>
+
+    function check() {
+        var quantity = document.getElementById("qty").value;
+        var uLimit = document.getElementById("qty").max;
+        var lLimit = document.getElementById("qty").min;
+        console.log(quantity);
+        quantity = Math.min(quantity,uLimit);
+        quantity=Math.max(quantity,lLimit);
+        document.getElementById("qty").value = quantity;
+    }
 </script>
 
 </html>
