@@ -38,7 +38,7 @@
 
                 <td> {{item['Quantity']}} </td>
                 <td> {{item['Category']}} </td>
-                <td> <input name="qty" id="qty" type="number" min="0" max={{item['Quantity']}} step="1" onchange="check()"> </td>
+                <td> <input name="qty" id="qty" type="number" min="1" max={{item['Quantity']}} step="1" onchange="check()"> </td>
             </tr>
             {% endfor %}
         </table>
