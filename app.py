@@ -21,15 +21,16 @@ def login():
 def showAll():
     # get the currentMerchantID from session.
     currentMerchantID = 2
-    merchants = getAllMerchants(mysql, currentMerchantID)
+    data = getAllMerchants(mysql, currentMerchantID)
     if request.method == "POST":
         search_option = request.form['search']
         filter=request.form.get('offerbox')
         radius=request.form['radius']
         product = request.form['name']
         data=getSearchResults(mysql,product, currentMerchantID,search_option,filter, radius)
-        return render_template('./search_merchants/search.html', data=data, product=product, merchants=merchants , search_option=search_option)
-    return render_template("./search_merchants/search.html",merchants=merchants)
+        return render_template('./search_merchants/search.html', data=data, product=product , search_option=search_option)
+    return render_template("./search_merchants/search.html",data=data)
+
 
 
 @app.route('/place_order')

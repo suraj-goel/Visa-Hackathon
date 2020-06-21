@@ -64,9 +64,11 @@
 </html>
 
 <script>
-    var data = '{{ merchants|tojson }}';
+    var data = '{{ data|tojson }}';
+    // var searchresult = '{{ data }}';
+    // console.log(searchresult)
     var jsonData = JSON.parse(data);
-
+    console.log(jsonData)
     function initMap() {
 
         var india = {
