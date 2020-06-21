@@ -16,6 +16,7 @@
                 <th> Quantity </th>
                 <th> Category </th>
                 <th> Add </th>
+                <th>ADD ITEMS TO CART</th>
             </tr>
             {% for item in products %}
             <tr>
@@ -38,7 +39,8 @@
 
                 <td> {{item['Quantity']}} </td>
                 <td> {{item['Category']}} </td>
-                <td> <input name="qty" id="qty" type="number" min="1" max={{item['Quantity']}} step="1" onchange="check()"> </td>
+                <td> <input name="qty" id="qty" type="number" min="1" max={{item['Quantity']}} step="1" onchange="check(value,min,max)"> </td>
+                <td><button type="submit">ADD TO CART</button> </td>
             </tr>
             {% endfor %}
         </table>
@@ -48,11 +50,11 @@
 
 <script>
 
-    function check() {
-        var quantity = document.getElementById("qty").value;
-        var uLimit = document.getElementById("qty").max;
-        var lLimit = document.getElementById("qty").min;
-        console.log(quantity);
+    function check(quantity,lLimit,uLimit) {
+
+
+        if(quantity>uLimit)
+            alert("SORRY WE ONLY HAVE "+uLimit+" UNITS IN OUR STOCK.");
         quantity = Math.min(quantity,uLimit);
         quantity=Math.max(quantity,lLimit);
         document.getElementById("qty").value = quantity;
