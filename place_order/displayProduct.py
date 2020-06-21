@@ -42,10 +42,11 @@ def displayAllOffers(mysql, selectedMerchant):
     offers = {}
 
     for i in range(len(a)):
-        cur.execute("select OfferID from OfferOnProduct WHERE ProductID = " + str(a[i]['ProductID']))
+        cur.execute("select OfferOnProduct.OfferID as OfferID, Offer.DiscountPercentage as DiscountPercentage \
+        from OfferOnProduct, Offer WHERE ProductID = " + str(a[i]['ProductID']) + " \
+        and OfferOnProduct.OfferID = Offer.OfferID")
         offerProduct = cur.fetchall()
 
-        # offers[a[i]['ProductID']] = offerProduct
         if len(offerProduct) > 0:
             offers[a[i]['ProductID']] = offerProduct
         else:
