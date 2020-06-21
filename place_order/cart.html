@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CART</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='./place_order/place_order.css') }}">
+</head>
+<body>
+
+<body>
+{%if cartITEM   %}
+<div class="container">
+    <table class="table table-bordered">
+    <tr>
+        <th> ProductID </th>
+        <th> Description </th>
+        <th> Price </th>
+        <th> Quantity</th>
+        <th> Negotiation</th>
+        <th> Negotiated Amount</th>
+    </tr>
+        {% for item in cartITEM %}
+        <tr>
+            <td> {{item['ProductID']}} </td>
+            <td> {{item['Description']}} </td>
+            <td> {{item['Price']}} </td>
+            <td> {{item['Quantity']}}</td>
+            <td><button type="button">Want To Negotiate</button></td>
+            <td> {{item['Price']}} </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+<button type="submit">PROCEED FOR PAYMENT</button>
+{% else %}
+<h2>YOUR CART IS EMPTY</h2>
+{% endif %}
+</body>
+
+<script src="{{ url_for('static',filename='./place_order/cart_feature.js' )}}"></script>
+</html>

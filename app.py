@@ -5,7 +5,7 @@ from search_merchants.searchMerchant import getAllMerchants
 from search_merchants.searchMerchant import getCurrentLocation
 from place_order.displayProduct import displayAllProducts, displayAllOffers
 from search_merchants.searchProducts import getSearchResults
-
+from place_order.displayCart import displayALLCart
 app = Flask(__name__,static_folder = '')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader,jinja2.FileSystemLoader(['.'])])
 
@@ -39,7 +39,16 @@ def showPlaceOrder(merchant_id):
     # get the currentSelectedMerchantID from function
     products = displayAllProducts(mysql, currentSelectedMerchantID)
     offers = displayAllOffers(mysql, currentSelectedMerchantID)
-    return render_template("./place_order/place_order.html", products = products, offers = offers)
+    return render_template("./place_order/place_order.html", products = products, offers = offers ,len=len(products))
+
+
+@app.route("/merchant/<merchant_id>/cart")
+def showCart(merchant_id):
+    currentMerchantID = merchant_id
+    currentCartID = merchant_id
+    carts = displayALLCart(mysql,cartID=currentCartID,merchantID=currentMerchantID)
+    print(carts);
+    return render_template("./place_order/cart.html",merchantID=merchant_id,cartITEM=carts)
 
 
 if __name__ == '__main__':
