@@ -31,14 +31,12 @@ def showAll():
         return render_template('./search_merchants/search.html', data=data, product=product , search_option=search_option)
     return render_template("./search_merchants/search.html",data=data)
 
-
 @app.route('/merchant/<merchant_id>')
 def showPlaceOrder(merchant_id):
     currentSelectedMerchantID = merchant_id
     # get the currentSelectedMerchantID from function
     products = displayAllProducts(mysql, currentSelectedMerchantID)
-    # offers = displayAllOffers(mysql, currentSelectedMerchantID)
-    return render_template("./place_order/place_order.html", products = products, offers = offers)
+    return render_template("./place_order/place_order.html", products = products)
 
 
 if __name__ == '__main__':
