@@ -30,11 +30,25 @@ def displayAllProducts(mysql,selectedMerchant):
                 "Category": currentCategory
         }
         productList.append(temp)
-        
+    
     return productList
 
 def displayAllOffers(mysql, selectedMerchant):
-    # cur = mysql.connection.cursor()
-    # cur.execute("select ProductID, Name, Description, Price, Quantity, Category FROM Product WHERE MerchantID = " + str(selectedMerchant))
-    # a=cur.fetchall()
-    return []
+    cur = mysql.connection.cursor()
+    cur.execute("select ProductID from Product WHERE MerchantID = " + str(selectedMerchant))
+    a=cur.fetchall()
+    # cur.close()
+
+    offers = []
+
+    for i in range(len(a)):
+        cur.execute("select OfferID from OfferOnProduct WHERE ProductID = " + str(a[i]['ProductID']))
+        offerProduct = cur.fetchall()
+
+        temp = {"ProductID": a[i]['ProductID'],
+                "OffersAvailable": offerProduct
+        }
+        if len(offerProduct) > 0:
+            offers.append(temp)
+            
+    return offers

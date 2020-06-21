@@ -12,6 +12,7 @@
                 <th> Name </th>
                 <th> Description </th>
                 <th> Price </th>
+                <th> Offers </th>
                 <th> Quantity </th>
                 <th> Category </th>
                 <th> Add </th>
@@ -22,6 +23,25 @@
                 <td> {{item['Name']}} </td>
                 <td> {{item['Description']}} </td>
                 <td> {{item['Price']}} </td>
+
+                {% if offers %}
+                <td>
+                    <select name="offerOptions" id="offerOptions">
+
+                        {% for row in offers %}
+                        {% if item['ProductID'] == row['ProductID'] %}
+                        {% for offer in row['OffersAvailable'] %}
+                        
+                        <option value={{offer[OfferID]}}> {{offer['OfferID']}} </option>
+                        
+                        {% endfor %}
+                        {% endif %}
+                        {% endfor %}
+
+                    </select>
+                </td>
+                {% endif %}
+
                 <td> {{item['Quantity']}} </td>
                 <td> {{item['Category']}} </td>
                 <td> <input type="number" value="0" min="0" max={{item[ 'Quantity']}}> </td>
