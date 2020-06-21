@@ -65,10 +65,10 @@
 
 <script>
     var data = '{{ data|tojson }}';
-    // var searchresult = '{{ data }}';
-    // console.log(searchresult)
+    var currentLocation = '{{ currentLocation|tojson }}'
     var jsonData = JSON.parse(data);
-    console.log(jsonData)
+    var currentLocationJSONData = JSON.parse(currentLocation)
+    console.log(currentLocationJSONData)
     function initMap() {
 
         var india = {
@@ -96,7 +96,7 @@
         var infowindow = new google.maps.InfoWindow();
 
         var marker, i;
-
+        
         for (i = 0; i < jsonData.length; i++) {
             marker = new google.maps.Marker({
                 position: new google.maps.LatLng(parseFloat(jsonData[i].Latitude), parseFloat(jsonData[i].Longitude)),
@@ -129,6 +129,11 @@
                 }
             })(marker, i));
         }
+        marker = new google.maps.Marker({
+                position: new google.maps.LatLng(parseFloat(currentLocationJSONData.Latitude), parseFloat(currentLocationJSONData.Longitude)),
+                map: map
+            });
+            marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png')
     }
 </script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAntxrxhQu11TxFD9wEe7JxxW1UZ0HQXRY&callback=initMap"></script>

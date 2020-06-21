@@ -27,6 +27,14 @@ def getAllMerchants(mysql,merchantID,radius=2000):
     cur.close()
     return nearbymerchants
 
+def getCurrentLocation(mysql,merchantID):
+    cur = mysql.connection.cursor()
+    cur.execute("select Latitude,Longitude FROM Location WHERE MerchantID = " + str(merchantID))
+    a=cur.fetchall()
+    cur.close()
+    return a[0]
+
+
 
 
 
