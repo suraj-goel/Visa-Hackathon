@@ -2,7 +2,7 @@ import jinja2
 from flask import Flask, render_template, request
 from services.db.db_connection import set_connection
 from search_merchants.searchMerchant import getAllMerchants
-from place_order.displayProduct import displayAllProducts
+from place_order.displayProduct import displayAllProducts, displayAllOffers
 from search_merchants.searchProducts import getSearchResults
 app=Flask(__name__)
 
@@ -21,25 +21,24 @@ def login():
 def showAll():
     # get the currentMerchantID from session.
     currentMerchantID = 2
-    merchants = getAllMerchants(mysql, currentMerchantID)
+    data = getAllMerchants(mysql, currentMerchantID)
     if request.method == "POST":
         search_option = request.form['search']
         filter=request.form.get('offerbox')
         radius=request.form['radius']
         product = request.form['name']
         data=getSearchResults(mysql,product, currentMerchantID,search_option,filter, radius)
-        return render_template('./search_merchants/search.html', data=data, product=product, merchants=merchants , search_option=search_option)
-    return render_template("./search_merchants/search.html",merchants=merchants)
+        return render_template('./search_merchants/search.html', data=data, product=product , search_option=search_option)
+    return render_template("./search_merchants/search.html",data=data)
 
 
-@app.route('/place_order')
-def showPlaceOrder():
-    currentSelectedMerchantID = 1
-    # get the currentSelectedMerchantID from session. 
+@app.route('/merchant/<merchant_id>')
+def showPlaceOrder(merchant_id):
+    currentSelectedMerchantID = merchant_id
+    # get the currentSelectedMerchantID from function
     products = displayAllProducts(mysql, currentSelectedMerchantID)
-    for r in products:
-        print(r)
-    return render_template("./place_order/place_order.html", products = products)
+    # offers = displayAllOffers(mysql, currentSelectedMerchantID)
+    return render_template("./place_order/place_order.html", products = products, offers = offers)
 
 
 if __name__ == '__main__':
