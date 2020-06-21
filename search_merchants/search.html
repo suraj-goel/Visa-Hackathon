@@ -1,5 +1,6 @@
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./search_merchants/search_style.css') }}">
+
 <body>
     <h1>
         <center>Nearby merchants</center>
@@ -22,44 +23,41 @@
 
         </form>
         <div id="map"></div>
-{% if product %} Search result for {{product}}
-<div class="container">
-  <table class="table table-bordered">
-      {% for item in data %}
-    <tr class="header">
-      <td colspan="2"><h3>{{item['Name']}}</h3><br>{% if search_option=='product' %}<br>{{item['Product.Name']}} {% endif %}</td>
-    </tr>
-      {% if item['Offers'] %}
-       {% for x in item['Offers'] %}
-    <tr>
-      <td>{{x}}</td>
-      <td>Discount</td>
-    </tr>
-       {% endfor %}
-      {% else %}
-      <tr>
-      <td>No discounts available</td>
-          </tr>
-      {% endif %}
-
-       {% endfor %}
-  </table>
-</div>
- {% endif %}
+        {% if product %} Search result for {{product}}
+        <div class="container">
+            <table class="table table-bordered">
+                {% for item in data %}
+                <tr class="header">
+                    <td colspan="2">
+                        <h3>{{item['Name']}}</h3><br>{% if search_option=='product' %}<br>{{item['Product.Name']}} {% endif %}</td>
+                </tr>
+                {% if item['Offers'] %} {% for x in item['Offers'] %}
+                <tr>
+                    <td>{{x}}</td>
+                    <td>Discount</td>
+                </tr>
+                {% endfor %} {% else %}
+                <tr>
+                    <td>No discounts available</td>
+                </tr>
+                {% endif %} {% endfor %}
+            </table>
+        </div>
+        {% endif %}
     </center>
     <script>
-    $(document).ready(function() {
-  //Fixing jQuery Click Events for the iPad
-  var ua = navigator.userAgent,
-    event = (ua.match(/iPad/i)) ? "touchstart" : "click";
-  if ($('.table').length > 0) {
-    $('.table .header').on(event, function() {
-      $(this).toggleClass("active", "").nextUntil('.header').css('display', function(i, v) {
-        return this.style.display === 'table-row' ? 'none' : 'table-row';
-      });
-    });
-  }
-})
+        $(document).ready(function() {
+            //Fixing jQuery Click Events for the iPad
+            var ua = navigator.userAgent,
+                event = (ua.match(/iPad/i)) ? "touchstart" : "click";
+            if ($('.table').length > 0) {
+                $('.table .header').on(event, function() {
+                    $(this).toggleClass("active", "").nextUntil('.header').css('display', function(i, v) {
+                        return this.style.display === 'table-row' ? 'none' : 'table-row';
+                    });
+                });
+            }
+        })
     </script>
 </body>
 
