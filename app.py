@@ -4,7 +4,6 @@ from services.db.db_connection import set_connection
 from search_merchants.searchMerchant import getAllMerchants
 from place_order.displayProduct import displayAllProducts, displayAllOffers
 from search_merchants.searchProducts import getSearchResults
-app=Flask(__name__)
 
 app = Flask(__name__,static_folder = '')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader,jinja2.FileSystemLoader(['.'])])
