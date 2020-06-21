@@ -28,6 +28,7 @@
 
                     {% if offers[item['ProductID']]|length > 0 %}
                     <select name="offerOptions" id="offerOptions">
+                        <option value=headerOption disabled selected="true"> Offer ID </option>
                         {% for offer in offers[item['ProductID']] %}
                         <option value={{offers[OfferID]}}> {{offer['OfferID']}} </option>
                         {% endfor %}
