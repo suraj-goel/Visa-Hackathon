@@ -1,0 +1,44 @@
+{% include "./common/header.html" %}
+
+<body>
+    <h1>Account Details</h1>
+    <div>
+        <p>
+            <label>Merchant ID : </label>
+            <label>{{ result['MerchantID'] }}</label>
+        </p>
+        <p>
+            <label>Name : </label>
+            <label>{{ result['Name'] }}</label>
+        </p>
+        <p>
+            <label>Registered Name : </label>
+            <label>{{ result['RegisteredName'] }}</label>
+        </p>
+        <p>
+            <label>Email id : </label>
+            <label>{{ result['EmailID'] }}</label>
+        </p>
+        <p>
+            <label>Contact number : </label>
+            <label>{{ result['ContactNumber'] }}</label>
+        </p>
+        <p>
+            <label>Address : </label>
+            <label>{{ result['Address'] }}</label>
+        </p>
+        <p>
+            <label>Password : </label>
+            <label>
+            {% for i in result['Password'] %}
+                *
+            {% endfor %}
+            </label>
+        </p>
+        <br>
+        <button><a href="{{ url_for('editAccountDetails') }}" style="text-decoration:None;">Edit Details</a></button>
+        <!--<input type="button" value="Edit Details" onclick="window.open('editUserDetails.html','_self')" /> -->
+    </div>
+
+</body>
+</html>
