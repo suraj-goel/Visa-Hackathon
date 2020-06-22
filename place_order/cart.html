@@ -1,23 +1,23 @@
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./place_order/place_order.css') }}">
-        {%if cartITEM %} <br><br><br>
-{{cartITEM}}
+        {%if ProductID %} <br><br><br>
         <div class="container">
             <table class="table table-bordered">
                 <tr>
                     <th> ProductID </th>
+                    <th> Name</th>
                     <th> Description </th>
-                    <th> Price </th>
+                    <th>Price Per Unit </th>
                     <th> Quantity</th>
-                    <th> Negotiated Amount</th>
+                   <!-- <th> Negotiated Amount</th>-->
                 </tr>
-                {% for item in cartITEM %}
+                {% for i in range(0,len) %}
                 <tr>
-                    <td> {{item['ProductID']}} </td>
-                    <td> {{item['Description']}} </td>
-                    <td> {{item['Quantity']}}</td>
-                    <td> {{item['Price']}} </td>
-                    <td> {{item['Price']}} </td>
+                    <td> {{ProductID[i]}} </td>
+                    <td> {{Name[i]}}</td>
+                    <td> {{Description[i]}}</td>
+                    <td> {{Price[i]}}</td>
+                    <td> {{qty[i]}}</td>
                 </tr>
                 {% endfor %}
             </table>

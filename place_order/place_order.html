@@ -78,11 +78,15 @@
                 </tr>
                     {% for item in products %}
                     <tr>
+                        <input type="hidden" name="ProductID[]" value="{{item['ProductID']}}"/>
                         <td> {{item['Name']}} - <br>
                             <font size="2dp"> {{item['Description']}} </font>
+                            <input type="hidden" name="Name[]" value="{{item['Name']}}"/>
+                            <input type="hidden" name="Desciption[]" value="{{item['Desciption']}}"/>
                         </td>
                         <td> {{item['Category']}} </td>
                         <td value="{{item['Price']}}" id="price{{loop.index0}}"> {{item['Price']}} </td>
+                        <input type="hidden" name="Price[]" value="{{item['Price']}}"/>
                         <td value="{{item['Quantity']}}" id="tquantity{{loop.index0}}"> {{item['Quantity']}} </td>
                         <td>
                             <input name="qty[]" type="number" id="quantity{{loop.index0}}" min="0" max="{{item[ 'Quantity']}}" value="0" onchange="validate( 'price{{loop.index0}}', 'tquantity{{loop.index0}}', 'quantity{{loop.index0}}', 'offerOptions{{loop.index0}}',
@@ -113,7 +117,7 @@
 
                     {% endfor %}
             </table>
-            <input type="hidden" value="{{products}}" name="details" />
+            <input type="hidden" value="{{products}}" name="details[]" />
             <input type="submit" value="ADD TO CART" />
         </form>
     </div>

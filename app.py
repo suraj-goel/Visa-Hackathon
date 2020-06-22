@@ -36,26 +36,31 @@ def showAll():
 
 @app.route('/merchant/<merchant_id>',methods=['GET','POST'])
 def showPlaceOrder(merchant_id):
-    if request.method == 'GET':
-        currentSelectedMerchantID = merchant_id
-        #get the currentSelectedMerchantID from function
-        products = displayAllProducts(mysql, currentSelectedMerchantID)
-        offers = displayAllOffers(mysql, currentSelectedMerchantID)
-        return render_template("./place_order/place_order.html", products = products, offers = offers ,len=len(products),merchantID=merchant_id)
-    else:
-        products=request.form['details']
-        session['cart']=products
-		print(request.form.getlist("qty[]"))
-        return redirect(url_for('showCart',merchant_id=merchant_id))
+	if request.method == 'GET':
+		currentSelectedMerchantID = merchant_id
+		#get the currentSelectedMerchantID from function
+		products = displayAllProducts(mysql, currentSelectedMerchantID)
+		offers = displayAllOffers(mysql, currentSelectedMerchantID)
+		return render_template("./place_order/place_order.html", products = products, offers = offers ,len=len(products),merchantID=merchant_id)
+	else:
+		qty=request.form.getlist("qty[]")
+		ProductID=request.form.getlist("ProductID[]")
+		Name = request.form.getlist("Name[]")
+		Description = request.form.getlist("Description[]")
+		Price = request.form.getlist("Price[]")
+		return redirect(url_for('showCart',merchant_id=merchant_id,qty=qty,ProductID=ProductID,Name=Name,Description=Description,Price=Price))
 
 
 @app.route("/merchant/<merchant_id>/cart",methods=['GET','POST'])
 def showCart(merchant_id):
-    currentMerchantID = merchant_id
-    currentCartID = merchant_id
-    carts = session['cart']
-    print(carts[0])
-    return render_template("./place_order/cart.html",merchantID=merchant_id,cartITEM=carts)
+	currentMerchantID = merchant_id
+	currentCartID = merchant_id
+	ProductID = request.args.getlist("ProductID")
+	qty = request.args.getlist('qty')
+	Description = request.args.getlist('Description')
+	Name = request.args.getlist('Name')
+	Price = request.args.getlist('Price')
+	return render_template("./place_order/cart.html",merchantID=merchant_id,ProductID=ProductID,qty=qty,Name=Name,Description=Description,Price=Price,len=len(qty))
 
 
 @app.route('/accounts/', methods=['GET','POST'])
