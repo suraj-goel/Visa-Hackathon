@@ -12,12 +12,14 @@
     function updateDiscount(disID, tpID, dpID) {
         var discount = document.getElementById(disID);
         var cost = document.getElementById(tpID);
+        var fcost = document.getElementById(dpID);
 
         if (discount != null && cost != null) {
             discount = discount.value;
             cost = cost.innerText;
-            var fcost = document.getElementById(dpID);
             fcost.innerText = cost - (cost * (discount / 100));
+        } else {
+            fcost.innerText = cost.innerText;
         }
     }
 </script>
