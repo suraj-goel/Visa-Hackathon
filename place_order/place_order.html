@@ -37,15 +37,14 @@
                 <th> Quantity in Stock</th>
                 <th> Quantity Required </th>
                 <th> Select Discount (%) </th>
-                <th> Product total amount </th>
-                <th> Amount after discount </th>
+                <th> Total Amount </th>
+                <th> Discounted Amount </th>
 
             </tr>
 
             {% for item in products %}
             <tr>
-                <!-- <td> {{item['ProductID']}} </td> -->
-                <td> {{item['Name']}} - <br>
+                <td> {{item['Name']}}- <br>
                     <font size="2dp"> {{item['Description']}} </font>
                 </td>
                 <td> {{item['Category']}} </td>
