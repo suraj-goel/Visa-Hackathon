@@ -1,5 +1,6 @@
 import jinja2
 from flask import *
+from flask import session
 from services.db.db_connection import set_connection
 from search_merchants.searchMerchant import getCurrentLocation
 from place_order.displayProduct import displayAllProducts, displayAllOffers
@@ -10,7 +11,6 @@ from place_order.displayCart import displayALLCart
 app = Flask(__name__,static_folder = '')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader,jinja2.FileSystemLoader(['.'])])
 app.secret_key = 'super secret key'
-
 mysql = set_connection(app)
 
 
@@ -54,13 +54,12 @@ def showPlaceOrder(merchant_id):
 @app.route("/merchant/<merchant_id>/cart",methods=['GET','POST'])
 def showCart(merchant_id):
 	if request.method=='GET':
-		currentMerchantID = merchant_id
-		currentCartID = merchant_id
 		qty=session['qty']
 		ProductID=session['ProductID']
 		Name = session['Name']
 		Description =session['Description']
 		Price = session['Price']
+		print(qty)
 		return render_template("./place_order/cart.html",merchantID=merchant_id,qty=qty,ProductID=ProductID,Name=Name,Description=Description,Price=Price,len=len(qty))
 	else:
 		return redirect(url_for('showPlaceOrder',merchant_id=merchant_id))
