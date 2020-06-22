@@ -16,20 +16,20 @@
     <div class="container">
         <table class="table table-bordered">
             <tr>
-                <th> ProductID </th>
+                <!-- <th> ProductID </th> -->
                 <th> Name </th>
                 <th> Description </th>
                 <th> Price </th>
-                <th> Offers </th>
+                <th> Discount <br>(%) </th>
                 <th> Quantity </th>
                 <th> Category </th>
-                <th> Discounted Price </th>
+                <th> Discounted <br> Price </th>
                 <th> Add </th>
             </tr>
 
             {% for item in products %}
             <tr>
-                <td> {{item['ProductID']}} </td>
+                <!-- <td> {{item['ProductID']}} </td> -->
                 <td> {{item['Name']}} </td>
                 <td> {{item['Description']}} </td>
                 <td value={{item['Price']}} id="price{{loop.index0}}"> {{item['Price']}} </td>
