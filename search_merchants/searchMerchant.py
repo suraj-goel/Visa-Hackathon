@@ -11,7 +11,7 @@ def getAllMerchants(mysql,merchantID,radius):
 
     
     cur = mysql.connection.cursor()
-    cur.execute("select LocationID,Latitude,Longitude,Merchant.MerchantID,Name,RegisteredName,EmailID,ContactNumber from Location INNER JOIN Merchant ON Location.MerchantID =Merchant.MerchantID;")
+    cur.execute("select LocationID,Latitude,Longitude,Merchant.MerchantID,Name,RegisteredName,EmailID,ContactNumber from Location INNER JOIN Merchant ON Location.MerchantID =Merchant.MerchantID and Merchant.MerchantID <> %s",(merchantID,))
     a=cur.fetchall()
 
     nearbymerchants = []
