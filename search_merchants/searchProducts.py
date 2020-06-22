@@ -1,10 +1,37 @@
 from builtins import list, len
+from .distanceCoordinates import distanceInKMBetweenCoordinates
+from search_merchants.searchMerchant import getAllMerchants
 
+def sortByDistance(cur,data_res,merchantid,radius):
+    finalResult = []
 
-def getSearchResults(mysql,name,merchantid,search_option,filters,radius):
+    cur.execute("select Latitude,Longitude FROM Location WHERE MerchantID = " + str(merchantid))
+    a = cur.fetchall()
+    currentLatitude = float(a[0]["Latitude"])
+    currentLongitude = float(a[0]["Longitude"])
+    cur.close()
+
+    for i in range(len(data_res)):
+        latitude = float(data_res[i]["Latitude"])
+        longitude = float(data_res[i]["Longitude"])
+        distance = distanceInKMBetweenCoordinates(currentLatitude, currentLongitude, latitude, longitude)
+        dic = {"distance": distance}
+        dic.update(data_res[i])
+        if not radius:
+            finalResult.append(dic)
+        else:
+            if (distance <= float(radius)):
+                finalResult.append(dic)
+
+    finalResult = sorted(finalResult, key=lambda i: i['distance'])
+    print(finalResult)
+    return finalResult
+
+def getSearchResults(mysql,merchantid,name='',search_option='initial',filters=False,radius=2000):
     cur = mysql.connection.cursor()
-    print(filters)
-    if search_option=='product':
+    if search_option=='initial':
+        data_res= getAllMerchants(mysql,merchantid,radius)
+    elif search_option=='product':
         product=name
         # only offers filter
         # add exact matches then based on name then see similarity in name
@@ -33,7 +60,7 @@ def getSearchResults(mysql,name,merchantid,search_option,filters,radius):
                     data[i]['Offers']=x
                     res.append(data[i]['ProductID'])
                     data_res.append(data[i])
-        print(data_res)
+        
     else:
         merchant=name
         if filters:
@@ -49,10 +76,6 @@ def getSearchResults(mysql,name,merchantid,search_option,filters,radius):
             x = list(cur.fetchall())
             i['Offers'] = x
             data_res.append(i)
-        print(data_res)
-    return data_res
-
-
-
-
-
+    
+    finalResult=sortByDistance(cur,data_res,merchantid,radius)
+    return finalResult

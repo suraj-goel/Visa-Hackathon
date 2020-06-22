@@ -1,10 +1,10 @@
 <head>
     <meta charset="UTF-8">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="./common/js/script.js"></script>
+    <script src="{{ url_for('static',filename='./common/js/script.js') }}"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="icon" href="./common/img/icon-img.png" type="image/icon">
+    <link rel="icon" href="{{ url_for('static',filename='../common/img/icon-img.png') }}" type="image/icon">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="{{ url_for('static',filename='./common/css/header.css') }}">
     <title>SBM</title>
@@ -16,7 +16,7 @@
                 <div class="navbar-body">
                     <div class="navbar-start">
                         <div class="hamburger-menu">
-                            <img src="./common/img/shop.png">
+                            <img src="{{ url_for('static',filename='../common/img/shop.png') }}">
                         </div>
                         <div class="navbar-end">
                             <h2 style="color:white;text-transform: uppercase">Small Business Merchant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;</a>
@@ -29,7 +29,7 @@
         <div class="navbar navbar-fixed-top navbar-inverse tabs paper-shadow-bottom-z-2">
             <div class="container-fluid">
                 <ul class="navbar-body list-inline">
-                    <li class="active"><a href="search" class="active">Search</a></li>
+                    <li class="active"><a href="/" class="active">Search</a></li>
                     <li><a>Orders</a></li>
                     <li><a>Inventory</a></li>
                     <li><a>Requirements</a></li>
