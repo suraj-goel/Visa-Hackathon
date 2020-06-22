@@ -43,12 +43,12 @@ def showPlaceOrder(merchant_id):
 		offers = displayAllOffers(mysql, currentSelectedMerchantID)
 		return render_template("./place_order/place_order.html", products = products, offers = offers ,len=len(products),merchantID=merchant_id)
 	else:
-		qty=request.form.getlist("qty[]")
-		ProductID=request.form.getlist("ProductID[]")
-		Name = request.form.getlist("Name[]")
-		Description = request.form.getlist("Description[]")
-		Price = request.form.getlist("Price[]")
-		return redirect(url_for('showCart',merchant_id=merchant_id,qty=qty,ProductID=ProductID,Name=Name,Description=Description,Price=Price))
+		session['qty']=request.form.getlist("qty[]")
+		session['ProductID']=request.form.getlist("ProductID[]")
+		session['Name'] = request.form.getlist("Name[]")
+		session['Description'] = request.form.getlist("Description[]")
+		session['Price'] = request.form.getlist("Price[]")
+		return redirect(url_for('showCart',merchant_id=merchant_id))
 
 
 @app.route("/merchant/<merchant_id>/cart",methods=['GET','POST'])
@@ -56,11 +56,11 @@ def showCart(merchant_id):
 	if request.method=='GET':
 		currentMerchantID = merchant_id
 		currentCartID = merchant_id
-		qty=request.args.getlist("qty")
-		ProductID=request.args.getlist("ProductID")
-		Name = request.args.getlist("Name")
-		Description = request.args.getlist("Description")
-		Price = request.args.getlist("Price")
+		qty=session['qty']
+		ProductID=session['ProductID']
+		Name = session['Name']
+		Description =session['Description']
+		Price = session['Price']
 		return render_template("./place_order/cart.html",merchantID=merchant_id,qty=qty,ProductID=ProductID,Name=Name,Description=Description,Price=Price,len=len(qty))
 	else:
 		return redirect(url_for('showPlaceOrder',merchant_id=merchant_id))
