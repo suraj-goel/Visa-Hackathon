@@ -1,5 +1,6 @@
 import jinja2
 from flask import Flask, render_template, request
+from flask import *
 from services.db.db_connection import set_connection
 from search_merchants.searchMerchant import getCurrentLocation
 from place_order.displayProduct import displayAllProducts, displayAllOffers
@@ -10,6 +11,7 @@ app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader,jinja2.FileSystemLoader
 
 
 mysql = set_connection(app)
+
 
 @app.route('/login')
 def login():
@@ -31,21 +33,24 @@ def showAll():
     return render_template("./search_merchants/search.html",currentLocation = currentLocation,data=data)
 
 
-@app.route('/merchant/<merchant_id>')
+@app.route('/merchant/<merchant_id>',methods=['GET','POST'])
 def showPlaceOrder(merchant_id):
-    currentSelectedMerchantID = merchant_id
-    # get the currentSelectedMerchantID from function
-    products = displayAllProducts(mysql, currentSelectedMerchantID)
-    offers = displayAllOffers(mysql, currentSelectedMerchantID)
-    return render_template("./place_order/place_order.html", products = products, offers = offers ,len=len(products))
+    if request.method == 'GET':
+        currentSelectedMerchantID = merchant_id
+        #get the currentSelectedMerchantID from function
+        products = displayAllProducts(mysql, currentSelectedMerchantID)
+        offers = displayAllOffers(mysql, currentSelectedMerchantID)
+        return render_template("./place_order/place_order.html", products = products, offers = offers ,len=len(products),merchantID=merchant_id)
+    else:
+        print(request.form)
+        return redirect(request.url+"/cart")
 
 
-@app.route("/merchant/<merchant_id>/cart")
+@app.route("/merchant/<merchant_id>/cart",methods=['GET','POST'])
 def showCart(merchant_id):
     currentMerchantID = merchant_id
     currentCartID = merchant_id
     carts = displayALLCart(mysql,cartID=currentCartID,merchantID=currentMerchantID)
-    print(carts);
     return render_template("./place_order/cart.html",merchantID=merchant_id,cartITEM=carts)
 
 

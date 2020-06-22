@@ -2,10 +2,35 @@ from builtins import list, len
 from .distanceCoordinates import distanceInKMBetweenCoordinates
 from search_merchants.searchMerchant import getAllMerchants
 
+def sortByDistance(cur,data_res,merchantid,radius):
+    finalResult = []
+
+    cur.execute("select Latitude,Longitude FROM Location WHERE MerchantID = " + str(merchantid))
+    a = cur.fetchall()
+    currentLatitude = float(a[0]["Latitude"])
+    currentLongitude = float(a[0]["Longitude"])
+    cur.close()
+
+    for i in range(len(data_res)):
+        latitude = float(data_res[i]["Latitude"])
+        longitude = float(data_res[i]["Longitude"])
+        distance = distanceInKMBetweenCoordinates(currentLatitude, currentLongitude, latitude, longitude)
+        dic = {"distance": distance}
+        dic.update(data_res[i])
+        if not radius:
+            finalResult.append(dic)
+        else:
+            if (distance <= float(radius)):
+                finalResult.append(dic)
+
+    finalResult = sorted(finalResult, key=lambda i: i['distance'])
+    print(finalResult)
+    return finalResult
+
 def getSearchResults(mysql,merchantid,name='',search_option='initial',filters=False,radius=2000):
     cur = mysql.connection.cursor()
     if search_option=='initial':
-        return getAllMerchants(mysql,merchantid,radius)
+        data_res= getAllMerchants(mysql,merchantid,radius)
     elif search_option=='product':
         product=name
         # only offers filter
@@ -51,32 +76,6 @@ def getSearchResults(mysql,merchantid,name='',search_option='initial',filters=Fa
             x = list(cur.fetchall())
             i['Offers'] = x
             data_res.append(i)
-        
-    # if not radius:    
-    #     return data_res
     
-    
-    finalResult = []
-    
-    cur.execute("select Latitude,Longitude FROM Location WHERE MerchantID = " + str(merchantid))
-    a=cur.fetchall()
-    currentLatitude = float(a[0]["Latitude"])
-    currentLongitude = float(a[0]["Longitude"])
-    cur.close()
-
-    for i in range(len(data_res)):
-        latitude = float(data_res[i]["Latitude"])
-        longitude = float(data_res[i]["Longitude"])
-        distance = distanceInKMBetweenCoordinates(currentLatitude,currentLongitude,latitude,longitude)
-        dic = {"distance" : distance}
-        dic.update(data_res[i])
-        if not radius:
-            finalResult.append(dic)
-        else:
-            if (distance<=float(radius)): 
-                finalResult.append(dic)
-
-    
-    finalResult = sorted(finalResult, key = lambda i: i['distance'])
-    # print(finalResult)
+    finalResult=sortByDistance(cur,data_res,merchantid,radius)
     return finalResult

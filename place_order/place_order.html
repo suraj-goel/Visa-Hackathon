@@ -7,13 +7,24 @@
         var fcost = document.getElementById(dpID);
         fcost.innerText = cost - (cost * (discount / 100));
     }
+    function check(quantity, lLimit, uLimit,id) {
+        if (quantity > uLimit) {
+            alert("SORRY WE ONLY HAVE " + uLimit + " UNITS IN OUR STOCK. ");
+        }
+        quantity = Math.min(quantity, uLimit);
+        quantity = Math.max(quantity, lLimit);
+        //.log(document.getElementById(id).innerHTML);
+        $("#"+id).val(quantity);
+    }
 </script>
 
 <body>
     <h2> Place your Orders here </h2>
 
     {% if products %}
+
     <div class="container">
+        <form id="form" method="post" action="">
         <table class="table table-bordered">
             <tr>
                 <!-- <th> ProductID </th> -->
@@ -37,9 +48,9 @@
                 <td>
                     {% if offers[item['ProductID']]|length > 0 %}
                     <select name="offerOptions" id="offerOptions{{loop.index0}}" onchange="updateInput('offerOptions{{loop.index0}}', 'price{{loop.index0}}', 'dprice{{loop.index0}}')">
-                        <option value=0 selected="true "> 0 </option>
+                        <option value=0 selected="true "> No discount </option>
                         {% for offer in offers[item['ProductID']] %}
-                        <option value={{offer['DiscountPercentage']}}> {{offer['DiscountPercentage']}} </option>
+                        <option value={{offer['DiscountPercentage']}}> {{offer['Information']}} </option>
                         {% endfor %}
                     </select> {% else %} {{"No offers "}} {% endif %}
                 </td>
@@ -48,7 +59,7 @@
                 <td> {{item['Category']}} </td>
                 <td value={{item['Price']}} id="dprice{{loop.index0}}"> {{item['Price']}} </td>
                 <td>
-                    <input name="qty " id="qty " type="number " min="0 " max={{item['Quantity']}}>
+                    <input name="qty" id="{{loop.index}}" value="0" type="number " min="0 " max={{item['Quantity']}} onchange="check(value,min,max,id)">
                 </td>
 
                 {% if offers[item['ProductID']]|length > 0 %}
@@ -59,21 +70,13 @@
             </tr>
             {% endfor %}
         </table>
-        <button type="submit ">ADD ALL ITEMS IN CART</button>
+
+        <input type="submit" value="ADD TO CART" name="{{products}}" />
+        </form>
     </div>
+
     {% endif %}
 </body>
 
-<script>
-    function check(quantity, lLimit, uLimit) {
-        if (quantity > uLimit) {
-            alert("SORRY WE ONLY HAVE " + uLimit + " UNITS IN OUR STOCK. ");
-        }
-        quantity = Math.min(quantity, uLimit);
-        quantity = Math.max(quantity, lLimit);
-        document.getElementById("qty ").value = quantity;
-    }
-</script>
-<script src="{{ url_for( 'static',filename='./place_order/cart_feature.js' )}} "></script>
 
 </html>
