@@ -1,10 +1,7 @@
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./place_order/place_order.css') }}">
-
-<body>
-
-    <body>
-        {%if cartITEM %}
+        {%if cartITEM %} <br><br><br>
+{{cartITEM}}
         <div class="container">
             <table class="table table-bordered">
                 <tr>
@@ -20,7 +17,6 @@
                     <td> {{item['Description']}} </td>
                     <td> {{item['Quantity']}}</td>
                     <td> {{item['Price']}} </td>
-
                     <td> {{item['Price']}} </td>
                 </tr>
                 {% endfor %}
@@ -37,6 +33,5 @@
 
         }
     </script>
-    <script src="{{ url_for('static',filename='./place_order/cart_feature.js' )}}"></script>
 
 </html>

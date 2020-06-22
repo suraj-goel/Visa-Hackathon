@@ -20,11 +20,10 @@ def sortByDistance(cur,data_res,merchantid,radius):
         if not radius:
             finalResult.append(dic)
         else:
+            # noinspection PyInterpreter
             if (distance <= float(radius)):
                 finalResult.append(dic)
-
     finalResult = sorted(finalResult, key=lambda i: i['distance'])
-    print(finalResult)
     return finalResult
 
 def getSearchResults(mysql,merchantid,name='',search_option='initial',filters=False,radius=2000):
