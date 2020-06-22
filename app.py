@@ -53,9 +53,7 @@ def showCart(merchant_id):
     currentMerchantID = merchant_id
     currentCartID = merchant_id
     carts = session['cart']
-    print(carts)
-    quan=request.form['quantity_added']
-    print(quan)
+    print(carts[0])
     return render_template("./place_order/cart.html",merchantID=merchant_id,cartITEM=carts)
 
 

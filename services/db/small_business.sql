@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 19, 2020 at 09:36 PM
+-- Generation Time: Jun 22, 2020 at 05:54 PM
 -- Server version: 8.0.20-0ubuntu0.20.04.1
 -- PHP Version: 7.4.3
 
@@ -16,7 +16,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `small_business`
@@ -33,7 +33,7 @@ CREATE TABLE `Location` (
   `Latitude` varchar(256) NOT NULL,
   `Longitude` varchar(256) NOT NULL,
   `MerchantID` varchar(256) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -49,7 +49,7 @@ CREATE TABLE `Merchant` (
   `ContactNumber` varchar(100) NOT NULL,
   `Address` varchar(100) NOT NULL,
   `Password` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `Merchant`
@@ -66,10 +66,10 @@ INSERT INTO `Merchant` (`MerchantID`, `Name`, `RegisteredName`, `EmailID`, `Cont
 
 CREATE TABLE `Negotiation` (
   `NegotiationID` varchar(256) NOT NULL,
-  `NegotiationBy` varchar(256) NOT NULL,
   `Status` varchar(256) NOT NULL,
-  `CartID` varchar(256) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `CartID` varchar(256) NOT NULL,
+  `Price` varchar(256) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -82,7 +82,7 @@ CREATE TABLE `Offer` (
   `Information` varchar(256) NOT NULL,
   `DiscountPercentage` varchar(256) NOT NULL,
   `ValidTill` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -92,9 +92,9 @@ CREATE TABLE `Offer` (
 
 CREATE TABLE `OfferOnProduct` (
   `OfferProductID` varchar(256) NOT NULL,
-  `OfferID` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `OfferID` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `ProductID` varchar(256) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -104,10 +104,9 @@ CREATE TABLE `OfferOnProduct` (
 
 CREATE TABLE `Orders` (
   `OrderID` varchar(256) NOT NULL,
-  `OrderedBy` varchar(256) NOT NULL,
   `Status` varchar(256) NOT NULL,
   `CartID` varchar(256) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -123,7 +122,7 @@ CREATE TABLE `Product` (
   `Quantity` varchar(256) NOT NULL,
   `Category` varchar(256) NOT NULL,
   `MerchantID` varchar(256) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `Product`
@@ -146,7 +145,14 @@ CREATE TABLE `ProductCart` (
   `Price` varchar(256) NOT NULL,
   `Information` varchar(512) DEFAULT NULL,
   `Quantity` varchar(256) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `ProductCart`
+--
+
+INSERT INTO `ProductCart` (`CartID`, `MerchantID`, `ProductID`, `Status`, `Price`, `Information`, `Quantity`) VALUES
+('1', '1', '1', 'pending', '200', 'Test Data', '2');
 
 -- --------------------------------------------------------
 
@@ -161,7 +167,7 @@ CREATE TABLE `Requirement` (
   `Status` varchar(256) NOT NULL,
   `CartId` varchar(256) DEFAULT NULL,
   `MerchantID` varchar(256) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Indexes for dumped tables
@@ -186,7 +192,6 @@ ALTER TABLE `Merchant`
 --
 ALTER TABLE `Negotiation`
   ADD PRIMARY KEY (`NegotiationID`),
-  ADD KEY `NegotiationBy` (`NegotiationBy`),
   ADD KEY `CartID` (`CartID`);
 
 --
@@ -208,8 +213,7 @@ ALTER TABLE `OfferOnProduct`
 --
 ALTER TABLE `Orders`
   ADD PRIMARY KEY (`OrderID`),
-  ADD KEY `CartID` (`CartID`),
-  ADD KEY `OrderedBy` (`OrderedBy`);
+  ADD KEY `CartID` (`CartID`);
 
 --
 -- Indexes for table `Product`
@@ -249,8 +253,7 @@ ALTER TABLE `Location`
 -- Constraints for table `Negotiation`
 --
 ALTER TABLE `Negotiation`
-  ADD CONSTRAINT `fk_cartid_nego` FOREIGN KEY (`CartID`) REFERENCES `ProductCart` (`CartID`),
-  ADD CONSTRAINT `fk_merchantid_nego` FOREIGN KEY (`NegotiationBy`) REFERENCES `Merchant` (`MerchantID`);
+  ADD CONSTRAINT `fk_cartid_nego` FOREIGN KEY (`CartID`) REFERENCES `ProductCart` (`CartID`);
 
 --
 -- Constraints for table `OfferOnProduct`
@@ -263,8 +266,7 @@ ALTER TABLE `OfferOnProduct`
 -- Constraints for table `Orders`
 --
 ALTER TABLE `Orders`
-  ADD CONSTRAINT `fk_cartid_orders` FOREIGN KEY (`CartID`) REFERENCES `ProductCart` (`CartID`),
-  ADD CONSTRAINT `fk_merchantid_orders` FOREIGN KEY (`OrderedBy`) REFERENCES `Merchant` (`MerchantID`);
+  ADD CONSTRAINT `fk_cartid_orders` FOREIGN KEY (`CartID`) REFERENCES `ProductCart` (`CartID`);
 
 --
 -- Constraints for table `Product`
