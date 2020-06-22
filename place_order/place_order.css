@@ -2,7 +2,7 @@ body {
     color: black;
 }
 
-input {
+input[type=number] {
     padding: 6px 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -35,5 +35,5 @@ th {
 }
 
 select {
-    width: 100px;
+    width: max-content;
 }
