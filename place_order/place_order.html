@@ -91,8 +91,8 @@
             {% endfor %}
             </selecl>
         </table>
-
-            <input type="submit" value="ADD TO CART"  name="{{products}}" />
+            <input type="hidden" value="{{products}}" name="details"/>
+            <input type="submit" value="ADD TO CART"  />
         </form>
     </div>
     {% endif %}
