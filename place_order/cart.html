@@ -1,5 +1,24 @@
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./place_order/place_order.css') }}">
+<script>
+    function save() {
+
+    }
+    function negotiate() {
+
+
+    }
+    function payment() {
+        
+
+    }
+    function goBack(event) {
+            window.history.back();
+            //event.preventDefault();
+
+    }
+
+</script>
         {%if ProductID %} <br><br><br>
         <div class="container">
             <table class="table table-bordered">
@@ -22,19 +41,13 @@
                 {% endfor %}
             </table>
         </div>
-        <td><form method="post" action="">
-        <input type="submit" value="Edit Cart">
-        </form></td>
+        <td><button type="button" onclick="goBack()">EDIT CART</button> </td>
         <td><button type="button" onclick="negotiate()">Want To Negotiate</button></td>
-        <button type="submit">PROCEED FOR PAYMENT</button> {% else %}
+        <button type="submit" onclick="payment()">PROCEED FOR PAYMENT</button> {% else %}
         <h2>YOUR CART IS EMPTY</h2>
         {% endif %}
     </body>
 
-    <script>
-        function negotiate() {
 
-        }
-    </script>
 
 </html>
