@@ -54,25 +54,28 @@
             fcost.innerText = cost.innerText;
         }
 
-        var cp = document.getElementById("CartPrice");
-        if (cp != null) {
-            findCartPrice(cp);
+        var cp1 = document.getElementById("finalPrice");
+        var cp2 = document.getElementById("CartPrice");
+        if (cp1 != null && cp2 != null) {
+            findCartPrice(cp1, cp2);
         }
     }
 
-    function findCartPrice(cp) {
+    // Show total price before discount and after discount
+    function findCartPrice(cp1, cp2) {
         var n = document.getElementById("tableID").rows.length - 1;
-        var res = 0;
+        var res1 = 0;
+        var res2 = 0;
 
         for (var i = 0; i < n; i++) {
-            res += parseInt(document.getElementById("dprice" + i).innerText);
+            res1 += parseInt(document.getElementById("tprice" + i).innerText);
+            res2 += parseInt(document.getElementById("dprice" + i).innerText);
         }
-        console.log(res);
-        cp.innerHTML = res;
-
+        cp1.innerHTML = res1;
+        cp2.innerHTML = res2;
     }
 
-    // Prevent Enter key from performing any function
+    // Prevent Enter key from performing any function/event
     $(document).ready(function() {
         $(window).keydown(function(event) {
             if (event.keyCode == 13) {
@@ -96,7 +99,7 @@
                     <th> Price Per Piece </th>
                     <th> Quantity in Stock</th>
                     <th> Quantity Required </th>
-                    <th> Select Discount (%) </th>
+                    <th> Select Discount </th>
                     <th> Total Amount </th>
                     <th> Discounted Amount </th>
 
@@ -137,8 +140,8 @@
 
                 {% endfor %}
             </table>
-            <h3> Total price is Rs <span id="CartPrice">0</span>
-            </h3> <br>
+            <h3> Total price before discount is Rs <span id="finalPrice">0</span></h3>
+            <h3> Total price after discount is Rs <span id="CartPrice">0</span></h3>
             <input type="hidden" value="{{products}}" name="details" />
             <input type="submit" value="ADD TO CART" />
         </form>
