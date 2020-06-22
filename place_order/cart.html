@@ -1,6 +1,7 @@
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./place_order/place_order.css') }}">
 
+<body>
 
     <body>
         {%if cartITEM %}
@@ -11,6 +12,7 @@
                     <th> Description </th>
                     <th> Price </th>
                     <th> Quantity</th>
+                    <th> Negotiation</th>
                     <th> Negotiated Amount</th>
                 </tr>
                 {% for item in cartITEM %}
@@ -19,15 +21,12 @@
                     <td> {{item['Description']}} </td>
                     <td> {{item['Quantity']}}</td>
                     <td> {{item['Price']}} </td>
+                    <td><button type="button" onclick="negotiate()">Want To Negotiate</button></td>
                     <td> {{item['Price']}} </td>
                 </tr>
                 {% endfor %}
             </table>
         </div>
-        <form method="post" action="">
-            <button type="submit">EDIT CART</button>
-        </form>
-        <button type="button" onclick="negotiate()">Want To Negotiate</button>
         <button type="submit">PROCEED FOR PAYMENT</button> {% else %}
         <h2>YOUR CART IS EMPTY</h2>
         {% endif %}
