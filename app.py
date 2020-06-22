@@ -48,7 +48,7 @@ def showPlaceOrder(merchant_id):
 
 @app.route("/merchant/<merchant_id>/cart",methods=['GET','POST'])
 def showCart(merchant_id):
-    print(request.args)
+    print(request.form)
     currentMerchantID = merchant_id
     currentCartID = merchant_id
     carts = displayALLCart(mysql,cartID=currentCartID,merchantID=currentMerchantID)
