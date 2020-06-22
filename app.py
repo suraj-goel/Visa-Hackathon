@@ -11,6 +11,7 @@ from accounts.validate_accounts import validation #validate_accounts.py
 app=Flask(__name__)
 app.secret_key = 'super secret key'
 from place_order.displayCart import displayALLCart
+app = Flask(__name__,static_folder = '')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader,jinja2.FileSystemLoader(['.'])])
 
 
