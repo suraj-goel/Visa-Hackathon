@@ -53,5 +53,5 @@ def displayAllOffers(mysql, selectedMerchant):
         else:
             offers[a[i]['ProductID']] = ()
     
-    print(offers)
+    # print(offers)
     return offers
