@@ -1,9 +1,22 @@
 {% include "./common/header.html" %}
-<link rel="stylesheet" href="{{ url_for('static',filename='./place_order/place_order.css') }}">
+<link rel="stylesheet" href="{{ url_for('static',filename='./place_order/place_order.css') }}"
+      xmlns="http://www.w3.org/1999/html">
 <script>
-    function updateTotalPrice(pppID, qrID, disID, tpID, dpID) {
+    function check(id,quantity, lLimit, uLimit) {
+        if (quantity > uLimit) {
+            alert("SORRY WE ONLY HAVE " + uLimit + " UNITS IN OUR STOCK. ");
+        }
+        quantity = Math.min(quantity, uLimit);
+        quantity = Math.max(quantity, lLimit);
+        $("#"+id).val(quantity);
+        return quantity;
+    }
+    function updateTotalPrice(pppID, qrID, disID, tpID, dpID,qty,iLimit,uLimit) {
+
+
         var price = document.getElementById(pppID).innerText;
-        var qty = document.getElementById(qrID).value;
+
+         qty=check(qrID,iLimit,uLimit);
         var tprice = document.getElementById(tpID);
         tprice.innerText = price * qty;
         updateDiscount(disID, tpID, dpID);
@@ -20,6 +33,7 @@
             fcost.innerText = cost - (cost * (discount / 100));
         }
     }
+
 </script>
 
 <body>
@@ -27,6 +41,7 @@
 
     {% if products %}
     <div class="container">
+        <form id="form" method="post" action="">
         <table class="table table-bordered">
             <tr>
                 <th> Product </th>
@@ -39,18 +54,18 @@
                 <th> Amount after discount </th>
 
             </tr>
-
+            <selecl name="details">
             {% for item in products %}
             <tr>
                 <!-- <td> {{item['ProductID']}} </td> -->
-                <td> {{item['Name']}} - <br>
+                  <td> {{item['Name']}} - <br>
                     <font size="2dp"> {{item['Description']}} </font>
                 </td>
                 <td> {{item['Category']}} </td>
-                <td value={{item[ 'Price']}} id="price{{loop.index0}}"> {{item['Price']}} </td>
+                <option value="{{item['Price']}}"><td value={{item[ 'Price']}} id="price{{loop.index0}}"> {{item['Price']}} </td></option>
                 <td value={{item[ 'Quantity']}} id="tquantity{{loop.index0}}"> {{item['Quantity']}} </td>
                 <td>
-                    <input type="number" id="quantity{{loop.index0}}" min="0" max="{{item['Quantity']}}" value="0" onchange="updateTotalPrice('price{{loop.index0}}', 'quantity{{loop.index0}}', 'offerOptions{{loop.index0}}', 'tprice{{loop.index0}}', 'dprice{{loop.index0}}')">
+                    <input name="qty" type="number" id="quantity{{loop.index0}}" min="0" max="{{item['Quantity']}}" value="0"   onchange="updateTotalPrice('price{{loop.index0}}', 'quantity{{loop.index0}}', 'offerOptions{{loop.index0}}', 'tprice{{loop.index0}}', 'dprice{{loop.index0}}',value,min,max)">
                 </td>
                 <td>
                     {% if offers[item['ProductID']]|length > 0 %}
@@ -74,23 +89,18 @@
             <script>
                 updateTotalPrice('price{{loop.index0}}', 'quantity{{loop.index0}}', 'offerOptions{{loop.index0}}', 'tprice{{loop.index0}}', 'dprice{{loop.index0}}');
             </script>
+
             {% endfor %}
+            </selecl>
         </table>
-        <button type="submit ">ADD ALL ITEMS IN CART</button>
+
+            <input type="submit" value="ADD TO CART"  name="{{products}}" />
+        </form>
     </div>
     {% endif %}
 </body>
 
-<script>
-    function check(quantity, lLimit, uLimit) {
-        if (quantity > uLimit) {
-            alert("SORRY WE ONLY HAVE " + uLimit + " UNITS IN OUR STOCK. ");
-        }
-        quantity = Math.min(quantity, uLimit);
-        quantity = Math.max(quantity, lLimit);
-        document.getElementById("qty ").value = quantity;
-    }
-</script>
+
 <script src="{{ url_for( 'static',filename='./place_order/cart_feature.js' )}} "></script>
 
 </html>

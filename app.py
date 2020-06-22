@@ -43,11 +43,12 @@ def showPlaceOrder(merchant_id):
         return render_template("./place_order/place_order.html", products = products, offers = offers ,len=len(products),merchantID=merchant_id)
     else:
         print(request.form)
-        return redirect(request.url+"/cart")
+        return redirect(url_for('showCart',merchant_id=merchant_id))
 
 
 @app.route("/merchant/<merchant_id>/cart",methods=['GET','POST'])
 def showCart(merchant_id):
+    print(request.args)
     currentMerchantID = merchant_id
     currentCartID = merchant_id
     carts = displayALLCart(mysql,cartID=currentCartID,merchantID=currentMerchantID)
