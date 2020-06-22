@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+      <title>Untitled</title>
+      <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+      <link rel="stylesheet" href="assets/fonts/ionicons.min.css">
+      <link rel="stylesheet" href="assets/css/Login-Form-Dark.css">
+      <link rel="stylesheet" href="assets/css/styles.css">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+      <script type="text/javascript">
+         function onVisaCheckoutReady(){
+         V.init( {
+         apikey: "Y55V0UIV66A96MF4EA4N217VEuC-EP55F-s2B9sHOX05ye4I4",
+         settings: {
+               displayName: "My Site",
+               review: {
+                   buttonAction: "Pay"
+               },
+               dataLevel: "FULL"
+         },
+         paymentRequest:{
+           currencyCode: "USD",
+           subtotal: "11.00"
+         },
+         // encryptionKey: "YEDEGDD6UYS38ROQ2A5N13768f1At7jM-kZr10nnZviZvafMY"
+         
+         });
+         V.on("payment.success", function(payment)
+         { console.log(payment);
+           alert(JSON.stringify(payment)); });
+         V.on("payment.cancel", function(payment)
+         {alert(JSON.stringify(payment)); });
+         V.on("payment.error", function(payment, error)
+         {alert(JSON.stringify(error)); });
+         }
+      </script>
+   </head>
+   <body>
+      <p>
+         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#PayCard" aria-expanded="false" aria-controls="PayCard">
+         Pay By Card
+         </button>
+         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#Checkout" aria-expanded="false" aria-controls="Checkout">
+         Visa Checkout
+         </button>
+      </p>
+      <div class="collapse login-dark" id="PayCard">
+         <div class="card card-body">
+            <div class="login-dark">
+               <form method="post">
+                  <h2 class="sr-only">Login Form</h2>
+                  <div class="illustration"><i class="icon ion-ios-locked-outline"></i></div>
+                  <div class="form-group"><input type="text" class="form-control" name="cardno" placeholder="Card Number" /></div>
+                  <div class="form-group"><input type="text" class="form-control" name="month" placeholder="Expiration Month" style="width: 80;" /><input class="form-control" type="text" name="year" placeholder="Expiration Year" style="width: 80;" /><input type="text" class="form-control" name="code"
+                     placeholder="Security Code" style="width: 80;" /></div>
+                  <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Pay</button></div>
+               </form>
+            </div>
+         </div>
+      </div>
+      <div class="collapse" id="Checkout">
+         <div class="card card-body">
+            <img alt="Visa Checkout" class="v-button" role="button"
+               src="https://sandbox.secure.checkout.visa.com/wallet-services-web/xo/button.png"/>
+            <script type="text/javascript"
+               src="https://sandbox-assets.secure.checkout.visa.com/
+               checkout-widget/resources/js/integration/v1/sdk.js"></script>
+         </div>
+      </div>
+
+
+
+      
+
+
+
+      <script src="assets/js/jquery.min.js"></script>
+      <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+   </body>
+</html>
