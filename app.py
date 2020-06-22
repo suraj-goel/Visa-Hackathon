@@ -1,7 +1,6 @@
 import jinja2
 from flask import Flask, render_template, request
 from services.db.db_connection import set_connection
-from search_merchants.searchMerchant import getAllMerchants
 from search_merchants.searchMerchant import getCurrentLocation
 from place_order.displayProduct import displayAllProducts, displayAllOffers
 from search_merchants.searchProducts import getSearchResults
@@ -19,17 +18,16 @@ def login():
 @app.route('/' ,methods=['POST','GET'])
 @app.route('/search', methods=['POST','GET'])
 def showAll():
-    # get the currentMerchantID from session.
     currentMerchantID = 2
-    data = getAllMerchants(mysql, currentMerchantID)
     currentLocation = getCurrentLocation(mysql,currentMerchantID)
     if request.method == "POST":
         search_option = request.form['search']
         filter=request.form.get('offerbox')
         radius=request.form['radius']
         product = request.form['name']
-        data=getSearchResults(mysql,product, currentMerchantID,search_option,filter, radius)
-        return render_template('./search_merchants/search.html', data=data, product=product ,currentLocation = currentLocation, search_option=search_option)
+        data=getSearchResults(mysql, currentMerchantID,product,search_option,filter, radius)
+        return render_template('./search_merchants/search.html', data=data ,currentLocation = currentLocation, search_option=search_option)
+    data = getSearchResults(mysql,currentMerchantID)
     return render_template("./search_merchants/search.html",currentLocation = currentLocation,data=data)
 
 
