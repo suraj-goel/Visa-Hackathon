@@ -45,7 +45,7 @@ def showPlaceOrder(merchant_id):
     else:
         products=request.form['details']
         session['cart']=products
-		print(request.form.get("qty[]"))
+		print(request.form.getlist("qty[]"))
         return redirect(url_for('showCart',merchant_id=merchant_id))
 
 
