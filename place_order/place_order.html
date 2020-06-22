@@ -85,7 +85,7 @@
                         <td value="{{item['Price']}}" id="price{{loop.index0}}"> {{item['Price']}} </td>
                         <td value="{{item['Quantity']}}" id="tquantity{{loop.index0}}"> {{item['Quantity']}} </td>
                         <td>
-                            <input name="quantity_added" type="number" id="quantity{{loop.index0}}" min="0" max="{{item[ 'Quantity']}}" value="0" onchange="validate( 'price{{loop.index0}}', 'tquantity{{loop.index0}}', 'quantity{{loop.index0}}', 'offerOptions{{loop.index0}}',
+                            <input name="qty[]" type="number" id="quantity{{loop.index0}}" min="0" max="{{item[ 'Quantity']}}" value="0" onchange="validate( 'price{{loop.index0}}', 'tquantity{{loop.index0}}', 'quantity{{loop.index0}}', 'offerOptions{{loop.index0}}',
                             'tprice{{loop.index0}}', 'dprice{{loop.index0}}')">
                         </td>
                         <td>
