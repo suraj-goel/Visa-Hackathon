@@ -1,6 +1,6 @@
 
 from .distanceCoordinates import distanceInKMBetweenCoordinates
-def getAllMerchants(mysql,merchantID,radius=2000):
+def getAllMerchants(mysql,merchantID):
     cur = mysql.connection.cursor()
     cur.execute("select Latitude,Longitude FROM Location WHERE MerchantID = " + str(merchantID))
     a=cur.fetchall()
