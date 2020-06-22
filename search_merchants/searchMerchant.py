@@ -1,6 +1,6 @@
 
 from .distanceCoordinates import distanceInKMBetweenCoordinates
-def getAllMerchants(mysql,merchantID,radius=2000):
+def getAllMerchants(mysql,merchantID,radius):
     cur = mysql.connection.cursor()
     cur.execute("select Latitude,Longitude FROM Location WHERE MerchantID = " + str(merchantID))
     a=cur.fetchall()
@@ -33,21 +33,9 @@ def getAllMerchants(mysql,merchantID,radius=2000):
             data_res.append(i)
 
     cur.close()
-    finalResult = []
-    for i in range(len(data_res)):
-        latitude = float(data_res[i]["Latitude"])
-        longitude = float(data_res[i]["Longitude"])
-        distance = distanceInKMBetweenCoordinates(currentLatitude,currentLongitude,latitude,longitude)
-        dic = {"distance" : distance}
-        dic.update(data_res[i])
-        if not radius:
-            finalResult.append(dic)
-        else:
-            if (distance<=float(radius)): 
-                finalResult.append(dic)
-    finalResult = sorted(finalResult, key = lambda i: i['distance'])
-    # print(finalResult)
-    return finalResult
+   
+    
+    return data_res
 
 def getCurrentLocation(mysql,merchantID):
     cur = mysql.connection.cursor()
