@@ -2,6 +2,7 @@
 <link rel="stylesheet" href="{{ url_for('static',filename='./place_order/place_order.css') }}" xmlns="http://www.w3.org/1999/html">
 
 <script>
+    // Validate all the input fields to get the no of products
     function validate(pppID, tqID, qrID, disID, tpID, dpID) {
         var idl = "quantity";
         var n = document.getElementById("tableID").rows.length - 1;
@@ -22,6 +23,7 @@
         updateTotalPrice(pppID, qrID, disID, tpID, dpID);
     }
 
+    // Update the total price the the customer needs to give
     function updateTotalPrice(pppID, qrID, disID, tpID, dpID) {
         var price = document.getElementById(pppID).innerText;
         var qty = document.getElementById(qrID).value;
@@ -30,6 +32,7 @@
         updateDiscount(disID, tpID, dpID);
     }
 
+    // Update the discounted price that the customer needs to give
     function updateDiscount(disID, tpID, dpID) {
         var discount = document.getElementById(disID);
         var cost = document.getElementById(tpID);
@@ -43,6 +46,16 @@
             fcost.innerText = cost.innerText;
         }
     }
+
+    // Prevent Enter key from performing any function
+    $(document).ready(function() {
+        $(window).keydown(function(event) {
+            if (event.keyCode == 13) {
+                event.preventDefault();
+                return false;
+            }
+        });
+    });
 </script>
 
 <body>
@@ -66,7 +79,6 @@
                 <selecl name="details">
                     {% for item in products %}
                     <tr>
-                        <!-- <td> {{item['ProductID']}} </td> -->
                         <td> {{item['Name']}} - <br>
                             <font size="2dp"> {{item['Description']}} </font>
                         </td>
@@ -110,7 +122,4 @@
     {% endif %}
 </body>
 
-
 <script src="{{ url_for( 'static',filename='./place_order/cart_feature.js' )}}"></script>
-
-</html>
