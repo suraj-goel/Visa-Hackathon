@@ -1,19 +1,15 @@
 import jinja2
-
-from flask import Flask, render_template, request, redirect,flash,session
 from flask import *
 from services.db.db_connection import set_connection
 from search_merchants.searchMerchant import getCurrentLocation
 from place_order.displayProduct import displayAllProducts, displayAllOffers
 from search_merchants.searchProducts import getSearchResults
-
 from accounts.validate_accounts import validation #validate_accounts.py
-app=Flask(__name__)
-app.secret_key = 'super secret key'
 from place_order.displayCart import displayALLCart
+
 app = Flask(__name__,static_folder = '')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader,jinja2.FileSystemLoader(['.'])])
-
+app.secret_key = 'super secret key'
 
 mysql = set_connection(app)
 
@@ -88,7 +84,7 @@ def editAccountDetails():
 			return redirect('/accounts/')
 		else:
 			result = r[0]
-			"""if(r[1][0]):
+			if(r[1][0]):
 				flash("Name already exists, please enter a new one.")
 			if(r[1][1]):
 				flash("Registered Name already exists, please enter a new one.")
@@ -99,7 +95,7 @@ def editAccountDetails():
 			if(r[1][4]):
 				flash("Address already exists, please enter a new one.")
 			if(r[1][5]):
-				flash("Password already exists, please enter a new one.")"""
+				flash("Password already exists, please enter a new one.")
 			return render_template("./accounts/editAccountDetails.html",result=result)
 
 	cur.execute("select * from Merchant where MerchantID='2'")
