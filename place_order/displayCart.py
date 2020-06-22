@@ -1,27 +1,23 @@
-def displayALLCart(mysql,cartID,merchantID):
+
+def addToCart(mysql,qty,ProductID,Name,Description,Price,merchant_id,cart_id):
+
     cur = mysql.connection.cursor()
-    cur.execute("select * FROM ProductCart WHERE CartID = "+str(cartID))
-    results=cur.fetchall()
+    cur.execute("select CartID FROM ProductCart where MerchantID =%s ORDER BY CartID",(str(merchant_id)));
+    a=cur.fetchall()
 
-
+    cart_id = 1
+    for i in range(0,len(a)):
+        if a[i]['CartID']!=cart_id:
+            break
+        else:
+            cart_id += 1
+    loop = len(ProductID)
+    status = "pending"
+    for i in range(0,loop):
+        try:
+            cur.execute('INSERT INTO ProductCart(CartID, MerchantID, ProductID, Status, Price, Information, Quantity) VALUES(%s,%s,%s,%s,%s,%s,%s)',(cart_id,merchant_id,ProductID[i],status,Price[i],Description[i],qty[i]))
+            mysql.connection.commit()
+        except Exception as e:
+            print("Problem in inseting into db"+str(e))
+            return None
     cur.close()
-
-    cartList = []
-
-    for i in range(len(results)):
-        currentProductID = str(results[i]["ProductID"])
-        currentMerchantID = str(results[i]["MerchantID"])
-        currentPrice = str(results[i]["Price"])
-        currentStatus = str(results[i]["Status"])
-        currentQuantity = str(results[i]["Quantity"])
-        currentInformation = str(results[i]["Information"])
-        if(currentStatus=='pending'):
-                temp = {"ProductID": currentProductID,
-                "Description": currentInformation,
-                "Price": currentPrice,
-                "Quantity": currentQuantity,
-                }
-                cartList.append(temp)
-
-
-    return cartList

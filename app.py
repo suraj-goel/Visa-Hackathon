@@ -6,14 +6,16 @@ from search_merchants.searchMerchant import getCurrentLocation
 from place_order.displayProduct import displayAllProducts, displayAllOffers
 from search_merchants.searchProducts import getSearchResults
 from accounts.validate_accounts import validation #validate_accounts.py
-from place_order.displayCart import displayALLCart
+from place_order.displayCart import addToCart
 
 app = Flask(__name__,static_folder = '')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader,jinja2.FileSystemLoader(['.'])])
 app.secret_key = 'super secret key'
 mysql = set_connection(app)
-
-
+Check=False
+def modify():
+	global Check
+	Check = True
 @app.route('/login')
 def login():
     return render_template("./login_registration/login.html")
@@ -53,16 +55,30 @@ def showPlaceOrder(merchant_id):
 
 @app.route("/merchant/<merchant_id>/cart",methods=['GET','POST'])
 def showCart(merchant_id):
+	qty=[]
+	ProductID=[]
+	Name = []
+	Description =[]
+	Price =[]
 	if request.method=='GET':
 		qty=session['qty']
 		ProductID=session['ProductID']
 		Name = session['Name']
 		Description =session['Description']
 		Price = session['Price']
-		print(qty)
 		return render_template("./place_order/cart.html",merchantID=merchant_id,qty=qty,ProductID=ProductID,Name=Name,Description=Description,Price=Price,len=len(qty))
 	else:
-		return redirect(url_for('showPlaceOrder',merchant_id=merchant_id))
+		ProductID = request.form.getlist("ProductId[]")
+		qty = request.form.getlist("qty[]")
+		Name = request.form.getlist("Name[]")
+		Description = request.form.getlist("Description[]")
+		Price = request.form.getlist("Price[]")
+		#print(Check)
+		if(Check==False):
+			addToCart(mysql,qty,ProductID,Name,Description,Price,merchant_id,merchant_id)
+			modify()
+
+		return redirect(url_for('showCart',merchant_id=merchant_id))
 
 
 @app.route('/accounts/', methods=['GET','POST'])

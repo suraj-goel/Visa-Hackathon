@@ -1,16 +1,10 @@
-var shoppingList = [];
+
+var finalPrice=0;
+var discountPrice = 0;
 
 
-function addToCart(item) {
-    shoppingList.push(item);
-    console.log(shoppingList);
-}
 
-function showOnCart(){
-
-    console.log(shoppingList);
-    for(var items=0;items<shoppingList.length;items++){
-
-    }
-
-}
+function updateDetails(firstValue,secondValue){
+   finalPrice = firstValue;
+   discountPrice = secondValue;
+};

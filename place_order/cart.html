@@ -1,27 +1,29 @@
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./place_order/place_order.css') }}">
 <script>
-    function save() {
+    var check = false;
+    function save(event) {
 
+        if (check == true) {
+            event.preventDefault();
+        }
+        check = true;
     }
     function negotiate() {
-
-
+       check = true;
     }
     function payment() {
-
-
+       check=true;
     }
-    function goBack(event) {
+    function goBack() {
         window.history.back();
-        //event.preventDefault();
-
     }
 
 </script>
 
         {%if qty %} <br><br><br>
         <div class="container">
+            <form method="post" action="" onsubmit="save()">
             <table class="table table-bordered">
                 <tr>
                     <th> ProductID </th>
@@ -34,25 +36,30 @@
                 {% for i in range(0,len) %}
                 <tr>
                     <td> {{ProductID[i]}} </td>
+                    <input type="hidden" name="ProductId[]" value="{{ProductID[i]}}">
                     <td> {{Name[i]}}</td>
+                    <input type="hidden" name="Name[]" value="{{Name[i]}}">
                     <td> {{Description[i]}}</td>
+                    <input type="hidden" name="Description[]" value="{{Description[i]}}">
                     <td> {{Price[i]}}</td>
+                    <input type="hidden" name="Price[]" value="{{Price[i]}}">
                     <td> {{qty[i]}}</td>
+                    <input type="hidden" name="qty[]" value="{{qty[i]}}">
                 </tr>
                 {% endfor %}
             </table>
+
+<td><button type="button" onclick="goBack()">EDIT CART</button></td>
+<td><button type="submit" onsubmit="save(event)" onclick="negotiate()" >Want To Negotiate</button></td>
+<td><button type="submit" onsubmit="save(event)" onclick="payment()">Process Payment</button></td>
+            </form>
         </div>
-        <td><button type="button" onclick="goBack()">EDIT CART</button> </td>
-        <td><button type="button" onclick="negotiate()">Want To Negotiate</button></td>
-        <button type="submit" onclick="payment()">PROCEED FOR PAYMENT</button> {% else %}
+{% else %}
         <h2>YOUR CART IS EMPTY</h2>
         {% endif %}
     </body>
 
-    <script>
-        function negotiate() {
-
-        }
-    </script>
 
 </html>
+<script type="text/javascript" src="{{url_for('static',filename='./place_order/cart_feature.js') }}"></script>
+
