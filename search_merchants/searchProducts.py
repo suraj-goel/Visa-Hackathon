@@ -1,10 +1,12 @@
 from builtins import list, len
 from .distanceCoordinates import distanceInKMBetweenCoordinates
+from search_merchants.searchMerchant import getAllMerchants
 
-def getSearchResults(mysql,name,merchantid,search_option,filters,radius):
+def getSearchResults(mysql,merchantid,name='',search_option='initial',filters=False,radius=2000):
     cur = mysql.connection.cursor()
-    print(filters)
-    if search_option=='product':
+    if search_option=='initial':
+        return getAllMerchants(mysql,merchantid,radius)
+    elif search_option=='product':
         product=name
         # only offers filter
         # add exact matches then based on name then see similarity in name

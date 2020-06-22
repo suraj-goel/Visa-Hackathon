@@ -1,12 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>CART</title>
-    <link rel="stylesheet" href="{{ url_for('static',filename='./place_order/place_order.css') }}">
-</head>
-<body>
-
+{% include "./common/header.html" %}
+<link rel="stylesheet" href="{{ url_for('static',filename='./place_order/place_order.css') }}">
 <body>
 {%if cartITEM   %}
 <div class="container">
