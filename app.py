@@ -53,14 +53,11 @@ def showPlaceOrder(merchant_id):
 
 @app.route("/merchant/<merchant_id>/cart",methods=['GET','POST'])
 def showCart(merchant_id):
-	currentMerchantID = merchant_id
-	currentCartID = merchant_id
-	ProductID = request.args.getlist("ProductID")
-	qty = request.args.getlist('qty')
-	Description = request.args.getlist('Description')
-	Name = request.args.getlist('Name')
-	Price = request.args.getlist('Price')
-	return render_template("./place_order/cart.html",merchantID=merchant_id,ProductID=ProductID,qty=qty,Name=Name,Description=Description,Price=Price,len=len(qty))
+    currentMerchantID = merchant_id
+    currentCartID = merchant_id
+    carts = session['cart']
+    print(carts[0])
+    return render_template("./place_order/cart.html",merchantID=merchant_id,cartITEM=carts)
 
 
 @app.route('/accounts/', methods=['GET','POST'])
