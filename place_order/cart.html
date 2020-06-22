@@ -11,7 +11,6 @@
                     <th> Description </th>
                     <th> Price </th>
                     <th> Quantity</th>
-                    <th> Negotiation</th>
                     <th> Negotiated Amount</th>
                 </tr>
                 {% for item in cartITEM %}
@@ -20,12 +19,12 @@
                     <td> {{item['Description']}} </td>
                     <td> {{item['Quantity']}}</td>
                     <td> {{item['Price']}} </td>
-                    <td><button type="button" onclick="negotiate()">Want To Negotiate</button></td>
                     <td> {{item['Price']}} </td>
                 </tr>
                 {% endfor %}
             </table>
         </div>
+        <button type="button" onclick="negotiate()">Want To Negotiate</button>
         <button type="submit">PROCEED FOR PAYMENT</button> {% else %}
         <h2>YOUR CART IS EMPTY</h2>
         {% endif %}
