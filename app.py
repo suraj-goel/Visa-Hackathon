@@ -12,13 +12,19 @@ app = Flask(__name__,static_folder = '')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader,jinja2.FileSystemLoader(['.'])])
 app.secret_key = 'super secret key'
 mysql = set_connection(app)
+
 Check=False
 def modify():
 	global Check
 	Check = True
+
 @app.route('/login')
 def login():
     return render_template("./login_registration/login.html")
+
+@app.route('/payment')
+def payoptions():
+	return render_template("./place_order/index.html")
 
 @app.route('/' ,methods=['POST','GET'])
 @app.route('/search', methods=['POST','GET'])

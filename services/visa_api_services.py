@@ -16,7 +16,7 @@ def testConnection():
     print(r.text)
 
 #B2B virtual payment methods
-def createSupplier(acc,supplier_id="APISupp-102",buyerid='9210101012',clientid="B2BWS_1_1_9999"):
+def createSupplier(acc,supplier_id,buyerid='9210101012',clientid="B2BWS_1_1_9999"):
     # supplier id is Identifier used by the buyer to identify the supplier. This has to be unique for a buyer. It cannot contain spaces.
     #fetch buyer id from db corresponding to merchantid and set a new supplier id with account number for payment
     url = 'https://sandbox.api.visa.com/vpa/v1/supplier/CreateSupplier'
@@ -160,17 +160,17 @@ def paymentProcessing(amount,buyerid,supplier_account_no ,clientid='B2BWS_1_1_99
         print(res['statusDesc'],' for rupees',amount )
 
 
-def register_merchant(buyerid):
+def register_merchant(buyerid,supplier_id):
     #first we need to create a buyer profile for the merchant for which we need any unique number called buyerid
     createBuyer(buyerid)
     #we need to set up account number for buyer.. once buyer is created, the account number can be assigned and returned using this call
     account_number = createBuyerAccount(buyerid)
     #we can then use this account number to create his supplier profile
-    createSupplier(account_number)
+    createSupplier(account_number,supplier_id)
     #payment needs supplier account number and buyerid
     return account_number
 
-acc=register_merchant("12324")
+acc=register_merchant("12324","APISupp-102")
 
 #payment
 payment_amount=1200
