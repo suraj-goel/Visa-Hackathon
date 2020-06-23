@@ -34,7 +34,7 @@ select {
     width: max-content;
 }
 
-.containerempty {
+.containerEmpty {
     height: 200px;
     position: relative;
     border: 3px solid green;

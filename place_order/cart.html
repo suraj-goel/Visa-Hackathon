@@ -36,12 +36,17 @@
     function FinalPrice() {
 
         var v1=document.getElementById("finalPrice");
-        v1.innerHTML = finalPrice;
+        v1.innerHTML= finalPrice;
+        var v2 = document.getElementById("finalPrice1");
+        v2.value = finalPrice;
+
 
     }
     function DiscountPrice(){
-        var v2 = document.getElementById("discountPrice");
-        v2.innerHTML = discountPrice;
+        var v1 = document.getElementById("discountPrice");
+        v1.innerHTML = discountPrice;
+        var v2 = document.getElementById("finalDiscountPrice1");
+        v2.value = discountPrice;
     }
 
     function showOffers(id){
@@ -53,7 +58,7 @@
 <body>
 {%if totalQuantity ==0 %}
 <h2>YOUR CART IS EMPTY</h2>
-<div class="containerempty">
+<div class="containerEmpty">
     <div class="vertical-center">
         <button type="button" onclick="goBack()">EDIT CART</button>
     </div>
@@ -82,7 +87,6 @@
                 <td> {{Description[i]}}</td>
                 <input type="hidden" name="Description[]" value="{{Description[i]}}">
                 <td> {{Price[i]}}</td>
-                <input type="hidden" name="Price[]" value="{{Price[i]}}">
                 <td> {{qty[i]}}</td>
                 <input type="hidden" name="qty[]" value="{{qty[i]}}">
                 <td>{{Offers[i]}}</td>
@@ -92,12 +96,14 @@
             </tr>
             {% endfor %}
         </table>
-
-        <tr><h3>Your final price is: Rs <span id="finalPrice">0</span></h3></tr>
-        <h3>Your final discount price is: Rs <span id="discountPrice">0</span></h3></tr>
+        <input type="hidden" id="finalPrice1" name="finalPrice" value="0"/>
+        <input type="hidden" id="finalDiscountPrice1" name="finalDiscountPrice" value="0"/>
+        <tr><h3>Totol Cost: Rs <span id="finalPrice" >0</span></h3></tr>
+        <h3>Total cost(After Discount): Rs <span id="discountPrice">0</span></h3></tr>
         <script> FinalPrice();
         DiscountPrice();
         </script>
+
         <br><br>
         <td><button type="button" onclick="goBack()">EDIT CART</button></td>
         <td><input type="submit" name="type" onclick="negotiate()" value="Want To Negotiate"/></td>

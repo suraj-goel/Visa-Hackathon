@@ -85,12 +85,14 @@ def showCart(merchant_id):
 		Name = request.form.getlist("Name[]")
 		Description = request.form.getlist("Description[]")
 		Price = request.form.getlist("discountPrice[]")
-		Type = request.form.getlist("type")
+		Type = request.form.get("type")
+		finalPrice = request.form.get('finalPrice')
+		finalDiscountPrice = request.form.get('finalDiscountPrice')
 		status ='N'
-		if(Type[0] == 'Process Payment'):
+		if(Type == 'Process Payment'):
 			status = 'P'
 		if(Check==False):
-			addToCart(mysql,qty,ProductID,Name,Description,Price,merchant_id,status)
+			addToCart(mysql,qty,ProductID,Name,Description,Price,merchant_id,status,finalPrice,finalDiscountPrice)
 			modify()
 
 		return redirect(url_for('showCart',merchant_id=merchant_id))
