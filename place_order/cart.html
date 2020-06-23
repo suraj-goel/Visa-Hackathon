@@ -4,7 +4,6 @@
 <script>
     var finalPrice = sessionStorage.getItem("finalPrice");
     var discountPrice = sessionStorage.getItem("discountPrice");
-    console.log(finalPrice,discountPrice);
     var check = false;
     function save(event) {
 
@@ -32,6 +31,12 @@
         var v2 = document.getElementById("discountPrice");
         v2.innerHTML = discountPrice;
     }
+
+    function showOffers(id){
+        var v1 = document.getElementById(id);
+        console.log(id,selectedOffers[id-1]);
+        v1.innerText=selectedOffers[id];
+    }
 </script>
 
 {%if qty %} <br><br><br>
@@ -39,16 +44,15 @@
     <form method="post" action="" onsubmit="save()">
         <table class="table table-bordered">
             <tr>
-                <th> ProductID </th>
                 <th> Name</th>
                 <th> Description </th>
                 <th>Price Per Unit </th>
                 <th> Quantity</th>
-                <!-- <th> Negotiated Amount</th>-->
+                <th> Selected Offers</th>
+                <th> Discount Price(If Applied)</th>
             </tr>
             {% for i in range(0,len) %}
             <tr>
-                <td> {{ProductID[i]}} </td>
                 <input type="hidden" name="ProductId[]" value="{{ProductID[i]}}">
                 <td> {{Name[i]}}</td>
                 <input type="hidden" name="Name[]" value="{{Name[i]}}">
@@ -58,12 +62,15 @@
                 <input type="hidden" name="Price[]" value="{{Price[i]}}">
                 <td> {{qty[i]}}</td>
                 <input type="hidden" name="qty[]" value="{{qty[i]}}">
+                 <td>{{Offers[i]}}</td>
+                <td> {{discountPrice[i]}}</td>
+                <input type="hidden" name="Price[]" value="{{discountPrice[i]}}">
             </tr>
             {% endfor %}
         </table>
 
-        <tr><h3>Your final price is: <span id="finalPrice">0</span></h3></tr>
-        <h3>Your final discount price is: <span id="discountPrice">0</span></h3></tr>
+        <tr><h3>Your final price is: Rs <span id="finalPrice">0</span></h3></tr>
+        <h3>Your final discount price is: Rs <span id="discountPrice">0</span></h3></tr>
         <script> FinalPrice();
         DiscountPrice();
         </script>

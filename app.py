@@ -50,6 +50,9 @@ def showPlaceOrder(merchant_id):
 		session['Name'] = request.form.getlist("Name[]")
 		session['Description'] = request.form.getlist("Description[]")
 		session['Price'] = request.form.getlist("Price[]")
+		session['offers'] = request.form.getlist("offers[]")
+		session['discountPrice'] = request.form.getlist("discountPrice[]")
+		print(session['discountPrice'])
 		return redirect(url_for('showCart',merchant_id=merchant_id))
 
 
@@ -60,20 +63,23 @@ def showCart(merchant_id):
 	Name = []
 	Description =[]
 	Price =[]
+	Offers = []
+	discountPrice = []
 	if request.method=='GET':
 		qty=session['qty']
 		ProductID=session['ProductID']
 		Name = session['Name']
 		Description =session['Description']
 		Price = session['Price']
-		return render_template("./place_order/cart.html",merchantID=merchant_id,qty=qty,ProductID=ProductID,Name=Name,Description=Description,Price=Price,len=len(qty))
+		Offers = session['offers']
+		discountPrice = session['discountPrice']
+		return render_template("./place_order/cart.html",merchantID=merchant_id,qty=qty,ProductID=ProductID,Name=Name,Description=Description,Price=Price,Offers=Offers,discountPrice=discountPrice,len=len(qty))
 	else:
 		ProductID = request.form.getlist("ProductId[]")
 		qty = request.form.getlist("qty[]")
 		Name = request.form.getlist("Name[]")
 		Description = request.form.getlist("Description[]")
 		Price = request.form.getlist("Price[]")
-		#print(Check)
 		if(Check==False):
 			addToCart(mysql,qty,ProductID,Name,Description,Price,merchant_id,merchant_id)
 			modify()
