@@ -79,7 +79,7 @@ def showCart(merchant_id):
 		qty = request.form.getlist("qty[]")
 		Name = request.form.getlist("Name[]")
 		Description = request.form.getlist("Description[]")
-		Price = request.form.getlist("Price[]")
+		Price = request.form.getlist("discountPrice[]")
 		Type = request.form.getlist("type")
 		status ='N'
 		if(Type[0] == 'Process Payment'):
