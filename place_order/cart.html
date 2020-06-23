@@ -2,110 +2,265 @@
 <link rel="stylesheet" href="{{ url_for('static',filename='./place_order/place_order.css') }}">
 <script type="text/javascript" src="{{url_for('static',filename='./place_order/cart_feature.js') }}"></script>
 <script>
-    var finalPrice = sessionStorage.getItem("finalPrice");
-    var discountPrice = sessionStorage.getItem("discountPrice");
-    var check = false;
-    function save(event) {
-
-        if (check == true) {
-            event.preventDefault();
-        }
-        check = true;
-    }
-    function negotiate() {
-        check = true;
-        var tprice = sessionStorage.getItem("discountPrice");
-        var negprice = prompt("Please enter the amount you want", tprice);
-        console.log(tprice, negprice);
-        if (parseInt(negprice) <= parseInt(tprice) && parseInt(negprice) >= 0) {
-            var priceSent = negprice;
-            alert("Negotiated price (" + priceSent + ") sent to merchant");
-        } else if (parseInt(negprice) > parseInt(tprice) || parseInt(negprice) < 0) {
-            var priceSent = tprice;
-            alert("Negotiated Price should be greater than 0 and less than Discount price(" + tprice + ")");
-            alert("Discount price (" + priceSent + ") sent to merchant");
-        }
-    }
-
-    function payment() {
-        check=true;
-    }
-    function goBack() {
-        window.history.back();
-    }
-    function FinalPrice() {
-
-        var v1=document.getElementById("finalPrice");
-        v1.innerHTML = finalPrice;
-
-    }
-    function DiscountPrice(){
-        var v2 = document.getElementById("discountPrice");
-        v2.innerHTML = discountPrice;
-    }
-
-    function showOffers(id){
-        var v1 = document.getElementById(id);
-        console.log(id,selectedOffers[id-1]);
-        v1.innerText=selectedOffers[id];
-    }
+   var finalPrice = sessionStorage.getItem("finalPrice");
+   var discountPrice = sessionStorage.getItem("discountPrice");
+   var check = false;
+   function save(event) {
+   
+       if (check == true) {
+           event.preventDefault();
+       }
+       check = true;
+   }
+   function negotiate() {
+       check = true;
+       var tprice = sessionStorage.getItem("discountPrice");
+       var negprice = prompt("Please enter the amount you want", tprice);
+       console.log(tprice, negprice);
+       if (parseInt(negprice) <= parseInt(tprice) && parseInt(negprice) >= 0) {
+           var priceSent = negprice;
+           alert("Negotiated price (" + priceSent + ") sent to merchant");
+       } else if (parseInt(negprice) > parseInt(tprice) || parseInt(negprice) < 0) {
+           var priceSent = tprice;
+           alert("Negotiated Price should be greater than 0 and less than Discount price(" + tprice + ")");
+           alert("Discount price (" + priceSent + ") sent to merchant");
+       }
+   }
+   
+   function payment() {
+       check=true;
+   }
+   function goBack() {
+       window.history.back();
+   }
+   function FinalPrice() {
+   
+       var v1=document.getElementById("finalPrice");
+       v1.innerHTML = finalPrice;
+   
+   }
+   function DiscountPrice(){
+       var v2 = document.getElementById("discountPrice");
+       v2.innerHTML = discountPrice;
+   }
+   
+   function showOffers(id){
+       var v1 = document.getElementById(id);
+       console.log(id,selectedOffers[id-1]);
+       v1.innerText=selectedOffers[id];
+   }
+</script>
+<link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' rel='stylesheet'>
+<link href='https://use.fontawesome.com/releases/v5.8.1/css/all.css' rel='stylesheet'>
+<style>body {
+   background: #f5f5f5
+   }
+   .rounded {
+   border-radius: 1rem
+   }
+   .nav-pills .nav-link {
+   color: #555
+   }
+   .nav-pills .nav-link.active {
+   color: white
+   }
+   input[type="radio"] {
+   margin-right: 5px
+   }
+   .bold {
+   font-weight: bold
+   }
+</style>
+<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script type='text/javascript' src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js'></script>
+<script type='text/javascript'>$(function() {
+   $('[data-toggle="tooltip"]').tooltip()
+   })
+</script>
+<script type="text/javascript">
+   function onVisaCheckoutReady(){
+   V.init( {
+   apikey: "Y55V0UIV66A96MF4EA4N217VEuC-EP55F-s2B9sHOX05ye4I4",
+   settings: {
+         displayName: "My Site",
+         review: {
+             buttonAction: "Pay"
+         },
+         dataLevel: "FULL"
+   },
+   paymentRequest:{
+     currencyCode: "USD",
+     subtotal: "11.00"
+   },
+   // encryptionKey: "YEDEGDD6UYS38ROQ2A5N13768f1At7jM-kZr10nnZviZvafMY"
+   
+   });
+   V.on("payment.success", function(payment)
+   { console.log(payment);
+     alert(JSON.stringify(payment)); });
+   V.on("payment.cancel", function(payment)
+   {alert(JSON.stringify(payment)); });
+   V.on("payment.error", function(payment, error)
+   {alert(JSON.stringify(error)); });
+   }
 </script>
 <body>
-{%if totalQuantity ==0 %}
-<h2>YOUR CART IS EMPTY</h2>
-<div class="containerempty">
-    <div class="vertical-center">
-        <button type="button" onclick="goBack()">EDIT CART</button>
-    </div>
-</div>
-
-{%else%}
-<br><br><br>
-<div class="container">
-    <form method="post" action="" onsubmit="save()">
-        <table class="table table-bordered">
+   {%if totalQuantity ==0 %}
+   <h2>YOUR CART IS EMPTY</h2>
+   <div class="containerempty">
+      <div class="vertical-center">
+         <button type="button" onclick="goBack()">EDIT CART</button>
+      </div>
+   </div>
+   {%else%}
+   <br><br><br>
+   <div class="container">
+      <form method="post" action="" onsubmit="save()">
+         <table class="table table-bordered">
             <tr>
-
-                <th> Name</th>
-                <th> Description </th>
-                <th>Price Per Unit </th>
-                <th> Quantity</th>
-                <th> Selected Offers</th>
-                <th> Discount Price(If Applied)</th>
+               <th> Name</th>
+               <th> Description </th>
+               <th>Price Per Unit </th>
+               <th> Quantity</th>
+               <th> Selected Offers</th>
+               <th> Discount Price(If Applied)</th>
             </tr>
             {% for i in range(0,len) %}
             <tr>
-                {% if qty[i] != '0' %}
-                <input type="hidden" name="ProductId[]" value="{{ProductID[i]}}">
-                <td> {{Name[i]}}</td>
-                <input type="hidden" name="Name[]" value="{{Name[i]}}">
-                <td> {{Description[i]}}</td>
-                <input type="hidden" name="Description[]" value="{{Description[i]}}">
-                <td> {{Price[i]}}</td>
-                <input type="hidden" name="Price[]" value="{{Price[i]}}">
-                <td> {{qty[i]}}</td>
-                <input type="hidden" name="qty[]" value="{{qty[i]}}">
-                <td>{{Offers[i]}}</td>
-                <td> {{discountPrice[i]}}</td>
-                <input type="hidden" name="Price[]" value="{{discountPrice[i]}}">
-                {% endif %}
+               {% if qty[i] != '0' %}
+               <input type="hidden" name="ProductId[]" value="{{ProductID[i]}}">
+               <td> {{Name[i]}}</td>
+               <input type="hidden" name="Name[]" value="{{Name[i]}}">
+               <td> {{Description[i]}}</td>
+               <input type="hidden" name="Description[]" value="{{Description[i]}}">
+               <td> {{Price[i]}}</td>
+               <input type="hidden" name="Price[]" value="{{Price[i]}}">
+               <td> {{qty[i]}}</td>
+               <input type="hidden" name="qty[]" value="{{qty[i]}}">
+               <td>{{Offers[i]}}</td>
+               <td> {{discountPrice[i]}}</td>
+               <input type="hidden" name="Price[]" value="{{discountPrice[i]}}">
+               {% endif %}
             </tr>
             {% endfor %}
-        </table>
-
-        <tr><h3>Your final price is: Rs <span id="finalPrice">0</span></h3></tr>
-        <h3>Your final discount price is: Rs <span id="discountPrice">0</span></h3></tr>
-        <script> FinalPrice();
-        DiscountPrice();
-        </script>
-        <br><br>
-        <td><button type="button" onclick="goBack()">EDIT CART</button></td>
-        <td><input type="submit" name="type" onclick="negotiate()" value="Want To Negotiate"/></td>
-        <td><input type="submit" name="type" onclick="payment()" value="Process Payment"/></td>
-    </form>
-</div>
-{%endif%}
+         </table>
+         <tr>
+            <h3>Your final price is: Rs <span id="finalPrice">0</span></h3>
+         </tr>
+         <h3>Your final discount price is: Rs <span id="discountPrice">0</span></h3>
+         </tr>
+         <script> FinalPrice();
+            DiscountPrice();
+         </script>
+         <br><br>
+         <td><button type="button" onclick="goBack()">EDIT CART</button></td>
+         <td><input type="submit" name="type" onclick="negotiate()" value="Want To Negotiate"/></td>
+         <td><input type="submit" name="type" onclick="payment()" value="Process Payment"/></td>
+      </form>
+   </div>
+   {%endif%}
+   <div class="container py-5">
+   <!-- For demo purpose -->
+   <!-- End -->
+   <div class="row">
+   <div class="col-lg-6 mx-auto">
+      <div class="card ">
+         <div class="card-header">
+            <div class="bg-white shadow-sm pt-4 pl-2 pr-2 pb-2">
+               <!-- Credit card form tabs -->
+               <ul role="tablist" class="nav bg-light nav-pills rounded nav-fill mb-3">
+                  <li class="nav-item"> <a data-toggle="pill" href="#credit-card" class="nav-link active "> <i class="fas fa-credit-card mr-2"></i> Card </a> </li>
+                  <li class="nav-item"> <a data-toggle="pill" href="#checkout" class="nav-link "> <i class="fab  mr-2"></i>Visa Checkout </a> </li>
+                  <li class="nav-item"> <a data-toggle="pill" href="#net-banking" class="nav-link "> <i class="fas  mr-2"></i> Visa B2B </a> </li>
+               </ul>
+            </div>
+            <!-- End -->
+            <!-- Credit card form content -->
+            <div class="tab-content">
+               <!-- credit card info-->
+               <div id="credit-card" class="tab-pane fade show active pt-3">
+                  <form role="form">
+                     <div class="form-group">
+                        <label for="username">
+                           <h6>Card Owner</h6>
+                        </label>
+                        <input type="text" name="username" placeholder="Card Owner Name" required class="form-control "> 
+                     </div>
+                     <div class="form-group">
+                        <label for="cardNumber">
+                           <h6>Card number</h6>
+                        </label>
+                        <div class="input-group">
+                           <input type="text" name="cardNumber" placeholder="Valid card number" class="form-control " required>
+                           <div class="input-group-append"> <span class="input-group-text text-muted"> <i class="fab fa-cc-visa mx-1"></i> <i class="fab fa-cc-mastercard mx-1"></i> <i class="fab fa-cc-amex mx-1"></i> </span> </div>
+                        </div>
+                     </div>
+                     <div class="row">
+                        <div class="col-sm-8">
+                           <div class="form-group">
+                              <label>
+                                 <span class="hidden-xs">
+                                    <h6>Expiration Date</h6>
+                                 </span>
+                              </label>
+                              <div class="input-group"> <input type="number" placeholder="MM" name="" class="form-control" required> <input type="number" placeholder="YY" name="" class="form-control" required> </div>
+                           </div>
+                        </div>
+                        <div class="col-sm-4">
+                           <div class="form-group mb-4">
+                              <label data-toggle="tooltip" title="Three digit CV code on the back of your card">
+                                 <h6>CVV <i class="fa fa-question-circle d-inline"></i></h6>
+                              </label>
+                              <input type="text" required class="form-control"> 
+                           </div>
+                        </div>
+                     </div>
+                     <div class="card-footer"> <button type="button" class="subscribe btn btn-primary btn-block shadow-sm"> Confirm Payment </button>
+                  </form>
+                  </div>
+               </div>
+               <!-- End -->
+               <!-- checkout info -->
+               <div id="checkout" class="tab-pane fade pt-3">
+                  <center>
+                     <img alt="Visa Checkout" class="v-button" role="button"
+                        src="https://sandbox.secure.checkout.visa.com/wallet-services-web/xo/button.png"/>
+                     <script type="text/javascript"
+                        src="https://sandbox-assets.secure.checkout.visa.com/
+                        checkout-widget/resources/js/integration/v1/sdk.js"></script>
+                  </center>
+               </div>
+               <!-- End -->
+               <!-- bank transfer info -->
+               <div id="net-banking" class="tab-pane fade pt-3">
+                  <div class="form-group ">
+                     <label for="Select Your Bank">
+                        <h6>Select your Bank</h6>
+                     </label>
+                     <select class="form-control" id="ccmonth">
+                        <option value="" selected disabled>--Please select your Bank--</option>
+                        <option>Bank 1</option>
+                        <option>Bank 2</option>
+                        <option>Bank 3</option>
+                        <option>Bank 4</option>
+                        <option>Bank 5</option>
+                        <option>Bank 6</option>
+                        <option>Bank 7</option>
+                        <option>Bank 8</option>
+                        <option>Bank 9</option>
+                        <option>Bank 10</option>
+                     </select>
+                  </div>
+                  <div class="form-group">
+                     <p> <button type="button" class="btn btn-primary "><i class="fas fa-mobile-alt mr-2"></i> Proceed Pyment</button> </p>
+                  </div>
+                  <p class="text-muted">Note: After clicking on the button, you will be directed to a secure gateway for payment. After completing the payment process, you will be redirected back to the website to view details of your order. </p>
+               </div>
+               <!-- End -->
+               <!-- End -->
+            </div>
+         </div>
+      </div>
+   </div>
 </body>
-
-
 </html>
