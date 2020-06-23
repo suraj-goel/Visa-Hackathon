@@ -11,11 +11,14 @@
 
         if (check == true) {
             event.preventDefault();
+            return false;
         }
         check = true;
+        return true;
     }
 
     function negotiate() {
+        check = true;
         var tprice = sessionStorage.getItem("discountPrice");
         var negprice = prompt("Please enter the amount you want", tprice);
         console.log(tprice, negprice);
@@ -81,8 +84,8 @@
 
         <br><br>
         <td><button type="button" onclick="goBack()">EDIT CART</button></td>
-        <td><button type="submit" onsubmit="save(event)" onclick="negotiate()">Want To Negotiate</button></td>
-        <td><button type="submit" onsubmit="save(event)" onclick="payment()">Process Payment</button></td>
+        <td><input type="submit" name="type" onclick="negotiate()" value="Want To Negotiate"/></td>
+        <td><input type="submit" name="type" onclick="payment()" value="Process Payment"/></td>
 
         <script>
             FinalPrice();

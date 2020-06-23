@@ -58,7 +58,6 @@ def showPlaceOrder(merchant_id):
 		session['Price'] = request.form.getlist("Price[]")
 		session['offers'] = request.form.getlist("offers[]")
 		session['discountPrice'] = request.form.getlist("discountPrice[]")
-		print(session['discountPrice'])
 		return redirect(url_for('showCart',merchant_id=merchant_id))
 
 
@@ -86,8 +85,13 @@ def showCart(merchant_id):
 		Name = request.form.getlist("Name[]")
 		Description = request.form.getlist("Description[]")
 		Price = request.form.getlist("Price[]")
+		Type = request.form.getlist("type")
+		#print(Type[0])
+		status ='N'
+		if(Type[0] == 'Process Payment'):
+			status = 'P'
 		if(Check==False):
-			addToCart(mysql,qty,ProductID,Name,Description,Price,merchant_id,merchant_id)
+			addToCart(mysql,qty,ProductID,Name,Description,Price,merchant_id,status)
 			modify()
 
 		return redirect(url_for('showCart',merchant_id=merchant_id))

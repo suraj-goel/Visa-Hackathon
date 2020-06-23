@@ -1,18 +1,18 @@
 
-def addToCart(mysql,qty,ProductID,Name,Description,Price,merchant_id,cart_id):
+def addToCart(mysql,qty,ProductID,Name,Description,Price,merchant_id,status):
 
     cur = mysql.connection.cursor()
-    cur.execute("select CartID FROM ProductCart where MerchantID =%s ORDER BY CartID",(str(merchant_id)));
+    cur.execute("select CartID FROM ProductCart where MerchantID =%s ORDER BY CartID",(str(merchant_id)))
     a=cur.fetchall()
-
     cart_id = 1
     for i in range(0,len(a)):
-        if a[i]['CartID']!=cart_id:
-            break
+        if str(a[i]['CartID']) != str(cart_id):
+            continue
         else:
-            cart_id += 1
+            cart_id+=1
+            print(cart_id)
+    print(status)
     loop = len(ProductID)
-    status = "pending"
     for i in range(0,loop):
         try:
             cur.execute('INSERT INTO ProductCart(CartID, MerchantID, ProductID, Status, Price, Information, Quantity) VALUES(%s,%s,%s,%s,%s,%s,%s)',(cart_id,merchant_id,ProductID[i],status,Price[i],Description[i],qty[i]))
