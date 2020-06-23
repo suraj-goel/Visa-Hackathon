@@ -82,6 +82,10 @@
             }
             cp1.innerHTML = res1;
             cp2.innerHTML = res2;
+            var finalPrice = res1;
+            var discountPrice = res2;
+            sessionStorage.setItem("finalPrice",finalPrice);
+            sessionStorage.setItem("discountPrice",discountPrice);
         }
 
     }
