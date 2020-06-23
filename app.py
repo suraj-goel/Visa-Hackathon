@@ -1,4 +1,5 @@
 import jinja2
+import os
 from flask import Flask, render_template, request
 from flask import *
 from services.db.db_connection import set_connection
@@ -11,20 +12,21 @@ from login_registration.loginMerchant import checkEmailAndPassword
 app = Flask(__name__,static_folder = '')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader,jinja2.FileSystemLoader(['.'])])
 
-
+app.secret_key = os.urandom(24)
 mysql = set_connection(app)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        session.pop('user_id', None)
+        session.pop('session_id', None)
 
         username = request.form['username']
         password = request.form['password']
 
         users = checkEmailAndPassword(username,password)
         if len(users) >0:
+            session['session_id'] = users[0][0]
             return redirect(url_for('/home'))
         else:
             flash('Incorrect Email and Password combination')
@@ -66,6 +68,7 @@ def register():
 
 @app.route('/logout')
 def logout():
+    session.pop('session_id', None)
     return redirect('/login')
 
 
