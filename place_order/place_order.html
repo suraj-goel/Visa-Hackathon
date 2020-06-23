@@ -82,6 +82,10 @@
             }
             cp1.innerHTML = res1;
             cp2.innerHTML = res2;
+            var finalPrice = res1;
+            var discountPrice = res2;
+            sessionStorage.setItem("finalPrice",finalPrice);
+            sessionStorage.setItem("discountPrice",discountPrice);
         }
 
     }
@@ -97,7 +101,7 @@
     });
 </script>
 
-<body onload="validate()">
+<body onmouseover="validate()">
     <h2> Place your Orders here </h2>
 
     {% if products %}
@@ -128,11 +132,11 @@
                     <input type="hidden" name="Price[]" value="{{item['Price']}}" />
                     <td value="{{item['Quantity']}}" id="tquantity{{loop.index0}}"> {{item['Quantity']}} </td>
                     <td>
-                        <input name="qty[]" type="number" id="quantity{{loop.index0}}" min="0" max="{{item[ 'Quantity']}}" value="0" onchange="validate()" onmouseover="validate()">
+                        <input name="qty[]" type="number" id="quantity{{loop.index0}}" min="0" max="{{item[ 'Quantity']}}" value="0" onchange="validate()">
                     </td>
                     <td>
                         {% if offers[item['ProductID']]|length > 0 %}
-                        <select name="offerOptions" id="offerOptions{{loop.index0}}" onchange="updateDiscount('quantity{{loop.index0}}', 'offerOptions{{loop.index0}}', 'tprice{{loop.index0}}', 'dprice{{loop.index0}}')" onmouseover="updateDiscount('quantity{{loop.index0}}', 'offerOptions{{loop.index0}}', 'tprice{{loop.index0}}', 'dprice{{loop.index0}}')">
+                        <select name="offerOptions" id="offerOptions{{loop.index0}}" onchange="updateDiscount('quantity{{loop.index0}}', 'offerOptions{{loop.index0}}', 'tprice{{loop.index0}}', 'dprice{{loop.index0}}')">
                                 <option value="0 0" selected="true "> No discount </option>
                                 {% for offer in offers[item['ProductID']] %}
                                 <option value="{{offer['DiscountPercentage']}} {{offer['QuantityRequired']}}"> {{offer['Information']}} </option>{% endfor %}

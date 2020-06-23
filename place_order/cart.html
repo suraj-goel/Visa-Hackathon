@@ -2,6 +2,9 @@
 <link rel="stylesheet" href="{{ url_for('static',filename='./place_order/place_order.css') }}">
 <script type="text/javascript" src="{{url_for('static',filename='./place_order/cart_feature.js') }}"></script>
 <script>
+    var finalPrice = sessionStorage.getItem("finalPrice");
+    var discountPrice = sessionStorage.getItem("discountPrice");
+    console.log(finalPrice,discountPrice);
     var check = false;
     function save(event) {
 
@@ -11,54 +14,69 @@
         check = true;
     }
     function negotiate() {
-       check = true;
+        check = true;
     }
     function payment() {
-       check=true;
+        check=true;
     }
     function goBack() {
         window.history.back();
     }
+    function FinalPrice() {
 
+        var v1=document.getElementById("finalPrice");
+        v1.innerHTML = finalPrice;
+
+    }
+    function DiscountPrice(){
+        var v2 = document.getElementById("discountPrice");
+        v2.innerHTML = discountPrice;
+    }
 </script>
 
-        {%if qty %} <br><br><br>
-        <div class="container">
-            <form method="post" action="" onsubmit="save()">
-            <table class="table table-bordered">
-                <tr>
-                    <th> ProductID </th>
-                    <th> Name</th>
-                    <th> Description </th>
-                    <th>Price Per Unit </th>
-                    <th> Quantity</th>
-                   <!-- <th> Negotiated Amount</th>-->
-                </tr>
-                {% for i in range(0,len) %}
-                <tr>
-                    <td> {{ProductID[i]}} </td>
-                    <input type="hidden" name="ProductId[]" value="{{ProductID[i]}}">
-                    <td> {{Name[i]}}</td>
-                    <input type="hidden" name="Name[]" value="{{Name[i]}}">
-                    <td> {{Description[i]}}</td>
-                    <input type="hidden" name="Description[]" value="{{Description[i]}}">
-                    <td> {{Price[i]}}</td>
-                    <input type="hidden" name="Price[]" value="{{Price[i]}}">
-                    <td> {{qty[i]}}</td>
-                    <input type="hidden" name="qty[]" value="{{qty[i]}}">
-                </tr>
-                {% endfor %}
-            </table>
-<script> updateDetails('a','b');</script>
-<td><button type="button" onclick="goBack()">EDIT CART</button></td>
-<td><button type="submit" onsubmit="save(event)" onclick="negotiate()" >Want To Negotiate</button></td>
-<td><button type="submit" onsubmit="save(event)" onclick="payment()">Process Payment</button></td>
-            </form>
-        </div>
+{%if qty %} <br><br><br>
+<div class="container">
+    <form method="post" action="" onsubmit="save()">
+        <table class="table table-bordered">
+            <tr>
+                <th> ProductID </th>
+                <th> Name</th>
+                <th> Description </th>
+                <th>Price Per Unit </th>
+                <th> Quantity</th>
+                <!-- <th> Negotiated Amount</th>-->
+            </tr>
+            {% for i in range(0,len) %}
+            <tr>
+                <td> {{ProductID[i]}} </td>
+                <input type="hidden" name="ProductId[]" value="{{ProductID[i]}}">
+                <td> {{Name[i]}}</td>
+                <input type="hidden" name="Name[]" value="{{Name[i]}}">
+                <td> {{Description[i]}}</td>
+                <input type="hidden" name="Description[]" value="{{Description[i]}}">
+                <td> {{Price[i]}}</td>
+                <input type="hidden" name="Price[]" value="{{Price[i]}}">
+                <td> {{qty[i]}}</td>
+                <input type="hidden" name="qty[]" value="{{qty[i]}}">
+            </tr>
+            {% endfor %}
+        </table>
+
+        <tr><h3>Your final price is: <span id="finalPrice">0</span></h3></tr>
+        <h3>Your final discount price is: <span id="discountPrice">0</span></h3></tr>
+        <script> FinalPrice();
+        DiscountPrice();
+        </script>
+        <br><br>
+        <td><button type="button" onclick="goBack()">EDIT CART</button></td>
+        <td><button type="submit" onsubmit="save(event)" onclick="negotiate()" >Want To Negotiate</button></td>
+        <td><button type="submit" onsubmit="save(event)" onclick="payment()">Process Payment</button></td>
+    </form>
+</div>
 {% else %}
-        <h2>YOUR CART IS EMPTY</h2>
-        {% endif %}
-    </body>
+<h2>YOUR CART IS EMPTY</h2>
+{% endif %}
+</body>
 
 
 </html>
