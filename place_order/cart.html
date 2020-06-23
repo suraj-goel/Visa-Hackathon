@@ -4,7 +4,9 @@
 <script>
     var finalPrice = sessionStorage.getItem("finalPrice");
     var discountPrice = sessionStorage.getItem("discountPrice");
+    // console.log(finalPrice, discountPrice);
     var check = false;
+
     function save(event) {
 
         if (check == true) {
@@ -12,30 +14,37 @@
         }
         check = true;
     }
+
     function negotiate() {
+        var tprice = sessionStorage.getItem("discountPrice");
+        var negprice = prompt("Please enter the amount you want", tprice);
+        console.log(tprice, negprice);
+        if (parseInt(negprice) <= parseInt(tprice) && parseInt(negprice) >= 0) {
+            var priceSent = negprice;
+            alert("Negotiated price (" + priceSent + ") sent to merchant");
+        } else if (parseInt(negprice) > parseInt(tprice) || parseInt(negprice) < 0) {
+            var priceSent = tprice;
+            alert("Negotiated Price should be greater than 0 and less than Discount price(" + tprice + ")");
+            alert("Discount price (" + priceSent + ") sent to merchant");
+        }
+    }
+
+    function payment() {
         check = true;
     }
-    function payment() {
-        check=true;
-    }
+
     function goBack() {
         window.history.back();
     }
+
     function FinalPrice() {
-
-        var v1=document.getElementById("finalPrice");
+        var v1 = document.getElementById("finalPrice");
         v1.innerHTML = finalPrice;
-
     }
-    function DiscountPrice(){
+
+    function DiscountPrice() {
         var v2 = document.getElementById("discountPrice");
         v2.innerHTML = discountPrice;
-    }
-
-    function showOffers(id){
-        var v1 = document.getElementById(id);
-        console.log(id,selectedOffers[id-1]);
-        v1.innerText=selectedOffers[id];
     }
 </script>
 
@@ -44,15 +53,16 @@
     <form method="post" action="" onsubmit="save()">
         <table class="table table-bordered">
             <tr>
+                <th> ProductID </th>
                 <th> Name</th>
                 <th> Description </th>
                 <th>Price Per Unit </th>
                 <th> Quantity</th>
-                <th> Selected Offers</th>
-                <th> Discount Price(If Applied)</th>
+                <!-- <th> Negotiated Amount</th>-->
             </tr>
             {% for i in range(0,len) %}
             <tr>
+                <td> {{ProductID[i]}} </td>
                 <input type="hidden" name="ProductId[]" value="{{ProductID[i]}}">
                 <td> {{Name[i]}}</td>
                 <input type="hidden" name="Name[]" value="{{Name[i]}}">
@@ -62,23 +72,25 @@
                 <input type="hidden" name="Price[]" value="{{Price[i]}}">
                 <td> {{qty[i]}}</td>
                 <input type="hidden" name="qty[]" value="{{qty[i]}}">
-                 <td>{{Offers[i]}}</td>
-                <td> {{discountPrice[i]}}</td>
-                <input type="hidden" name="Price[]" value="{{discountPrice[i]}}">
             </tr>
             {% endfor %}
         </table>
 
-        <tr><h3>Your final price is: Rs <span id="finalPrice">0</span></h3></tr>
-        <h3>Your final discount price is: Rs <span id="discountPrice">0</span></h3></tr>
-        <script> FinalPrice();
-        DiscountPrice();
-        </script>
+        <h3>Your final price is: <span id="finalPrice">0</span></h3>
+        <h3>Your final discount price is: <span id="discountPrice">0</span></h3>
+
         <br><br>
         <td><button type="button" onclick="goBack()">EDIT CART</button></td>
-        <td><button type="submit" onsubmit="save(event)" onclick="negotiate()" >Want To Negotiate</button></td>
+        <td><button type="submit" onsubmit="save(event)" onclick="negotiate()">Want To Negotiate</button></td>
         <td><button type="submit" onsubmit="save(event)" onclick="payment()">Process Payment</button></td>
+
+        <script>
+            FinalPrice();
+            DiscountPrice();
+        </script>
+
     </form>
+
 </div>
 {% else %}
 <h2>YOUR CART IS EMPTY</h2>
@@ -87,5 +99,3 @@
 
 
 </html>
-
-
