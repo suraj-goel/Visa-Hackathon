@@ -1,5 +1,6 @@
 import jinja2
 import os
+from datetime import timedelta
 from flask import Flask, render_template, request
 from flask import *
 from services.db.db_connection import set_connection
@@ -13,6 +14,7 @@ app = Flask(__name__,static_folder = '')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader,jinja2.FileSystemLoader(['.'])])
 
 app.secret_key = os.urandom(24)
+app.permanent_session_lifetime = timedelta(minutes=5)
 mysql = set_connection(app)
 
 
@@ -26,6 +28,7 @@ def login():
 
         users = checkEmailAndPassword(username,password)
         if len(users) >0:
+            session.permanent = True
             session['session_id'] = users[0][0]
             return redirect(url_for('/home'))
         else:
