@@ -1,9 +1,8 @@
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./place_order/place_order.css') }}">
 <script type="text/javascript" src="{{url_for('static',filename='./place_order/cart_feature.js') }}"></script>
-
 <script>
-    //wiil shift this later on different page
+    //will shift this later on different page
     var finalPrice = sessionStorage.getItem("finalPrice");
     var discountPrice = sessionStorage.getItem("discountPrice");
     var check = false;
@@ -51,13 +50,11 @@
 </script>
 <body>
 {%if totalQuantity ==0 %}
-<h2>YOUR CART IS EMPTY</h2>
-<div class="containerEmpty">
-    <div class="vertical-center">
+<h2 style="color: green"><b>YOUR CART IS EMPTY</b></h2>
+
+    <div style="margin-left: 45%">
         <button type="button" onclick="goBack()">EDIT CART</button>
     </div>
-</div>
-
 {%else%}
 <br><br><br>
 <div class="container">
@@ -65,22 +62,22 @@
         <table class="table table-bordered">
             <tr>
 
-                <th> Name</th>
-                <th> Description </th>
-                <th>Price Per Unit </th>
-                <th> Quantity</th>
-                <th> Selected Offers</th>
-                <th> Discount Price(If Applied)</th>
+                <th>Product Details</th>
+                <th>Quantity</th>
+                <th>Offers Selected</th>
+                <th>Cost Price/<br>
+                    Discount Price
+                </th>
             </tr>
             {% for i in range(0,len) %}
             <tr>
                 {% if qty[i] != '0' %}
                 <input type="hidden" name="ProductId[]" value="{{ProductID[i]}}">
-                <td> {{Name[i]}}</td>
+                <td><b> {{Name[i]}}</b> :-<br>
                 <input type="hidden" name="Name[]" value="{{Name[i]}}">
-                <td> {{Description[i]}}</td>
+                    <p> {{Description[i]}}</p>
+                </td>
                 <input type="hidden" name="Description[]" value="{{Description[i]}}">
-                <td> {{Price[i]}}</td>
                 <td> {{qty[i]}}</td>
                 <input type="hidden" name="qty[]" value="{{qty[i]}}">
                 <td>{{Offers[i]}}</td>
