@@ -1,5 +1,6 @@
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./place_order/place_order.css') }}">
+<script type="text/javascript" src="{{url_for('static',filename='./place_order/cart_feature.js') }}"></script>
 <script>
     var check = false;
     function save(event) {
@@ -48,7 +49,7 @@
                 </tr>
                 {% endfor %}
             </table>
-
+<script> updateDetails('a','b');</script>
 <td><button type="button" onclick="goBack()">EDIT CART</button></td>
 <td><button type="submit" onsubmit="save(event)" onclick="negotiate()" >Want To Negotiate</button></td>
 <td><button type="submit" onsubmit="save(event)" onclick="payment()">Process Payment</button></td>
@@ -61,5 +62,5 @@
 
 
 </html>
-<script type="text/javascript" src="{{url_for('static',filename='./place_order/cart_feature.js') }}"></script>
+
 
