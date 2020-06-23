@@ -65,6 +65,7 @@
             </tr>
             {% for i in range(0,len) %}
             <tr>
+                {% if qty[i] != '0' %}
                 <input type="hidden" name="ProductId[]" value="{{ProductID[i]}}">
                 <td> {{Name[i]}}</td>
                 <input type="hidden" name="Name[]" value="{{Name[i]}}">
@@ -77,6 +78,7 @@
                 <td>{{Offers[i]}}</td>
                 <td> {{discountPrice[i]}}</td>
                 <input type="hidden" name="Price[]" value="{{discountPrice[i]}}">
+                {% endif %}
             </tr>
             {% endfor %}
         </table>
