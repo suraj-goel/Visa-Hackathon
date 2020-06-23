@@ -6,6 +6,8 @@ from search_merchants.searchMerchant import getCurrentLocation
 from place_order.displayProduct import displayAllProducts, displayAllOffers
 from search_merchants.searchProducts import getSearchResults
 from place_order.displayCart import displayALLCart
+from login_registration.registerMerchant import checkIfExistingMerchant,registerNewMerchant
+from login_registration.loginMerchant import checkEmailAndPassword
 app = Flask(__name__,static_folder = '')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader,jinja2.FileSystemLoader(['.'])])
 
@@ -13,9 +15,55 @@ app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader,jinja2.FileSystemLoader
 mysql = set_connection(app)
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        session.pop('user_id', None)
+
+        username = request.form['username']
+        password = request.form['password']
+
+        users = checkEmailAndPassword(username,password)
+        if len(users) >0:
+            return redirect(url_for('/home'))
+        else:
+            flash('Incorrect Email and Password combination')
+            return redirect(url_for('login'))
+        #user = [x for x in users if x.username == username][0]
+        #if user and user.password == password:
+        #    session['user_id'] = user.id
+         #   return redirect(url_for('profile'))
+
+        return redirect(url_for('login'))
+
     return render_template("./login_registration/login.html")
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        #session.pop('user_id', None)
+
+        #username = request.form['username']
+        #password = request.form['password']
+        email = request.form.get('email')
+        name = request.form.get('name')
+        password = request.form.get('password')
+        confirmPassword = request.form.get('confirmPassword')
+
+        if password != confirmPassword:
+            flash('Passwords do not match')
+            return redirect(url_for(request.url))
+
+        if checkIfExistingMerchant(mysql,email):
+            flash('Email already registered')
+            return redirect(url_for(request.url))
+        else:
+            registerNewMerchant(mysql,email,password,name)
+
+        return redirect(url_for('login'))
+
+    return render_template("./login_registration/registration.html")
+
 
 @app.route('/' ,methods=['POST','GET'])
 @app.route('/search', methods=['POST','GET'])
