@@ -65,6 +65,7 @@ def showCart(merchant_id):
 	Price =[]
 	Offers = []
 	discountPrice = []
+	totalQuantity = 0
 	if request.method=='GET':
 		qty=session['qty']
 		ProductID=session['ProductID']
@@ -73,7 +74,11 @@ def showCart(merchant_id):
 		Price = session['Price']
 		Offers = session['offers']
 		discountPrice = session['discountPrice']
-		return render_template("./place_order/cart.html",merchantID=merchant_id,qty=qty,ProductID=ProductID,Name=Name,Description=Description,Price=Price,Offers=Offers,discountPrice=discountPrice,len=len(qty))
+		l=len(qty)
+		for i in qty:
+			totalQuantity+=int(i)
+		print(totalQuantity)
+		return render_template("./place_order/cart.html",merchantID=merchant_id,qty=qty,ProductID=ProductID,Name=Name,Description=Description,Price=Price,Offers=Offers,discountPrice=discountPrice,len=len(qty),totalQuantity=totalQuantity)
 	else:
 		ProductID = request.form.getlist("ProductId[]")
 		qty = request.form.getlist("qty[]")

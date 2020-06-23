@@ -50,12 +50,22 @@
         v1.innerText=selectedOffers[id];
     }
 </script>
+<body>
+{%if totalQuantity ==0 %}
+<h2>YOUR CART IS EMPTY</h2>
+<div class="containerempty">
+    <div class="vertical-center">
+        <button type="button" onclick="goBack()">EDIT CART</button>
+    </div>
+</div>
 
-{%if qty %} <br><br><br>
+{%else%}
+<br><br><br>
 <div class="container">
     <form method="post" action="" onsubmit="save()">
         <table class="table table-bordered">
             <tr>
+
                 <th> Name</th>
                 <th> Description </th>
                 <th>Price Per Unit </th>
@@ -91,12 +101,10 @@
         <br><br>
         <td><button type="button" onclick="goBack()">EDIT CART</button></td>
         <td><input type="submit" name="type" onclick="negotiate()" value="Want To Negotiate"/></td>
-        <td><input type="submit" name="type" onsubmit="payment()" value="Process Payment"/></td>
+        <td><input type="submit" name="type" onclick="payment()" value="Process Payment"/></td>
     </form>
 </div>
-{% else %}
-<h2>YOUR CART IS EMPTY</h2>
-{% endif %}
+{%endif%}
 </body>
 
 
