@@ -1,7 +1,9 @@
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./place_order/place_order.css') }}">
 <script type="text/javascript" src="{{url_for('static',filename='./place_order/cart_feature.js') }}"></script>
+
 <script>
+    //wiil shift this later on different page
     var finalPrice = sessionStorage.getItem("finalPrice");
     var discountPrice = sessionStorage.getItem("discountPrice");
     var check = false;
@@ -39,20 +41,12 @@
         v1.innerHTML= finalPrice;
         var v2 = document.getElementById("finalPrice1");
         v2.value = finalPrice;
-
-
     }
     function DiscountPrice(){
         var v1 = document.getElementById("discountPrice");
         v1.innerHTML = discountPrice;
         var v2 = document.getElementById("finalDiscountPrice1");
         v2.value = discountPrice;
-    }
-
-    function showOffers(id){
-        var v1 = document.getElementById(id);
-        console.log(id,selectedOffers[id-1]);
-        v1.innerText=selectedOffers[id];
     }
 </script>
 <body>
@@ -103,7 +97,6 @@
         <script> FinalPrice();
         DiscountPrice();
         </script>
-
         <br><br>
         <td><button type="button" onclick="goBack()">EDIT CART</button></td>
         <td><input type="submit" name="type" onclick="negotiate()" value="Want To Negotiate"/></td>
