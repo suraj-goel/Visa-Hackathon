@@ -11,7 +11,7 @@ def addToCart(mysql,qty,ProductID,Name,Description,Price,merchant_id,status):
         else:
             cart_id+=1
             print(cart_id)
-    print(status)
+    #print(status)
     loop = len(ProductID)
     for i in range(0,loop):
         try:

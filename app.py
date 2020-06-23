@@ -12,34 +12,28 @@ app = Flask(__name__,static_folder = '')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader,jinja2.FileSystemLoader(['.'])])
 app.secret_key = 'super secret key'
 mysql = set_connection(app)
-
 Check=False
 def modify():
 	global Check
 	Check = True
-
 @app.route('/login')
 def login():
-    return render_template("./login_registration/login.html")
-
-@app.route('/payment')
-def payoptions():
-	return render_template("./place_order/index.html")
+	return render_template("./login_registration/login.html")
 
 @app.route('/' ,methods=['POST','GET'])
 @app.route('/search', methods=['POST','GET'])
 def showAll():
-    currentMerchantID = 2
-    currentLocation = getCurrentLocation(mysql,currentMerchantID)
-    if request.method == "POST":
-        search_option = request.form['search']
-        filter=request.form.get('offerbox')
-        radius=request.form['radius']
-        product = request.form['name']
-        data=getSearchResults(mysql, currentMerchantID,product,search_option,filter, radius)
-        return render_template('./search_merchants/search.html', data=data ,currentLocation = currentLocation, search_option=search_option)
-    data = getSearchResults(mysql,currentMerchantID)
-    return render_template("./search_merchants/search.html",currentLocation = currentLocation,data=data)
+	currentMerchantID = 2
+	currentLocation = getCurrentLocation(mysql,currentMerchantID)
+	if request.method == "POST":
+		search_option = request.form['search']
+		filter=request.form.get('offerbox')
+		radius=request.form['radius']
+		product = request.form['name']
+		data=getSearchResults(mysql, currentMerchantID,product,search_option,filter, radius)
+		return render_template('./search_merchants/search.html', data=data ,currentLocation = currentLocation, search_option=search_option)
+	data = getSearchResults(mysql,currentMerchantID)
+	return render_template("./search_merchants/search.html",currentLocation = currentLocation,data=data)
 
 
 @app.route('/merchant/<merchant_id>',methods=['GET','POST'])
@@ -58,6 +52,7 @@ def showPlaceOrder(merchant_id):
 		session['Price'] = request.form.getlist("Price[]")
 		session['offers'] = request.form.getlist("offers[]")
 		session['discountPrice'] = request.form.getlist("discountPrice[]")
+		print(session['discountPrice'])
 		return redirect(url_for('showCart',merchant_id=merchant_id))
 
 
@@ -86,7 +81,6 @@ def showCart(merchant_id):
 		Description = request.form.getlist("Description[]")
 		Price = request.form.getlist("Price[]")
 		Type = request.form.getlist("type")
-		#print(Type[0])
 		status ='N'
 		if(Type[0] == 'Process Payment'):
 			status = 'P'
@@ -147,6 +141,6 @@ def editAccountDetails():
 
 
 if __name__ == '__main__':
-    #threaded allows multiple users (for hosting)
+	#threaded allows multiple users (for hosting)
 	app.run(debug=True,threaded=True, port=5000)
 
