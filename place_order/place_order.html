@@ -1,10 +1,10 @@
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./place_order/place_order.css') }}" xmlns="http://www.w3.org/1999/html">
+
 <script type="text/javascript" src="{{url_for('static',filename='./place_order/cart_feature.js') }}"></script>
 <script>
-
     // Validate all the input fields to get the no of products
-    function validate(pppID, tqID, qrID, disID, tpID, dpID) {
+    function validate() {
         var idl = "quantity";
         var n = document.getElementById("tableID").rows.length - 1;
 
@@ -24,16 +24,25 @@
                 quantity.value = totalQuantity.innerText;
             }
         }
-        updateTotalPrice(pppID, qrID, disID, tpID, dpID);
+        updateTotalPrice();
     }
 
     // Update the total price the the customer needs to give
-    function updateTotalPrice(pppID, qrID, disID, tpID, dpID) {
-        var price = document.getElementById(pppID).innerText;
-        var qty = document.getElementById(qrID).value;
-        var tprice = document.getElementById(tpID);
-        tprice.innerText = price * qty;
-        updateDiscount(qrID, disID, tpID, dpID);
+    function updateTotalPrice() {
+        var n = document.getElementById("tableID").rows.length - 1;
+        for (var i = 0; i < n; i++) {
+            var pppID = "price" + i;
+            var qrID = "quantity" + i;
+            var disID = "offerOptions" + i;
+            var tpID = "tprice" + i;
+            var dpID = "dprice" + i;
+
+            var price = document.getElementById(pppID).innerText;
+            var qty = document.getElementById(qrID).value;
+            var tprice = document.getElementById(tpID);
+            tprice.innerText = price * qty;
+            updateDiscount(qrID, disID, tpID, dpID);
+        }
     }
 
     // Update the discounted price that the customer needs to give
@@ -54,27 +63,26 @@
         } else {
             fcost.innerText = cost.innerText;
         }
-
-        var cp1 = document.getElementById("finalPrice");
-        var cp2 = document.getElementById("CartPrice");
-        if (cp1 != null && cp2 != null) {
-            findCartPrice(cp1, cp2);
-        }
+        findCartPrice();
     }
 
     // Show total price before discount and after discount
-    function findCartPrice(cp1, cp2) {
-        var n = document.getElementById("tableID").rows.length - 1;
-        var res1 = 0;
-        var res2 = 0;
+    function findCartPrice() {
+        var cp1 = document.getElementById("finalPrice");
+        var cp2 = document.getElementById("CartPrice");
 
-        for (var i = 0; i < n; i++) {
-            res1 += parseInt(document.getElementById("tprice" + i).innerText);
-            res2 += parseInt(document.getElementById("dprice" + i).innerText);
+        if (cp1 != null && cp2 != null) {
+            var n = document.getElementById("tableID").rows.length - 1;
+            var res1 = 0;
+            var res2 = 0;
+
+            for (var i = 0; i < n; i++) {
+                res1 += parseInt(document.getElementById("tprice" + i).innerText);
+                res2 += parseInt(document.getElementById("dprice" + i).innerText);
+            }
+            cp1.innerHTML = res1;
+            cp2.innerHTML = res2;
         }
-        cp1.innerHTML = res1;
-        cp2.innerHTML = res2;
-
 
     }
 
@@ -87,13 +95,9 @@
             }
         });
     });
-
-
-
-
 </script>
 
-<body>
+<body onload="validate()">
     <h2> Place your Orders here </h2>
 
     {% if products %}
@@ -111,22 +115,20 @@
                     <th> Discounted Amount </th>
 
                 </tr>
-                    {% for item in products %}
-                    <tr>
-                        <input type="hidden" name="ProductID[]" value="{{item['ProductID']}}"/>
-                        <td> {{item['Name']}} - <br>
-                            <font size="2dp"> {{item['Description']}} </font>
-                            <input type="hidden" name="Name[]" value="{{item['Name']}}"/>
-                            <input type="hidden" name="Description[]" value="{{item['Description']}}"/>
-                        </td>
-                        <td> {{item['Category']}} </td>
-                        <td value="{{item['Price']}}" id="price{{loop.index0}}"> {{item['Price']}} </td>
-                        <input type="hidden" name="Price[]" value="{{item['Price']}}"/>
-                        <td value="{{item['Quantity']}}" id="tquantity{{loop.index0}}"> {{item['Quantity']}} </td>
-                        <td>
-                            <input name="qty[]" type="number" id="quantity{{loop.index0}}" min="0" max="{{item[ 'Quantity']}}" value="0" onchange="validate( 'price{{loop.index0}}', 'tquantity{{loop.index0}}', 'quantity{{loop.index0}}', 'offerOptions{{loop.index0}}',
-                            'tprice{{loop.index0}}', 'dprice{{loop.index0}}')" onmouseover="validate( 'price{{loop.index0}}', 'tquantity{{loop.index0}}', 'quantity{{loop.index0}}', 'offerOptions{{loop.index0}}',
-                            'tprice{{loop.index0}}', 'dprice{{loop.index0}}')">
+                {% for item in products %}
+                <tr>
+                    <input type="hidden" name="ProductID[]" value="{{item['ProductID']}}" />
+                    <td> {{item['Name']}} - <br>
+                        <font size="2dp"> {{item['Description']}} </font>
+                        <input type="hidden" name="Name[]" value="{{item['Name']}}" />
+                        <input type="hidden" name="Description[]" value="{{item['Description']}}" />
+                    </td>
+                    <td> {{item['Category']}} </td>
+                    <td value="{{item['Price']}}" id="price{{loop.index0}}"> {{item['Price']}} </td>
+                    <input type="hidden" name="Price[]" value="{{item['Price']}}" />
+                    <td value="{{item['Quantity']}}" id="tquantity{{loop.index0}}"> {{item['Quantity']}} </td>
+                    <td>
+                        <input name="qty[]" type="number" id="quantity{{loop.index0}}" min="0" max="{{item[ 'Quantity']}}" value="0" onchange="validate()" onmouseover="validate()">
                     </td>
                     <td>
                         {% if offers[item['ProductID']]|length > 0 %}
@@ -137,7 +139,7 @@
                             </select> {% else %} {{"No offers"}} {% endif %}
                     </td>
                     <td id="tprice{{loop.index0}}"> </td>
-                    <td value={{item['Price']}} id="dprice{{loop.index0}}"> {{item['Price']}} </td>
+                    <td value={{item[ 'Price']}} id="dprice{{loop.index0}}"> {{item['Price']}} </td>
 
                 </tr>
                 {% if offers[item['ProductID']]|length > 0 %}
@@ -152,7 +154,7 @@
 
                 {% endfor %}
             </table>
-            <h3> Total price before discount is Rs <span id="finalPrice" >0</span></h3>
+            <h3> Total price before discount is Rs <span id="finalPrice">0</span></h3>
             <input type="hidden" value="" name="finalPrice">
             <h3> Total price after discount is Rs <span id="CartPrice">0</span></h3>
             <input type="submit" value="ADD TO CART" />
