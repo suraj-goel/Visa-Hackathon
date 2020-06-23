@@ -1,3 +1,5 @@
+from functools import wraps
+
 import jinja2
 import os
 from datetime import timedelta
@@ -17,8 +19,21 @@ app.secret_key = os.urandom(24)
 app.permanent_session_lifetime = timedelta(minutes=5)
 mysql = set_connection(app)
 
+#auth decorator
+def login_required(function_to_protect):
+    @wraps(function_to_protect)
+    def wrapper(*args, **kwargs):
+        if 'session_id' in session:
+            # Success!
+            return function_to_protect(*args, **kwargs)
+        else:
+            flash("Please log in")
+            return redirect(url_for('login'))
+    return wrapper
+
 
 @app.route('/login', methods=['GET', 'POST'])
+@login_required
 def login():
     if request.method == 'POST':
         session.pop('session_id', None)
@@ -44,6 +59,7 @@ def login():
     return render_template("./login_registration/login.html")
 
 @app.route('/register', methods=['GET', 'POST'])
+@login_required
 def register():
     if request.method == 'POST':
         #session.pop('user_id', None)
@@ -70,6 +86,7 @@ def register():
     return render_template("./login_registration/registration.html")
 
 @app.route('/logout')
+@login_required
 def logout():
     session.pop('session_id', None)
     return redirect('/login')
