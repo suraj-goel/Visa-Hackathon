@@ -64,6 +64,10 @@ def register():
 
     return render_template("./login_registration/registration.html")
 
+@app.route('/logout')
+def logout():
+    return redirect('/login')
+
 
 @app.route('/' ,methods=['POST','GET'])
 @app.route('/search', methods=['POST','GET'])
