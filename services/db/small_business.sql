@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 22, 2020 at 05:54 PM
+-- Generation Time: Jun 23, 2020 at 06:01 PM
 -- Server version: 8.0.20-0ubuntu0.20.04.1
 -- PHP Version: 7.4.3
 
@@ -21,6 +21,19 @@ SET time_zone = "+00:00";
 --
 -- Database: `small_business`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Cart`
+--
+
+CREATE TABLE `Cart` (
+  `CartID` varchar(256) NOT NULL,
+  `Total` varchar(256) NOT NULL,
+  `Status` varchar(256) NOT NULL,
+  `MerchantID` varchar(256) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -139,20 +152,9 @@ INSERT INTO `Product` (`ProductID`, `Name`, `Description`, `Price`, `Quantity`, 
 
 CREATE TABLE `ProductCart` (
   `CartID` varchar(256) NOT NULL,
-  `MerchantID` varchar(256) NOT NULL,
   `ProductID` varchar(256) NOT NULL,
-  `Status` varchar(256) NOT NULL,
-  `Price` varchar(256) NOT NULL,
-  `Information` varchar(512) DEFAULT NULL,
   `Quantity` varchar(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `ProductCart`
---
-
-INSERT INTO `ProductCart` (`CartID`, `MerchantID`, `ProductID`, `Status`, `Price`, `Information`, `Quantity`) VALUES
-('1', '1', '1', 'pending', '200', 'Test Data', '2');
 
 -- --------------------------------------------------------
 
@@ -172,6 +174,13 @@ CREATE TABLE `Requirement` (
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `Cart`
+--
+ALTER TABLE `Cart`
+  ADD PRIMARY KEY (`CartID`),
+  ADD KEY `MerchantID` (`MerchantID`);
 
 --
 -- Indexes for table `Location`
@@ -228,8 +237,8 @@ ALTER TABLE `Product`
 --
 ALTER TABLE `ProductCart`
   ADD PRIMARY KEY (`CartID`,`ProductID`),
-  ADD KEY `MerchantID` (`MerchantID`),
-  ADD KEY `ProductID` (`ProductID`);
+  ADD KEY `ProductID` (`ProductID`),
+  ADD KEY `CartID` (`CartID`);
 
 --
 -- Indexes for table `Requirement`
@@ -242,6 +251,12 @@ ALTER TABLE `Requirement`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `Cart`
+--
+ALTER TABLE `Cart`
+  ADD CONSTRAINT `fk_cart_mid` FOREIGN KEY (`MerchantID`) REFERENCES `Merchant` (`MerchantID`);
 
 --
 -- Constraints for table `Location`
@@ -278,8 +293,7 @@ ALTER TABLE `Product`
 -- Constraints for table `ProductCart`
 --
 ALTER TABLE `ProductCart`
-  ADD CONSTRAINT `fk_merchant_cart` FOREIGN KEY (`MerchantID`) REFERENCES `Merchant` (`MerchantID`),
-  ADD CONSTRAINT `fk_product_cart` FOREIGN KEY (`ProductID`) REFERENCES `Product` (`ProductID`);
+  ADD CONSTRAINT `fk_product_cart_cartID` FOREIGN KEY (`CartID`) REFERENCES `Cart` (`CartID`);
 
 --
 -- Constraints for table `Requirement`
