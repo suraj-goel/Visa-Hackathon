@@ -8,6 +8,7 @@ from search_merchants.searchProducts import getSearchResults
 from accounts.validate_accounts import validation #validate_accounts.py
 from place_order.displayCart import addToCart
 from manage_inventory.SearchInventory import *
+from manage_inventory.addProduct import addNewProduct,getCategories
 
 app = Flask(__name__,static_folder = '')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader,jinja2.FileSystemLoader(['.'])])
@@ -18,27 +19,39 @@ mysql = set_connection(app)
 def login():
 	return render_template("./login_registration/login.html")
 
-@app.route('/inventory',methods=['POST','GET'])
+@app.route('/addproduct',methods=['POST','GET'])
+def addproduct():
+	if request.method=='POST':
+		print(request.form)
+		name=request.form['name']
+		description=request.form['description']
+		price=request.form['price']
+		quantity=request.form['quantity']
+		category=request.form.get('category')
+		if category=='others':
+			category=request.form['other_category']
+		sell=request.form['sell']
+		merchantID=1
+		message=addNewProduct(name, description, price, quantity, category, sell, merchantID, mysql)
+		session['message_product_add']=message
+	return redirect(url_for('inventory'))
+
+@app.route('/inventory/',methods=['POST','GET'])
 def inventory():
 	merchantid = 1
+	c=getCategories(mysql)
+	try:
+		message=session['message_product_add']
+		session['message_product_add']=None
+	except:
+		message=None
 	if request.method=='POST':
 		filter=request.form['filter']
 		items=getAllProducts(mysql,merchantid,filter)
-		return render_template("./manage_inventory/inventory.html",items=items,filter=filter)
+		return render_template("./manage_inventory/inventory.html",items=items,filter=filter,category=c,message=message)
 	else:
 		items = getAllProducts(mysql, merchantid, "S")
-		return render_template("./manage_inventory/inventory.html", items=items,filter='S')
-
-@app.route('/inventory/edit/<productID>',methods=['POST','GET'])
-def editProduct(productID):
-	merchantID = 1
-	productID = productID
-	if request.method=='POST':
-		# user can submit the form and the contents of form is passed to updateProduct.updateProduct method
-		pass
-	else:
-		# get product details and show in the form
-		return render_template("./manage_inventory/editProduct.html")
+		return render_template("./manage_inventory/inventory.html", items=items,filter='S',category=c,message=message)
 
 @app.route('/' ,methods=['POST','GET'])
 @app.route('/search', methods=['POST','GET'])
