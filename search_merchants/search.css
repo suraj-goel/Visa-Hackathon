@@ -191,9 +191,8 @@ form.example::after {
 }
 
 .custom-dropdown__select--white {
-  border: 1px solid #faaa13;
-  /* background-color: #faaa13; */
-  color: #faaa13;
+  border: 1px solid #1a1f71;
+  color: #1a1f71;
 }
 .custom-dropdown::before,
 .custom-dropdown::after {
@@ -236,10 +235,9 @@ form.example::after {
 .custom-dropdown--white::before {
   top: 0.5em;
   bottom: 0.5em;
-  /* background-color: #faaa13; */
   border-left: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .custom-dropdown--white::after {
-  color: #faaa13;
+  color: #1a1f71;
 }
