@@ -1,71 +1,80 @@
 {% include "./common/header.html" %}
-<link rel="stylesheet" href="{{ url_for('static',filename='./place_order/place_order.css') }}" xmlns="http://www.w3.org/1999/html">
+<link rel="stylesheet" href="{{ url_for('static',filename='./place_order/place_order.css') }}"
+    xmlns="http://www.w3.org/1999/html">
 <script type="text/javascript" src="{{url_for('static',filename='./place_order/place_order.js') }}"></script>
 
 <body onmouseover="validate()">
-    <h2> Place your Orders here </h2>
+    <h2 style="color:#1a1f71"> Place your Orders here </h2>
 
     {% if products %}
-    <div class="container">
-        <form id="form" method="post" action="">
-            <table class="table table-bordered" id="tableID">
-                <tr>
-                    <th> Product </th>
-                    <th> Category </th>
-                    <th> Price Per Piece </th>
-                    <th> Quantity in Stock</th>
-                    <th> Quantity Required </th>
-                    <th> Select Discount </th>
-                    <th> Total Amount </th>
-                    <th> Discounted Amount </th>
+    <center>
+        <div class="container">
+            <form id="form" method="post" action="">
+                <table class="table table-bordered" id="tableID">
+                    <tr>
+                        <th> Product </th>
+                        <th> Category </th>
+                        <th> Price Per Piece </th>
+                        <th> Quantity in Stock</th>
+                        <th> Quantity Required </th>
+                        <th> Select Discount </th>
+                        <th> Total Amount </th>
+                        <th style="color: #053ea9;"> Discounted Amount </th>
 
-                </tr>
-                {% for item in products %}
-                <tr>
-                    <input type="hidden" name="ProductID[]" value="{{item['ProductID']}}" />
-                    <td> {{item['Name']}} - <br>
-                        <font size="2dp"> {{item['Description']}} </font>
-                        <input type="hidden" name="Name[]" value="{{item['Name']}}" />
-                        <input type="hidden" name="Description[]" value="{{item['Description']}}" />
-                    </td>
-                    <td> {{item['Category']}} </td>
-                    <td value="{{item['Price']}}" id="price{{loop.index0}}"> {{item['Price']}} </td>
-                    <input type="hidden" name="Price[]" value="{{item['Price']}}" />
-                    <td value="{{item['Quantity']}}" id="tquantity{{loop.index0}}"> {{item['Quantity']}} </td>
-                    <td>
-                        <input name="qty[]" type="number" id="quantity{{loop.index0}}" min="0" max="{{item[ 'Quantity']}}" value="0" onchange="validate()">
-                    </td>
-                    <td>
-                        <input type="hidden" name="offers[]" id="off{{loop.index0}}" value="No Discount" />
-                        <input type="hidden" name="discountPrice[]" id="dis{{loop.index0}}" value="0" /> {% if offers[item['ProductID']]|length > 0 %}
-                        <select name="offerOptions" id="offerOptions{{loop.index0}}" onchange="updateDiscount('quantity{{loop.index0}}', 'offerOptions{{loop.index0}}', 'tprice{{loop.index0}}', 'dprice{{loop.index0}}')">
-                        <option value="0 0" > No discount </option>
-                        {% for offer in offers[item['ProductID']] %}
-                        <option value="{{offer['DiscountPercentage']}} {{offer['QuantityRequired']}}"> {{offer['Information']}} </option>{% endfor %}
-                    </select> {% else %} {{"No offers"}} {% endif %}
-                    </td>
-                    <td id="tprice{{loop.index0}}"> </td>
-                    <td value={{item[ 'Price']}} id="dprice{{loop.index0}}"> {{item['Price']}} </td>
+                    </tr>
+                    {% for item in products %}
+                    <tr>
+                        <input type="hidden" name="ProductID[]" value="{{item['ProductID']}}" />
+                        <td> {{item['Name']}} - <br>
+                            <font size="2dp"> {{item['Description']}} </font>
+                            <input type="hidden" name="Name[]" value="{{item['Name']}}" />
+                            <input type="hidden" name="Description[]" value="{{item['Description']}}" />
+                        </td>
+                        <td> {{item['Category']}} </td>
+                        <td value="{{item['Price']}}" id="price{{loop.index0}}"> {{item['Price']}} </td>
+                        <input type="hidden" name="Price[]" value="{{item['Price']}}" />
+                        <td value="{{item['Quantity']}}" id="tquantity{{loop.index0}}"> {{item['Quantity']}} </td>
+                        <td>
+                            <input name="qty[]" type="number" id="quantity{{loop.index0}}" min="0"
+                                max="{{item[ 'Quantity']}}" value="0" onchange="validate()">
+                        </td>
+                        <td>
+                            <input type="hidden" name="offers[]" id="off{{loop.index0}}" value="No Discount" />
+                            <input type="hidden" name="discountPrice[]" id="dis{{loop.index0}}" value="0" />
+                            {% if offers[item['ProductID']]|length > 0 %}
+                            <span class="custom-dropdown custom-dropdown--white">
+                                <select name="offerOptions" class="custom-dropdown__select"
+                                    id="offerOptions{{loop.index0}}"
+                                    onchange="updateDiscount('quantity{{loop.index0}}', 'offerOptions{{loop.index0}}', 'tprice{{loop.index0}}', 'dprice{{loop.index0}}')">
+                                    <option value="0 0"> No discount </option>
+                                    {% for offer in offers[item['ProductID']] %}
+                                    <option value="{{offer['DiscountPercentage']}} {{offer['QuantityRequired']}}">
+                                        {{offer['Information']}} </option>{% endfor %}
+                                </select> {% else %} {{"No offers"}} {% endif %}
+                        </td>
+                        <td id="tprice{{loop.index0}}"> </td>
+                        <td value={{item[ 'Price']}} id="dprice{{loop.index0}}" style="color: #053ea9;"> {{item['Price']}} </td>
 
-                </tr>
-                {% if offers[item['ProductID']]|length > 0 %}
-                <script>
-                    updateDiscount('quantity{{loop.index0}}', 'offerOptions{{loop.index0}}', 'tprice{{loop.index0}}', 'dprice{{loop.index0}}');
-                </script>
-                {% endif %}
+                    </tr>
+                    {% if offers[item['ProductID']]|length > 0 %}
+                    <script>
+                        updateDiscount('quantity{{loop.index0}}', 'offerOptions{{loop.index0}}', 'tprice{{loop.index0}}', 'dprice{{loop.index0}}');
+                    </script>
+                    {% endif %}
 
-                <script>
-                    updateTotalPrice('price{{loop.index0}}', 'quantity{{loop.index0}}', 'offerOptions{{loop.index0}}', 'tprice{{loop.index0}}', 'dprice{{loop.index0}}');
-                </script>
+                    <script>
+                        updateTotalPrice('price{{loop.index0}}', 'quantity{{loop.index0}}', 'offerOptions{{loop.index0}}', 'tprice{{loop.index0}}', 'dprice{{loop.index0}}');
+                    </script>
 
-                {% endfor %}
-            </table>
-            <h3> Total price before discount is Rs <span id="finalPrice">0</span></h3>
-            <input type="hidden" value="" name="finalPrice">
-            <h3> Total price after discount is Rs <span id="CartPrice">0</span></h3>
-            <input type="submit" value="ADD TO CART" />
-        </form>
-    </div>
+                    {% endfor %}
+                </table>
+                <h3> Total price before discount is Rs <span id="finalPrice">0</span></h3>
+                <input type="hidden" value="" name="finalPrice">
+                <h3 style="color: #053ea9;"> Total price after discount is Rs <span id="CartPrice">0</span></h3>
+                <button type="submit" form="form" value="ADD TO CART" class="button"/><span>Add to Cart</span></button>
+            </form>
+        </div>
+    </center>
     {% endif %}
 
 </body>
