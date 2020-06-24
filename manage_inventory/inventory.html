@@ -1,7 +1,38 @@
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./manage_inventory/inventory_style.css') }}">
+<script type="text/javascript" src="{{url_for('static',filename='./manage_inventory/inventory.js') }}"></script>
+<center>
+    {% if message=='yes' %}
+    <span style="color:green">Successfully added product</span>
+    {% endif %}
+    {% if message=='no' %}
+    <span style="color:red;"> Already exists. Edit the product to change the quantity or sell options </span>
+    {% endif %}
+        <h1>Inventory</h1>
+    <button type="button" id="formButton">Add product</button>
+
+<form id="form1" method="post">
+    <b>Product name</b> <input type="text" name="name" required><br><br>
+    <b>Product Description</b><textarea name="description" required></textarea><br><br>
+    <b>Price per piece</b> <input type="number" min='0' name="price" id='price' onchange="validate(this.id)" required><br><br>
+    <b>Quantity</b> <input type="number" min='0' name="quantity" id='quantity' onchange="validate(this.id)" required><br><br>
+    <b>Category</b><br>
+        <select name="category" onchange="checkvalue(this.value)">
+            {% for i in category %}
+                <option value="{{i}}">{{i}}</option>
+            {% endfor %}
+            <option value="others">Others</option>
+        </select>
+    <div  id='category' style='display:none'>
+        Enter your category
+        <input type="text" name="other_category" value=''>
+    </div><br>
+    <input type="radio" name="sell" value="1" checked> Show as selling to other merchants<br>
+    <input type="radio" name="sell" value="0"> Add to inventory without showing to other merchants<br>
+    <input type="submit" onclick="javascript: form.action='/addproduct';">
+</form>
+    </center>
 <form class="example" method="post" action="" style="margin:auto;max-width:600px">
-    <h1>Inventory</h1>
             <select name="filter">
                 <option value="S">Selling</option>
                 {% if filter=='N' %}
@@ -39,17 +70,3 @@
         {% endif %}
     </center>
 </html>
-    <script>
-        $(document).ready(function() {
-            //Fixing jQuery Click Events for the iPad
-            var ua = navigator.userAgent,
-                event = (ua.match(/iPad/i)) ? "touchstart" : "click";
-            if ($('.table').length > 0) {
-                $('.table .header').on(event, function() {
-                    $(this).toggleClass("active", "").nextUntil('.header').css('display', function(i, v) {
-                        return this.style.display === 'table-row' ? 'none' : 'table-row';
-                    });
-                });
-            }
-        })
-    </script>

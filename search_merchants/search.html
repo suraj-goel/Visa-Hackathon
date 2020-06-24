@@ -9,12 +9,12 @@
         <form class="example" method="post" action="" style="margin:auto;max-width:600px">
 
             <select name="search">
-                {% if search_option=='product' %}
-                    <option value="product" selected>Search by Product</option>
-                <option value="merchant">Search by merchant</option>
-                {% else %}
-                <option value="product">Search by Product</option>
+                {% if search_option=='merchant' %}
+                    <option value="product">Search by Product</option>
                 <option value="merchant" selected>Search by merchant</option>
+                {% else %}
+                <option value="product" selected>Search by Product</option>
+                <option value="merchant" >Search by merchant</option>
                 {% endif %}
                 <br>
             </select><br>
