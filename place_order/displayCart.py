@@ -1,7 +1,7 @@
 import uuid
 
 
-def addToCart(mysql,qty,ProductID,Name,Description,Price,merchant_id,status,finalPrice,finalDiscountPrice,negotiatedrequestAmount):
+def addToCart(mysql,qty,ProductID,Name,Description,Price,merchant_id,status,finalPrice,finalDiscountPrice,negotiatedRequestAmount):
 
     cur = mysql.connection.cursor()
     cur.execute('select NegotiationID from Negotiation ORDER BY NegotiationID')
@@ -30,10 +30,11 @@ def addToCart(mysql,qty,ProductID,Name,Description,Price,merchant_id,status,fina
             print("Problem in inseting into db"+str(e))
             return None
 
-    try:
-        cur.execute('INSERT INTO Negotiation(NegotiationID,Status,CartID,Price) VALUES(%s,%s,%s,%s)',(negotiation_id,"pending",cart_id,negotiatedrequestAmount))
-        mysql.connection.commit()
-    except Exception as e:
-        print("Problem in inserting in db"+ str(e))
-        return None
+    if negotiatedRequestAmount!='0':
+        try:
+            cur.execute('INSERT INTO Negotiation(NegotiationID,Status,CartID,Price) VALUES(%s,%s,%s,%s)',(negotiation_id,"pending",cart_id,negotiatedRequestAmount))
+            mysql.connection.commit()
+        except Exception as e:
+            print("Problem in inserting in db"+ str(e))
+            return None
     cur.close()
