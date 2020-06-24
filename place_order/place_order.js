@@ -1,11 +1,13 @@
 // Validate all the input fields to get the no of products
 function validate() {
-    var idl = "quantity";
     var n = document.getElementById("tableID").rows.length - 1;
     for (var i = 0; i < n; i++) {
         var quantity = document.getElementById("quantity" + i);
         var totalQuantity = document.getElementById("tquantity" + i);
 
+        if (quantity.value == "" || quantity.value.length < 0 || quantity.value == null) {
+            quantity.value = "0";
+        }
         if (parseInt(quantity.value) > parseInt(totalQuantity.innerText)) {
             alert("Sorry !! \nWe have only " + totalQuantity.innerText + " units in our Stock.");
             quantity.value = totalQuantity.innerText;
@@ -103,12 +105,12 @@ function findCartPrice() {
 
 }
 
-// Prevent Enter key from performing any function/event
-$(document).ready(function() {
-    $(window).keydown(function(event) {
-        if (event.keyCode == 13) {
-            event.preventDefault();
-            return false;
-        }
-    });
-});
+// // Prevent Enter key from performing any function/event
+// $(document).ready(function() {
+//     $(window).keydown(function(event) {
+//         if (event.keyCode == 13) {
+//             event.preventDefault();
+//             return false;
+//         }
+//     });
+// });
