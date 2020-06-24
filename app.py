@@ -35,6 +35,7 @@ def editProduct(productID):
 	productID = productID
 	if request.method=='POST':
 		# user can submit the form and the contents of form is passed to updateProduct.updateProduct method
+		pass
 	else:
 		# get product details and show in the form
 		return render_template("./manage_inventory/editProduct.html")
