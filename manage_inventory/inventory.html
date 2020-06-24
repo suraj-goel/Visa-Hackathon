@@ -1,12 +1,19 @@
 {% include "./common/header.html" %}
+<link rel="stylesheet" href="{{ url_for('static',filename='./manage_inventory/inventory_style.css') }}">
 <form class="example" method="post" action="" style="margin:auto;max-width:600px">
     <h1>Inventory</h1>
             <select name="filter">
                 <option value="S">Selling</option>
-                <option value="N">Not Selling</option>
-                <option value="A">All</option>
+                {% if filter=='N' %}
+                <option value="N" selected>Not Selling</option>
+                {% else %}
+                <option value="N">Not Selling</option> {% endif %}
+                {% if filter=='A' %}
+                <option value="A" selected>All</option>
+                {% else %}
+                <option value="A">All</option> {% endif %}
             </select>
-            <button type="submit" id="submitButton">Filter<i class="fa fa-filter"></i>
+            <button type="submit" >Filter<i class="fa fa-filter"></i>
             </button>
         </form>
         {% if items %}
@@ -15,11 +22,11 @@
                 {% for item in items %}
                 <tr class="header">
                     <td colspan="2">
-                       {{items}}
+                       <h3>{{item['Name']}}</h3>Description: {{item['Description']}} <br>Category: {{item['Category']}} <br>
+                    Cost per unit: {{item['Price']}}<br>Quantity: {{item['Quantity']}}
                 </tr>
-                {% if item['Offers'] %} {% for x in item['Offers'] %}
+                {% if item['offers'] %} {% for x in item['offers'] %}
                 <tr>
-                    <td>Product : {{x['Name']}}</td>
                     <td>{{x['Information']}}</td>
                 </tr>
                 {% endfor %} {% else %}
@@ -32,3 +39,17 @@
         {% endif %}
     </center>
 </html>
+    <script>
+        $(document).ready(function() {
+            //Fixing jQuery Click Events for the iPad
+            var ua = navigator.userAgent,
+                event = (ua.match(/iPad/i)) ? "touchstart" : "click";
+            if ($('.table').length > 0) {
+                $('.table .header').on(event, function() {
+                    $(this).toggleClass("active", "").nextUntil('.header').css('display', function(i, v) {
+                        return this.style.display === 'table-row' ? 'none' : 'table-row';
+                    });
+                });
+            }
+        })
+    </script>

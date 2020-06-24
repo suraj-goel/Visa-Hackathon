@@ -23,12 +23,11 @@ def inventory():
 	merchantid = 1
 	if request.method=='POST':
 		filter=request.form['filter']
-		print(filter)
 		items=getAllProducts(mysql,merchantid,filter)
-		return render_template("./manage_inventory/inventory.html",items=items)
+		return render_template("./manage_inventory/inventory.html",items=items,filter=filter)
 	else:
 		items = getAllProducts(mysql, merchantid, "S")
-		return render_template("./manage_inventory/inventory.html", items=items)
+		return render_template("./manage_inventory/inventory.html", items=items,filter='S')
 
 @app.route('/' ,methods=['POST','GET'])
 @app.route('/search', methods=['POST','GET'])
