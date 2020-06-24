@@ -7,18 +7,21 @@ from place_order.displayProduct import displayAllProducts, displayAllOffers
 from search_merchants.searchProducts import getSearchResults
 from accounts.validate_accounts import validation #validate_accounts.py
 from place_order.displayCart import addToCart
-
+from manage_inventory.inventoryDetails import getProducts
 app = Flask(__name__,static_folder = '')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader,jinja2.FileSystemLoader(['.'])])
 app.secret_key = 'super secret key'
 mysql = set_connection(app)
-Check=False
-def modify():
-	global Check
-	Check = True
+
 @app.route('/login')
 def login():
 	return render_template("./login_registration/login.html")
+
+@app.route('/inventory')
+def inventory():
+	merchantid=1
+	items=getProducts(mysql,merchantid,filters='all')
+	return render_template("./manage_inventory/inventory.html",items=items)
 
 @app.route('/' ,methods=['POST','GET'])
 @app.route('/search', methods=['POST','GET'])
@@ -55,6 +58,10 @@ def showPlaceOrder(merchant_id):
 		print(session['discountPrice'])
 		return redirect(url_for('showCart',merchant_id=merchant_id))
 
+Check=False
+def modify():
+	global Check
+	Check = True
 
 @app.route("/merchant/<merchant_id>/cart",methods=['GET','POST'])
 def showCart(merchant_id):
