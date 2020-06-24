@@ -67,17 +67,20 @@ def showCart(merchant_id):
 	discountPrice = []
 	totalQuantity = 0
 	if request.method=='GET':
-		qty=session['qty']
-		ProductID=session['ProductID']
-		Name = session['Name']
-		Description =session['Description']
-		Price = session['Price']
-		Offers = session['offers']
-		discountPrice = session['discountPrice']
+		try:
+			qty=session['qty']
+			ProductID=session['ProductID']
+			Name = session['Name']
+			Description =session['Description']
+			Price = session['Price']
+			Offers = session['offers']
+			discountPrice = session['discountPrice']
+		except Exception as e:
+			print("exception details "+str(e))
 		l=len(qty)
 		for i in qty:
 			totalQuantity+=int(i)
-		print(totalQuantity)
+
 		return render_template("./place_order/cart.html",merchantID=merchant_id,qty=qty,ProductID=ProductID,Name=Name,Description=Description,Price=Price,Offers=Offers,discountPrice=discountPrice,len=len(qty),totalQuantity=totalQuantity)
 	else:
 		ProductID = request.form.getlist("ProductId[]")
@@ -88,14 +91,15 @@ def showCart(merchant_id):
 		Type = request.form.get("type")
 		finalPrice = request.form.get('finalPrice')
 		finalDiscountPrice = request.form.get('finalDiscountPrice')
+		NegotitatedRequestAmount = request.form.get('NegotiatedRequestAmount')
 		status ='N'
 		if(Type == 'Process Payment'):
 			status = 'P'
 		if(Check==False):
-			addToCart(mysql,qty,ProductID,Name,Description,Price,merchant_id,status,finalPrice,finalDiscountPrice)
+			addToCart(mysql,qty,ProductID,Name,Description,Price,merchant_id,status,finalPrice,finalDiscountPrice,NegotitatedRequestAmount)
 			modify()
-
-		return redirect(url_for('showCart',merchant_id=merchant_id))
+		session.clear();
+		return redirect(url_for('showAll'))
 
 
 @app.route('/accounts/', methods=['GET','POST'])
