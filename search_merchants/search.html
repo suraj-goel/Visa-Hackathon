@@ -7,6 +7,9 @@
     </h1>
     <center>
         <form class="example" method="post" action="" style="margin:auto;max-width:600px">
+            
+            <input type="number" name="radius" placeholder="Search radius in km">
+            <br><br>
 
             <span class="custom-dropdown custom-dropdown--white">
                 <select name="search" class="custom-dropdown__select custom-dropdown__select--white">
@@ -20,12 +23,9 @@
                     <br>
                 </select>
             </span>
-
-            <br>
-
-            <input type="number" name="radius" placeholder="Search radius in km">
             <br><br>
 
+            
             <label style="color: #1a1f71;">
                 <input type="checkbox" name="offerbox" value="True">
                 Only display results of merchants who give offers
@@ -38,7 +38,10 @@
             </div>
 
         </form>
+        <br><br><br><br><br>
+
         <div id="map"></div>
+
         {% if data %}
         <h2 style="color: #1a1f71;">
             Search results :
@@ -75,11 +78,106 @@
         <h1> Could not find any match</h1>
         {% endif %}
     </center>
+    <br>
     <script>
+        $(document).ready(function () {
+            //Fixing jQuery Click Events for the iPad
+            var ua = navigator.userAgent,
+                event = (ua.match(/iPad/i)) ? "touchstart" : "click";
+            if ($('.table').length > 0) {
+                $('.table .header').on(event, function () {
+                    $(this).toggleClass("active", "").nextUntil('.header').css('display', function (i, v) {
+                        return this.style.display === 'table-row' ? 'none' : 'table-row';
+                    });
+                });
+            }
+        });
     </script>
 </body>
 
 </html>
-<script type="text/javascript" src="{{url_for('static',filename='./search_merchants/search.js') }}"></script>
+<script>
+
+    (() => {
+        let customSelects = document.querySelectorAll(".custom-dropdown__select");
+        customSelects.forEach(el => {
+            if (el.disabled)
+                el.parentNode.classList.add("custom-dropdown--disabled");
+        })
+    })();
+
+
+    var data = '{{ data|tojson }}';
+    var currentLocation = '{{ currentLocation|tojson }}'
+    var jsonData = JSON.parse(data);
+    var currentLocationJSONData = JSON.parse(currentLocation)
+    console.log(currentLocationJSONData)
+    function initMap() {
+
+        var india = {
+            lat: 20.5937,
+            lng: 78.9629
+        };
+        var map;
+        if (jsonData.length == 0)
+            map = new google.maps.Map(
+                document.getElementById('map'), {
+                zoom: 4,
+                center: india
+            });
+        else
+            map = new google.maps.Map(
+                document.getElementById('map'), {
+                zoom: 7,
+                center: {
+                    lat: parseFloat(jsonData[0].Latitude),
+                    lng: parseFloat(jsonData[0].Longitude)
+                }
+            });
+
+
+        var infowindow = new google.maps.InfoWindow();
+
+        var marker, i;
+
+        for (i = 0; i < jsonData.length; i++) {
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(parseFloat(jsonData[i].Latitude), parseFloat(jsonData[i].Longitude)),
+                map: map
+            });
+            if (parseInt(jsonData[i].distance) === 0) {
+
+                marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png')
+            }
+
+
+            google.maps.event.addListener(marker, 'mouseover', (function (marker, i) {
+                return function () {
+                    infowindow.setContent(jsonData[i].RegisteredName);
+                    infowindow.open(map, marker);
+                }
+            })(marker, i));
+
+            google.maps.event.addListener(marker, 'mouseout', (function (marker, i) {
+                return function () {
+                    infowindow.close();
+                }
+            })(marker, i));
+
+
+            google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                return function () {
+                    if (parseInt(jsonData[i].distance) !== 0)
+                        window.location.href = '/merchant/' + jsonData[i].MerchantID;
+                }
+            })(marker, i));
+        }
+        marker = new google.maps.Marker({
+            position: new google.maps.LatLng(parseFloat(currentLocationJSONData.Latitude), parseFloat(currentLocationJSONData.Longitude)),
+            map: map
+        });
+        marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png')
+    }
+</script>
 <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAntxrxhQu11TxFD9wEe7JxxW1UZ0HQXRY&callback=initMap"></script>

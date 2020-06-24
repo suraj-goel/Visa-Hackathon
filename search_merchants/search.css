@@ -1,6 +1,8 @@
 /* CSS for search file */
 #map {
-  height: 400px;
+  margin: 70px 10px;
+  width: 80%;
+  height: 500px;
 }
 
 body {
@@ -8,7 +10,10 @@ body {
   font-family: "open-sans", sans-serif, Tahoma;
   font-weight: 300;
   color: #6a6c6f;
-  margin-top: 30px;
+}
+
+h1{
+  margin: 0px 0px 10px 0px;
 }
 
 * {
@@ -27,6 +32,7 @@ input::-webkit-inner-spin-button {
 
 /* Firefox */
 input[type="number"] {
+  width: 600px;
   -moz-appearance: textfield;
 }
 
@@ -50,6 +56,10 @@ input[type="text"] {
   background-color: white;
   padding: 12px 20px 12px 40px;
   transition: width 0.4s ease-in-out;
+}
+
+.example {
+  width: 600px;
 }
 
 form.example {
@@ -114,7 +124,6 @@ form.example::after {
 .table tr {
   margin-bottom: 20px;
   margin: 25px;
-  /* padding: 5px; */
   border: 2px solid #1a1f71;
 }
 
@@ -159,13 +168,20 @@ form.example::after {
   content: "\2212";
 }
 
+.custom-dropdown {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0px;
+}
+
 .custom-dropdown__select {
   font-size: 1.7rem;
   font-family: "open-sans", sans-serif, Tahoma;
   font-weight: 300;
   padding: 0.5em; /* add some space*/
   margin: 0; /* remove default margins */
-  width: max-content;
+  width: 600px;
   padding-right: 2.5em;
   border: 0;
   border-radius: 3px;
@@ -179,12 +195,6 @@ form.example::after {
   /* background-color: #faaa13; */
   color: #faaa13;
 }
-.custom-dropdown {
-  position: relative;
-  display: inline-block;
-  vertical-align: middle;
-}
-
 .custom-dropdown::before,
 .custom-dropdown::after {
   content: "";
@@ -232,9 +242,4 @@ form.example::after {
 
 .custom-dropdown--white::after {
   color: #faaa13;
-}
-
-.custom-dropdown {
-  margin: 10px;
-  display: inline-block;
 }
