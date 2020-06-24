@@ -22,7 +22,7 @@ def login():
 def inventory():
     merchantid=1
     items=getAllProducts(mysql,merchantid,filter)
-	return render_template("./manage_inventory/inventory.html",items=items)
+    return render_template("./manage_inventory/inventory.html",items=items)
 
 @app.route('/' ,methods=['POST','GET'])
 @app.route('/search', methods=['POST','GET'])
