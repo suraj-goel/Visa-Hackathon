@@ -18,14 +18,17 @@
         var tprice = sessionStorage.getItem("discountPrice");
         var negprice = prompt("Please enter the amount you want", tprice);
         console.log(tprice, negprice);
+        var priceSent=tprice;
         if (parseInt(negprice) <= parseInt(tprice) && parseInt(negprice) >= 0) {
-            var priceSent = negprice;
+            priceSent = negprice;
             alert("Negotiated price (" + priceSent + ") sent to merchant");
         } else if (parseInt(negprice) > parseInt(tprice) || parseInt(negprice) < 0) {
-            var priceSent = tprice;
+            priceSent = tprice;
             alert("Negotiated Price should be greater than 0 and less than Discount price(" + tprice + ")");
             alert("Discount price (" + priceSent + ") sent to merchant");
         }
+
+        document.getElementById("Negotiated").value=parseInt(priceSent);
     }
 
     function payment() {
@@ -53,7 +56,7 @@
 <h2 style="color: green"><b>YOUR CART IS EMPTY</b></h2>
 
     <div style="margin-left: 45%">
-        <button type="button" onclick="goBack()">EDIT CART</button>
+        <button type="submit" onsubmit="goBack()">ADD ITEMS</button>
     </div>
 {%else%}
 <br><br><br>
@@ -95,6 +98,7 @@
         DiscountPrice();
         </script>
         <br><br>
+        <input type="hidden" id="Negotiated" name="NegotiatedRequestAmount" value="0"/>
         <td><button type="button" onclick="goBack()">EDIT CART</button></td>
         <td><input type="submit" name="type" onclick="negotiate()" value="Want To Negotiate"/></td>
         <td><input type="submit" name="type" onclick="payment()" value="Process Payment"/></td>
