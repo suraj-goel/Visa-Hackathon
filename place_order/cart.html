@@ -102,23 +102,23 @@
         </table>
         <input type="hidden" id="finalPrice1" name="finalPrice" value="0"/>
         <input type="hidden" id="finalDiscountPrice1" name="finalDiscountPrice" value="0"/>
-        <tr><h3>Totol Cost: Rs <span id="finalPrice" >0</span></h3></tr>
-        <h3>Total cost(After Discount): Rs <span id="discountPrice">0</span></h3></tr>
+        <h3>Totol Cost: Rs <span id="finalPrice" >0</span></h3>
+        <h3>Total cost(After Discount): Rs <span id="discountPrice">0</span></h3>
         <script> FinalPrice();
         DiscountPrice();
         </script>
         <br><br>
         <input type="hidden" id="Negotiated" name="NegotiatedRequestAmount" value="0"/>
-        <td><button type="button" onclick="showDetails()"><b>Click Here For Negotiation</b></button>
+        <button type="button" onclick="showDetails()"><b>Click Here For Negotiation</b></button>
         <div id="contact" style="display: none">
             <p> <b>Phone No:</b> +123435</p>
             <p> <b>Email ID</b>: business@visa.com</p>
             <input type="submit" name="type" onclick="negotiate()" value="Enter Your Amount"/>
             <br><br><br>
-    </div></td>
-        <td><button type="button" onclick="goBack()">EDIT CART</button></td>
+    </div>
+        <button type="button" onclick="goBack()">EDIT CART</button>
 
-        <td><input type="submit" name="type" onclick="payment()" value="Process Payment"/></td>
+        <input type="submit" name="type" onclick="payment()" value="Process Payment"/>
     </form>
 </div>
 {%endif%}

@@ -166,6 +166,12 @@ def editAccountDetails():
 	return render_template("./accounts/editAccountDetails.html",result=result)
 
 
+@app.route('/merchant/<merchant_id>/requirements')
+def requirements(merchant_id):
+	return render_template("./requirements/requirements.html")
+
+
+
 if __name__ == '__main__':
 	#threaded allows multiple users (for hosting)
 	app.run(debug=True,threaded=True, port=5000)

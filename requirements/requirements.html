@@ -1,21 +1,105 @@
-<!DOCTYPE html>
-<html lang="en">
+{% include "./common/header.html" %}
+<link rel="stylesheet" href="{{ url_for('static',filename='./requirements/requirements.css') }}">
 
-<head>
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
-    <style>
-        body {
-            color: black;
-        }
-    </style>
 
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-    </head>
+<script>
+    function showThis(ii) {
 
-    <body>
-        You have searched
-    </body>
+        document.getElementById("thisDiv1").style.display="none";
+        document.getElementById("thisDiv2").style.display="none";
+        document.getElementById("thisDiv3").style.display="none";
+        document.getElementById("thisDiv4").style.display="none";
+        document.getElementById("thisDiv"+ii).style.display="block";
+        document.getElementById("requestForm1").style.display="none";
+        document.getElementById("requestForm2").style.display="none";
+    }
+    function typeOfRequest(ii) {
+        document.getElementById("requestForm1").style.display="none";
+        document.getElementById("requestForm2").style.display="none";
+        document.getElementById("requestForm"+ii).style.display="block";
+    }
+</script>
+<style>
+    .grab {cursor: -webkit-grab; cursor: grab;}
 
+
+    .split {
+
+        height: 100%;
+        width: 15%;
+        position: fixed;
+        z-index: 1;
+        top: 100px;
+        overflow-x: hidden;
+        padding-top: 50px;
+        gap: 10%;
+    }
+    .split1 {
+        height: 100%;
+        width: 80%;
+        position: fixed;
+        z-index: 1;
+        top: 50px;
+        overflow-x: hidden;
+        padding-top: 100px;
+    }
+
+    .left {
+        left: 0;
+        background-color: #111;
+    }
+
+    .right {
+        right: 0;
+
+    }
+</style>
+<body>
+
+        <div>
+            <ul  class="grab split left">
+
+                <ul>
+                    <h4  class="grab" style="color:chocolate"  onclick="showThis(1)" >Create Request</h4>
+                </ul>
+                <ul>
+                    <h4 class="grab" style="color:chocolate" onclick="showThis(2)">Pending Request</h4>
+                </ul>
+                <ul>
+                    <h4 class="grab" style="color:chocolate" onclick="showThis(3)">Request Accepted</h4>
+                </ul>
+                <ul>
+                    <h4 class="grab" style="color:chocolate" onclick="showThis(4)">Rejected Request</h4>
+                </ul>
+            </ul>
+        </div>
+
+        <div id="thisDiv1"  class="split1 right">
+            <h1>Create Your Request</h1>
+            <button type="button" onclick="typeOfRequest(1)">Write In Your Way</button>
+            <button type="button" onclick="typeOfRequest(2)">Sample Template</button>
+            <form action="#">
+            <div id="requestForm1" style="display: none">
+
+                <textarea id="description" name="w3review" rows="4" cols="50">
+                </textarea>
+                <br><br>
+                <input type="submit" value="Submit">
+            </div>
+            <div id="requestForm2" style="display: none">
+                <p>TEMPLATE TYPE</p>
+            </div>
+            </form>
+        <div id="thisDiv2" style="display: none" class="split1 right">
+            See your pending request
+        </div>
+        <div id="thisDiv3" style="display: none" class="split1 right">
+            See your accepted request
+        </div>
+        <div id="thisDiv4" style="display: none" class="split1 right">
+            see your rejected request
+        </div>
+
+
+</body>
 </html>
