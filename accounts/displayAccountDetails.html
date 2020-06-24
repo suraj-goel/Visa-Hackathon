@@ -1,0 +1,61 @@
+{% include "./common/header.html" %}
+<body>
+    <h1>Account Details</h1>
+    <div>
+        <p>
+            <label>Merchant ID : </label>
+            <label>{{ result['MerchantID'] }}</label>
+        </p>
+        <p>
+            <label>Name : </label>
+            <label>{{ result['Name'] }}</label>
+        </p>
+        <p>
+            <label>Registered Name : </label>
+            <label>{{ result['RegisteredName'] }}</label>
+        </p>
+        <p>
+            <label>Email id : </label>
+            <label>{{ result['EmailID'] }}</label>
+        </p>
+        <p>
+            <label>Contact Number : </label>
+            <label>{{ result['ContactNumber'] }}</label>
+        </p>
+        <p>
+            <label>Address : </label>
+            <label>{{ result['Address'] }}</label>
+        </p>
+        <p>
+            <label>Password : </label>
+            <label>
+            {% for i in result['Password'] %}
+                *
+            {% endfor %}
+            </label>
+        </p>
+        <br>
+        <button><a href="{{ url_for('editAccountDetails') }}" style="text-decoration:None;">Edit Above Details</a></button>
+        <!--<input type="button" value="Edit Details" onclick="window.open('editUserDetails.html','_self')" /> -->
+        <br>
+    </div>
+    <div>
+        {% if b2bregistered %}
+        <label>You have successfully been registered under B2B Virtual Payment</label>
+        <br>
+        {% else %}
+        <button><a href="{{ url_for('registerB2B',merchant_id=result['MerchantID']) }}" style ="text-decoration:None;">Register Via Visa B2B Virtual Payment</a></button>
+        {% endif %}
+        <br>
+        {% if cyberregistered %}
+        <label>You have successfully been registered under Cyber Source Payments</label>
+        <br>
+        <button><a href="{{ url_for('registerCyber') }}" style ="text-decoration:None;">Edit your Visa Cyber Source Payment Details</a></button>
+        <br>
+        {% else %}
+        <button><a href="{{ url_for('registerCyber') }}" style ="text-decoration:None;">Register Via Visa Cyber Source Payment</a></button>
+        {% endif %}
+    </div>
+
+</body>
+</html>

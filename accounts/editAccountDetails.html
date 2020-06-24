@@ -1,0 +1,50 @@
+{% include "./common/header.html" %}
+
+<body>
+    <h1>Account Details</h1>
+    <div>
+        <form action="/editaccountinfo/" method="POST">
+            <p>
+                <label>Merchant ID : </label>
+                <label>{{ result['MerchantID'] }}</label>
+            </p>
+            <p>
+                <label>Name : </label>
+                <input value="{{ result['Name'] }}" name="name" type="text" required>
+            </p>
+            <p>
+                <label>Registered Name : </label>
+                <input value="{{ result['RegisteredName'] }}" name="registeredName" type="text" required>
+            </p>
+            <p>
+                <label>Email id : </label>
+                <input value="{{ result['EmailID']}}" name="emailid" type="email" required>
+            </p>
+            <p>
+                <label>Contact number : </label>
+                <input value="{{ result['ContactNumber'] }}" name="contactno" type="text" required>
+            </p>
+            <p>
+                <label>Address : </label>
+                <input value="{{ result['Address'] }}" name="address" type="text" required>
+            </p>
+            <p>
+                <label>Password : </label>
+                <input value="{{ result['Password'] }}" name="password" type="password" required>
+            </p>
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+   <div>
+        {% with messages =  get_flashed_messages(with_categories =  true) %}
+            {%if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        <p style="font-size: 24px;">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+</body>
+</html>

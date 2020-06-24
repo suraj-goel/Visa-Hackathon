@@ -1,0 +1,54 @@
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{{ url_for('static',filename='./common/js/script.js') }}"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static',filename='../common/img/icon-img.png') }}" type="image/icon">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="{{ url_for('static',filename='./common/css/header.css') }}">
+    <title>SBM</title>
+</head>
+<navbar>
+    <div class="navbar nav navbar-fixed-top navbar-inverse">
+        <div class="container-fluid">
+            <div class="v-flex">
+                <div class="navbar-body">
+                    <div class="navbar-start">
+                        <div class="hamburger-menu">
+                            <img src="{{ url_for('static',filename='../common/img/shop.png') }}">
+                        </div>
+                        <div class="navbar-end">
+                            <h2 style="color:white;text-transform: uppercase">Small Business Merchant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;</a>
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="navbar navbar-fixed-top navbar-inverse tabs paper-shadow-bottom-z-2">
+            <div class="container-fluid">
+                <ul class="navbar-body list-inline">
+                    <li class="active"><a href="/" class="active">Search</a></li>
+                    <li><a>Orders</a></li>
+                    <li><a>Inventory</a></li>
+                    <li><a>Requirements</a></li>
+                    <li><a>Negotiation</a></li>
+                    <li><a>Manage Offers</a></li>
+                    <li class="w3-dropdown-hover w3-right">
+                        <button class="w3-button w3-black">Profile</button>
+                        <div class="w3-dropdown-content w3-bar-block w3-border" style="right:0;background-color:black;">
+                            <a href="#" style="color:white" class="w3-bar-item w3-button">Settings</a>
+                            <a href="{{ url_for('displayaccountsdetails') }}" style="color:white" class="w3-bar-item w3-button">Accounts</a>
+                            <a href="login" style="color:white" class="w3-bar-item w3-button">Log out</a>
+                        </div>
+                    </li>
+                </ul>
+                <div class="tab-highlighter"></div>
+            </div>
+        </div>
+    </div>
+
+</navbar>
+
+<br><br><br><br>

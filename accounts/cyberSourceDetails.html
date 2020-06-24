@@ -1,0 +1,21 @@
+{% include "./common/header.html" %}
+<body>
+    <h1>Cyber Source Payment Details</h1>
+    <form action="/registerCyber/" method="post">
+        <p>
+            <label>Aggregator ID : </label>
+            <input value="{{ result['AggregatorID'] }}" name="aggregatorid" type="text" required>
+        </p>
+        <p>
+            <label>Name : </label>
+            <input value="{{ result['Name'] }}" name="name" type="text" required>
+        </p>
+        <p>
+            <label>Card Acceptor id : </label>
+            <input value="{{ result['CardAcceptorID'] }}" name="cardacceptorid" type="text" required>
+        </p>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
