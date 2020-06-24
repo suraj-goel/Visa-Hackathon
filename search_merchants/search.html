@@ -7,21 +7,6 @@
     </h1>
     <center>
         <form class="example" method="post" action="" style="margin:auto;max-width:600px">
-            
-            <input type="number" name="radius" placeholder="Search radius in km">
-            <br><br>
-
-            <select name="search">
-                {% if search_option=='merchant' %}
-                    <option value="product">Search by Product</option>
-                <option value="merchant" selected>Search by merchant</option>
-                {% else %}
-                <option value="product" selected>Search by Product</option>
-                <option value="merchant" >Search by merchant</option>
-                {% endif %}
-                <br>
-            </select><br>
-
             <input type="number" name="radius" placeholder="Search radius in km">
             <span class="custom-dropdown custom-dropdown--white">
                 <select name="search" class="custom-dropdown__select custom-dropdown__select--white">
