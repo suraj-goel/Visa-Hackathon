@@ -18,11 +18,17 @@ mysql = set_connection(app)
 def login():
 	return render_template("./login_registration/login.html")
 
-@app.route('/inventory')
+@app.route('/inventory',methods=['POST','GET'])
 def inventory():
-    merchantid=1
-    items=getAllProducts(mysql,merchantid,filter)
-    return render_template("./manage_inventory/inventory.html",items=items)
+	merchantid = 1
+	if request.method=='POST':
+		filter=request.form['filter']
+		print(filter)
+		items=getAllProducts(mysql,merchantid,filter)
+		return render_template("./manage_inventory/inventory.html",items=items)
+	else:
+		items = getAllProducts(mysql, merchantid, "S")
+		return render_template("./manage_inventory/inventory.html", items=items)
 
 @app.route('/' ,methods=['POST','GET'])
 @app.route('/search', methods=['POST','GET'])
