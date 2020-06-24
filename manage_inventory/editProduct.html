@@ -1,1 +1,37 @@
-hi
+{% include "./common/header.html" %}
+<link rel="stylesheet" href="{{ url_for('static',filename='./manage_inventory/inventory_style.css') }}">
+<script type="text/javascript" src="{{url_for('static',filename='./manage_inventory/inventory.js') }}"></script>
+<center>
+    {% if message=='yes' %}
+    <span style="color:green">Successfully Edited product</span>
+    {% endif %}
+    {% if message=='no' %}
+    <span style="color:red;"> Already exists. Edit the product to change the quantity or sell options </span>
+    {% endif %}
+        <h1>Edit Product</h1>
+    <button type="button" id="formButton">Show Details</button>
+
+<form id="form1" method="post">
+    <b>Product name</b> <input type="text" name="name" required value="{{data['Name']}}"><br><br>
+    <b>Product Description</b><textarea name="description" required>{{data["Description"]}}</textarea><br><br>
+    <b>Price per piece</b> <input type="number" min='0' name="price" id='price' value="{{data['Price']}}" onchange="validate(this.id)" required><br><br>
+    <b>Quantity</b> <input type="number" min='0' name="quantity" id='quantity' value= "{{data['Quantity']}}" onchange="validate(this.id)" required><br><br>
+    <b>Category</b><br>
+        <select name="category" onchange="checkvalue(this.value)">
+            <option value="{{data['Category']}}">{{data['Category']}}</option>
+            {% for i in category %}
+                <option value="{{i}}">{{i}}</option>
+            {% endfor %}
+            <option value="others">Others</option>
+            
+        </select>
+    <div  id='category' style='display:none'>
+        Enter your category
+        <input type="text" name="other_category" value=''>
+    </div><br>
+    <input type="radio" name="sell" value="1" checked> Show as selling to other merchants<br>
+    <input type="radio" name="sell" value="0"> Add to inventory without showing to other merchants<br>
+    <input type="submit" onclick="javascript: form.action='/inventory/edit/{{productID}}';">
+</form>
+   
+</html>

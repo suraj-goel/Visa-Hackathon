@@ -9,7 +9,7 @@ from accounts.validate_accounts import validation #validate_accounts.py
 from place_order.displayCart import addToCart
 from manage_inventory.SearchInventory import *
 from manage_inventory.addProduct import addNewProduct,getCategories
-
+from manage_inventory.updateProduct import *;
 app = Flask(__name__,static_folder = '')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader,jinja2.FileSystemLoader(['.'])])
 app.secret_key = 'super secret key'
@@ -52,6 +52,31 @@ def inventory():
 	else:
 		items = getAllProducts(mysql, merchantid, "S")
 		return render_template("./manage_inventory/inventory.html", items=items,filter='S',category=c,message=message)
+@app.route('/inventory/edit/<productID>',methods=['POST','GET'])
+def editProduct(productID):
+	merchantID = 1
+	productID = productID
+	c=getCategories(mysql)
+	if request.method=='POST':
+		name=request.form['name']
+		description=request.form['description']
+		price=request.form['price']
+		quantity=request.form['quantity']
+		category=request.form.get('category')
+		if category=='others':
+			category=request.form['other_category']
+		sell=request.form['sell']
+		merchantID=1
+		message=updateProduct(productID,merchantID,mysql,name,description,price,quantity,category,sell)
+		session['message_product_add']=message
+		return redirect(url_for('inventory'))
+	else:
+		cur = mysql.connection.cursor()
+		query = "SELECT * FROM Product WHERE ProductID = '{}'".format(productID)
+		cur.execute(query)
+		data = cur.fetchall()
+		return render_template("./manage_inventory/editProduct.html",data=data[0],category = c,productID = productID)
+
 
 @app.route('/' ,methods=['POST','GET'])
 @app.route('/search', methods=['POST','GET'])
