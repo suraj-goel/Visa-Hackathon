@@ -42,7 +42,7 @@
         var x = document.forms["requirementForm2"]["title"].value;
         var x1 = document.forms["requirementForm2"]["Item"].value;
         var x2 = document.forms["requirementForm2"]["Quantity"].value;
-      
+
         if (parseInt(x2)<=0) {
             alert("Error in Creating Request. Fill all Information Carefully");
             return false;
@@ -172,7 +172,7 @@
                     <textarea id="description" name="description" placeholder="Write About Your Request...">
                     </textarea>
                 <br><br>
-                <input type="submit" value="Post Request">
+                <input name="createRequest" type="submit" value="Post Request">
 
             </div>
             </form>
@@ -185,9 +185,9 @@
                 <label for="Item">Item Name: </label>
                 <input type="text" name="Item" id="Item" placeholder="Item You Want"/><br>
                 <label for="Quantity">Quantity Required: </label>
-                <input type="number" name="Quantity" id="Quantity" min="1"  placeholder="Quantity Required"/>
+                <input type="number" name="Quantity" id="Quantity" style="height:200px placeholder="Quantity Required"/>
                 <br><br>
-                <input type="submit" value="Post Request">
+                <input name="requestType" type="submit" value="Post Request">
                   </p>
             </div>
             </form>

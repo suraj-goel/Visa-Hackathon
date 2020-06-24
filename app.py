@@ -11,7 +11,7 @@ from manage_inventory.SearchInventory import *
 from manage_inventory.addProduct import addNewProduct,getCategories
 from manage_inventory.updateProduct import *
 from orders_management.orderHistory import getOrders
-
+from requirements.requirements import *
 app = Flask(__name__,static_folder = '')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader,jinja2.FileSystemLoader(['.'])])
 app.secret_key = 'super secret key'
@@ -227,7 +227,16 @@ def requirements(merchant_id):
 	if(request.method == 'GET'):
 		return render_template("./requirements/requirements.html")
 	else:
-		return redirect(request.url)
+		title = request.form.get('title')
+		description = request.form.get('description')
+		quantity = request.form.get('Quantity')
+		price = request.form.get('price')
+		Item = request.form.get('Item')
+		#status are: Post,Received,Accept,Reject depending on requestType
+		status = "Post"
+		requestType = request.form.get('requestType')
+		saveRequirements(mysql,merchantID=merchant_id,title=title,description=description,quantity=quantity,price=price,Item=Item,status=status)
+	return redirect(request.url)
 
 
 
