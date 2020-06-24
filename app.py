@@ -68,12 +68,12 @@ def modify():
 def showCart(merchant_id):
 	totalQuantity = 0
 	qty = []
-	Price = []
 	ProductID = []
-	Offers = []
-	discountPrice = []
 	Name = []
 	Description = []
+	Price = []
+	Offers =  []
+	discountPrice = []
 	if request.method=='GET':
 		try:
 			qty=session['qty']
@@ -83,11 +83,12 @@ def showCart(merchant_id):
 			Price = session['Price']
 			Offers = session['offers']
 			discountPrice = session['discountPrice']
+			l=len(qty)
+			for i in qty:
+				totalQuantity+=int(i)
 		except Exception as e:
 			print("exception details "+str(e))
-		l=len(qty)
-		for i in qty:
-			totalQuantity+=int(i)
+
 
 		return render_template("./place_order/cart.html",merchantID=merchant_id,qty=qty,ProductID=ProductID,Name=Name,Description=Description,Price=Price,Offers=Offers,discountPrice=discountPrice,len=len(qty),totalQuantity=totalQuantity)
 	else:
