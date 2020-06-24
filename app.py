@@ -18,11 +18,17 @@ mysql = set_connection(app)
 def login():
 	return render_template("./login_registration/login.html")
 
-@app.route('/inventory')
+@app.route('/inventory',methods=['POST','GET'])
 def inventory():
-    merchantid=1
-    items=getAllProducts(mysql,merchantid,filter)
-    return render_template("./manage_inventory/inventory.html",items=items)
+	merchantid = 1
+	if request.method=='POST':
+		filter=request.form['filter']
+		print(filter)
+		items=getAllProducts(mysql,merchantid,filter)
+		return render_template("./manage_inventory/inventory.html",items=items)
+	else:
+		items = getAllProducts(mysql, merchantid, "S")
+		return render_template("./manage_inventory/inventory.html", items=items)
 
 @app.route('/' ,methods=['POST','GET'])
 @app.route('/search', methods=['POST','GET'])
@@ -67,6 +73,13 @@ def modify():
 @app.route("/merchant/<merchant_id>/cart",methods=['GET','POST'])
 def showCart(merchant_id):
 	totalQuantity = 0
+	qty = []
+	ProductID = []
+	Name = []
+	Description = []
+	Price = []
+	Offers =  []
+	discountPrice = []
 	if request.method=='GET':
 		try:
 			qty=session['qty']
@@ -76,11 +89,12 @@ def showCart(merchant_id):
 			Price = session['Price']
 			Offers = session['offers']
 			discountPrice = session['discountPrice']
+			l=len(qty)
+			for i in qty:
+				totalQuantity+=int(i)
 		except Exception as e:
 			print("exception details "+str(e))
-		l=len(qty)
-		for i in qty:
-			totalQuantity+=int(i)
+
 
 		return render_template("./place_order/cart.html",merchantID=merchant_id,qty=qty,ProductID=ProductID,Name=Name,Description=Description,Price=Price,Offers=Offers,discountPrice=discountPrice,len=len(qty),totalQuantity=totalQuantity)
 	else:
@@ -99,7 +113,7 @@ def showCart(merchant_id):
 		if(Check==False):
 			addToCart(mysql,qty,ProductID,Name,Description,Price,merchant_id,status,finalPrice,finalDiscountPrice,NegotitatedRequestAmount)
 			modify()
-		session.clear();
+		session.clear()
 		return redirect(url_for('showAll'))
 
 
