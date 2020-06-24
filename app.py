@@ -67,6 +67,13 @@ def modify():
 @app.route("/merchant/<merchant_id>/cart",methods=['GET','POST'])
 def showCart(merchant_id):
 	totalQuantity = 0
+	qty = []
+	Price = []
+	ProductID = []
+	Offers = []
+	discountPrice = []
+	Name = []
+	Description = []
 	if request.method=='GET':
 		try:
 			qty=session['qty']
@@ -99,7 +106,7 @@ def showCart(merchant_id):
 		if(Check==False):
 			addToCart(mysql,qty,ProductID,Name,Description,Price,merchant_id,status,finalPrice,finalDiscountPrice,NegotitatedRequestAmount)
 			modify()
-		session.clear();
+		session.clear()
 		return redirect(url_for('showAll'))
 
 

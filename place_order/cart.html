@@ -27,7 +27,6 @@
             alert("Negotiated Price should be greater than 0 and less than Discount price(" + tprice + ")");
             alert("Discount price (" + priceSent + ") sent to merchant");
         }
-
         document.getElementById("Negotiated").value=parseInt(priceSent);
     }
 
@@ -50,21 +49,32 @@
         var v2 = document.getElementById("finalDiscountPrice1");
         v2.value = discountPrice;
     }
+    function deleteAllHistory() {
+        window.history.go(-(window.history.length-1));
+        window.history.back()
+    }
+    function showDetails() {
+
+        document.getElementById("contact").style.display = "block";
+    }
+    function hideDetails() {
+        document.getElementById("contact").style.display = "none";
+    }
+
 </script>
 <body>
 {%if totalQuantity ==0 %}
 <h2 style="color: green"><b>YOUR CART IS EMPTY</b></h2>
 
     <div style="margin-left: 45%">
-        <button type="submit" onsubmit="goBack()">ADD ITEMS</button>
+        <button type="button" onclick="goBack()">ADD ITEMS</button>
     </div>
 {%else%}
 <br><br><br>
 <div class="container">
-    <form method="post" action="" onsubmit="save()">
+    <td method="post" action="" onsubmit="save()">
         <table class="table table-bordered">
             <tr>
-
                 <th>Product Details</th>
                 <th>Quantity</th>
                 <th>Offers Selected</th>
@@ -99,8 +109,15 @@
         </script>
         <br><br>
         <input type="hidden" id="Negotiated" name="NegotiatedRequestAmount" value="0"/>
+        <h4 onclick="showDetails()"><b>Click Here For Negotiation</b></h4>
+        <td></td><div id="contact" style="display: none">
+            <p> <b>Phone No:</b> +123435</p>
+            <p> <b>Email ID</b>: business@visa.com</p>
+            <input type="submit" name="type" onclick="negotiate()" value="Enter Your Amount"/>
+            <br><br><br>
+    </div></td>
         <td><button type="button" onclick="goBack()">EDIT CART</button></td>
-        <td><input type="submit" name="type" onclick="negotiate()" value="Want To Negotiate"/></td>
+
         <td><input type="submit" name="type" onclick="payment()" value="Process Payment"/></td>
     </form>
 </div>
