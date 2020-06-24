@@ -1,21 +1,126 @@
-<!DOCTYPE html>
-<html lang="en">
+{% include "./common/header.html" %}
+<link rel="stylesheet" href="{{ url_for('static',filename='./requirements/requirements.css') }}">
 
-<head>
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
-    <style>
-        body {
-            color: black;
+
+<script>
+    function showThis(ii) {
+
+        document.getElementById("thisDiv1").style.display="none";
+        document.getElementById("thisDiv2").style.display="none";
+        document.getElementById("thisDiv3").style.display="none";
+        document.getElementById("thisDiv4").style.display="none";
+        document.getElementById("thisDiv5").style.display="none";
+
+        document.getElementById("requestForm1").style.display="none";
+        document.getElementById("requestForm2").style.display="none";
+        document.getElementById("thisDiv"+ii).style.display="block";
+        if( ii == 1){
+            document.getElementById("buttons").style.display="block";
+
         }
-    </style>
+    }
+    function typeOfRequest(ii) {
+        document.getElementById("requestForm1").style.display="none";
+        document.getElementById("requestForm2").style.display="none";
+        document.getElementById("requestForm"+ii).style.display="block";
+        document.getElementById("buttons").style.display="none";
+    }
+</script>
+<style>
+    .grab {cursor: -webkit-grab; cursor: grab;}
+    .split {
 
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-    </head>
+        height: 100%;
+        width: 15%;
+        position: fixed;
+        z-index: 1;
+        top: 100px;
+        overflow-x: hidden;
+        padding-top: 50px;
+        gap: 10%;
+    }
+    .split1 {
+        height: 100%;
+        width: 80%;
+        position: fixed;
+        z-index: 1;
+        top: 50px;
+        overflow-x: hidden;
+        padding-top: 100px;
+    }
 
-    <body>
-        You have searched
-    </body>
+    .left {
+        left: 0;
+        background-color: #111;
+    }
 
+    .right {
+        right: 0;
+
+    }
+</style>
+<body>
+
+        <div>
+            <ul  class="grab split left">
+
+                <ul>
+                    <h4  class="grab" style="color:chocolate"  onclick="showThis(1)" >Create Request</h4>
+                </ul>
+                <ul>
+                    <h4 class="grab" style="color:chocolate" onclick="showThis(2)">Received Request</h4>
+                </ul>
+                <ul>
+                    <h4 class="grab" style="color:chocolate" onclick="showThis(3)">Pending Request</h4>
+                </ul>
+                <ul>
+                    <h4 class="grab" style="color:chocolate" onclick="showThis(4)">Request Accepted</h4>
+                </ul>
+                <ul>
+                    <h4 class="grab" style="color:chocolate" onclick="showThis(5)">Rejected Request</h4>
+                </ul>
+            </ul>
+        </div>
+
+        <div id="thisDiv1"  class="split1 right">
+            <h1>Create Your Request</h1>
+            <p id="buttons"><button type="button" id="button1" onclick="typeOfRequest(1)">Write In Your Way</button>
+            <button type="button" id="button2" onclick="typeOfRequest(2)">Sample Template</button>
+            </p>
+            <form method="post" action="#">
+            <div id="requestForm1" style="display: none">
+
+                <textarea id="description" name="description" rows="4" cols="50">
+                </textarea>
+                <br><br>
+                <input type="submit" value="Post Request">
+            </div>
+            <div id="requestForm2" style="display: none">
+                <p><label for="Item">Item Name: </label>
+                   <input type="text" name="Item" id="Item" placeholder="Item You Want"/>
+
+                 <label for="Quantity">Quantity Required: </label>
+                    <input type="number" name="Quantity" id="Quantity" min="1"  placeholder="Quantity Required"/>
+                    <br><br>
+                    <input type="submit" value="Post Request">
+                  </p>
+            </div>
+            </form>
+        </div>
+        <div id="thisDiv2" style="display: none" class="split1 right">
+            see your received request
+        </div>
+        <div id="thisDiv3" style="display: none" class="split1 right">
+            See your pending request
+        </div>
+        <div id="thisDiv4" style="display: none" class="split1 right">
+            See your accepted request
+        </div>
+        <div id="thisDiv5" style="display: none" class="split1 right">
+            see your rejected request
+        </div>
+
+
+
+</body>
 </html>

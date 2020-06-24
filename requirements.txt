@@ -6,3 +6,6 @@ Jinja2==2.11.2
 MarkupSafe==1.1.1
 mysqlclient==1.4.6
 Werkzeug==1.0.1
+requests==2.24.0
+cybersource-rest-client-python==0.0.17
+cryptography==2.8

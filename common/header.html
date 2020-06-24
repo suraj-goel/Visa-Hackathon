@@ -2,11 +2,13 @@
     <meta charset="UTF-8">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{{ url_for('static',filename='./common/js/script.js') }}"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="icon" href="{{ url_for('static',filename='../common/img/icon-img.png') }}" type="image/icon">
+
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="{{ url_for('static',filename='./common/css/header.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href=" https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+
+    <link rel=" icon" href="{{ url_for('static',filename='../common/img/icon-img.png') }}" type="image/icon">
     <title>SBM</title>
 </head>
 <navbar>
@@ -19,7 +21,9 @@
                             <img src="{{ url_for('static',filename='../common/img/shop.png') }}">
                         </div>
                         <div class="navbar-end">
-                            <h2 style="color:white;text-transform: uppercase">Small Business Merchant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;</a>
+                            <h2 style="color:white;text-transform: uppercase">Small Business
+                                Merchant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;</a>
                             </h2>
                         </div>
                     </div>
@@ -30,25 +34,28 @@
             <div class="container-fluid">
                 <ul class="navbar-body list-inline">
                     <li class="active"><a href="/" class="active">Search</a></li>
-                    <li><a>Orders</a></li>
-                    <li><a>Inventory</a></li>
+                    <li><a href="/orders">Orders</a></li>
+                    <li><a href="/inventory">Inventory</a></li>
                     <li><a>Requirements</a></li>
                     <li><a>Negotiation</a></li>
                     <li><a>Manage Offers</a></li>
                     <li class="w3-dropdown-hover w3-right">
-                        <button class="w3-button w3-black">Profile</button>
-                        <div class="w3-dropdown-content w3-bar-block w3-border" style="right:0;background-color:black;">
-                            <a href="#" style="color:white" class="w3-bar-item w3-button">Settings</a>
-                            <a href="#" style="color:white" class="w3-bar-item w3-button">Accounts</a>
-                            <a href="login" style="color:white" class="w3-bar-item w3-button">Log out</a>
+                        <button>Profile</button>
+                        <div class="w3-dropdown-content w3-bar-block w3-border"
+                            style="right:0;background-color:#1a1f71;">
+                            <a href="#" style="color:white" class="w3-bar-item w3-button back">Settings</a>
+                            <a href="{{ url_for('displayaccountsdetails') }}" style="color:white"
+                                class="w3-bar-item w3-button back">Accounts</a>
+                            <a href="login" style="color:white" class="w3-bar-item w3-button back">Log out</a>
                         </div>
                     </li>
                 </ul>
                 <div class="tab-highlighter"></div>
             </div>
         </div>
+        <hr class="line">
     </div>
-
+    
 </navbar>
 
-<br><br><br><br>
+<br><br><br><br><br><br>
