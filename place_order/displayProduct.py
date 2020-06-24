@@ -44,7 +44,7 @@ def displayAllOffers(mysql, selectedMerchant):
     for i in range(len(a)):
         cur.execute("select Information,OfferOnProduct.OfferID as OfferID, Offer.DiscountPercentage as DiscountPercentage \
         , Offer.QuantityRequired as QuantityRequired \
-        from OfferOnProduct, Offer WHERE ProductID = " + str(a[i]['ProductID']) + " \
+        from OfferOnProduct, Offer WHERE ProductID = " + "'"+str(a[i]['ProductID']) + "' \
         and OfferOnProduct.OfferID = Offer.OfferID")
         offerProduct = cur.fetchall()
 
