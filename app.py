@@ -1,7 +1,9 @@
 from functools import wraps
-
+from flask_googlemaps import GoogleMaps
+from flask_googlemaps import Map
 import jinja2
 import os
+import uuid
 from datetime import timedelta
 from flask import Flask, render_template, request
 from flask import *
@@ -10,8 +12,8 @@ from services.db.db_connection import set_connection
 from search_merchants.searchMerchant import getCurrentLocation
 from place_order.displayProduct import displayAllProducts, displayAllOffers
 from search_merchants.searchProducts import getSearchResults
-#from place_order.displayCart import displayALLCart
-from login_registration.registerMerchant import checkIfExistingMerchant,registerNewMerchant
+# from place_order.displayCart import displayALLCart
+from login_registration.registerMerchant import checkIfExistingMerchant, registerNewMerchant, checkPayType
 from login_registration.loginMerchant import checkEmailAndPassword
 from accounts.validate_accounts import validation #validate_accounts.py
 from place_order.displayCart import addToCart
@@ -20,20 +22,29 @@ from manage_inventory.addProduct import addNewProduct,getCategories
 from manage_inventory.updateProduct import *
 from orders_management.orderHistory import getOrders
 
-app = Flask(__name__,static_folder = '')
-app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader,jinja2.FileSystemLoader(['.'])])
-
+app = Flask(__name__, static_folder='')
+app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader, jinja2.FileSystemLoader(['.'])])
+app.config['GOOGLEMAPS_KEY'] = ""
 app.secret_key = os.urandom(24)
 app.permanent_session_lifetime = timedelta(minutes=5)
 mysql = set_connection(app)
+GoogleMaps(app)
+
 
 #auth decorator
 def login_required(function_to_protect):
     @wraps(function_to_protect)
     def wrapper(*args, **kwargs):
         if 'session_id' in session:
-            # Success!
-            return function_to_protect(*args, **kwargs)
+            id = session['session_id']
+            if 'pay_type' in session:
+                return function_to_protect(*args, **kwargs)
+            elif checkPayType(mysql, id):
+                session.permanent = True
+                session['pay_type'] = True
+                return redirect('/home')
+            else:
+                return redirect('/payment')
         else:
             flash("Please log in")
             return redirect(url_for('login'))
@@ -87,7 +98,9 @@ def register():
             flash('Email already registered')
             return redirect(url_for(request.url))
         else:
-            registerNewMerchant(mysql,email,password,name)
+            session.permanent = True
+            id = registerNewMerchant(mysql, email, password, name)
+            session['session_id'] = id
 
         return redirect(url_for('login'))
 
