@@ -60,6 +60,10 @@
     function hideDetails() {
         document.getElementById("contact").style.display = "none";
     }
+    function addItems() {
+        var x =document.getElementById("emptyCart").name;
+        return window.location = x;
+    }
 
 </script>
 <body>
@@ -67,7 +71,8 @@
 <h2 style="color: chocolate"><b>YOUR CART IS EMPTY</b></h2>
 
     <div style="margin-left: 45%">
-        <button type="button" onclick="goBack()">ADD ITEMS</button>
+
+        <button id="emptyCart" name="{{url_for('showPlaceOrder',merchant_id=merchantID)}}" type="button" onclick="addItems()">ADD ITEMS</button>
     </div>
 {%else%}
 <br><br><br>
@@ -102,8 +107,8 @@
         </table>
         <input type="hidden" id="finalPrice1" name="finalPrice" value="0"/>
         <input type="hidden" id="finalDiscountPrice1" name="finalDiscountPrice" value="0"/>
-        <h3>Totol Cost: Rs <span id="finalPrice" >0</span></h3>
-        <h3>Total cost(After Discount): Rs <span id="discountPrice">0</span></h3>
+        <h3>Total Cost: Rs <span id="finalPrice" >0</span></h3>
+        <h3>Total Cost(After Discount): Rs <span id="discountPrice">0</span></h3>
         <script> FinalPrice();
         DiscountPrice();
         </script>
