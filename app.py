@@ -45,6 +45,8 @@ def login_required(function_to_protect):
                 return redirect('/home')
             else:
                 return redirect('/payment')
+        elif request.path == '/register' or request.path == '/login':
+            return function_to_protect(*args, **kwargs)
         else:
             flash("Please log in")
             return redirect(url_for('login'))
