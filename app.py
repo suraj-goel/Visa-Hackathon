@@ -222,9 +222,12 @@ def editAccountDetails():
 	return render_template("./accounts/editAccountDetails.html",result=result)
 
 
-@app.route('/merchant/<merchant_id>/requirements')
+@app.route('/merchant/<merchant_id>/requirements',methods=['GET','POST'])
 def requirements(merchant_id):
-	return render_template("./requirements/requirements.html")
+	if(request.method == 'GET'):
+		return render_template("./requirements/requirements.html")
+	else:
+		return redirect(request.url)
 
 
 
