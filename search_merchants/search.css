@@ -40,7 +40,7 @@ input {
   padding: 6px 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  color: #faaa13;
+  color: #1a1f71;
   border: 1px solid #faaa13;
 }
 
@@ -191,7 +191,7 @@ form.example::after {
 }
 
 .custom-dropdown__select--white {
-  border: 1px solid #1a1f71;
+  border: 1px solid #faaa13;
   color: #1a1f71;
 }
 .custom-dropdown::before,
