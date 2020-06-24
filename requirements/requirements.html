@@ -9,20 +9,25 @@
         document.getElementById("thisDiv2").style.display="none";
         document.getElementById("thisDiv3").style.display="none";
         document.getElementById("thisDiv4").style.display="none";
-        document.getElementById("thisDiv"+ii).style.display="block";
+        document.getElementById("thisDiv5").style.display="none";
+
         document.getElementById("requestForm1").style.display="none";
         document.getElementById("requestForm2").style.display="none";
+        document.getElementById("thisDiv"+ii).style.display="block";
+        if( ii == 1){
+            document.getElementById("buttons").style.display="block";
+
+        }
     }
     function typeOfRequest(ii) {
         document.getElementById("requestForm1").style.display="none";
         document.getElementById("requestForm2").style.display="none";
         document.getElementById("requestForm"+ii).style.display="block";
+        document.getElementById("buttons").style.display="none";
     }
 </script>
 <style>
     .grab {cursor: -webkit-grab; cursor: grab;}
-
-
     .split {
 
         height: 100%;
@@ -63,42 +68,58 @@
                     <h4  class="grab" style="color:chocolate"  onclick="showThis(1)" >Create Request</h4>
                 </ul>
                 <ul>
-                    <h4 class="grab" style="color:chocolate" onclick="showThis(2)">Pending Request</h4>
+                    <h4 class="grab" style="color:chocolate" onclick="showThis(2)">Received Request</h4>
                 </ul>
                 <ul>
-                    <h4 class="grab" style="color:chocolate" onclick="showThis(3)">Request Accepted</h4>
+                    <h4 class="grab" style="color:chocolate" onclick="showThis(3)">Pending Request</h4>
                 </ul>
                 <ul>
-                    <h4 class="grab" style="color:chocolate" onclick="showThis(4)">Rejected Request</h4>
+                    <h4 class="grab" style="color:chocolate" onclick="showThis(4)">Request Accepted</h4>
+                </ul>
+                <ul>
+                    <h4 class="grab" style="color:chocolate" onclick="showThis(5)">Rejected Request</h4>
                 </ul>
             </ul>
         </div>
 
         <div id="thisDiv1"  class="split1 right">
             <h1>Create Your Request</h1>
-            <button type="button" onclick="typeOfRequest(1)">Write In Your Way</button>
-            <button type="button" onclick="typeOfRequest(2)">Sample Template</button>
-            <form action="#">
+            <p id="buttons"><button type="button" id="button1" onclick="typeOfRequest(1)">Write In Your Way</button>
+            <button type="button" id="button2" onclick="typeOfRequest(2)">Sample Template</button>
+            </p>
+            <form method="post" action="#">
             <div id="requestForm1" style="display: none">
 
-                <textarea id="description" name="w3review" rows="4" cols="50">
+                <textarea id="description" name="description" rows="4" cols="50">
                 </textarea>
                 <br><br>
-                <input type="submit" value="Submit">
+                <input type="submit" value="Post Request">
             </div>
             <div id="requestForm2" style="display: none">
-                <p>TEMPLATE TYPE</p>
+                <p><label for="Item">Item Name: </label>
+                   <input type="text" name="Item" id="Item" placeholder="Item You Want"/>
+
+                 <label for="Quantity">Quantity Required: </label>
+                    <input type="number" name="Quantity" id="Quantity" min="1"  placeholder="Quantity Required"/>
+                    <br><br>
+                    <input type="submit" value="Post Request">
+                  </p>
             </div>
             </form>
+        </div>
         <div id="thisDiv2" style="display: none" class="split1 right">
-            See your pending request
+            see your received request
         </div>
         <div id="thisDiv3" style="display: none" class="split1 right">
-            See your accepted request
+            See your pending request
         </div>
         <div id="thisDiv4" style="display: none" class="split1 right">
+            See your accepted request
+        </div>
+        <div id="thisDiv5" style="display: none" class="split1 right">
             see your rejected request
         </div>
+
 
 
 </body>
