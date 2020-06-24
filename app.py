@@ -29,6 +29,16 @@ def inventory():
 		items = getAllProducts(mysql, merchantid, "S")
 		return render_template("./manage_inventory/inventory.html", items=items,filter='S')
 
+@app.route('/inventory/edit/<productID>',methods=['POST','GET'])
+def editProduct(productID):
+	merchantID = 1
+	productID = productID
+	if request.method=='POST':
+		pass
+	else:
+		
+		return render_template("./manage_inventory/editProduct.html")
+
 @app.route('/' ,methods=['POST','GET'])
 @app.route('/search', methods=['POST','GET'])
 def showAll():

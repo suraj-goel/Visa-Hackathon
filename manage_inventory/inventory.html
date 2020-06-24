@@ -24,6 +24,7 @@
                     <td colspan="2">
                        <h3>{{item['Name']}}</h3>Description: {{item['Description']}} <br>Category: {{item['Category']}} <br>
                     Cost per unit: {{item['Price']}}<br>Quantity: {{item['Quantity']}}
+                    <h4><a title="Edit Product" href="/inventory/edit/{{item['ProductID']}}">Edit Product</a></h4>
                 </tr>
                 {% if item['offers'] %} {% for x in item['offers'] %}
                 <tr>
