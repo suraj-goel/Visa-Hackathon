@@ -9,7 +9,9 @@ from accounts.validate_accounts import validation #validate_accounts.py
 from place_order.displayCart import addToCart
 from manage_inventory.SearchInventory import *
 from manage_inventory.addProduct import addNewProduct,getCategories
-from manage_inventory.updateProduct import *;
+from manage_inventory.updateProduct import *
+from orders_management.orderHistory import getOrders
+
 app = Flask(__name__,static_folder = '')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader,jinja2.FileSystemLoader(['.'])])
 app.secret_key = 'super secret key'
@@ -52,6 +54,7 @@ def inventory():
 	else:
 		items = getAllProducts(mysql, merchantid, "S")
 		return render_template("./manage_inventory/inventory.html", items=items,filter='S',category=c,message=message)
+	
 @app.route('/inventory/edit/<productID>',methods=['POST','GET'])
 def editProduct(productID):
 	merchantID = 1
@@ -76,7 +79,12 @@ def editProduct(productID):
 		cur.execute(query)
 		data = cur.fetchall()
 		return render_template("./manage_inventory/editProduct.html",data=data[0],category = c,productID = productID)
-
+	
+@app.route('/orders',methods=['POST','GET'])
+def orders():
+	merchantid=1
+	history=getOrders(mysql,merchantid)
+	return render_template('./orders_management/order_management.html',history=history)
 
 @app.route('/' ,methods=['POST','GET'])
 @app.route('/search', methods=['POST','GET'])
