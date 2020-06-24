@@ -1,6 +1,6 @@
 def displayAllProducts(mysql,selectedMerchant):
     cur = mysql.connection.cursor()
-    cur.execute("select ProductID, Name, Description, Price, Quantity, Category FROM Product WHERE MerchantID = " + str(selectedMerchant))
+    cur.execute("select ProductID, Name, Description, Price, Quantity, Category FROM Product WHERE Product.Sell=1 and MerchantID = " + str(selectedMerchant))
     a=cur.fetchall()
     
     currentProductID = str(a[0]["ProductID"])
@@ -35,7 +35,7 @@ def displayAllProducts(mysql,selectedMerchant):
 
 def displayAllOffers(mysql, selectedMerchant):
     cur = mysql.connection.cursor()
-    cur.execute("select ProductID from Product WHERE MerchantID = " + str(selectedMerchant))
+    cur.execute("select ProductID from Product WHERE MerchantID = " + str(selectedMerchant)+' and Product.Sell=1')
     a=cur.fetchall()
     # cur.close()
 
