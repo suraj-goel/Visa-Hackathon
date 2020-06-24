@@ -94,11 +94,11 @@ def register():
 
         if password != confirmPassword:
             flash('Passwords do not match')
-            return redirect(url_for(request.url))
+            return redirect(url_for('register'))
 
         if checkIfExistingMerchant(mysql,email):
             flash('Email already registered')
-            return redirect(url_for(request.url))
+            return redirect(url_for('register'))
         else:
             session.permanent = True
             id = registerNewMerchant(mysql, email, password, name)

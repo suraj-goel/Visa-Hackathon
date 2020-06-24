@@ -12,6 +12,7 @@ def checkIfExistingMerchant(mysql,merchantEmail):
 
 def registerNewMerchant(mysql, email, password,name):
   id = uuid.uuid1()
+  print(id)
   cur = mysql.connection.cursor
   query = """INSERT INTO 
         MERCHANT (
