@@ -172,6 +172,6 @@ def register_merchant(buyerid,supplier_id):
 
 acc=register_merchant("12324","APISupp-102")
 
-#payment
-payment_amount=1200
+# payment
+payment_amount = 1200
 paymentProcessing(payment_amount,"12324",acc)

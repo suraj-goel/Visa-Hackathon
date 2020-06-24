@@ -4,7 +4,7 @@
     <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoredPackages">
         <value>
-          <list size="315">
+          <list size="316">
             <item index="0" class="java.lang.String" itemvalue="mysqlclient" />
             <item index="1" class="java.lang.String" itemvalue="Werkzeug" />
             <item index="2" class="java.lang.String" itemvalue="Flask-MySQLdb" />
@@ -320,6 +320,7 @@
             <item index="312" class="java.lang.String" itemvalue="google-cloud-firestore" />
             <item index="313" class="java.lang.String" itemvalue="google-auth" />
             <item index="314" class="java.lang.String" itemvalue="openpyxl" />
+            <item index="315" class="java.lang.String" itemvalue="cybersource-rest-client-python" />
           </list>
         </value>
       </option>
