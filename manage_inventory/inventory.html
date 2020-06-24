@@ -1,10 +1,34 @@
 {% include "./common/header.html" %}
-
-<body>
-    <br>
-    <h1 style="color:yellow;">HELLO</h1>
-    inventory {{name}}
-<br> {{items}}
-</body>
-
+<form class="example" method="post" action="" style="margin:auto;max-width:600px">
+    <h1>Inventory</h1>
+            <select name="filter">
+                <option value="S">Selling</option>
+                <option value="N">Not Selling</option>
+                <option value="A">All</option>
+            </select>
+            <button type="submit" id="submitButton">Filter<i class="fa fa-filter"></i>
+            </button>
+        </form>
+        {% if items %}
+        <div class="container">
+            <table class="table table-bordered">
+                {% for item in items %}
+                <tr class="header">
+                    <td colspan="2">
+                       {{items}}
+                </tr>
+                {% if item['Offers'] %} {% for x in item['Offers'] %}
+                <tr>
+                    <td>Product : {{x['Name']}}</td>
+                    <td>{{x['Information']}}</td>
+                </tr>
+                {% endfor %} {% else %}
+                <tr>
+                    <td>No discounts available</td>
+                </tr>
+                {% endif %} {% endfor %}
+            </table>
+        </div>
+        {% endif %}
+    </center>
 </html>
