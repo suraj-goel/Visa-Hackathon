@@ -27,7 +27,8 @@
                        <h3>Cart: {{item['CartID']}}</h3>Total: {{item['Total']}}<br>
                         Was ordered on {{ item['OrderedDate'] }} <br>
                          {% if item['Status']=='no' %}
-                        <button>Confirm delivery</button>
+                         <form method="post" action=""><button type="submit" name="confirm" value="{{item['CartID']}}">Confirm delivery</button></form>
+                        
                         {% else %}
                          Was delivered on {{item['DeliveredDate']}}
                     {% endif %}
