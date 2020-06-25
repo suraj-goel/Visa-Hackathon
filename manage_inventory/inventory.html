@@ -1,56 +1,6 @@
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./manage_inventory/inventory_style.css') }}">
 <script type="text/javascript" src="{{url_for('static',filename='./manage_inventory/inventory.js') }}"></script>
-<style>
-
-    body {font-family: Arial, Helvetica, sans-serif;}
-    * {box-sizing: border-box;}
-
-    input[type=text], select, textarea {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box;
-        margin-top: 6px;
-        margin-bottom: 16px;
-        resize: vertical;
-    }
-    input[type=number] {
-        padding: 12px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box;
-        margin-top: 6px;
-        margin-bottom: 16px;
-        resize: vertical;
-
-    }
-
-    input[type=submit] {
-        background-color: #4CAF50;
-        color: white;
-        padding: 12px 20px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    input[type=submit]:hover {
-        background-color: #45a049;
-    }
-
-
-    .containerForm {
-        border-radius: 5px;
-        background-color: #f2f2f2;
-        padding: 15px;
-
-
-    }
-</style>
-
-<body>
 <center>
     {% if message=='yes' %}
     <span style="color:green">Successfully added product</span>
@@ -58,77 +8,121 @@
     {% if message=='no' %}
     <span style="color:red;"> Already exists. Edit the product to change the quantity or sell options </span>
     {% endif %}
-        <h1>Inventory</h1>
-    <button type="button" id="formButton">Add product</button>
-</center>
-<form id="form1" method="post"  >
+    <h1 style="color: #1a1f71;">Inventory</h1>
+    <button type="button" class="button" id="formButton"><span> Add product </span></button>
 
+    <form id="form1" method="post" style="border: none;">
         <div id="newForm" class="containerForm">
-            <label for="name">Product Name: </label>
-            <input type="text"  name="name" id="name" placeholder="Item Name" required/>
-            <label for="description">Product Description: </label>
-            <textarea id="description" name="description" placeholder="Something About Your Product...">
-            </textarea>
-            <label for="price">Price Per Piece: </label><br>
-            <input type="number" min='1' name="price" id='price' onchange="validate(this.id)" required><br>
-            <label for="other_category">Select Your Category: </label>
-            <label for="categoryname"></label>
-            <select name="category" id="categoryname" onchange="checkvalue(this.value)">
-                {% for i in category %}
-                <option value="{{i}}">{{i}}</option>
-                {% endfor %}
-                <option value="others">Others</option>
-            </select>
+            <table border="0" style="border-spacing: 10px 15px; border-collapse: initial;">
+                <tr>
+                    <td>
+                        <h4>Product name </h4>
+                    </td>
+                    <td> <input type="text" name="name" required></h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4>Product Description</h4>
+                    </td>
+                    <td><textarea name="description" required></textarea></td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4>Price per piece</h4>
+                    </td>
+                    <td> <input type="number" min='1' name="price" id='price' onchange="validate(this.id)" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4>Quantity</h4>
+                    </td>
+                    <td><input type="number" min='0' name="quantity" id='quantity' onchange="validate(this.id)"
+                            required>
+                    </td>
 
-            <div  id='category' style='display:none'>
-                <label for="other_category">Type Your Category: </label>
-                <input id="other_category" type="text" name="other_category" value=''>
-            </div>
-            <input type="radio" name="sell" value="1" checked> <b>Show as selling to other merchants</b><br>
-            <input type="radio" name="sell" value="0"> <b>Add to inventory without showing to other merchants</b><br>
-            <input style="display: block;
-  margin-right: auto;
-  margin-left: auto;" type="submit" value="Add Product" onclick="javascript: form.action='/addproduct';">
-        </div>
-</form>
-</body>
-<form class="example" method="post" action="" style="margin:auto;max-width:600px">
-            <select name="filter">
-                <option value="S">Selling</option>
-                {% if filter=='N' %}
-                <option value="N" selected>Not Selling</option>
-                {% else %}
-                <option value="N">Not Selling</option> {% endif %}
-                {% if filter=='A' %}
-                <option value="A" selected>All</option>
-                {% else %}
-                <option value="A">All</option> {% endif %}
-            </select>
-            <button type="submit" >Filter<i class="fa fa-filter"></i>
-            </button>
-        </form>
-        {% if items %}
-        <div class="container">
-            <table class="table table-bordered">
-                {% for item in items %}
-                <tr class="header">
-                    <td colspan="2">
-                       <h3>{{item['Name']}}</h3>Description: {{item['Description']}} <br>Category: {{item['Category']}} <br>
-                    Cost per unit: {{item['Price']}}<br>Quantity: {{item['Quantity']}}
-                    <h4><a title="Edit Product" href="/inventory/edit/{{item['ProductID']}}">Edit Product</a></h4>
                 </tr>
-                {% if item['offers'] %} {% for x in item['offers'] %}
                 <tr>
-                    <td>{{x['Information']}}</td>
+                    <td>
+                        <h4>Category</h4>
+                    </td>
+                    <td>
+                        <span class="custom-dropdown custom-dropdown--white">
+                            <select name="category" class="custom-dropdown__select custom-dropdown__select--white"
+                                onchange="checkvalue(this.value)">
+                                {% for i in category %}
+                                <option value="{{i}}">{{i}}</option>
+                                {% endfor %}
+                                <option value="others">Others</option>
+                            </select>
+                        </span>
+                    </td>
                 </tr>
-                {% endfor %} {% else %}
-                <tr>
-                    <td>No discounts available</td>
-                </tr>
-                {% endif %} {% endfor %}
             </table>
-        </div>
-        {% endif %}
 
-    </center>
+            <div id='category' style='display:none'>
+                <h4 for="other_category">Type Your Category: </h4><br>
+                <input id="other_category" type="text" name="other_category" value=''>
+            </div><br><br>
+
+            <input type="radio" name="sell" value="1" checked><b> Show as selling to other merchants</b><br>
+            <input type="radio" name="sell" value="0"><b> Add to inventory without showing to other
+                merchants</b><br><br>
+            <input style="display: block; background-color: #053ea9;
+          margin-right: auto;
+          margin-left: auto;" type="submit" class="button" value="Add Product"
+                onclick="javascript: form.action='/addproduct';">
+        </div>
+    </form>
+</center>
+<br><br>
+<form class="example" method="post" action="" style="margin:auto;max-width:600px">
+    <span class="custom-dropdown custom-dropdown--white"><select name="filter"
+            class="custom-dropdown__select custom-dropdown__select--white">
+            <option value="S">Selling</option>
+            {% if filter=='N' %}
+            <option value="N" selected>Not Selling</option>
+            {% else %}
+            <option value="N">Not Selling</option> {% endif %}
+            {% if filter=='A' %}
+            <option value="A" selected>All</option>
+            {% else %}
+            <option value="A">All</option> {% endif %}
+        </select>
+    </span>
+    <button type="submit">Filter<i class="fa fa-filter"></i></button>
+</form>
+{% if items %}
+<div class="container">
+    <table class="table table-bordered">
+        {% for item in items %}
+        <tr style="all: none;">
+            <td style="background-color: white; border: none;"></td>
+        </tr>
+        <tr class="header">
+            <td colspan="2">
+                <h4>{{item['Name']}}</h4> <br>
+                Description: {{item['Description']}} <br>
+                Category: {{item['Category']}} <br>
+                Cost per unit: {{item['Price']}} <br>
+                Quantity: {{item['Quantity']}}
+                <h5><a title="Edit Product" href="/inventory/edit/{{item['ProductID']}}" style="color: #337ab7;">Edit
+                        Product</a></h5>
+            </td>
+        </tr>
+        {% if item['offers'] %} {% for x in item['offers'] %}
+        <tr>
+            <td>{{x['Information']}}</td>
+        </tr>
+        {% endfor %} {% else %}
+        <tr>
+            <td>No discounts available</td>
+        </tr>
+        {% endif %} {% endfor %}
+    </table>
+</div>
+{% endif %}
+</center>
+
 </html>
