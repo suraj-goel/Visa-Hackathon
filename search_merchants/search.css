@@ -12,15 +12,22 @@ body {
   color: #6a6c6f;
 }
 
-h1{
+h1 {
   margin: 0px 0px 10px 0px;
+}
+
+h4 {
+  margin-bottom: 0px;
 }
 
 * {
   box-sizing: border-box;
 }
 
-a:hover {
+a:link,
+a:hover,
+a:active,
+a:visited {
   text-decoration: none;
 }
 
@@ -118,13 +125,22 @@ form.example::after {
 .table {
   border: none;
   border-collapse: separate;
-  border-spacing: 0px 15px;
+  /* border-spacing: 0px 10px; */
 }
 
 .table tr {
   margin-bottom: 20px;
   margin: 25px;
+  padding-bottom: 0px;
   border: 2px solid #1a1f71;
+  background-color: #f7f7f7;
+}
+
+.table td {
+  font-size: 1.7rem;
+  font-family: "open-sans", sans-serif, Tahoma;
+  font-weight: 300;
+  color: #1a1f71;
 }
 
 .table tr.header {
