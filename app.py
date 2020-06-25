@@ -329,6 +329,7 @@ def cybersource():
 def negotiation():
 	if(request.method=='GET'):
 		merchant_id = 1  #get from session
+
 		return render_template("./negotiation/negotiation.html")
 
 if __name__ == '__main__':
