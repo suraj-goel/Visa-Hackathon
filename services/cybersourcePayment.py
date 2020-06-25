@@ -17,6 +17,7 @@ def del_none(d):
 
 def simple_authorizationinternet(cardNumber="4111111111111111",cardExpirationMonth="12",cardExpirationYear="2031",amount="0",aggregator_id="123456789", 
     card_acceptor_id="1234567890",name="V-Internatio" ):
+    amount = amount/76.0#Online currency converter required or Visa has to let us change Currency code to INR
     print("\nCardNumber:"+cardNumber+"\nCardExpirationMonth:"+cardExpirationMonth+"\nCardExpirationYear:"+cardExpirationYear+"\nAmount:"+amount+"\nAGGID:"+aggregator_id+"\nCAID:"+card_acceptor_id+"\nName:"+name+"\n")
     flag = False
     clientReferenceInformationCode = "TC50711_3"
