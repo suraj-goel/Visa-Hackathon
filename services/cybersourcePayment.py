@@ -104,9 +104,16 @@ def simple_authorizationinternet(cardNumber="4111111111111111",cardExpirationMon
         print("\nAPI RESPONSE CODE : ", status)
         print("\nAPI RESPONSE BODY : ", body)
         print("\nAPI RETURN DATA : ",return_data)
-        return status
+        bodydict = eval(body)
+        actualStatus = bodydict["status"]
+        print("STATUS:",bodydict["status"])
+        if(actualStatus=="DECLINED"):
+            raise Exception
+        else:
+            return 1
     except Exception as e:
         print("\nException when calling PaymentsApi->create_payment: %s\n" % e)
+        return 0
 
 #if __name__ == "__main__":
 #    simple_authorizationinternet()
