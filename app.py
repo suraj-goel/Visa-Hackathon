@@ -267,11 +267,12 @@ def registerCyber():
 	return render_template("./accounts/cyberSourceDetails.html",result=result)
 
 
-@app.route('/merchant/<merchant_id>/requirements',methods=['GET','POST'])
-def requirements(merchant_id):
+@app.route('/requirements',methods=['GET','POST'])
+def requirements():
 	if(request.method == 'GET'):
 		return render_template("./requirements/requirements.html")
 	else:
+		merchant_id=1 # get from session
 		title = request.form.get('title')
 		description = request.form.get('description')
 		quantity = request.form.get('Quantity')
