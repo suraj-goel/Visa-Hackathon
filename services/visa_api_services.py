@@ -1,7 +1,9 @@
 import requests
 import json
+import os
 
 cert=('./cert.pem','./key_374cc983-558b-49dd-a55b-99d3cb3afac5.pem')
+#cert=(os.path.abspath("services/cert.pem"),os.path.abspath("services/key_374cc983-558b-49dd-a55b-99d3cb3afac5.pem"))
 auth=("STT3WACAH2W19FH6H48A2117b1JIIYevI8qRcIQn2Zwhtdp4M", "81SYH42zc2CwJgtOzInj50e8zT6vr")
 header={'Accept': 'application/json'}
 
@@ -16,12 +18,13 @@ def testConnection():
     print(r.text)
 
 #B2B virtual payment methods
-def createSupplier(mysql,acc,supplier_id,buyerid='9210101012',clientid="B2BWS_1_1_9999"):
+def createSupplier(mysql,acc,supplier_id,buyerid,clientid="B2BWS_1_1_9999"):
     # supplier id is Identifier used by the buyer to identify the supplier. This has to be unique for a buyer. It cannot contain spaces.
     #fetch buyer id from db corresponding to merchantid and set a new supplier id with account number for payment
     cur = mysql.connection.cursor()
     cur.execute("select * from Merchant where MerchantID='"+supplier_id+"';")
     mid, name, registeredName, email, contactNumber, address, password = cur.fetchone()
+    cur.close()
     url = 'https://sandbox.api.visa.com/vpa/v1/supplier/CreateSupplier'
     p = json.loads(
         '''                        
@@ -46,10 +49,9 @@ def createSupplier(mysql,acc,supplier_id,buyerid='9210101012',clientid="B2BWS_1_
         "supplierPostalCode": "94404",
         "supplierState": "CA",
         "supplierCity": "FC",
-        "supplierAddressLine2": "",
         "supplierAddressLine1": "'''+address+'''",
         "supplierType": "VPA",
-        "supplierName": "APISupp-102",
+        "supplierName": "'''+registeredName+'''",
         "supplierId": "'''+supplier_id+'''",
         "buyerId": "'''+buyerid+'''",
         "clientId": "'''+clientid+'''",
@@ -64,12 +66,14 @@ def createSupplier(mysql,acc,supplier_id,buyerid='9210101012',clientid="B2BWS_1_
     try:
         res=r.json()
         print(res['statusDesc'])
+        return 1
     except Exception as e:
         print(e)
         print(r.text)
         print('error creating supplier')
+        return 0
 
-def createBuyerAccount(buyerid,clientid="B2BWS_1_1_9999"):
+def createBuyerAccount(mysql,buyerid,clientid="B2BWS_1_1_9999"):
     url='https://sandbox.api.visa.com/vpa/v1/requisitionService'
     p= json.loads('''
         {
@@ -88,14 +92,18 @@ def createBuyerAccount(buyerid,clientid="B2BWS_1_1_9999"):
     result=r.json()
     account_number=result['accountNumber']
     print('Account number set up for buyer')
+    cur = mysql.connection.cursor()
+    cur.execute("INSERT INTO B2BDetails (MerchantID, AccountNumber) VALUES (%s, %s);", (buyerid, account_number))
+    mysql.connection.commit()
     return account_number
 
 
-def createBuyer(mysql,buyerid,clientid="B2BWS_1_Region_Bank_19401"):
+def createBuyer(mysql,buyerid,clientid="B2BWS_1_1_9999"):
     # client id is supplied by visa to identify the finantial institutaion that is offering this service(ignore it)
     cur = mysql.connection.cursor()
     cur.execute("select * from Merchant where MerchantID='"+buyerid+"';")
     mid,name,registeredName,email,contactNumber,address,password = cur.fetchone()
+    cur.close()
     #The Company ID must be the same Company ID at the processor
     url='https://sandbox.api.visa.com/vpa/v1/buyerManagement/buyer/create'
     p = json.loads(
@@ -108,7 +116,7 @@ def createBuyer(mysql,buyerid,clientid="B2BWS_1_Region_Bank_19401"):
             "addressLine2": "",
             "addressLine3": "",
             "buyerId": "'''+buyerid+'''",
-            "buyerName": '''+name+''',
+            "buyerName": "TestPaymentFileLijie14",
             "city": "Austin",
             "companyId": "'''+mid+'''",
             "contactName": "'''+registeredName+'''",
@@ -166,19 +174,26 @@ def paymentProcessing(amount,buyerid,supplier_account_no ,clientid='B2BWS_1_1_99
         print(res['statusDesc'],' for rupees',amount )
 
 
-def register_merchant(mysql,buyerid,supplier_id):
-    # first we need to create a buyer profile for the merchant for which we need any unique number called buyerid
+def register_merchant(mysql,mid):
+    #first we need to create a buyer profile for the merchant for which we need any unique number called buyerid
+    buyerid,supplier_id = mid,mid
     createBuyer(mysql,buyerid)
-    # we need to set up account number for buyer.. once buyer is created, the account number can be assigned and
-    # returned using this call
-    account_number = createBuyerAccount(buyerid)
-    # we can then use this account number to create his supplier profile
+    #we need to set up account number for buyer.. once buyer is created, the account number can be assigned and returned using this call
+    account_number = createBuyerAccount(mysql,buyerid)
+    #we can then use this account number to create his supplier profile
     createSupplier(mysql,account_number,supplier_id)
-    # payment needs supplier account number and buyerid
-    return account_number
+    #payment needs supplier account number and buyerid
+    cur = mysql.connection.cursor()
+    cur.execute("select * from PaymentType where MerchantID='"+mid+"';")
+    result = cur.fetchone()
+    if result!=None:
+        cur.execute("update PaymentType set PayType='3' where MerchantID='"+mid+"';")
+    else:
+        cur.execute("INSERT INTO PaymentType (MerchantID, PayType) VALUES (%s, %s);", (mid, '2'))
+    mysql.connection.commit()
 
-
-## call to complete payment
 #acc=register_merchant(mysql,"12324","APISupp-102")
+
+#payment
 #payment_amount=1200
 #paymentProcessing(payment_amount,"12324",acc)
