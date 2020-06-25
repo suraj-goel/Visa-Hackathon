@@ -26,7 +26,7 @@ h4 {
 }
 
 h3 {
-  margin: 0px 20px;
+  margin: 0px 0px;
 }
 
 b {
@@ -61,6 +61,7 @@ form.example::after {
 
 button,
 input[type="submit"] {
+  /* float: left; */
   width: 20%;
   padding: 9px;
   background: #fdbb0a;
@@ -130,7 +131,7 @@ input {
   border-radius: 4px;
 }
 
-textarea{
+textarea {
   width: 215px;
   height: 50px;
   resize: none;
@@ -169,6 +170,7 @@ textarea{
   margin: 40px 0px;
   border: none;
   border-collapse: separate;
+  /* border-spacing: 0px 10px; */
 }
 
 .table tr {
@@ -244,7 +246,8 @@ textarea{
   margin: 0; /* remove default margins */
   width: 200px;
   padding-right: 2.5em;
-  border: 0;
+  border-radius: 3px;
+  border: 1px solid #1a1f71;
   border-radius: 3px;
   -webkit-appearance: none;
   -moz-appearance: none;
