@@ -3,7 +3,7 @@ import os
 import json
 from importlib.machinery import SourceFileLoader
 
-config_file = os.path.join(os.getcwd(), "data", "Configuration.py")
+config_file = os.path.join(os.getcwd(), "services/data", "Configuration.py")
 configuration = SourceFileLoader("module.name", config_file).load_module()
 
 # To delete None values in Input Request Json body

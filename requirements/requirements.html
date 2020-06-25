@@ -1,13 +1,11 @@
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./requirements/requirements.css') }}">
-
-
 <script>
     function showThis(ii) {
 
         document.getElementById("thisDiv1").style.display="none";
         document.getElementById("thisDiv2").style.display="none";
-
+        document.getElementById("thisDiv3").style.display="none";
         document.getElementById("thisDiv"+ii).style.display="block";
     }
     function validateForm() {
@@ -100,16 +98,19 @@
 
     }
 </style>
-<body>
+<body onload="showThis({{profile}})">
 
         <div>
             <ul  class="grab split left">
 
                 <ul>
-                    <h4  class="grab" style="color:chocolate"  onclick="showThis(1)" >Create Request</h4>
+                    <h4  class="grab" style="color:chocolate"  onclick="showThis(1)">Create Request</h4>
                 </ul>
                 <ul>
-                    <h4 class="grab" style="color:chocolate" onclick="showThis(2)">View Request</h4>
+                    <h4 class="grab" style="color:chocolate" onclick="showThis(2)">Supplier profile</h4>
+                </ul>
+                <ul>
+                    <h4 class="grab" style="color:chocolate" onclick="showThis(3)">Buyer profile</h4>
                 </ul>
             </ul>
         </div>
@@ -120,14 +121,14 @@
 
                 <div id="requestForm" class="containerForm ">
                     <label for="title1">Title</label>
-                    <input type="text" name="title" id="title1" placeholder="Item Name"/>
+                    <input type="text" name="title" id="title1" placeholder="Item Name" required/>
                     <label for="requesterName">Merchant Business Name</label>
                     <input type="text" name="requesterName" id="requesterName" value="{{registeredName}}" readonly/>
                     <label for="description">Description</label>
                     <textarea id="description" name="description" placeholder="Write About Your Requirement...">
                     </textarea>
                     <label for="Quantity">Quantity Required: </label>
-                    <input type="number" name="Quantity" id="Quantity" style="height:50px" placeholder="Quantity Required"/>
+                    <input type="number" name="Quantity" id="Quantity" style="height:50px" min="1" placeholder="Quantity Required" required/>
                     <label for="Price">Amount in Rs: </label>
                     <input type="number" name="Price" id="Price" style="height:50px" placeholder="Expected Amount"/>
                 <br><br>
@@ -135,48 +136,92 @@
 
             </div>
             </form>
-
         </div>
         <div id="thisDiv2" style="display: none" class="split1 right">
-            <center>
-            <form class="example" method="post" action="" style="margin:auto;max-width:600px">
-            <select name="filter">
-                <option value="S">Selling</option>
-                {% if filter=='N' %}
-                <option value="N" selected>Not Selling</option>
+            <h1>Your supplier profile for requirements</h1>
+<form class="example" method="post" action="" style="margin:auto;max-width:600px">
+            <select name="filtersupplier">
+                {% if choice=='P' %}
+                    <option value="P" selected>Posts</option>
                 {% else %}
-                <option value="N">Not Selling</option> {% endif %}
-                {% if filter=='A' %}
-                <option value="A" selected>All</option>
+                    <option value="P">Posts</option>{% endif %}
+                {% if choice=='A' %}
+                    <option value="A" selected>Approved by buyer</option>
                 {% else %}
-                <option value="A">All</option> {% endif %}
+                    <option value="A">Approved by buyer</option>{% endif %}
+                {% if choice=='R' %}
+                    <option value="R" selected>Rejected by buyer</option>
+                {% else %}
+                    <option value="R">Rejected by buyer</option>{% endif %}
+                {% if choice=='W' %}
+                   <option value="W" selected>Pending</option>
+                {% else %}
+                    <option value="W">Pending</option>{% endif %}
+                {% if choice=='E' %}
+                   <option value="E" selected>All Approved</option>
+                {% else %}
+                    <option value="E">All accepted by you</option>{% endif %}
             </select>
-            <button type="submit" >Filter<i class="fa fa-filter"></i>
-            </button>
+            <input type="submit" onclick="javascript: form.action='/requirementssupplier';">
         </form>
-        {% if items %}
-        <div class="container">
-            <table class="table table-bordered">
-                {% for item in items %}
-                <tr class="header">
-                    <td colspan="2">
-                       <h3>{{item['Name']}}</h3>Description: {{item['Description']}} <br>Category: {{item['Category']}} <br>
-                    Cost per unit: {{item['Price']}}<br>Quantity: {{item['Quantity']}}
-                    <h4><a title="Edit Product" href="/inventory/edit/{{item['ProductID']}}">Edit Product</a></h4>
-                </tr>
-                {% if item['offers'] %} {% for x in item['offers'] %}
-                <tr>
-                    <td>{{x['Information']}}</td>
-                </tr>
-                {% endfor %} {% else %}
-                <tr>
-                    <td>No discounts available</td>
-                </tr>
-                {% endif %} {% endfor %}
-            </table>
+
+                {% if choice=='A' %}
+                    <h1>Approved by buyer</h1>
+                {% elif choice=='R' %}
+                    <h1>Rejected by buyer</h1>
+                {% elif choice=='W' %}
+                   <h1>Pending</h1>
+                {% elif choice=='E' %}
+                   <h1>All Accepted by you</h1>
+                {% elif choice=='P' %}
+                    <h1>Posts</h1>
+                {% else %}
+             <h1>Posts</h1>
+                    <h3>Enter your filter</h3>
+                {% endif %}
+            {% if sup_items %}
+{{sup_items}}
+            {% endif %}
         </div>
-        {% endif %}
-</center>
+<div id="thisDiv3" style="display: none" class="split1 right">
+     <h1>Your buyer profile for requirements</h1>
+    <form method="post" action="" >
+                <select name="filterbuyer">
+                {% if buyer_choice=='R' %}
+                    <option value="R" selected>Your requests</option>
+                {% else %}
+                    <option value="R">Your requests</option>{% endif %}
+                {% if buyer_choice=='P' %}
+                    <option value="P" selected>Paid</option>
+                {% else %}
+                    <option value="P">Paid</option>{% endif %}
+                {% if buyer_choice=='D' %}
+                    <option value="D" selected>Delivered</option>
+                {% else %}
+                    <option value="D">Delivered</option>{% endif %}
+                    {% if buyer_choice=='E' %}
+                    <option value="E" selected>All requests</option>
+                {% else %}
+                    <option value="E">All requests</option>{% endif %}
+            </select>
+            <input type="submit" onclick="javascript: form.action='/requirementsbuyer';">
+        </form>
+                {% if buyer_choice=='P' %}
+                    <h1>Paid</h1>
+                {% elif buyer_choice=='D' %}
+                   <h1>Delivered</h1>
+                {% elif buyer_choice=='E' %}
+                   <h1>All requests</h1>
+                {% elif buyer_choice=='R' %}
+                    <h1>Requests pending</h1>
+                {% else %}
+                    <h1>Requests pending</h1>
+                    <h3>Enter your filter</h3>
+                {% endif %}
+            {% if buy_items %}
+{{buy_items}}
+            {% endif %}
+
         </div>
 </body>
 </html>
