@@ -211,13 +211,15 @@ def showCart(merchant_id):
         return redirect(url_for('showAll'))
 
 
+
 @app.route('/accounts/', methods=['GET', 'POST'])
 def displayaccountsdetails():
+    merchant_id = '2' #session['MerchantID']
     cur = mysql.connection.cursor()
-    cur.execute("select * from PaymentType where MerchantID='2';")
+    cur.execute("select * from PaymentType where MerchantID='"+merchant_id+"';")
     r = cur.fetchone()
-    cur.execute("select * from Merchant where MerchantID='2';")
-    # "select * from Merchant where MerchantID ='"+str(session['Mercahntid'])+"';"
+
+    cur.execute("select * from Merchant where MerchantID='"+merchant_id+"';")
     result = cur.fetchone()
     cur.close()
     if r == None:
@@ -238,18 +240,18 @@ def displayaccountsdetails():
 def editAccountDetails():
     cur = mysql.connection.cursor()
     if request.method == 'POST':
-        mid = "2"  # session['mid']
+        merchant_id = "2"  # session['MerchantID']
         name = request.form['name']
         registeredName = request.form['registeredName']
         email = request.form['emailid']
         contactno = request.form['contactno']
         address = request.form['address']
         password = request.form['password']
-        r = validation(mysql, mid, name, registeredName, email, contactno, address, password)
+        r = validation(mysql, merchant_id, name, registeredName, email, contactno, address, password)
 
         if r[2] == 0:
             cur.execute(
-                "update Merchant set Name = '" + name + "', RegisteredName = '" + registeredName + "', EmailID = '" + email + "', ContactNumber = '" + contactno + "', Address = '" + address + "', password = '" + password + "' where MerchantID='" + mid + "';")
+                "update Merchant set Name = '" + name + "', RegisteredName = '" + registeredName + "', EmailID = '" + email + "', ContactNumber = '" + contactno + "', Address = '" + address + "', password = '" + password + "' where MerchantID='" + merchant_id + "';")
             mysql.connection.commit()
             return redirect('/accounts/')
         else:
@@ -268,7 +270,7 @@ def editAccountDetails():
                 flash("Password already exists, please enter a new one.")
             return render_template("./accounts/editAccountDetails.html", result=result)
 
-    cur.execute("select * from Merchant where MerchantID='2'")
+    cur.execute("select * from Merchant where MerchantID='"+merchant_id+"';")
     # "select * from Merchant where MerchantID = '"+str(session['Merchantid'])+"';"
     result = cur.fetchone()
     cur.close()
@@ -312,17 +314,13 @@ def registerCyber():
 @ app.route('/payments/',methods=['GET', 'POST'])
 def payment():
     if request.method == 'POST':
-        amount = request.form['finalPrice']
+        amount = request.form['finalDiscountPrice']
     return render_template("./payment/payment.html", amount=amount)
 
 @app.route('/cybersource/', methods=['GET', 'POST'])
 def cybersource():
 	merchant_id = "2"  # session['merchantID']
-	cur = mysql.connection.cursor()
-	cur.execute("select AggregatorID,CardAcceptorID,Name from CybersourceMerchant where MerchantID='"+merchant_id+"';")
-	result = cur.fetchone()
-	aggregatorID,cardAcceptorID,name = result['AggregatorID'],result['CardAcceptorID'],result['Name']
-	
+
 	qty=session['qty']
 	ProductID=session['ProductID']
 	Name = session['Name']
@@ -331,7 +329,12 @@ def cybersource():
 	Offers = session['offers']
 	discountPrice = session['discountPrice']
 	sellerId = session['mid']
-	
+
+	cur = mysql.connection.cursor()
+	cur.execute("select AggregatorID,CardAcceptorID,Name from CybersourceMerchant where MerchantID='"+sellerId+"';")
+	result = cur.fetchone()
+	aggregatorID,cardAcceptorID,name = result['AggregatorID'],result['CardAcceptorID'],result['Name']
+
 	if request.method == 'POST':
 		print(request.form)
 		amount = request.form.getlist('amount')[0]
@@ -340,7 +343,7 @@ def cybersource():
 		month = request.form.getlist('month')[0]
 		year = request.form.getlist('year')[0]
 		cvv = request.form.getlist('CVV')[0]
-		status = simple_authorizationinternet(cardNumber,month,year,amount,aggregatorID,cardAcceptorID,"V-Internatio")#username
+		status = simple_authorizationinternet(cardNumber,month,year,amount,aggregatorID,cardAcceptorID,username)
 		# if payment in authorized then call ****
 		# addToOrders(mysql,qty,ProductID,Name,Description,Price,sellerId,"no",discountPrice[0],discountPrice[0],'1-01-2012')
 		# updateSupplierInventory(mysql,productList)
@@ -350,10 +353,9 @@ def cybersource():
 		# status will be 'no'
 		# check date format
 		# pass the correct values recieved from session (refer this for more info @app.route("/merchant/<merchant_id>/cart",methods=['GET','POST']))
-		
+
 		return redirect(url_for('showAll'))
 	return render_template("./payment/payment.html",amount=amount)
-
 
 
 @app.route('/negotiation',methods=['GET','POST'])

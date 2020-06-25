@@ -1,168 +1,76 @@
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./requirements/requirements.css') }}">
+<script type="text/javascript" src="{{url_for('static',filename='./requirements/requirements.js') }}"></script>
 <script>
-    function showThis(ii) {
-
-        document.getElementById("thisDiv1").style.display="none";
-        document.getElementById("thisDiv2").style.display="none";
-        document.getElementById("thisDiv3").style.display="none";
-        document.getElementById("thisDiv"+ii).style.display="block";
-    }
-    function validateForm() {
-        var x = document.forms["requirementForm"]["title"].value;
-        var x2 = document.forms["requirementForm"]["Quantity"].value;
-        if (x == "") {
-            alert("Error in Creating Request. Fill all Information Carefully");
-            return false;
-        }
-        if (parseInt(x2)<=0) {
-            alert("Error in Creating Request. Fill all Information Carefully");
-            return false;
-        }
-    }
 </script>
 <style>
-    .grab {cursor: -webkit-grab; cursor: grab;}
-
-    .split {
-
-        height: 100%;
-        width: 18%;
-        position: absolute;
-        top: 100px;
-        overflow-x: hidden;
-        padding-top: 50px;
-        gap: 10%;
-    }
-    .split1 {
-        height: 100%;
-        width: 78%;
-        position: absolute;
-
-        top: 80px;
-        overflow-x: hidden;
-        padding-top: 50px;
-    }
-
-    .left {
-        left: 0;
-        background-color: #111;
-    }
-
-    .right {
-        right: 2%;
-
-    }
-    body {font-family: Arial, Helvetica, sans-serif;}
-    * {box-sizing: border-box;}
-
-    input[type=text], select, textarea {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box;
-        margin-top: 6px;
-        margin-bottom: 16px;
-        resize: vertical;
-    }
-    input[type=number] {
-        padding: 12px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box;
-        margin-top: 6px;
-        margin-bottom: 16px;
-        resize: vertical;
-    }
-
-    input[type=submit] {
-        background-color: #4CAF50;
-        color: white;
-        padding: 12px 20px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    input[type=submit]:hover {
-        background-color: #45a049;
-    }
-
-
-    .containerForm {
-        border-radius: 5px;
-        background-color: #f2f2f2;
-        padding: 15px;
-
-
-    }
 </style>
+
 <body onload="showThis({{profile}})">
 
-        <div>
-            <ul  class="grab split left">
+    <div>
+        <ul class="grab split left">
+            <li>
+                <h4 class="grab" style="color:white" onclick="showThis(1)">Create Request</h4>
+            </li>
+            <li>
+                <h4 class="grab" style="color:white" onclick="showThis(2)">Supplier profile</h4>
+            </li>
+            <li>
+                <h4 class="grab" style="color:white" onclick="showThis(3)">Buyer profile</h4>
+            </li>
+        </ul>
+    </div>
 
-                <ul>
-                    <h4  class="grab" style="color:chocolate"  onclick="showThis(1)">Create Request</h4>
-                </ul>
-                <ul>
-                    <h4 class="grab" style="color:chocolate" onclick="showThis(2)">Supplier profile</h4>
-                </ul>
-                <ul>
-                    <h4 class="grab" style="color:chocolate" onclick="showThis(3)">Buyer profile</h4>
-                </ul>
-            </ul>
-        </div>
+    <div id="thisDiv1" class="split1 right">
+        <h1 style="color:#1a1f71">Create Your Request</h1>
+        <form name="requirementForm" action="" onsubmit="return validateForm()" method="post" required>
 
-        <div id="thisDiv1"  class="split1 right">
-            <h1>Create Your Request</h1>
-            <form name="requirementForm"  action="" onsubmit="return validateForm()" method="post" required>
-
-                <div id="requestForm" class="containerForm ">
-                    <label for="title1">Title</label>
-                    <input type="text" name="title" id="title1" placeholder="Item Name" required/>
-                    <label for="requesterName">Merchant Business Name</label>
-                    <input type="text" name="requesterName" id="requesterName" value="{{registeredName}}" readonly/>
-                    <label for="description">Description</label>
-                    <textarea id="description" name="description" placeholder="Write About Your Requirement...">
+            <div id="requestForm" class="containerForm ">
+                <label for="title1">Title</label>
+                <input type="text" name="title" id="title1" placeholder="Item Name" required />
+                <label for="requesterName">Merchant Business Name</label>
+                <input type="text" name="requesterName" id="requesterName" value="{{registeredName}}" readonly />
+                <label for="description">Description</label>
+                <textarea id="description" name="description" placeholder="Write About Your Requirement...">
                     </textarea>
-                    <label for="Quantity">Quantity Required: </label>
-                    <input type="number" name="Quantity" id="Quantity" style="height:50px" min="1" placeholder="Quantity Required" required/>
-                    <label for="Price">Amount in Rs: </label>
-                    <input type="number" name="Price" id="Price" style="height:50px" placeholder="Expected Amount"/>
+                <label for="Quantity">Quantity Required: </label>
+                <input type="number" name="Quantity" id="Quantity" style="height:50px" min="1"
+                    placeholder="Quantity Required" required />
+                <label for="Price">Amount in Rs: </label>
+                <input type="number" name="Price" id="Price" style="height:50px" placeholder="Expected Amount" />
                 <br><br>
-                <input name="createRequest" type="submit" value="Post Request">
+                <input name="createRequest" class="button" type="submit" value="Post Request">
 
             </div>
-            </form>
-        </div>
-        <div id="thisDiv2" style="display: none" class="split1 right">
-            <h1>Your supplier profile for requirements</h1>
-<form class="example" method="post" action="" style="margin:auto;max-width:600px">
+        </form>
+    </div>
+    <div id="thisDiv2" style="display: none" class="split1 right">
+        <h1>Your supplier profile for requirements</h1>
+        <form class="example" method="post" action="" style="margin:auto;max-width:600px">
             <select name="filtersupplier">
                 {% if choice=='P' %}
-                    <option value="P" selected>Posts</option>
+                <option value="P" selected>Posts</option>
                 {% else %}
-                    <option value="P">Posts</option>{% endif %}
+                <option value="P">Posts</option>{% endif %}
                 {% if choice=='A' %}
-                    <option value="A" selected>Approved by buyer</option>
+                <option value="A" selected>Approved by buyer</option>
                 {% else %}
-                    <option value="A">Approved by buyer</option>{% endif %}
+                <option value="A">Approved by buyer</option>{% endif %}
                 {% if choice=='R' %}
-                    <option value="R" selected>Rejected by buyer</option>
+                <option value="R" selected>Rejected by buyer</option>
                 {% else %}
-                    <option value="R">Rejected by buyer</option>{% endif %}
+                <option value="R">Rejected by buyer</option>{% endif %}
                 {% if choice=='W' %}
-                   <option value="W" selected>Pending</option>
+                <option value="W" selected>Pending</option>
                 {% else %}
-                    <option value="W">Pending</option>{% endif %}
+                <option value="W">Pending</option>{% endif %}
                 {% if choice=='E' %}
-                   <option value="E" selected>All Approved</option>
+                <option value="E" selected>All Approved</option>
                 {% else %}
-                    <option value="E">All accepted by you</option>{% endif %}
+                <option value="E">All accepted by you</option>{% endif %}
             </select>
-            <input type="submit" onclick="javascript: form.action='/requirementssupplier';">
+            <input type="submit" class="button" onclick="javascript: form.action='/requirementssupplier';" value="Submit">
         </form>
 
                 {% if choice=='A' %}
@@ -197,23 +105,23 @@
     <form method="post" action="" >
                 <select name="filterbuyer">
                 {% if buyer_choice=='R' %}
-                    <option value="R" selected>Your requests</option>
+                <option value="R" selected>Your requests</option>
                 {% else %}
-                    <option value="R">Your requests</option>{% endif %}
+                <option value="R">Your requests</option>{% endif %}
                 {% if buyer_choice=='P' %}
-                    <option value="P" selected>Paid</option>
+                <option value="P" selected>Paid</option>
                 {% else %}
-                    <option value="P">Paid</option>{% endif %}
+                <option value="P">Paid</option>{% endif %}
                 {% if buyer_choice=='D' %}
-                    <option value="D" selected>Delivered</option>
+                <option value="D" selected>Delivered</option>
                 {% else %}
-                    <option value="D">Delivered</option>{% endif %}
-                    {% if buyer_choice=='E' %}
-                    <option value="E" selected>All requests</option>
+                <option value="D">Delivered</option>{% endif %}
+                {% if buyer_choice=='E' %}
+                <option value="E" selected>All requests</option>
                 {% else %}
-                    <option value="E">All requests</option>{% endif %}
+                <option value="E">All requests</option>{% endif %}
             </select>
-            <input type="submit" onclick="javascript: form.action='/requirementsbuyer';">
+            <input type="submit" class="button" onclick="javascript: form.action='/requirementsbuyer';">
         </form>
                 {% if buyer_choice=='P' %}
                     <h1>Paid</h1>
@@ -258,9 +166,20 @@
 
             <!-- <div id="New Requirements/As a Buyer">
             <h2>New Requirements</h2>
-             </div>
-            <div id="Your Own Posted Requirement">
+        </div>
+        <div id="Your Own Posted Requirement">
 
+        </div>
+        <div id="Approved Requirements">
+            <h2>Approved Requirements</h2>
+        </div>
+        <div id="Accepted Requirements/Paid One">
+            <h2>New Requirements</h2>
+        </div>
+        <div id="Rejected Requirements/Not Approved">
+            <h2>New Requirements</h2>
+        </div>
+    </div>
             </div>
             <div id="Approved Requirements">
                 <h2>Approved Requirements</h2>
@@ -273,4 +192,5 @@
             </div>-->
         </div>
 </body>
+
 </html>
