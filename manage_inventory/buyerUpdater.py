@@ -26,13 +26,13 @@ def updateBuyerInventoryOrder(mysql,orderID,buyerMerchantID):
     return "Success"
 
 
-def updateBuyerInventoryRequirement(mysql,sellerMerchantID,buyerMerchantID):
-    query = "SELECT RequirementAccepted.ProductID,Quantity,Price FROM Requirement INNER JOIN RequirementAccepted ON Requirement.RequirementID = RequirementAccepted.RequirementID WHERE RequirementAccepted.MerchantID = '{}' AND Requirement.MerchantID = '{}' AND RequirementAccepted.Status = 'yes' ".format(sellerMerchantID,buyerMerchantID)
+def updateBuyerInventoryRequirement(mysql,productID,buyerMerchantID):
+    query = "SELECT RequirementAccepted.ProductID,Quantity,Price FROM Requirement INNER JOIN RequirementAccepted ON Requirement.RequirementID = RequirementAccepted.RequirementID WHERE RequirementAccepted.ProductID = '{}' AND Requirement.MerchantID = '{}' AND RequirementAccepted.Status = 'yes' ".format(productID,buyerMerchantID)
     cur = mysql.connection.cursor()
     cur.execute(query)
     data = list(cur.fetchall())
-    # print(data)
-    cur.execute("SELECT * FROM Product WHERE ProductID = '{}'".format(data[0]["ProductID"]))
+    # # print(data)
+    cur.execute("SELECT * FROM Product WHERE ProductID = '{}'".format(productID))
     res = list(cur.fetchall())
 
     for i in range(len(res)):

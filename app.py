@@ -13,8 +13,12 @@ from manage_inventory.updateProduct import *
 from orders_management.orderHistory import getOrders
 from requirements.requirements import *
 from services.visa_api_services import register_merchant,paymentProcessing
+<<<<<<< HEAD
 from services.cybersourcePayment import simple_authorizationinternet
 
+=======
+from manage_inventory.buyerUpdater import *
+>>>>>>> a19828c2fe8df5acc6b0ea0fd21e674affa43e4c
 app = Flask(__name__,static_folder = '')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader,jinja2.FileSystemLoader(['.'])])
 app.secret_key = 'super secret key'
@@ -87,8 +91,19 @@ def editProduct(productID):
 def orders():
 	merchantid=1
 	delivered_filter='yes'
+	selectedCartID = None
 	if request.method=='POST':
-		delivered_filter=request.form['filter']
+		
+		if "filter" in request.form:
+			delivered_filter=request.form['filter']
+		if "confirm" in request.form:
+			selectedCartID = request.form['confirm']
+	if selectedCartID:
+		cur = mysql.connection.cursor()
+		cur.execute("Update Orders SET Status = 'yes' WHERE CartID = '{}'".format(selectedCartID))
+		cur.execute("SELECT OrderID FROM Orders WHERE CartID = '{}'".format(selectedCartID))
+		data = list(cur.fetchall())
+		updateBuyerInventoryOrder(mysql,data[0]['OrderID'],merchantid)
 	history=getOrders(mysql,merchantid,delivered_filter)
 	return render_template('./orders_management/order_management.html',history=history,filter=delivered_filter)
 
@@ -270,18 +285,19 @@ def registerCyber():
 @app.route('/requirements',methods=['GET','POST'])
 def requirements():
 	if(request.method == 'GET'):
-		return render_template("./requirements/requirements.html")
+		merchant_id = 1 #get from session
+		registeredName = showBusinessName(mysql,merchant_id)
+		return render_template("./requirements/requirements.html",registeredName=registeredName)
 	else:
 		merchant_id=1 # get from session
 		title = request.form.get('title')
 		description = request.form.get('description')
 		quantity = request.form.get('Quantity')
 		price = request.form.get('price')
-		Item = request.form.get('Item')
 		#status are: Post,Received,Accept,Reject depending on requestType
 		status = "Post"
 		requestType = request.form.get('requestType')
-		saveRequirements(mysql,merchantID=merchant_id,title=title,description=description,quantity=quantity,price=price,Item=Item,status=status)
+		saveRequirements(mysql,merchantID=merchant_id,title=title,description=description,quantity=quantity,price=price,status=status)
 	return redirect(request.url)
 
 
