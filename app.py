@@ -16,7 +16,8 @@ from services.visa_api_services import register_merchant, paymentProcessing
 from services.cybersourcePayment import simple_authorizationinternet
 from manage_inventory.buyerUpdater import *
 from requirements.showRequirements import getSupplierRequests, getBuyerRequests
-
+from payment.confirmPayment import *
+from manage_inventory.supplierupdater import *
 app = Flask(__name__, static_folder='')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader, jinja2.FileSystemLoader(['.'])])
 app.secret_key = 'super secret key'
@@ -147,6 +148,7 @@ def showPlaceOrder(merchant_id):
         session['Price'] = request.form.getlist("Price[]")
         session['offers'] = request.form.getlist("offers[]")
         session['discountPrice'] = request.form.getlist("discountPrice[]")
+        session['mid'] = merchant_id
         print(session['discountPrice'])
         return redirect(url_for('showCart', merchant_id=merchant_id))
 
@@ -204,7 +206,8 @@ def showCart(merchant_id):
             addToCart(mysql, qty, ProductID, Name, Description, Price, merchant_id, status, finalPrice,
                       finalDiscountPrice, NegotitatedRequestAmount)
             modify()
-        session.clear()
+        if(Type != 'Process Payment'):
+            session.clear()
         return redirect(url_for('showAll'))
 
 
@@ -316,20 +319,41 @@ def payment():
 def cybersource():
 	merchant_id = "2"  # session['merchantID']
 	cur = mysql.connection.cursor()
-	cur.execute("select AggregatorID,CardAcceptorID,Name from CybersourceMerchant where MerchantID='" + merchant_id + "';")
+	cur.execute("select AggregatorID,CardAcceptorID,Name from CybersourceMerchant where MerchantID='"+merchant_id+"';")
 	result = cur.fetchone()
-	aggregatorID, cardAcceptorID, name = result['AggregatorID'], result['CardAcceptorID'], result['Name']
-	print("AGGID:" + aggregatorID + "\nCAID:" + cardAcceptorID + "\nName:" + name)
+	aggregatorID,cardAcceptorID,name = result['AggregatorID'],result['CardAcceptorID'],result['Name']
+	
+	qty=session['qty']
+	ProductID=session['ProductID']
+	Name = session['Name']
+	Description =session['Description']
+	Price = session['Price']
+	Offers = session['offers']
+	discountPrice = session['discountPrice']
+	sellerId = session['mid']
+	
 	if request.method == 'POST':
+		print(request.form)
 		amount = request.form.getlist('amount')[0]
 		username = request.form.getlist('username')[0]
 		cardNumber = request.form.getlist('cardNumber')[0]
 		month = request.form.getlist('month')[0]
 		year = request.form.getlist('year')[0]
 		cvv = request.form.getlist('CVV')[0]
-		status = simple_authorizationinternet(cardNumber, month, year, amount, aggregatorID, cardAcceptorID,"V-Internatio")  # username
+		status = simple_authorizationinternet(cardNumber,month,year,amount,aggregatorID,cardAcceptorID,"V-Internatio")#username
+		# if payment in authorized then call ****
+		# addToOrders(mysql,qty,ProductID,Name,Description,Price,sellerId,"no",discountPrice[0],discountPrice[0],'1-01-2012')
+		# updateSupplierInventory(mysql,productList)
+
+		# currentDate is today's date
+		# merchantID is seller's id
+		# status will be 'no'
+		# check date format
+		# pass the correct values recieved from session (refer this for more info @app.route("/merchant/<merchant_id>/cart",methods=['GET','POST']))
+		
 		return redirect(url_for('showAll'))
-	return render_template("./payment/payment.html")
+	return render_template("./payment/payment.html",amount=amount)
+
 
 
 @app.route('/requirementssupplier', methods=['GET', 'POST'])
