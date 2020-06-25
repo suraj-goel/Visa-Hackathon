@@ -325,7 +325,11 @@ def cybersource():
 		return redirect(url_for('showAll'))
 	return render_template("./payment/payment.html",amount=amount)
 
-
+@app.route('/negotiation',methods=['GET','POST'])
+def negotiation():
+	if(request.method=='GET'):
+		merchant_id = 1  #get from session
+		return render_template("./negotiation/negotiation.html")
 
 if __name__ == '__main__':
 	#threaded allows multiple users (for hosting)
