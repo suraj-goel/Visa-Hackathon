@@ -85,7 +85,7 @@
 
         <h2 style="color:#1a1f71"> Your Cart </h2>
         <div class="container">
-            <form method="post" action="/payments/" onsubmit="save()">
+            <form method="post" action="" onsubmit="save()">
                 <table class="table table-bordered">
                     <tr>
                         <th>Product Details</th>
@@ -125,8 +125,8 @@
                 <input type="hidden" id="Negotiated" name="NegotiatedRequestAmount" value="0" />
                 <button type="button" class="button" onclick="showDetails()"><span>Click Here For Negotiation</span></button>
                 <div id="contact" style="display: none">
-                    <p style="color: #053ea9;"> <b>Phone No:</b> +123435</p>
-                    <p style="color: #053ea9;"> <b>Email ID</b>: business@visa.com</p>
+                    <p style="color: #053ea9;"> <b>Phone No:</b> {{contact}}</p>
+                    <p style="color: #053ea9;"> <b>Email ID</b>: {{emailID}}</p>
                     <input type="submit" name="type" class="button" onclick="negotiate()" value="Enter Your Amount" />
                     
                     <br><br><br>

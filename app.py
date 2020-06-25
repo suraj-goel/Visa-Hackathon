@@ -6,7 +6,7 @@ from search_merchants.searchMerchant import getCurrentLocation
 from place_order.displayProduct import displayAllProducts, displayAllOffers
 from search_merchants.searchProducts import getSearchResults
 from accounts.validate_accounts import validation  # validate_accounts.py
-from place_order.displayCart import addToCart
+from place_order.displayCart import addToCart,getMerchantInfo
 from manage_inventory.SearchInventory import *
 from manage_inventory.addProduct import addNewProduct, getCategories
 from manage_inventory.updateProduct import *
@@ -16,6 +16,7 @@ from services.visa_api_services import register_merchant, paymentProcessing
 from services.cybersourcePayment import simple_authorizationinternet
 from manage_inventory.buyerUpdater import *
 from requirements.showRequirements import *
+from negotiation.negotiation import *
 from payment.confirmPayment import *
 from manage_inventory.supplierupdater import *
 app = Flask(__name__, static_folder='')
@@ -180,6 +181,9 @@ def showCart(merchant_id):
             Price = session['Price']
             Offers = session['offers']
             discountPrice = session['discountPrice']
+            data = getMerchantInfo(mysql,merchant_id)
+            emailID = data[0]
+            contact = data[1]
             l = len(qty)
             for i in qty:
                 totalQuantity += int(i)
@@ -188,7 +192,7 @@ def showCart(merchant_id):
 
         return render_template("./place_order/cart.html", merchantID=merchant_id, qty=qty, ProductID=ProductID,
                                Name=Name, Description=Description, Price=Price, Offers=Offers,
-                               discountPrice=discountPrice, len=len(qty), totalQuantity=totalQuantity)
+                               discountPrice=discountPrice, len=len(qty), totalQuantity=totalQuantity,emailID=emailID,contact=contact)
     else:
         ProductID = request.form.getlist("ProductId[]")
         qty = request.form.getlist("qty[]")
@@ -208,7 +212,10 @@ def showCart(merchant_id):
             modify()
         if(Type != 'Process Payment'):
             session.clear()
-        return redirect(url_for('showAll'))
+        if(Type == 'Process Payment'):
+            return redirect(url_for('payment'))
+        else:
+            return redirect(url_for('negotiation'))
 
 
 
@@ -362,7 +369,8 @@ def cybersource():
 def negotiation():
     if(request.method=='GET'):
         merchant_id = 1 #get from seearch
-        return render_template("./negotiation/negotiation.html")
+        allNegotiation = displayAllNegotiation(mysql,merchant_id)
+        return render_template("./negotiation/negotiation.html",negotiations = allNegotiation)
 
 @app.route('/requirementssupplier', methods=['GET', 'POST'])
 def showsupplierrequirements():

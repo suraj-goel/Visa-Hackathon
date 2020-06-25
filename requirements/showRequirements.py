@@ -131,9 +131,9 @@ def getBuyerRequests(mysql,merchantid,choice='R'):
 
 def acceptDeal(mysql,requirementID):
     cur = mysql.connection.cursor()
-    cur.execute("UPDATE RequirementAccepted SET Status=%s WHERE RequirementID=%s",("yes",requirementID))
+    cur.execute("UPDATE RequirementAccepted SET Status='{}' WHERE RequirementID='{}'".format("yes",requirementID))
     mysql.connection.commit()
-    cur.execute("UPDATE Requirement SET Status=%s WHERE RequirementID=%s",("Paid",requirementID))
+    cur.execute("UPDATE Requirement SET Status='{}' WHERE RequirementID='{}'".format("Paid",requirementID))
     mysql.connection.commit()
 
 
