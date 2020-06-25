@@ -364,6 +364,40 @@ def cybersource():
     return render_template("./payment/payment.html",amount=amount)
 
 
+@app.route('/b2bpay/', methods=['GET','POST'])
+def b2bpay():
+    merchant_id = '2'#session['MerchantID']
+    qty = session['qty']
+    ProductID = session['ProductID']
+    Name = session['Name']
+    Description = session['Description']
+    Price = session['Price']
+    Offers = session['offers']
+    discountPrice = session['discountPrice']
+    sellerId = session['mid']
+
+    sellerId = '2'#Temporarily because merchantid 1 isn't actually registered, for demo let's show this, but change later once login is added.
+
+    cur = mysql.connection.cursor()
+    cur.execute("select AccountNumber from B2BDetails where MerchantID='"+sellerId+"';")
+    accountNumber = cur.fetchone()['AccountNumber']
+    if request.method == 'POST':
+        print(request.form)
+        amount = request.form.getlist('amount')[0]
+        #buyerid = merchant_id, supplier_account_no = accountNumber
+        status = paymentProcessing(amount, merchant_id, accountNumber)#clientid is a default parameter but can be added
+        if status==1:
+            print("Payment Authorized")
+            #addToOrders(mysql,qty,ProductID,Name,Description,Price,sellerId,"no",discountPrice,datetime.today().strftime('%Y-%m-%d'))
+            #updateSupplierInventory(mysql, productList) #productList?
+            return redirect(url_for('showAll'))
+        else:
+            print("Payment not authorized")
+            flash("Error in payment, check account details again or try different payment")
+    return render_template("./payment/payment.html",amount=amount)
+
+
+
 @app.route('/negotiation',methods=['GET','POST'])
 def negotiation():
     if(request.method=='GET'):
