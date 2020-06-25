@@ -25,6 +25,9 @@
 </script>
 <style>
     .grab {cursor: -webkit-grab; cursor: grab;}
+    .scrollable-element {
+        scrollbar-width: thin;
+    }
     .split {
 
         height: 100%;
@@ -41,7 +44,7 @@
         width: 80%;
         position: fixed;
         z-index: 1;
-        top: 50px;
+        top: 80px;
         overflow-x: hidden;
         padding-top: 100px;
     }
@@ -95,7 +98,8 @@
     .containerForm {
         border-radius: 5px;
         background-color: #f2f2f2;
-        padding: 20px;
+        padding: 15px;
+
     }
 </style>
 <body>
@@ -114,18 +118,18 @@
 
         <div id="thisDiv1"  class="split1 right">
             <h1>Create Your Request</h1>
-            <form name="requirementForm" action="" onsubmit="return validateForm()" method="post" required>
+            <form name="requirementForm" style="overflow: scroll" action="" onsubmit="return validateForm()" method="post" required>
 
-                <div id="requestForm" class="containerForm">
+                <div id="requestForm" class="containerForm ">
                     <label for="title1">Title</label>
-                    <input type="text" name="title" id="title1" placeholder="Item Name"/><br>
+                    <input type="text" name="title" id="title1" placeholder="Item Name"/>
                     <label for="requesterName">Merchant Business Name</label>
-                    <input type="text" name="requesterName" id="requesterName" value="{{registeredName}}" readonly/><br>
+                    <input type="text" name="requesterName" id="requesterName" value="{{registeredName}}" readonly/>
                     <label for="description">Description</label>
                     <textarea id="description" name="description" placeholder="Write About Your Requirement...">
                     </textarea>
                     <label for="Quantity">Quantity Required: </label>
-                    <input type="number" name="Quantity" id="Quantity" style="height:50px" placeholder="Quantity Required"/><br>
+                    <input type="number" name="Quantity" id="Quantity" style="height:50px" placeholder="Quantity Required"/>
                     <label for="Price">Amount in Rs: </label>
                     <input type="number" name="Price" id="Price" style="height:50px" placeholder="Expected Amount"/>
                 <br><br>
