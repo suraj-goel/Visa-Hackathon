@@ -279,18 +279,19 @@ def registerCyber():
 @app.route('/requirements',methods=['GET','POST'])
 def requirements():
 	if(request.method == 'GET'):
-		return render_template("./requirements/requirements.html")
+		merchant_id = 1 #get from session
+		registeredName = showBusinessName(mysql,merchant_id)
+		return render_template("./requirements/requirements.html",registeredName=registeredName)
 	else:
 		merchant_id=1 # get from session
 		title = request.form.get('title')
 		description = request.form.get('description')
 		quantity = request.form.get('Quantity')
 		price = request.form.get('price')
-		Item = request.form.get('Item')
 		#status are: Post,Received,Accept,Reject depending on requestType
 		status = "Post"
 		requestType = request.form.get('requestType')
-		saveRequirements(mysql,merchantID=merchant_id,title=title,description=description,quantity=quantity,price=price,Item=Item,status=status)
+		saveRequirements(mysql,merchantID=merchant_id,title=title,description=description,quantity=quantity,price=price,status=status)
 	return redirect(request.url)
 
 
