@@ -314,7 +314,7 @@ def registerCyber():
 @ app.route('/payments/',methods=['GET', 'POST'])
 def payment():
     if request.method == 'POST':
-        amount = request.form['finalPrice']
+        amount = request.form['finalDiscountPrice']
     return render_template("./payment/payment.html", amount=amount)
 
 @app.route('/cybersource/', methods=['GET', 'POST'])
