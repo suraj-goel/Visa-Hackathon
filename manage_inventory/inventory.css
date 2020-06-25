@@ -61,7 +61,6 @@ form.example::after {
 
 button,
 input[type="submit"] {
-  /* float: left; */
   width: 20%;
   padding: 9px;
   background: #fdbb0a;
@@ -170,7 +169,6 @@ textarea{
   margin: 40px 0px;
   border: none;
   border-collapse: separate;
-  /* border-spacing: 0px 10px; */
 }
 
 .table tr {
