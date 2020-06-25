@@ -12,6 +12,8 @@ from manage_inventory.addProduct import addNewProduct,getCategories
 from manage_inventory.updateProduct import *
 from orders_management.orderHistory import getOrders
 from requirements.requirements import *
+from services.visa_api_services import register_merchant,paymentProcessing
+
 app = Flask(__name__,static_folder = '')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader,jinja2.FileSystemLoader(['.'])])
 app.secret_key = 'super secret key'
@@ -176,11 +178,21 @@ def showCart(merchant_id):
 @app.route('/accounts/', methods=['GET','POST'])
 def displayaccountsdetails():
 	cur = mysql.connection.cursor()
+	cur.execute("select * from PaymentType where MerchantID='2';")
+	r = cur.fetchone()
 	cur.execute("select * from Merchant where MerchantID='2';")
-	#"select * from Merchant where MerchantID ='"+str(session['Mercahntid'])+"';"
+	# "select * from Merchant where MerchantID ='"+str(session['Mercahntid'])+"';"
 	result = cur.fetchone()
 	cur.close()
-	return render_template("./accounts/displayAccountDetails.html",result=result)
+	if r==None:
+		return render_template("./accounts/displayAccountDetails.html",result=result,b2bregistered=0,cyberregistered=0)
+	elif r['PayType']=='1':
+		return render_template("./accounts/displayAccountDetails.html", result=result,b2bregistered=0,cyberregistered=1)
+	elif r['PayType']=='2':
+		return render_template("./accounts/displayAccountDetails.html", result=result,b2bregistered=1,cyberregistered=0)
+	else:
+		return render_template("./accounts/displayAccountDetails.html", result=result, b2bregistered=1,cyberregistered=1)
+
 
 @app.route('/editaccountinfo/', methods=['GET','POST'])
 def editAccountDetails():
@@ -220,6 +232,36 @@ def editAccountDetails():
 	result = cur.fetchone()
 	cur.close()
 	return render_template("./accounts/editAccountDetails.html",result=result)
+
+@app.route('/registerB2B/<merchant_id>', methods=['GET','POST'])
+def registerB2B(merchant_id):
+	register_merchant(mysql,merchant_id)
+	return redirect('/accounts/')
+
+@app.route('/registerCyber/', methods=['GET','POST'])
+def registerCyber():
+	merchant_id = '2'  # retrieve from session
+	cur = mysql.connection.cursor()
+	cur.execute("select * from CybersourceMerchant where MerchantID='" + merchant_id + "';")
+	result = cur.fetchone()
+	if request.method == 'POST':
+		name = request.form['name']
+		aggregatorID = request.form['aggregatorid']
+		cardAcceptorID = request.form['cardacceptorid']
+		if result==None:
+			cur.execute("insert into CybersourceMerchant(AggregatorID,CardAcceptorID,Name,MerchantID) values (%s,%s,%s,%s);", (aggregatorID,cardAcceptorID,name,merchant_id))
+			cur.execute("select * from PaymentType where MerchantID='" + merchant_id + "';")
+			r = cur.fetchone()
+			if r == None:
+				cur.execute("INSERT INTO PaymentType (MerchantID, PayType) VALUES (%s, %s);", (merchant_id, '1'))
+			else:
+				cur.execute("update PaymentType set PayType='3' where MerchantID='"+merchant_id+"';")
+			mysql.connection.commit()
+		else:
+			cur.execute("update CybersourceMerchant set Name = '" + name + "', AggregatorID = '" + aggregatorID + "', CardAcceptorID = '" + cardAcceptorID + "' where MerchantID='" + merchant_id + "';")
+		mysql.connection.commit()
+		return redirect('/accounts/')
+	return render_template("./accounts/cyberSourceDetails.html",result=result)
 
 
 @app.route('/merchant/<merchant_id>/requirements',methods=['GET','POST'])
