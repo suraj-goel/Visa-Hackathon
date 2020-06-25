@@ -13,12 +13,9 @@ from manage_inventory.updateProduct import *
 from orders_management.orderHistory import getOrders
 from requirements.requirements import *
 from services.visa_api_services import register_merchant,paymentProcessing
-<<<<<<< HEAD
 from services.cybersourcePayment import simple_authorizationinternet
-
-=======
 from manage_inventory.buyerUpdater import *
->>>>>>> a19828c2fe8df5acc6b0ea0fd21e674affa43e4c
+
 app = Flask(__name__,static_folder = '')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader,jinja2.FileSystemLoader(['.'])])
 app.secret_key = 'super secret key'
