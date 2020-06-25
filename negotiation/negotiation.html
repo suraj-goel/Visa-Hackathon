@@ -1,29 +1,148 @@
-<!DOCTYPE html>
-<html lang="en">
+{% include "./common/header.html" %}
+<link rel="stylesheet" href="{{ url_for('static',filename='./negotiation/negotiation.css') }}">
+<script type="text/javascript" src="{{url_for('static',filename='./negotiation/negotiation.js') }}"></script>
+<script>
+    function showThis(ii) {
 
-<head>
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
-    <style>
-        body {
-            color: black;
-        }
-    </style>
+        document.getElementById("thisDiv1").style.display = "none";
+        document.getElementById("thisDiv2").style.display = "none";
+        document.getElementById("thisDiv" + ii).style.display = "block";
+    }
 
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-    </head>
 
-    <body>
-     <h2>Lets start negotiation</h2>
-         <div id="supplierSide">
+</script>
 
-         </div>
+<style>
+    /* .grab {
+  cursor: -webkit-grab;
+  cursor: grab;
+} */
 
-         <div id="buyerSide">
+    .split {
+        height: 100%;
+        width: 18%;
+        position: absolute;
+        top: 100px;
+        overflow-x: hidden;
+        padding-top: 50px;
+        gap: 10%;
+    }
+    .split1 {
+        height: 100%;
+        width: 78%;
+        position: absolute;
 
-         </div>
+        top: 80px;
+        overflow-x: hidden;
+        padding-top: 50px;
+    }
 
-      </body>
+    .left {
+        left: 0;
+        margin-bottom: 0px;
+        background-color: #1a1f71;
+        padding: 25px 30px;
+    }
+
+    .right {
+        right: 2%;
+    }
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    * {
+        box-sizing: border-box;
+    }
+
+    input[type="text"],
+    select,
+    textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-top: 6px;
+        margin-bottom: 16px;
+        resize: vertical;
+    }
+    input[type="number"] {
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-top: 6px;
+        margin-bottom: 16px;
+        resize: vertical;
+    }
+
+    input[type="submit"] {
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        background-color: #1a1f71;
+    }
+
+    input[type="submit"]:hover {
+        cursor: pointer;
+    }
+
+    h3:hover {
+        color: #fdbb0a;
+        cursor: pointer;
+    }
+
+    h4:hover {
+        cursor: pointer;
+    }
+
+    .containerForm {
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        padding: 15px;
+    }
+
+    .button {
+        display: inline-block;
+        border-radius: 4px;
+        background-color: #1a1f71;
+        border: none;
+        color: #ffffff;
+        text-align: center;
+        font-size: 14px;
+        padding: 10px;
+        width: 250px;
+        transition: all 0.5s;
+        cursor: pointer;
+        margin: 5px;
+    }
+
+</style>
+
+<body>
+
+<div>
+    <ul class="grab split left">
+        <li>
+            <h4 class="grab" style="color:white" onclick="showThis(1)">Buyer Side</h4>
+        </li>
+        <li>
+            <h4 class="grab" style="color:white" onclick="showThis(2)">Supplier Side</h4>
+        </li>
+    </ul>
+</div>
+
+<div id="thisDiv1"  class="split1 right">
+
+    <h2>BUYER SIDE</h2>
+
+</div>
+<div id="thisDiv2" style="display: none" class="split1 right">
+     <h2>SUPPLIER SIDE</h2>
+
+</div>
+</body>
 
 </html>
