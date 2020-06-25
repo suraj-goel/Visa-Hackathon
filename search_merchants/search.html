@@ -47,6 +47,9 @@
         <div class="container">
             <table class="table table-bordered">
                 {% for item in data %}
+                <tr style="all: none;">
+                    <td style="background-color: white; border: none;"></td>
+                </tr>
                 <tr class="header">
                     <td colspan="3">
                         {% if search_option=='product' %}<h4>{{item['Product.Name']}} at cost:{{item['Price']}} rupees
@@ -71,15 +74,9 @@
                     <td colspan="2">Product : {{x['Name']}}</td>
                     <td colspan="1">{{x['Information']}}</td>
                 </tr>
-                <tr style="all: none;">
-                    <td style="background-color: white; border: none;"></td>
-                </tr>
                 {% endfor %} {% else %}
                 <tr>
                     <td colspan="3">No discounts available</td>
-                </tr>
-                <tr style="all: none;">
-                    <td style="background-color: white; border: none;"></td>
                 </tr>
                 {% endif %} {% endfor %}
             </table>
