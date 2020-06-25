@@ -180,7 +180,45 @@
             </form>
         </div>
         <div id="thisDiv2" style="display: none" class="split1 right">
-
+            <center>
+            <form class="example" method="post" action="" style="margin:auto;max-width:600px">
+            <select name="filter">
+                <option value="S">Selling</option>
+                {% if filter=='N' %}
+                <option value="N" selected>Not Selling</option>
+                {% else %}
+                <option value="N">Not Selling</option> {% endif %}
+                {% if filter=='A' %}
+                <option value="A" selected>All</option>
+                {% else %}
+                <option value="A">All</option> {% endif %}
+            </select>
+            <button type="submit" >Filter<i class="fa fa-filter"></i>
+            </button>
+        </form>
+        {% if items %}
+        <div class="container">
+            <table class="table table-bordered">
+                {% for item in items %}
+                <tr class="header">
+                    <td colspan="2">
+                       <h3>{{item['Name']}}</h3>Description: {{item['Description']}} <br>Category: {{item['Category']}} <br>
+                    Cost per unit: {{item['Price']}}<br>Quantity: {{item['Quantity']}}
+                    <h4><a title="Edit Product" href="/inventory/edit/{{item['ProductID']}}">Edit Product</a></h4>
+                </tr>
+                {% if item['offers'] %} {% for x in item['offers'] %}
+                <tr>
+                    <td>{{x['Information']}}</td>
+                </tr>
+                {% endfor %} {% else %}
+                <tr>
+                    <td>No discounts available</td>
+                </tr>
+                {% endif %} {% endfor %}
+            </table>
+        </div>
+        {% endif %}
+</center>
         </div>
 </body>
 </html>
