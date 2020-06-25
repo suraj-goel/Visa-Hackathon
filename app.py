@@ -318,11 +318,7 @@ def payment():
 @app.route('/cybersource/', methods=['GET', 'POST'])
 def cybersource():
 	merchant_id = "2"  # session['merchantID']
-	cur = mysql.connection.cursor()
-	cur.execute("select AggregatorID,CardAcceptorID,Name from CybersourceMerchant where MerchantID='"+merchant_id+"';")
-	result = cur.fetchone()
-	aggregatorID,cardAcceptorID,name = result['AggregatorID'],result['CardAcceptorID'],result['Name']
-	
+
 	qty=session['qty']
 	ProductID=session['ProductID']
 	Name = session['Name']
@@ -331,7 +327,12 @@ def cybersource():
 	Offers = session['offers']
 	discountPrice = session['discountPrice']
 	sellerId = session['mid']
-	
+
+	cur = mysql.connection.cursor()
+	cur.execute("select AggregatorID,CardAcceptorID,Name from CybersourceMerchant where MerchantID='"+sellerId+"';")
+	result = cur.fetchone()
+	aggregatorID,cardAcceptorID,name = result['AggregatorID'],result['CardAcceptorID'],result['Name']
+
 	if request.method == 'POST':
 		print(request.form)
 		amount = request.form.getlist('amount')[0]
@@ -340,7 +341,7 @@ def cybersource():
 		month = request.form.getlist('month')[0]
 		year = request.form.getlist('year')[0]
 		cvv = request.form.getlist('CVV')[0]
-		status = simple_authorizationinternet(cardNumber,month,year,amount,aggregatorID,cardAcceptorID,"V-Internatio")#username
+		status = simple_authorizationinternet(cardNumber,month,year,amount,aggregatorID,cardAcceptorID,username)
 		# if payment in authorized then call ****
 		# addToOrders(mysql,qty,ProductID,Name,Description,Price,sellerId,"no",discountPrice[0],discountPrice[0],'1-01-2012')
 		# updateSupplierInventory(mysql,productList)
@@ -350,10 +351,9 @@ def cybersource():
 		# status will be 'no'
 		# check date format
 		# pass the correct values recieved from session (refer this for more info @app.route("/merchant/<merchant_id>/cart",methods=['GET','POST']))
-		
+
 		return redirect(url_for('showAll'))
 	return render_template("./payment/payment.html",amount=amount)
-
 
 
 @app.route('/negotiation',methods=['GET','POST'])
