@@ -167,13 +167,13 @@ form.example::after {
   position: relative;
   top: 1px;
   display: inline-block;
-  font-family: "Glyphicons Halflings";
+  font-family: "open-sans", sans-serif, Tahoma;
   font-style: normal;
   font-weight: 400;
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #999;
+  color: #faaa13;
   text-align: center;
   padding: 3px;
   transition: transform 0.25s linear;
