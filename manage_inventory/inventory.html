@@ -1,6 +1,56 @@
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./manage_inventory/inventory_style.css') }}">
 <script type="text/javascript" src="{{url_for('static',filename='./manage_inventory/inventory.js') }}"></script>
+<style>
+
+    body {font-family: Arial, Helvetica, sans-serif;}
+    * {box-sizing: border-box;}
+
+    input[type=text], select, textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-top: 6px;
+        margin-bottom: 16px;
+        resize: vertical;
+    }
+    input[type=number] {
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-top: 6px;
+        margin-bottom: 16px;
+        resize: vertical;
+
+    }
+
+    input[type=submit] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    input[type=submit]:hover {
+        background-color: #45a049;
+    }
+
+
+    .containerForm {
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        padding: 15px;
+
+
+    }
+</style>
+
+<body>
 <center>
     {% if message=='yes' %}
     <span style="color:green">Successfully added product</span>
@@ -10,28 +60,36 @@
     {% endif %}
         <h1>Inventory</h1>
     <button type="button" id="formButton">Add product</button>
+</center>
+<form id="form1" method="post"  >
 
-<form id="form1" method="post">
-    <b>Product name</b> <input type="text" name="name" required><br><br>
-    <b>Product Description</b><textarea name="description" required></textarea><br><br>
-    <b>Price per piece</b> <input type="number" min='0' name="price" id='price' onchange="validate(this.id)" required><br><br>
-    <b>Quantity</b> <input type="number" min='0' name="quantity" id='quantity' onchange="validate(this.id)" required><br><br>
-    <b>Category</b><br>
-        <select name="category" onchange="checkvalue(this.value)">
-            {% for i in category %}
+        <div id="newForm" class="containerForm">
+            <label for="name">Product Name: </label>
+            <input type="text"  name="name" id="name" placeholder="Item Name" required/>
+            <label for="description">Product Description: </label>
+            <textarea id="description" name="description" placeholder="Something About Your Product...">
+            </textarea>
+            <label for="price">Price Per Piece: </label><br>
+            <input type="number" min='0' name="price" id='price' onchange="validate(this.id)" required><br>
+            <label for="other_category">Select Your Category: </label>
+            <label for="categoryname"></label>
+            <select name="category" id="categoryname" onchange="checkvalue(this.value)">
+                {% for i in category %}
                 <option value="{{i}}">{{i}}</option>
-            {% endfor %}
-            <option value="others">Others</option>
-        </select>
-    <div  id='category' style='display:none'>
-        Enter your category
-        <input type="text" name="other_category" value=''>
-    </div><br>
-    <input type="radio" name="sell" value="1" checked> Show as selling to other merchants<br>
-    <input type="radio" name="sell" value="0"> Add to inventory without showing to other merchants<br>
-    <input type="submit" onclick="javascript: form.action='/addproduct';">
+                {% endfor %}
+                <option value="others">Others</option>
+            </select>
+
+            <div  id='category' style='display:none'>
+                <label for="other_category">Type Your Category: </label>
+                <input id="other_category" type="text" name="other_category" value=''>
+            </div>
+            <input type="radio" name="sell" value="1" checked> <b>Show as selling to other merchants</b><br>
+            <input type="radio" name="sell" value="0"> <b>Add to inventory without showing to other merchants</b><br>
+            <input style="margin-left: 45%" type="submit" value="Add Product" onclick="javascript: form.action='/addproduct';">
+        </div>
 </form>
-    </center>
+</body>
 <form class="example" method="post" action="" style="margin:auto;max-width:600px">
             <select name="filter">
                 <option value="S">Selling</option>
@@ -69,5 +127,6 @@
             </table>
         </div>
         {% endif %}
+
     </center>
 </html>
