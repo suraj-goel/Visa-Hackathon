@@ -85,8 +85,11 @@ def editProduct(productID):
 @app.route('/orders',methods=['POST','GET'])
 def orders():
 	merchantid=1
-	history=getOrders(mysql,merchantid)
-	return render_template('./orders_management/order_management.html',history=history)
+	delivered_filter='yes'
+	if request.method=='POST':
+		delivered_filter=request.form['filter']
+	history=getOrders(mysql,merchantid,delivered_filter)
+	return render_template('./orders_management/order_management.html',history=history,filter=delivered_filter)
 
 @app.route('/' ,methods=['POST','GET'])
 @app.route('/search', methods=['POST','GET'])

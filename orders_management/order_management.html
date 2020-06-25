@@ -1,3 +1,47 @@
 {% include "./common/header.html" %}
-Orders
+<link rel="stylesheet" href="{{ url_for('static',filename='./manage_inventory/inventory_style.css') }}">
+<script type="text/javascript" src="{{url_for('static',filename='./manage_inventory/inventory.js') }}"></script>
+<center>
+<h1>Orders</h1>
+<form class="example" method="post" action="" style="margin:auto;max-width:600px">
+            <select name="filter">
+                <option value="yes">Delivered</option>
+                {% if filter=='no' %}
+                <option value="no" selected>Not delivered</option>
+                {% else %}
+                <option value="no">Not delivered</option> {% endif %}
+                {% if filter=='all' %}
+                <option value="all" selected>All</option>
+                {% else %}
+                <option value="all">All</option> {% endif %}
+            </select>
+            <button type="submit" >Filter<i class="fa fa-filter"></i>
+            </button>
+        </form>
+        {% if history %}
+        <div class="container">
+            <table class="table table-bordered">
+                {% for item in history %}
+                <tr class="header">
+                    <td colspan="2">
+                       <h3>Cart: {{item['CartID']}}</h3>Total: {{item['Total']}}<br>
+                        Was ordered on {{ item['OrderedDate'] }} <br>
+                         {% if item['Status']=='no' %}
+                        <button>Confirm delivery</button>
+                        {% else %}
+                         Was delivered on {{item['DeliveredDate']}}
+                    {% endif %}
+                </tr>
+                {% for x in item['Products_list'] %}
+                <tr>
+                    <td>{{x['Name']}}</td>
+                    <td>{{x['Quantity']}}</td>
+                </tr>
+                {% endfor %}  {% endfor %}
+            </table>
+        </div>
+    {% else %}
+    <h3>No carts found</h3>
+        {% endif %}
+    </center>
 </html>
