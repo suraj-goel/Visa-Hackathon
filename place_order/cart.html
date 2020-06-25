@@ -78,14 +78,14 @@
         <h2 style="color: chocolate"><b>YOUR CART IS EMPTY</b></h2>
 
         <div style="margin-left: 45%">
-            <button id="emptyCart" name="{{url_for('showPlaceOrder',merchant_id=merchantID)}}" type="button"
-                onclick="addItems()">ADD ITEMS</button>
+            <button id="emptyCart" class="button" name="{{url_for('showPlaceOrder',merchant_id=merchantID)}}" type="button"
+                onclick="addItems()"><span> ADD ITEMS </span></button>
         </div>
         {%else%}
 
         <h2 style="color:#1a1f71"> Your Cart </h2>
         <div class="container">
-            <form method="post" action="" onsubmit="save()">
+            <form method="post" action="/payments/" onsubmit="save()">
                 <table class="table table-bordered">
                     <tr>
                         <th>Product Details</th>
