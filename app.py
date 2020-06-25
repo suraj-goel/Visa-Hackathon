@@ -266,7 +266,6 @@ def registerCyber():
 		return redirect('/accounts/')
 	return render_template("./accounts/cyberSourceDetails.html",result=result)
 
-
 @app.route('/requirements',methods=['GET','POST'])
 def requirements():
 	if(request.method == 'GET'):

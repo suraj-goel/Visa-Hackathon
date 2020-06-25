@@ -13,12 +13,13 @@
         }
         check = true;
     }
+
     function negotiate() {
         check = true;
         var tprice = sessionStorage.getItem("discountPrice");
         var negprice = prompt("Please enter the amount you want", tprice);
         console.log(tprice, negprice);
-        var priceSent=tprice;
+        var priceSent = tprice;
         if (parseInt(negprice) <= parseInt(tprice) && parseInt(negprice) >= 0) {
             priceSent = negprice;
             alert("Negotiated price (" + priceSent + ") sent to merchant");
@@ -27,106 +28,115 @@
             alert("Negotiated Price should be greater than 0 and less than Discount price(" + tprice + ")");
             alert("Discount price (" + priceSent + ") sent to merchant");
         }
-        document.getElementById("Negotiated").value=parseInt(priceSent);
+        document.getElementById("Negotiated").value = parseInt(priceSent);
     }
 
     function payment() {
-        check=true;
+        check = true;
     }
+
     function goBack() {
         window.history.back();
     }
-    function FinalPrice() {
 
-        var v1=document.getElementById("finalPrice");
-        v1.innerHTML= finalPrice;
+    function FinalPrice() {
+        var v1 = document.getElementById("finalPrice");
+        v1.innerHTML = finalPrice;
         var v2 = document.getElementById("finalPrice1");
         v2.value = finalPrice;
     }
-    function DiscountPrice(){
+
+    function DiscountPrice() {
         var v1 = document.getElementById("discountPrice");
         v1.innerHTML = discountPrice;
         var v2 = document.getElementById("finalDiscountPrice1");
         v2.value = discountPrice;
     }
+
     function deleteAllHistory() {
-        window.history.go(-(window.history.length-1));
+        window.history.go(-(window.history.length - 1));
         window.history.back()
     }
-    function showDetails() {
 
+    function showDetails() {
         document.getElementById("contact").style.display = "block";
     }
+
     function hideDetails() {
         document.getElementById("contact").style.display = "none";
     }
+
     function addItems() {
-        var x =document.getElementById("emptyCart").name;
+        var x = document.getElementById("emptyCart").name;
         return window.location = x;
     }
-
 </script>
+
 <body>
-{%if totalQuantity ==0 %}
-<h2 style="color: chocolate"><b>YOUR CART IS EMPTY</b></h2>
+    <center>
+        {%if totalQuantity ==0 %}
+        <h2 style="color: chocolate"><b>YOUR CART IS EMPTY</b></h2>
 
-    <div style="margin-left: 45%">
+        <div style="margin-left: 45%">
+            <button id="emptyCart" name="{{url_for('showPlaceOrder',merchant_id=merchantID)}}" type="button"
+                onclick="addItems()">ADD ITEMS</button>
+        </div>
+        {%else%}
 
-        <button id="emptyCart" name="{{url_for('showPlaceOrder',merchant_id=merchantID)}}" type="button" onclick="addItems()">ADD ITEMS</button>
-    </div>
-{%else%}
-<br><br><br>
-<div class="container">
-    <form method="post" action="" onsubmit="save()">
-        <table class="table table-bordered">
-            <tr>
-                <th>Product Details</th>
-                <th>Quantity</th>
-                <th>Offers Selected</th>
-                <th>Cost Price/<br>
-                    Discount Price
-                </th>
-            </tr>
-            {% for i in range(0,len) %}
-            <tr>
-                {% if qty[i] != '0' %}
-                <input type="hidden" name="ProductId[]" value="{{ProductID[i]}}">
-                <td><b> {{Name[i]}}</b> :-<br>
-                <input type="hidden" name="Name[]" value="{{Name[i]}}">
-                    <p> {{Description[i]}}</p>
-                </td>
-                <input type="hidden" name="Description[]" value="{{Description[i]}}">
-                <td> {{qty[i]}}</td>
-                <input type="hidden" name="qty[]" value="{{qty[i]}}">
-                <td>{{Offers[i]}}</td>
-                <td> {{discountPrice[i]}}</td>
-                <input type="hidden" name="Price[]" value="{{discountPrice[i]}}">
-                {% endif %}
-            </tr>
-            {% endfor %}
-        </table>
-        <input type="hidden" id="finalPrice1" name="finalPrice" value="0"/>
-        <input type="hidden" id="finalDiscountPrice1" name="finalDiscountPrice" value="0"/>
-        <h3>Total Cost: Rs <span id="finalPrice" >0</span></h3>
-        <h3>Total Cost(After Discount): Rs <span id="discountPrice">0</span></h3>
-        <script> FinalPrice();
-        DiscountPrice();
-        </script>
-        <br><br>
-        <input type="hidden" id="Negotiated" name="NegotiatedRequestAmount" value="0"/>
-        <button type="button" onclick="showDetails()"><b>Click Here For Negotiation</b></button>
-        <div id="contact" style="display: none">
-            <p> <b>Phone No:</b> +123435</p>
-            <p> <b>Email ID</b>: business@visa.com</p>
-            <input type="submit" name="type" onclick="negotiate()" value="Enter Your Amount"/>
-            <br><br><br>
-    </div>
-        <button type="button" onclick="goBack()">EDIT CART</button>
+        <h2 style="color:#1a1f71"> Your Cart </h2>
+        <div class="container">
+            <form method="post" action="" onsubmit="save()">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Product Details</th>
+                        <th>Quantity</th>
+                        <th>Offers Selected</th>
+                        <th style="color: #053ea9;">Cost Price/<br> Discount Price </th>
+                    </tr>
+                    {% for i in range(0,len) %}
+                    <tr>
+                        {% if qty[i] != '0' %}
+                        <input type="hidden" name="ProductId[]" value="{{ProductID[i]}}">
+                        <td><b> {{Name[i]}}</b> :-<br>
+                            <input type="hidden" name="Name[]" value="{{Name[i]}}">
+                            <p> {{Description[i]}}</p>
+                        </td>
+                        <input type="hidden" name="Description[]" value="{{Description[i]}}">
+                        <td> {{qty[i]}}</td>
+                        <input type="hidden" name="qty[]" value="{{qty[i]}}">
+                        <td>{{Offers[i]}}</td>
+                        <td style="color: #053ea9;"> {{discountPrice[i]}}</td>
+                        <input type="hidden" name="Price[]" value="{{discountPrice[i]}}">
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </table>
+                <input type="hidden" id="finalPrice1" name="finalPrice" value="0" />
+                <input type="hidden" id="finalDiscountPrice1" name="finalDiscountPrice" value="0" />
+                
+                <h3>Total Cost: Rs <span id="finalPrice">0</span></h3>
+                <h3 style="color: #053ea9;">Total Cost(After Discount): Rs <span id="discountPrice">0</span></h3>
+                
+                <script> FinalPrice();
+                    DiscountPrice();
+                </script>
+                <br><br>
 
-        <input type="submit" name="type" onclick="payment()" value="Process Payment"/>
-    </form>
-</div>
-{%endif%}
+                <input type="hidden" id="Negotiated" name="NegotiatedRequestAmount" value="0" />
+                <button type="button" class="button" onclick="showDetails()"><span>Click Here For Negotiation</span></button>
+                <div id="contact" style="display: none">
+                    <p style="color: #053ea9;"> <b>Phone No:</b> +123435</p>
+                    <p style="color: #053ea9;"> <b>Email ID</b>: business@visa.com</p>
+                    <input type="submit" name="type" class="button" onclick="negotiate()" value="Enter Your Amount" />
+                    
+                    <br><br><br>
+                </div>
+                <button type="button" class="button" onclick="goBack()"><span> Edit Cart </span></button>
+                <input type="submit" name="type" class="button" onclick="payment()" value="Process Payment" />
+            </form>
+        </div>
+        {%endif%}
+    </center>
 </body>
 
 
