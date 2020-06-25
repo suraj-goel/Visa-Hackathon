@@ -86,8 +86,9 @@ def editProduct(productID):
 def orders():
 	merchantid=1
 	delivered_filter='yes'
+	selectedCartID = None
 	if request.method=='POST':
-		selectedCartID = None
+		
 		if "filter" in request.form:
 			delivered_filter=request.form['filter']
 		if "confirm" in request.form:
