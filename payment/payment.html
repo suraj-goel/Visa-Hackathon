@@ -141,7 +141,10 @@
                      <!-- End -->
                      <!-- bank transfer info -->
                      <div id="net-banking" class="tab-pane fade pt-3">
-
+                        <form action="/b2bpay/" method="post">
+                           <input type="hidden" name="amount" value="{{ amount }}">
+                           <div class="card-footer"> <button type="submit" class="subscribe btn btn-primary btn-block shadow-sm" "> Confirm Payment </button>
+                        </form>
                      </div>
                      <!-- End -->
                      <!-- End -->
