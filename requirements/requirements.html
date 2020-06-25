@@ -207,12 +207,20 @@
                 {% elif choice=='W' %}
                    <h1>Pending</h1>
                 <form method="post" action="/requirementssupplier">
-                    <h3>Title of All requirements</h3>
+                    <h3>Title of requirement</h3>
                     <div>
-                    <button type="button">show Detailed Request and Contact Info</button>
+                    <button type="button">show Detailed Request and Contact Info after clicking and ask for price id approving</button>
+                        <div name="requestSending" style="opacity: 50%">
+                            <h3> show Info</h3>
+                            <label for="expectPrice">ExpectPrice: </label>
+                        <input type="number" id="expectPrice" style="height: 40px ;width: 80px;" name="expectPrice" value="1">
+                        <label for="expectDelivery">ExpectDeliveryDate: </label>
+                            <input type="date" id="expectDelivery"name="expectDelivery" >
+
                         <input type="hidden" name="requirementID" value="requirementID">
                         <input type="submit" name="Approve" value="Approve">
                         <input type="submit" name="Reject" value="Reject">
+                        </div>
                     </div>
                 </form>
                 {% elif choice=='E' %}
@@ -251,7 +259,7 @@
             <input type="submit" class="button" onclick="javascript: form.action='/requirementsbuyer';">
         </form>
                 {% if buyer_choice=='P' %}
-                    <h1>Paid</h1>
+              <h1>Paid</h1>
                 {% elif buyer_choice=='D' %}
                    <h1>Delivered</h1>
                 {% elif buyer_choice=='E' %}
@@ -290,33 +298,6 @@
             {% if buy_items %}
              {{buy_items}}
             {% endif %}
-
-            <!-- <div id="New Requirements/As a Buyer">
-            <h2>New Requirements</h2>
-        </div>
-        <div id="Your Own Posted Requirement">
-
-        </div>
-        <div id="Approved Requirements">
-            <h2>Approved Requirements</h2>
-        </div>
-        <div id="Accepted Requirements/Paid One">
-            <h2>New Requirements</h2>
-        </div>
-        <div id="Rejected Requirements/Not Approved">
-            <h2>New Requirements</h2>
-        </div>
-    </div>
-            </div>
-            <div id="Approved Requirements">
-                <h2>Approved Requirements</h2>
-            </div>
-            <div id="Accepted Requirements/Paid One">
-                <h2>New Requirements</h2>
-            </div>
-            <div id="Rejected Requirements/Not Approved">
-                <h2>New Requirements</h2>
-            </div>-->
         </div>
 </body>
 

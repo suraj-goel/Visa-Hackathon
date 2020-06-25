@@ -381,6 +381,8 @@ def showsupplierrequirements():
         try:
             approve = request.form['Approve']
             requirementid = request.form['requirementID']
+            price = request.form['expectPrice']
+            expectdelivery = request.form['expectDelivery']
             #approvedDeal(mysql,requirementid,merchantid)
             return redirect(request.url)
         except Exception as e:
@@ -411,7 +413,7 @@ def showbuyerrequirements():
             choice = request.form['filterbuyer']
             items = getBuyerRequests(mysql, merchantid, choice)
             print(items)
-            return render_template('./requirements/requirements.html', buy_items=items, buyer_choice=choice, profile=3)
+            return render_template('./requirements/requirements.html', buy_items=items, buyer_choice=choice, profile=3,loop=len(items))
         except Exception as e:
             print("filterbuyer"+str(e))
 
@@ -427,7 +429,7 @@ def showbuyerrequirements():
     else:
         choice = 'W'
         items = getBuyerRequests(mysql,merchantid,choice)
-        return render_template('./requirements/requirements.html', buy_items=items, buyer_choice=choice, profile=3)
+        return render_template('./requirements/requirements.html', buy_items=items, buyer_choice=choice, profile=3,loop=len(items))
 
 
 
