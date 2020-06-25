@@ -120,14 +120,14 @@
 
                 <div id="requestForm" class="containerForm ">
                     <label for="title1">Title</label>
-                    <input type="text" name="title" id="title1" placeholder="Item Name"/>
+                    <input type="text" name="title" id="title1" placeholder="Item Name" required/>
                     <label for="requesterName">Merchant Business Name</label>
                     <input type="text" name="requesterName" id="requesterName" value="{{registeredName}}" readonly/>
                     <label for="description">Description</label>
                     <textarea id="description" name="description" placeholder="Write About Your Requirement...">
                     </textarea>
                     <label for="Quantity">Quantity Required: </label>
-                    <input type="number" name="Quantity" id="Quantity" style="height:50px" placeholder="Quantity Required"/>
+                    <input type="number" name="Quantity" id="Quantity" style="height:50px" min="1" placeholder="Quantity Required" required/>
                     <label for="Price">Amount in Rs: </label>
                     <input type="number" name="Price" id="Price" style="height:50px" placeholder="Expected Amount"/>
                 <br><br>
@@ -141,7 +141,7 @@
             <h2>New Requirements</h2>
              </div>
             <div id="Your Own Posted Requirement">
-                
+
             </div>
             <div id="Approved Requirements">
                 <h2>Approved Requirements</h2>

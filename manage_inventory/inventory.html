@@ -70,7 +70,7 @@
             <textarea id="description" name="description" placeholder="Something About Your Product...">
             </textarea>
             <label for="price">Price Per Piece: </label><br>
-            <input type="number" min='0' name="price" id='price' onchange="validate(this.id)" required><br>
+            <input type="number" min='1' name="price" id='price' onchange="validate(this.id)" required><br>
             <label for="other_category">Select Your Category: </label>
             <label for="categoryname"></label>
             <select name="category" id="categoryname" onchange="checkvalue(this.value)">
@@ -86,7 +86,9 @@
             </div>
             <input type="radio" name="sell" value="1" checked> <b>Show as selling to other merchants</b><br>
             <input type="radio" name="sell" value="0"> <b>Add to inventory without showing to other merchants</b><br>
-            <input style="margin-left: 45%" type="submit" value="Add Product" onclick="javascript: form.action='/addproduct';">
+            <input style="display: block;
+  margin-right: auto;
+  margin-left: auto;" type="submit" value="Add Product" onclick="javascript: form.action='/addproduct';">
         </div>
 </form>
 </body>
