@@ -171,6 +171,15 @@
                     <h1>Rejected by buyer</h1>
                 {% elif choice=='W' %}
                    <h1>Pending</h1>
+                <form method="post" action="/requirementssupplier">
+                    <h3>Title of All requirements</h3>
+                    <div>
+                    <button type="button">show Detailed Request and Contact Info</button>
+                        <input type="hidden" name="requirementID" value="requirementID">
+                        <input type="submit" name="Approve" value="Approve">
+                        <input type="submit" name="Reject" value="Reject">
+                    </div>
+                </form>
                 {% elif choice=='E' %}
                    <h1>All Accepted by you</h1>
                 {% elif choice=='P' %}
@@ -183,7 +192,7 @@
 {{sup_items}}
             {% endif %}
         </div>
-<div id="thisDiv3" style="display: none" class="split1 right">
+<div id="thisDiv3" style="display: none" class="split1 right">    <!--  FIRST THIS -->
      <h1>Your buyer profile for requirements</h1>
     <form method="post" action="" >
                 <select name="filterbuyer">
@@ -214,14 +223,40 @@
                    <h1>All requests</h1>
                 {% elif buyer_choice=='R' %}
                     <h1>Requests pending</h1>
+
+                    <form method="post" action="/requirementsbuyer">
+                        <div id="accept/reject">
+                            <h1>Your Request(one request example)</h1>
+                            <p>List of Interested Buyers</p>
+                            <div>
+                        <input type="radio" name="buyer1" value="buyer1" id="buyer1"/>
+                            <label for="buyer1">buyer1</label>
+                                <input type="hidden" name="requirementID" value="requirementID1">
+                                <input type="submit" name="AC" value="ACCEPT DEAL"/>
+                            </div>
+                            <div>
+                            <input type="radio" name="buyer2" id="buyer2" value="buyer2"/>
+                            <label for="buyer2">buyer2</label>
+                                <input type="hidden" name="requirementID" value="requirementID2">
+                                <input type="submit" name="AC" value="ACCEPT DEAL"/>
+                            </div>
+                            <div>
+                            <input type="radio" name="buyer3" value="buyer3" id="buyer3"/>
+                            <label for="buyer3">buyer3</label>
+                                <input type="hidden" name="requirementID" value="requirementID3">
+                                <input type="submit" name="AC" value="ACCEPTDEAL"/>
+                            </div>
+                        </div>
+                    </form>
                 {% else %}
                     <h1>Requests pending</h1>
                     <h3>Enter your filter</h3>
                 {% endif %}
             {% if buy_items %}
-{{buy_items}}
+             {{buy_items}}
             {% endif %}
-             <div id="New Requirements/As a Buyer">
+
+            <!-- <div id="New Requirements/As a Buyer">
             <h2>New Requirements</h2>
              </div>
             <div id="Your Own Posted Requirement">
@@ -235,7 +270,7 @@
             </div>
             <div id="Rejected Requirements/Not Approved">
                 <h2>New Requirements</h2>
-            </div>
+            </div>-->
         </div>
 </body>
 </html>

@@ -15,7 +15,7 @@ from requirements.requirements import *
 from services.visa_api_services import register_merchant, paymentProcessing
 from services.cybersourcePayment import simple_authorizationinternet
 from manage_inventory.buyerUpdater import *
-from requirements.showRequirements import getSupplierRequests, getBuyerRequests
+from requirements.showRequirements import *
 from payment.confirmPayment import *
 from manage_inventory.supplierupdater import *
 app = Flask(__name__, static_folder='')
@@ -364,25 +364,72 @@ def negotiation():
 
 @app.route('/requirementssupplier', methods=['GET', 'POST'])
 def showsupplierrequirements():
-	merchantid = 3
-	items = getSupplierRequests(mysql, merchantid)
-	choice = 'P'
-	if request.method == 'POST':
-		choice = request.form['filtersupplier']
-		items = getSupplierRequests(mysql, merchantid, choice)
-	return render_template('./requirements/requirements.html', sup_items=items, choice=choice, profile=2)
+    merchantid = 3
+    items = getSupplierRequests(mysql, merchantid)
+    choice = 'P'
+    if request.method == 'POST':
+        print(request.form)
+        try:
+            choice = request.form['filtersupplier']
+            items = getSupplierRequests(mysql, merchantid, choice)
+            return render_template('./requirements/requirements.html', sup_items=items, choice=choice, profile=2)
+        except Exception as e:
+            print("filtersupplier"+str(e))
+
+        try:
+            approve = request.form['Approve']
+            requirementid = request.form['requirementID']
+            #approvedDeal(mysql,requirementid,merchantid)
+            return redirect(request.url)
+        except Exception as e:
+            print("APPROVE"+str(e))
+
+        try:
+            reject = request.form['Reject']
+            requirementid = request.form['requirementID']
+            #rejectedDeal(mysql,requirementid,merchantid)
+            return redirect(request.url)
+        except Exception as e:
+            print("Reject" + str(e))
+        return render_template(url_for('requirements'))
+    else:
+        choice = 'W'
+        items = getSupplierRequests(mysql,merchantid,choice)
+        return render_template('./requirements/requirements.html', sup_items=items, choice=choice, profile=2)
 
 
 @app.route('/requirementsbuyer', methods=['GET', 'POST'])
 def showbuyerrequirements():
-	merchantid = 1
-	items = getSupplierRequests(mysql, merchantid)
-	choice = 'R'
-	if request.method == 'POST':
-		choice = request.form['filterbuyer']
-		items = getBuyerRequests(mysql, merchantid, choice)
-		print(items)
-	return render_template('./requirements/requirements.html', buy_items=items, buyer_choice=choice, profile=3)
+    merchantid = 1
+    items = getSupplierRequests(mysql, merchantid)
+    choice = 'R'
+    if request.method == 'POST':
+        print(request.form)
+        try:
+            choice = request.form['filterbuyer']
+            items = getBuyerRequests(mysql, merchantid, choice)
+            print(items)
+            return render_template('./requirements/requirements.html', buy_items=items, buyer_choice=choice, profile=3)
+        except Exception as e:
+            print("filterbuyer"+str(e))
+
+        try:
+            accept = request.form['AC']
+            requirementID = request.form['requirementID']
+            #acceptDeal(mysql,requirementID)
+            #change this to payment after payment module is finish
+            return redirect(url_for('requirements'))
+        except Exception as e:
+            print("AC"+str(e))
+        return render_template(url_for("requirements"))
+    else:
+        choice = 'W'
+        items = getBuyerRequests(mysql,merchantid,choice)
+        return render_template('./requirements/requirements.html', buy_items=items, buyer_choice=choice, profile=3)
+
+
+
+
 
 
 @app.route('/requirements', methods=['GET', 'POST'])

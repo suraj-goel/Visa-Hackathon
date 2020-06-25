@@ -69,7 +69,7 @@ def PostedAndPending(mysql, merchantid):
                         "RequirementAccepted.ProductID and Requirement.Status='Post' and Requirement.MerchantID ='%s' and "
                         "Requirement.RequirementID=%s;",(merchantid, str(i['RequirementID'])))
             x = cur.fetchall()
-            # if no one accepted, dont add accept list to disctonary
+            # if no one accepted, dont add accept list to dictionary
             if x:
                 data = []
                 for j in x:
@@ -127,3 +127,26 @@ def getBuyerRequests(mysql,merchantid,choice='R'):
         res.extend(PostedAndPaid(mysql,merchantid))
         res.extend(PostedAndDelivered(mysql,merchantid))
         return res
+
+
+def acceptDeal(mysql,requirementID):
+    cur = mysql.connection.cursor()
+    cur.execute("UPDATE RequirementAccepted SET Status=%s WHERE RequirementID=%s",("yes",requirementID))
+    mysql.connection.commit()
+    cur.execute("UPDATE Requirement SET Status=%s WHERE RequirementID=%s",("Paid",requirementID))
+    mysql.connection.commit()
+
+
+def approvedDeal(mysql,requirementID,merchantID):
+    cur = mysql.connection.cursor()
+    cur.execute("UPDATE Requirement SET Status=%s WHERE RequirementID=%s AND MerchantID=%s",("Approved",requirementID,merchantID))
+    mysql.connection.commit()
+
+
+def rejectedDeal(mysql,requirementID,merchantID):
+    cur = mysql.connection.cursor()
+    cur.execute("UPDATE Requirement SET Status=%s WHERE RequirementID=%s AND MerchantID=%s",("Rejected",requirementID,merchantID))
+    mysql.connection.commit()
+
+
+
