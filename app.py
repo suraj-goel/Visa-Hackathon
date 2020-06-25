@@ -13,7 +13,7 @@ from manage_inventory.updateProduct import *
 from orders_management.orderHistory import getOrders
 from requirements.requirements import *
 from services.visa_api_services import register_merchant,paymentProcessing
-
+from manage_inventory.buyerUpdater import *
 app = Flask(__name__,static_folder = '')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader,jinja2.FileSystemLoader(['.'])])
 app.secret_key = 'super secret key'
@@ -87,7 +87,17 @@ def orders():
 	merchantid=1
 	delivered_filter='yes'
 	if request.method=='POST':
-		delivered_filter=request.form['filter']
+		selectedCartID = None
+		if "filter" in request.form:
+			delivered_filter=request.form['filter']
+		if "confirm" in request.form:
+			selectedCartID = request.form['confirm']
+	if selectedCartID:
+		cur = mysql.connection.cursor()
+		cur.execute("Update Orders SET Status = 'yes' WHERE CartID = '{}'".format(selectedCartID))
+		cur.execute("SELECT OrderID FROM Orders WHERE CartID = '{}'".format(selectedCartID))
+		data = list(cur.fetchall())
+		updateBuyerInventoryOrder(mysql,data[0]['OrderID'],merchantid)
 	history=getOrders(mysql,merchantid,delivered_filter)
 	return render_template('./orders_management/order_management.html',history=history,filter=delivered_filter)
 
