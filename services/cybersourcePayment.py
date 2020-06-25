@@ -78,7 +78,7 @@ def simple_authorizationinternet(cardNumber="4111111111111111",cardExpirationMon
         bill_to = orderInformationBillTo.__dict__
     )
     
-    sub_merchant = Ptsv2paymentsAggregatorInformationSubMerchant(card_acceptor_id="1234567890", id=None, name="V-Internatio", address1=None, locality=None, administrative_area=None, region=None, postal_code=None, country=None, email=None, phone_number=None)
+    sub_merchant = Ptsv2paymentsAggregatorInformationSubMerchant(card_acceptor_id=card_acceptor_id, id=None, name=name, address1=None, locality=None, administrative_area=None, region=None, postal_code=None, country=None, email=None, phone_number=None)
 
 
     aggregatorInfo = Ptsv2paymentsAggregatorInformation(aggregator_id, name, sub_merchant=sub_merchant)
