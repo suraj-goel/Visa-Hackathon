@@ -3,7 +3,7 @@ import os
 import json
 from importlib.machinery import SourceFileLoader
 
-config_file = os.path.join(os.getcwd(), "data", "Configuration.py")
+config_file = os.path.join(os.getcwd(), "services/data", "Configuration.py")
 configuration = SourceFileLoader("module.name", config_file).load_module()
 
 # To delete None values in Input Request Json body
@@ -17,6 +17,7 @@ def del_none(d):
 
 def simple_authorizationinternet(cardNumber="4111111111111111",cardExpirationMonth="12",cardExpirationYear="2031",amount="0",aggregator_id="123456789", 
     card_acceptor_id="1234567890",name="V-Internatio" ):
+    print("\nCardNumber:"+cardNumber+"\nCardExpirationMonth:"+cardExpirationMonth+"\nCardExpirationYear:"+cardExpirationYear+"\nAmount:"+amount+"\nAGGID:"+aggregator_id+"\nCAID:"+card_acceptor_id+"\nName:"+name+"\n")
     flag = False
     clientReferenceInformationCode = "TC50711_3"
     clientReferenceInformation = Ptsv2paymentsClientReferenceInformation(
@@ -102,10 +103,10 @@ def simple_authorizationinternet(cardNumber="4111111111111111",cardExpirationMon
 
         print("\nAPI RESPONSE CODE : ", status)
         print("\nAPI RESPONSE BODY : ", body)
-
-        return return_data
+        print("\nAPI RETURN DATA : ",return_data)
+        return status
     except Exception as e:
         print("\nException when calling PaymentsApi->create_payment: %s\n" % e)
 
-if __name__ == "__main__":
-    simple_authorizationinternet()
+#if __name__ == "__main__":
+#    simple_authorizationinternet()

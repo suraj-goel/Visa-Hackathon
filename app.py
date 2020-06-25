@@ -13,6 +13,7 @@ from manage_inventory.updateProduct import *
 from orders_management.orderHistory import getOrders
 from requirements.requirements import *
 from services.visa_api_services import register_merchant,paymentProcessing
+from services.cybersourcePayment import simple_authorizationinternet
 
 app = Flask(__name__,static_folder = '')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader,jinja2.FileSystemLoader(['.'])])
@@ -284,6 +285,32 @@ def requirements():
 	return redirect(request.url)
 
 
+@app.route('/payments/',methods=['GET','POST'])
+def payment():
+	if request.method == 'POST':
+		amount = request.form['finalPrice']
+	return render_template("./payment/payment.html",amount=amount)
+
+@app.route('/cybersource/',methods=['GET','POST'])
+def cybersource():
+	merchant_id = "2"  # session['merchantID']
+	cur = mysql.connection.cursor()
+	cur.execute("select AggregatorID,CardAcceptorID,Name from CybersourceMerchant where MerchantID='"+merchant_id+"';")
+	result = cur.fetchone()
+	aggregatorID,cardAcceptorID,name = result['AggregatorID'],result['CardAcceptorID'],result['Name']
+	print("AGGID:"+aggregatorID+"\nCAID:"+cardAcceptorID+"\nName:"+name)
+	if request.method == 'POST':
+		print(request.form)
+		amount = request.form.getlist('amount')[0]
+		username = request.form.getlist('username')[0]
+		cardNumber = request.form.getlist('cardNumber')[0]
+		month = request.form.getlist('month')[0]
+		year = request.form.getlist('year')[0]
+		cvv = request.form.getlist('CVV')[0]
+
+		status = simple_authorizationinternet(cardNumber,month,year,amount,aggregatorID,cardAcceptorID,"V-Internatio")#username
+		return redirect(url_for('showAll'))
+	return render_template("./payment/payment.html",amount=amount)
 
 if __name__ == '__main__':
 	#threaded allows multiple users (for hosting)
