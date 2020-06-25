@@ -11,51 +11,19 @@
         document.getElementById("thisDiv4").style.display="none";
         document.getElementById("thisDiv5").style.display="none";
 
-        document.getElementById("requestForm1").style.display="none";
-        document.getElementById("requestForm2").style.display="none";
         document.getElementById("thisDiv"+ii).style.display="block";
-        if( ii == 1){
-            document.getElementById("buttons").style.display="block";
-
-        }
     }
-    function typeOfRequest(ii) {
-        document.getElementById("requestForm1").style.display="none";
-        document.getElementById("requestForm2").style.display="none";
-        document.getElementById("requestForm"+ii).style.display="block";
-        document.getElementById("buttons").style.display="none";
-    }
-    function validateForm1() {
-        var x = document.forms["requirementForm1"]["title"].value;
-        var x1 = document.forms["requirementForm1"]["description"].value;
-        console.log(x,x1);
+    function validateForm() {
+        var x = document.forms["requirementForm"]["title"].value;
+        var x2 = document.forms["requirementForm"]["Quantity"].value;
         if (x == "") {
             alert("Error in Creating Request. Fill all Information Carefully");
             return false;
         }
-        if (x1 == "") {
-            alert("Error in Creating Request. Fill all Information Carefully");
-            return false;
-        }
-    }
-    function validateForm2() {
-        var x = document.forms["requirementForm2"]["title"].value;
-        var x1 = document.forms["requirementForm2"]["Item"].value;
-        var x2 = document.forms["requirementForm2"]["Quantity"].value;
-
         if (parseInt(x2)<=0) {
             alert("Error in Creating Request. Fill all Information Carefully");
             return false;
         }
-        if (x == "") {
-            alert("Error in Creating Request. Fill all Information Carefully");
-            return false;
-        }
-        if (x1 == "") {
-            alert("Error in Creating Request. Fill all Information Carefully");
-            return false;
-        }
-
     }
 </script>
 <style>
@@ -63,7 +31,7 @@
     .split {
 
         height: 100%;
-        width: 15%;
+        width: 18%;
         position: fixed;
         z-index: 1;
         top: 100px;
@@ -158,39 +126,26 @@
 
         <div id="thisDiv1"  class="split1 right">
             <h1>Create Your Request</h1>
-            <p id="buttons"><button type="button" id="button1" onclick="typeOfRequest(1)">Write In Your Way</button>
-            <button type="button" id="button2" onclick="typeOfRequest(2)">Sample Template</button>
-            </p>
-            <form name="requirementForm1" action="" onsubmit="return validateForm1()" method="post" required>
+            <form name="requirementForm" action="" onsubmit="return validateForm()" method="post" required>
 
-                <div id="requestForm1" style="display: none" class="containerForm">
-                    <label for="title">Title</label>
-                    <input type="text" name="title" id="title" placeholder="Your Request Title"/><br>
+                <div id="requestForm" class="containerForm">
+                    <label for="title1">Title</label>
+                    <input type="text" name="title" id="title1" placeholder="Item Name"/><br>
                     <label for="requesterName">Merchant Business Name</label>
-                    <input type="text" name="requesterName" id="requesterName" value="Visa" readonly/><br>
+                    <input type="text" name="requesterName" id="requesterName" value="{{registeredName}}" readonly/><br>
                     <label for="description">Description</label>
-                    <textarea id="description" name="description" placeholder="Write About Your Request...">
+                    <textarea id="description" name="description" placeholder="Write About Your Requirement...">
                     </textarea>
+                    <label for="Quantity">Quantity Required: </label>
+                    <input type="number" name="Quantity" id="Quantity" style="height:50px" placeholder="Quantity Required"/><br>
+                    <label for="Price">Amount in Rs: </label>
+                    <input type="number" name="Price" id="Price" style="height:50px" placeholder="Expected Amount"/>
                 <br><br>
                 <input name="createRequest" type="submit" value="Post Request">
 
             </div>
             </form>
-            <form name="requirementForm2" action="" onsubmit="return validateForm2()" method="post">
-            <div id="requestForm2" style="display: none" class="containerForm">
-                <label for="title1">Title</label>
-                <input type="text" name="title" id="title1" placeholder="Your Request Title"/><br>
-                <label for="requesterName1">Merchant Business Name</label>
-                <input type="text" name="requesterName" id="requesterName1" value="Visa" readonly/><br>
-                <label for="Item">Item Name: </label>
-                <input type="text" name="Item" id="Item" placeholder="Item You Want"/><br>
-                <label for="Quantity">Quantity Required: </label>
-                <input type="number" name="Quantity" id="Quantity" style="height:200px placeholder="Quantity Required"/>
-                <br><br>
-                <input name="requestType" type="submit" value="Post Request">
-                  </p>
-            </div>
-            </form>
+
         </div>
         <div id="thisDiv2" style="display: none" class="split1 right">
             see your received request
