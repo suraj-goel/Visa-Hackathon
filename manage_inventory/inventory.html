@@ -31,7 +31,8 @@
                     <td>
                         <h4>Price per piece</h4>
                     </td>
-                    <td> <input type="number" min='1' name="price" id='price' onchange="validate(this.id)" required>
+                    <td> 
+                        <input type="number" min='1' name="price" id='price' onchange="validate(this.id)" required>
                     </td>
                 </tr>
                 <tr>
@@ -41,7 +42,6 @@
                     <td><input type="number" min='0' name="quantity" id='quantity' onchange="validate(this.id)"
                             required>
                     </td>
-
                 </tr>
                 <tr>
                     <td>
@@ -69,9 +69,9 @@
             <input type="radio" name="sell" value="1" checked><b> Show as selling to other merchants</b><br>
             <input type="radio" name="sell" value="0"><b> Add to inventory without showing to other
                 merchants</b><br><br>
-            <input style="display: block; background-color: #053ea9;
+            <input style="display: block; 
           margin-right: auto;
-          margin-left: auto;" type="submit" class="button" value="Add Product"
+          margin-left: auto;" type="submit" class="button" value="Submit"
                 onclick="javascript: form.action='/addproduct';">
         </div>
     </form>
