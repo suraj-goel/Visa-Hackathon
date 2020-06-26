@@ -31,7 +31,7 @@
                     <td>
                         <h4>Price per piece</h4>
                     </td>
-                    <td> 
+                    <td>
                         <input type="number" min='1' name="price" id='price' onchange="validate(this.id)" required>
                     </td>
                 </tr>
@@ -75,54 +75,55 @@
                 onclick="javascript: form.action='/addproduct';">
         </div>
     </form>
-</center>
-<br><br>
-<form class="example" method="post" action="" style="margin:auto;max-width:600px">
-    <span class="custom-dropdown custom-dropdown--white"><select name="filter"
-            class="custom-dropdown__select custom-dropdown__select--white">
-            <option value="S">Selling</option>
-            {% if filter=='N' %}
-            <option value="N" selected>Not Selling</option>
-            {% else %}
-            <option value="N">Not Selling</option> {% endif %}
-            {% if filter=='A' %}
-            <option value="A" selected>All</option>
-            {% else %}
-            <option value="A">All</option> {% endif %}
-        </select>
-    </span>
-    <button type="submit">Filter<i class="fa fa-filter"></i></button>
-</form>
-{% if items %}
-<div class="container">
-    <table class="table table-bordered">
-        {% for item in items %}
-        <tr style="all: none;">
-            <td style="background-color: white; border: none;"></td>
-        </tr>
-        <tr class="header">
-            <td colspan="2">
-                <h4>{{item['Name']}}</h4> <br>
-                Description: {{item['Description']}} <br>
-                Category: {{item['Category']}} <br>
-                Cost per unit: {{item['Price']}} <br>
-                Quantity: {{item['Quantity']}}
-                <h5><a title="Edit Product" href="/inventory/edit/{{item['ProductID']}}" style="color: #337ab7;">Edit
-                        Product</a></h5>
-            </td>
-        </tr>
-        {% if item['offers'] %} {% for x in item['offers'] %}
-        <tr>
-            <td>{{x['Information']}}</td>
-        </tr>
-        {% endfor %} {% else %}
-        <tr>
-            <td>No discounts available</td>
-        </tr>
-        {% endif %} {% endfor %}
-    </table>
-</div>
-{% endif %}
+
+    <br><br>
+    <form class="example" method="post" action="" style="margin:auto;max-width:600px">
+        <span class="custom-dropdown custom-dropdown--white"><select name="filter"
+                class="custom-dropdown__select custom-dropdown__select--white">
+                <option value="S">Selling</option>
+                {% if filter=='N' %}
+                <option value="N" selected>Not Selling</option>
+                {% else %}
+                <option value="N">Not Selling</option> {% endif %}
+                {% if filter=='A' %}
+                <option value="A" selected>All</option>
+                {% else %}
+                <option value="A">All</option> {% endif %}
+            </select>
+        </span>
+        <button type="submit">Filter<i class="fa fa-filter"></i></button>
+    </form>
+    {% if items %}
+    <div class="container">
+        <table class="table table-bordered">
+            {% for item in items %}
+            <tr style="all: none;">
+                <td style="background-color: white; border: none;"></td>
+            </tr>
+            <tr class="header">
+                <td colspan="2">
+                    <h4>{{item['Name']}}</h4> <br>
+                    Description: {{item['Description']}} <br>
+                    Category: {{item['Category']}} <br>
+                    Cost per unit: {{item['Price']}} <br>
+                    Quantity: {{item['Quantity']}}
+                    <h5><a title="Edit Product" href="/inventory/edit/{{item['ProductID']}}"
+                            style="color: #337ab7;">Edit
+                            Product</a></h5>
+                </td>
+            </tr>
+            {% if item['offers'] %} {% for x in item['offers'] %}
+            <tr>
+                <td>{{x['Information']}}</td>
+            </tr>
+            {% endfor %} {% else %}
+            <tr>
+                <td>No discounts available</td>
+            </tr>
+            {% endif %} {% endfor %}
+        </table>
+    </div>
+    {% endif %}
 </center>
 
 </html>
