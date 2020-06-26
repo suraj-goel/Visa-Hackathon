@@ -18,3 +18,12 @@ function validateForm() {
         return false;
     }
 }
+
+//suppierformvalidation
+function suppierFormValidation(){
+
+    var price= document.forms["supplierForm"].value;
+    var quantity = document.forms["quantity"].value;
+
+
+}

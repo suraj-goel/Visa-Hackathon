@@ -129,24 +129,39 @@ def getBuyerRequests(mysql,merchantid,choice='R'):
         return res
 
 
-def acceptDeal(mysql,requirementID):
+#SUPPLIER
+def approveDeal(mysql,requirementID,merchantIDWhoPosted):
     cur = mysql.connection.cursor()
-    cur.execute("UPDATE RequirementAccepted SET Status='{}' WHERE RequirementID='{}'".format("yes",requirementID))
-    mysql.connection.commit()
-    cur.execute("UPDATE Requirement SET Status='{}' WHERE RequirementID='{}'".format("Paid",requirementID))
+    cur.execute("UPDATE RequirementAccepted,Requirement SET RequirementAccepted.Status='{}' WHERE RequirementAccepted.RequirementID='{}' AND Requirement.RequirementID='{}' AND Requirement.MerchantID='{}'".format("yes",requirementID,requirementID,merchantIDWhoPosted))
     mysql.connection.commit()
 
 
-def approvedDeal(mysql,requirementID,merchantID):
+#BUYER
+#ONLY AFTER PAYMENT
+def acceptDeal(mysql,requirementID,merchantIDwhoPost,cartID):
     cur = mysql.connection.cursor()
-    cur.execute("UPDATE Requirement SET Status=%s WHERE RequirementID=%s AND MerchantID=%s",("Approved",requirementID,merchantID))
+    cur.execute("UPDATE Requirement,RequirementAccepted,Cart,Orders SET Requirement.Status= '{}' where Requirement.RequirementID='{}' and Orders.CartID='{}' and Requirement.MerchantID".format("Done",requirementID,cartID,merchantIDwhoPost))
     mysql.connection.commit()
 
 
-def rejectedDeal(mysql,requirementID,merchantID):
+#SUPPLIER
+def rejectDeal(mysql,requirementID,merchantIDWhoPosted):
     cur = mysql.connection.cursor()
-    cur.execute("UPDATE Requirement SET Status=%s WHERE RequirementID=%s AND MerchantID=%s",("Rejected",requirementID,merchantID))
+    cur.execute("UPDATE RequirementAccepted,Requirement SET RequirementAccepted.Status='{}' WHERE RequirementAccepted.RequirementID='{}' AND Requirement.RequirementID='{}' AND Requirement.MerchantID='{}'".format("no",requirementID,requirementID,merchantIDWhoPosted))
     mysql.connection.commit()
 
+
+#SUPPLIER
+def allProductID(mysql,merchantID):
+    cur = mysql.connection.cursor()
+    cur.execute("select * from Product where Sell=1 and MerchantID='{}'".format(merchantID))
+    sellProduct = list(cur.fetchall())
+    return sellProduct
+
+
+
+# product name = sellProduct[i]['Name']
+# Price = sellProduct[i]['Price']
+#Quantity = sellProduct[i]['Quantity']
 
 
