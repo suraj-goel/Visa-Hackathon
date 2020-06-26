@@ -343,19 +343,19 @@ def payment():
 def cybersource():
     merchant_id = "2"  # session['merchantID']
 
-    qty = session['qty']
-    ProductID = session['ProductID']
+    qty=session['qty']
+    ProductID=session['ProductID']
     Name = session['Name']
-    Description = session['Description']
+    Description =session['Description']
     Price = session['Price']
     Offers = session['offers']
     discountPrice = session['discountPrice']
     sellerId = session['mid']
 
     cur = mysql.connection.cursor()
-    cur.execute("select AggregatorID,CardAcceptorID,Name from CybersourceMerchant where MerchantID='" + sellerId + "';")
+    cur.execute("select AggregatorID,CardAcceptorID,Name from CybersourceMerchant where MerchantID='"+sellerId+"';")
     result = cur.fetchone()
-    aggregatorID, cardAcceptorID, name = result['AggregatorID'], result['CardAcceptorID'], result['Name']
+    aggregatorID,cardAcceptorID,name = result['AggregatorID'],result['CardAcceptorID'],result['Name']
 
     if request.method == 'POST':
         print(request.form)
@@ -365,22 +365,22 @@ def cybersource():
         month = request.form.getlist('month')[0]
         year = request.form.getlist('year')[0]
         cvv = request.form.getlist('CVV')[0]
-        status = simple_authorizationinternet(cardNumber, month, year, amount, aggregatorID, cardAcceptorID, username)
+        status = simple_authorizationinternet(cardNumber,month,year,amount,aggregatorID,cardAcceptorID,username)
         if (status == 1):
             print('Payment Authorized')
-            # addToOrders(mysql,qty,ProductID,Name,Description,Price,sellerId,"no",discountPrice,datetime.today().strftime('%Y-%m-%d'))
-            # updateSupplierInventory(mysql, productList)'''
+            addToOrders(mysql,qty,ProductID,Name,Description,Price,sellerId,"no",discountPrice,amount,datetime.today().strftime('%Y-%m-%d'))
+            updateSupplierInventory(mysql, ProductID,qty) #productID=ProductList
             return redirect(url_for('showAll'))
         else:
             print('Payment not authorized, please enter the correct details')
             flash("Some details were invalid, please enter the correct values.")
         # pass the correct values recieved from session (refer this for more info @app.route("/merchant/<merchant_id>/cart",methods=['GET','POST']))
-    return render_template("./payment/payment.html", amount=amount)
+    return render_template("./payment/payment.html",amount=amount)
 
 
-@app.route('/b2bpay/', methods=['GET', 'POST'])
+@app.route('/b2bpay/', methods=['GET','POST'])
 def b2bpay():
-    merchant_id = '2'  # session['MerchantID']
+    merchant_id = '2'#session['MerchantID']
     qty = session['qty']
     ProductID = session['ProductID']
     Name = session['Name']
@@ -390,26 +390,25 @@ def b2bpay():
     discountPrice = session['discountPrice']
     sellerId = session['mid']
 
-    sellerId = '2'  # Temporarily because merchantid 1 isn't actually registered, for demo let's show this, but change later once login is added.
+    sellerId = '2'#Temporarily because merchantid 1 isn't actually registered, for demo let's show this, but change later once login is added.
 
     cur = mysql.connection.cursor()
-    cur.execute("select AccountNumber from B2BDetails where MerchantID='" + sellerId + "';")
+    cur.execute("select AccountNumber from B2BDetails where MerchantID='"+sellerId+"';")
     accountNumber = cur.fetchone()['AccountNumber']
     if request.method == 'POST':
         print(request.form)
         amount = request.form.getlist('amount')[0]
-        # buyerid = merchant_id, supplier_account_no = accountNumber
-        status = paymentProcessing(amount, merchant_id,
-                                   accountNumber)  # clientid is a default parameter but can be added
-        if status == 1:
+        #buyerid = merchant_id, supplier_account_no = accountNumber
+        status = paymentProcessing(amount, merchant_id, accountNumber)#clientid is a default parameter but can be added
+        if status==1:
             print("Payment Authorized")
-            # addToOrders(mysql,qty,ProductID,Name,Description,Price,sellerId,"no",discountPrice,datetime.today().strftime('%Y-%m-%d'))
-            # updateSupplierInventory(mysql, productList) #productList?
+            addToOrders(mysql,qty,ProductID,Name,Description,Price,sellerId,"no",discountPrice,amount,datetime.today().strftime('%Y-%m-%d'))
+            updateSupplierInventory(mysql, ProductID,qty) #productID=ProductList
             return redirect(url_for('showAll'))
         else:
             print("Payment not authorized")
             flash("Error in payment, check account details again or try different payment")
-    return render_template("./payment/payment.html", amount=amount)
+    return render_template("./payment/payment.html",amount=amount)
 
 
 @app.route('/negotiation', methods=['GET', 'POST'])
