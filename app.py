@@ -1,3 +1,4 @@
+from datetime import datetime
 import jinja2
 from flask import *
 from flask import session
@@ -14,7 +15,6 @@ from orders_management.orderHistory import getOrders
 from requirements.requirements import *
 from services.visa_api_services import register_merchant, paymentProcessing
 from services.cybersourcePayment import simple_authorizationinternet
-from manage_inventory.buyerUpdater import *
 from requirements.showRequirements import *
 from negotiation.negotiation import *
 from payment.confirmPayment import *
@@ -45,7 +45,7 @@ def addproduct():
         if category == 'others':
             category = request.form['other_category']
         sell = request.form['sell']
-        merchantID = 1
+        merchantID = session['merchantid']
         message = addNewProduct(name, description, price, quantity, category, sell, merchantID, mysql)
         session['message_product_add'] = message
     return redirect(url_for('inventory'))
@@ -53,7 +53,7 @@ def addproduct():
 
 @app.route('/inventory/', methods=['POST', 'GET'])
 def inventory():
-    merchantid = 1
+    merchantid = session['merchantid']
     c = getCategories(mysql)
     try:
         message = session['message_product_add']
@@ -73,7 +73,6 @@ def inventory():
 
 @app.route('/inventory/edit/<productID>', methods=['POST', 'GET'])
 def editProduct(productID):
-    merchantID = 1
     productID = productID
     c = getCategories(mysql)
     if request.method == 'POST':
@@ -85,7 +84,7 @@ def editProduct(productID):
         if category == 'others':
             category = request.form['other_category']
         sell = request.form['sell']
-        merchantID = 1
+        merchantID = session['merchantid']
         message = updateProduct(productID, merchantID, mysql, name, description, price, quantity, category, sell)
         session['message_product_add'] = message
         return redirect(url_for('inventory'))
@@ -98,28 +97,17 @@ def editProduct(productID):
 
 @app.route('/delivered', methods=['POST'])
 def delivered():
-    merchantid=1
+    merchantid=session['merchantid']
     orderid=request.form['orderid']
     Delivered(mysql,orderid,merchantid)
     return redirect(url_for('orders'))
 
 @app.route('/orders', methods=['POST', 'GET'])
 def orders():
-    merchantid = 1
+    merchantid = session['merchantid']
     delivered_filter = 'yes'
-    selectedCartID = None
     if request.method == 'POST':
-
-        if "filter" in request.form:
             delivered_filter = request.form['filter']
-        if "confirm" in request.form:
-            selectedCartID = request.form['confirm']
-    if selectedCartID:
-        cur = mysql.connection.cursor()
-        cur.execute("Update Orders SET Status = 'yes' WHERE CartID = '{}'".format(selectedCartID))
-        cur.execute("SELECT OrderID FROM Orders WHERE CartID = '{}'".format(selectedCartID))
-        data = list(cur.fetchall())
-        updateBuyerInventoryOrder(mysql, data[0]['OrderID'], merchantid)
     history = getOrders(mysql, merchantid, delivered_filter)
     return render_template('./orders_management/order_management.html', history=history, filter=delivered_filter)
 
@@ -127,7 +115,8 @@ def orders():
 @app.route('/', methods=['POST', 'GET'])
 @app.route('/search', methods=['POST', 'GET'])
 def showAll():
-    currentMerchantID = 2
+    session['merchantid'] = '2'
+    currentMerchantID = session['merchantid']
     currentLocation = getCurrentLocation(mysql, currentMerchantID)
     if request.method == "POST":
         search_option = request.form['search']
@@ -231,7 +220,7 @@ def showCart(merchant_id):
 
 @app.route('/accounts/', methods=['GET', 'POST'])
 def displayaccountsdetails():
-    merchant_id = '2'  # session['MerchantID']
+    merchant_id = session['merchantid']
     cur = mysql.connection.cursor()
     cur.execute("select * from PaymentType where MerchantID='" + merchant_id + "';")
     r = cur.fetchone()
@@ -286,7 +275,7 @@ def editAccountDetails():
             if (r[1][5]):
                 flash("Password already exists, please enter a new one.")
             return render_template("./accounts/editAccountDetails.html", result=result)
-    merchant_id = "2"
+    merchant_id = session['merchantid']
     cur.execute("select * from Merchant where MerchantID='{}'".format(merchant_id))  # scope problem
     # "select * from Merchant where MerchantID = '"+str(session['Merchantid'])+"';"
     result = cur.fetchone()
@@ -302,7 +291,7 @@ def registerB2B(merchant_id):
 
 @app.route('/registerCyber/', methods=['GET', 'POST'])
 def registerCyber():
-    merchant_id = '2'  # retrieve from session
+    merchant_id = session['merchantid']  # retrieve from session
     cur = mysql.connection.cursor()
     cur.execute("select * from CybersourceMerchant where MerchantID='" + merchant_id + "';")
     result = cur.fetchone()
@@ -341,8 +330,6 @@ def payment():
 
 @app.route('/cybersource/', methods=['GET', 'POST'])
 def cybersource():
-    merchant_id = "2"  # session['merchantID']
-
     qty=session['qty']
     ProductID=session['ProductID']
     Name = session['Name']
@@ -350,7 +337,7 @@ def cybersource():
     Price = session['Price']
     Offers = session['offers']
     discountPrice = session['discountPrice']
-    sellerId = session['mid']
+    sellerId = session['merchantid']
 
     cur = mysql.connection.cursor()
     cur.execute("select AggregatorID,CardAcceptorID,Name from CybersourceMerchant where MerchantID='"+sellerId+"';")
@@ -388,7 +375,7 @@ def b2bpay():
     Price = session['Price']
     Offers = session['offers']
     discountPrice = session['discountPrice']
-    sellerId = session['mid']
+    sellerId = session['merchantid']
 
     sellerId = '2'#Temporarily because merchantid 1 isn't actually registered, for demo let's show this, but change later once login is added.
 
@@ -414,14 +401,14 @@ def b2bpay():
 @app.route('/negotiation', methods=['GET', 'POST'])
 def negotiation():
     if (request.method == 'GET'):
-        merchant_id = 1  # get from seearch
+        merchant_id = session['merchantid']
         allNegotiation = displayAllNegotiation(mysql, merchant_id)
         return render_template("./negotiation/negotiation.html", negotiations=allNegotiation)
 
 
 @app.route('/requirementssupplier', methods=['GET', 'POST'])
 def showsupplierrequirements():
-    merchantid = 2
+    merchantid = session['merchantid']
     items = getSupplierRequests(mysql, merchantid)
     if request.method == 'POST':
         print(request.form)
@@ -459,7 +446,7 @@ def showsupplierrequirements():
 
 @app.route('/requirementsbuyer', methods=['GET', 'POST'])
 def showbuyerrequirements():
-    merchantid = 1
+    merchantid = session['merchantid']
     items = getSupplierRequests(mysql, merchantid)
     choice = 'R'
     if request.method == 'POST':
@@ -489,11 +476,11 @@ def showbuyerrequirements():
 @app.route('/requirements', methods=['GET', 'POST'])
 def requirements():
     if (request.method == 'GET'):
-        merchant_id = 3  # get from session
+        merchant_id = session['merchantid']  # get from session
         registeredName = showBusinessName(mysql, merchant_id)
         return render_template("./requirements/requirements.html", registeredName=registeredName, profile=1)
     else:
-        merchant_id = 3  # get from session
+        merchant_id = session['merchantid'] # get from session
         title = request.form.get('title')
         description = request.form.get('description')
         quantity = request.form.get('Quantity')
@@ -506,7 +493,7 @@ def requirements():
 
 @app.route('/offers',methods=['GET', 'POST'])
 def showoffers():
-    merchantID = 1 #is equal to logged in user
+    merchantID = session['merchantid'] #is equal to logged in user
     data = displayOffersPage(mysql,merchantID)
     cur=mysql.connection.cursor()
     cur.execute("SELECT Name FROM Product WHERE MerchantID = '{}'".format(merchantID))
