@@ -19,6 +19,8 @@ from requirements.showRequirements import *
 from negotiation.negotiation import *
 from payment.confirmPayment import *
 from manage_inventory.supplierupdater import *
+from manage_offers.displayOffers import *
+
 app = Flask(__name__, static_folder='')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader, jinja2.FileSystemLoader(['.'])])
 app.secret_key = 'super secret key'
@@ -497,7 +499,12 @@ def requirements():
 		saveRequirements(mysql, merchantID=merchant_id, title=title, description=description, quantity=quantity,
                          price=price, status=status)
 		return redirect(request.url)
+@app.route('/offers',methods=['GET', 'POST'])
+def showoffers():
+    merchantID = 1 #is equal to logged in user
+    data = displayOffersPage(mysql,merchantID)
 
+    return render_template("./manage_offers/offers.html",data=data)
 
 if __name__ == '__main__':
 	# threaded allows multiple users (for hosting)
