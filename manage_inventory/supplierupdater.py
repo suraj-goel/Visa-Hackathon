@@ -4,14 +4,17 @@
         }
 '''
 
-def updateSupplierInventory(mysql,productList):
+def updateSupplierInventory(mysql,productList,qtyList):
     cur = mysql.connection.cursor()
-    for i in productList:
-        productid=i['ProductID']
-        print(productid)
-        cur.execute('select quantity from Product where productID="%s";',(productid,))
-        quan=int(cur.fetchone()['quantity'])-int(i['Quantity'])
-        cur.execute('update Product set Quantity="%s" where productID="%s";',(quan,productid))
-        mysql.connection.commit()
+    #print(productList,qtyList)
+    for i in range(len(productList)):
+        productid = productList[i]
+        qty = int(qtyList[i])
+        if qty>0:
+            cur.execute("select Quantity from Product where productID='"+productid+"';")
+            result = int(cur.fetchone()["Quantity"]) - qty
+            #print(result)
+            cur.execute("update Product set Quantity='"+str(result)+"' where productID='"+productid+"';")
+            mysql.connection.commit()
 
 

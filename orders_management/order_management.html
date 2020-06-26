@@ -35,10 +35,6 @@
 
                     Total: &#8377;{{item['Total']}} 	<br>
                     Was ordered on {{ item['OrderedDate'] }} <br>
-                    {% if item['Status']=='no' %}
-                    <form method="post" action=""><button type="submit" name="confirm"
-                            value="{{item['CartID']}}">Confirm delivery</button></form>
-                    {% endif %}
                     {% if item['DeliveredDate'] %}
                     <span style="color:green">Was delivered on {{item['DeliveredDate']}}</span>
                     {% else %}

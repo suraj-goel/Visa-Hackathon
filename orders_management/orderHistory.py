@@ -23,5 +23,8 @@ def getOrders(mysql,merchantid,delivered_filter):
     return res
 
 def Delivered(mysql,orderid,merchantid):
-    #updateBuyerInventoryOrder(mysql, orderid, merchantid)
+    cur=mysql.connection.cursor()
+    cur.execute("update Orders set DeliveredDate=CURDATE() WHERE OrderID=%s;",(orderid,))
+    mysql.connection.commit()
+    updateBuyerInventoryOrder(mysql, orderid, merchantid)
     pass
