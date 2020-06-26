@@ -115,7 +115,7 @@ def orders():
 @app.route('/', methods=['POST', 'GET'])
 @app.route('/search', methods=['POST', 'GET'])
 def showAll():
-    session['merchantid'] = '2'
+    session['merchantid'] = '1'
     currentMerchantID = session['merchantid']
     currentLocation = getCurrentLocation(mysql, currentMerchantID)
     if request.method == "POST":
@@ -337,7 +337,7 @@ def cybersource():
     Price = session['Price']
     Offers = session['offers']
     discountPrice = session['discountPrice']
-    sellerId = session['merchantid']
+    sellerId = session['merchantid'] # why?
 
     cur = mysql.connection.cursor()
     cur.execute("select AggregatorID,CardAcceptorID,Name from CybersourceMerchant where MerchantID='"+sellerId+"';")
@@ -367,7 +367,7 @@ def cybersource():
 
 @app.route('/b2bpay/', methods=['GET','POST'])
 def b2bpay():
-    merchant_id = '2'#session['MerchantID']
+    merchant_id = session['merchantid']#session['MerchantID']
     qty = session['qty']
     ProductID = session['ProductID']
     Name = session['Name']
@@ -375,8 +375,6 @@ def b2bpay():
     Price = session['Price']
     Offers = session['offers']
     discountPrice = session['discountPrice']
-    sellerId = session['merchantid']
-
     sellerId = '2'#Temporarily because merchantid 1 isn't actually registered, for demo let's show this, but change later once login is added.
 
     cur = mysql.connection.cursor()
@@ -389,7 +387,7 @@ def b2bpay():
         status = paymentProcessing(amount, merchant_id, accountNumber)#clientid is a default parameter but can be added
         if status==1:
             print("Payment Authorized")
-            addToOrders(mysql,qty,ProductID,Name,Description,Price,sellerId,"no",discountPrice,amount,datetime.today().strftime('%Y-%m-%d'))
+            addToOrders(mysql,qty,ProductID,Name,Description,Price,merchant_id,"no",discountPrice,amount,datetime.today().strftime('%Y-%m-%d'))
             updateSupplierInventory(mysql, ProductID,qty) #productID=ProductList
             return redirect(url_for('showAll'))
         else:
@@ -514,7 +512,7 @@ def addoffer():
         date=request.form['date']
         quantity = request.form['quantity']
         selectedProducts = request.form.getlist('selectedProducts')
-        merchantID = 1 #get from session when user is logged in
+        merchantID = session['merchantid'] #get from session when user is logged in
         message = addoffersindb(mysql,merchantID,discount,info,date,quantity,selectedProducts)
         session['message_offer_add'] = message
     return redirect(url_for('showoffers'))
