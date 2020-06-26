@@ -72,7 +72,7 @@ input[type="submit"] {
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  background-color: #1a1f71;
+  background-color: #fdbb0a;
 }
 
 input[type="submit"]:hover {
@@ -103,7 +103,7 @@ li {
 .button {
   display: inline-block;
   border-radius: 4px;
-  background-color: #1a1f71;
+  background-color: #fdbb0a;
   border: none;
   color: #ffffff;
   text-align: center;
