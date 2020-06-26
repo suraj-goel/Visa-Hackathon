@@ -17,7 +17,7 @@
             </li>
         </ul>
     </div>
-
+<center>
     <div id="thisDiv1" class="split1 right">
         <h1 style="color:#1a1f71">Create Your Request</h1>
         <form name="requirementForm" action="" onsubmit="return validateForm()" method="post" required>
@@ -46,9 +46,9 @@
         <form class="example" method="post" action="" style="margin:auto;max-width:600px">
             <select name="filtersupplier">
                 {% if choice=='P' %}
-                <option value="P" selected>Posts</option>
+                <option value="P" selected>Open posts</option>
                 {% else %}
-                <option value="P">Posts</option>{% endif %}
+                <option value="P">Open posts</option>{% endif %}
                 {% if choice=='A' %}
                 <option value="A" selected>Approved by buyer</option>
                 {% else %}
@@ -58,25 +58,64 @@
                 {% else %}
                 <option value="R">Rejected by buyer</option>{% endif %}
                 {% if choice=='W' %}
-                <option value="W" selected>Pending</option>
+                <option value="W" selected>Approved by you and pending</option>
                 {% else %}
-                <option value="W">Pending</option>{% endif %}
+                <option value="W">Approved by you and pending</option>{% endif %}
                 {% if choice=='E' %}
-                <option value="E" selected>All Approved</option>
+                <option value="E" selected>All approved by you</option>
                 {% else %}
-                <option value="E">All accepted by you</option>{% endif %}
+                <option value="E">All approved by you</option>{% endif %}
             </select>
             <input type="submit" class="button" onclick="javascript: form.action='/requirementssupplier';"
                 value="Submit">
-        </form>
-
+        </form><br><br><br>
         {% if choice=='A' %}
         <h1>Approved by buyer</h1>
         {% elif choice=='R' %}
         <h1>Rejected by buyer</h1>
         {% elif choice=='W' %}
-        <h1>Pending</h1>
-        <form method="post" action="/requirementssupplier">
+        <h1>Approved by you and pending buyer's response</h1>
+        {% elif choice=='E' %}
+        <h1>All Approved by you</h1>
+        {% else %}
+        <h1>Open posts</h1><br>
+        {% endif %}
+        {% if sup_items %}
+        <div class="container">
+            <table class="table table-bordered">
+                {% for item in sup_items %}
+                <tr style="all: none;">
+                    <td style="background-color: white; border: none;"></td>
+                </tr>
+                <tr class="header">
+                    <td colspan="4">
+                        <h3>{{item['Title']}}</h3><span style="float:right;">
+                        {% if item['Status']=='Waiting for buyer response' %} <span style="color:orange">Status: Waiting for buyer response</span>
+                        {% elif item['Status']=='Buyer accepted and paid' %}<span style="color:green">Status: Buyer accepted and paid</span></span>
+                        {% elif item['Status']=='Rejected and closed' %}<span style="color:red">Status: Rejected and closed </span></span>
+                        {% endif %}</span>
+                        <h4>{{item['Description']}}</h4>
+                        {% if item['Price']!='' and item['Price']!=None %} <h3>Price: {{item['Price']}}</h3> {% endif %}
+                        <h3>Quantity: {{item['Quantity']}}</h3>
+                    </td>
+                    <tr>
+                <td colspan="2"><b>Merchant details:<br>Name:</b>{% if item['Merchant.Name'] %}{{item['Merchant.Name']}} {% else %}{{item['Name']}} {% endif %}<br><b>Registered Shop:</b>{{item['RegisteredName']}}, {{item['Address']}}<br></td>
+                {% if item['Product.ProductID'] %}
+                <td colspan="1"><b>Product Details:<br>Name:</b> {{item['Name']}}<br><b>Description:</b> {{item['Product.Description']}}<br><b>Category:</b> {{item['Category']}}</td>
+                <td colspan="1"><b>Contact details of merchant:<br>Email:</b> {{item['EmailID']}}<br><b>Phone:</b> {{item['ContactNumber']}}</td>
+             {% elif choice=='P' %}
+                <td colspan="1"><b>Contact details of merchant:<br>Email:</b> {{item['EmailID']}}<br><b>Phone:</b> {{item['ContactNumber']}}</td>
+                <td colspan="1"><button >Approve request</button></td>
+                   {% endif %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% else %}
+        <h2> Could not find any match</h2>
+        {% endif %}
+        <!--
+                <form method="post" action="/requirementssupplier">
             <h3>Title of requirement</h3>
             <div>
                 <button type="button" class="button">Show Detailed Request and Contact Info after clicking and ask for
@@ -96,17 +135,7 @@
                 </div>
             </div>
         </form>
-        {% elif choice=='E' %}
-        <h1>All Accepted by you</h1>
-        {% elif choice=='P' %}
-        <h1>Posts</h1>
-        {% else %}
-        <h1>Posts</h1>
-        <h3>Enter your filter</h3>
-        {% endif %}
-        {% if sup_items %}
-        {{sup_items}}
-        {% endif %}
+        -->
     </div>
     <div id="thisDiv3" style="display: none" class="split1 right">
         <!--  FIRST THIS -->
@@ -114,34 +143,82 @@
         <form method="post" action="">
             <select name="filterbuyer">
                 {% if buyer_choice=='R' %}
-                <option value="R" selected>Your requests</option>
+                <option value="R" selected>Your pending requests</option>
                 {% else %}
-                <option value="R">Your requests</option>{% endif %}
-                {% if buyer_choice=='P' %}
-                <option value="P" selected>Paid</option>
+                <option value="R">Your pending requests</option>{% endif %}
+                {% if buyer_choice=='A' %}
+                <option value="A" selected>Accepted by supplier</option>
                 {% else %}
-                <option value="P">Paid</option>{% endif %}
+                <option value="A">Accepted by supplier</option>{% endif %}
                 {% if buyer_choice=='D' %}
-                <option value="D" selected>Delivered</option>
+                <option value="D" selected>Completed requirements</option>
                 {% else %}
-                <option value="D">Delivered</option>{% endif %}
+                <option value="D">Completed requirements</option>{% endif %}
                 {% if buyer_choice=='E' %}
                 <option value="E" selected>All requests</option>
                 {% else %}
                 <option value="E">All requests</option>{% endif %}
             </select>
-            <input type="submit" class="button" onclick="javascript: form.action='/requirementsbuyer';">
+            <input type="submit" value="filter" class="button" onclick="javascript: form.action='/requirementsbuyer';">
         </form>
-        {% if buyer_choice=='P' %}
-        <h1>Paid</h1>
+        {% if buyer_choice=='A' %}
+        <h2>Accepted</h2>
         {% elif buyer_choice=='D' %}
-        <h1>Delivered</h1>
+        <h2>Completed requests</h2>
         {% elif buyer_choice=='E' %}
-        <h1>All requests</h1>
+        <h2>All requests</h2>
         {% elif buyer_choice=='R' %}
-        <h1>Requests pending</h1>
+        <h2>Requests pending</h2>
+        {% else %}
+        <h2>Requests pending</h2>
+        {% endif %}
+        {% if buy_items %}
+        <h2 style="color: #1a1f71;"></h2>
+        <div class="container">
+            <table class="table table-bordered">
+                {% for item in buy_items %}
+                <tr style="all: none;">
+                    <td style="background-color: white; border: none;"></td>
+                </tr>
+                <tr class="header">
+                    <td colspan="4">
+                        <h3>{{item['Title']}}</h3><span style="float:right;">Status:
+                        {% if item['Status']=='Pending' %} <span style="color:red">Pending</span>
+                        {% elif item['Status']=='Done' %}<span style="color:blue">Closed</span></span>
+                        {% elif item['Status']=='Accepted' %}<span style="color:green">Accepted by supplier</span></span>
+                        {% endif %}</span>
+                        <h3>{{item['Description']}}</h3>
+                        {% if item['Price']!='' and item['Price']!=None %} <h3>Price: {{item['Price']}}</h3> {% endif %}
+                        <h3>Quantity: {{item['Quantity']}}</h3>
 
-        <form method="post" action="/requirementsbuyer">
+                    </td>
+                    {% if item['Status']=='Done' %}
+                    <tr>
+                    <td colspan="4"><b>Merchant:</b>{{item['Name']}}<br><b>Registered Shop:</b>{{item['RegisteredName']}}, {{item['Address']}}<br>
+                    <b>Item:</b><br>{{item['Product.Name']}}<br><b>Description:</b> {{item['Product.Description']}}<br>
+                    <b>Contact details of merchant:<br>Email:</b> {{item['EmailID']}}<br><b>Phone:</b> {{item['ContactNumber']}}</td>
+                </tr>
+                    {% elif item['Status']!='Pending' %} {% for x in item['Accepts'] %}
+                <tr>
+                <td colspan="1"><b>Merchant:</b> {{x['Name']}}<br><b>Registered Shop:</b> {{x['RegisteredName']}}, {{x['Address']}}</td>
+                <td colspan="1"><b>Item:</b><br>{{x['Product.Name']}}<br><b>Description:</b> {{x['Product.Description']}}</td>
+                <td colspan="1"><b>Contact details of merchant:<br>Email:</b> {{x['EmailID']}}<br><b>Phone:</b> {{x['ContactNumber']}}</td>
+                <td><button >add to cart</button></td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% else %}
+        <h2> Could not find any match</h2>
+        {% endif %}
+    </div>
+</center>
+</body>
+<!--
+<form method="post" action="/requirementsbuyer">
             <div id="accept/reject">
                 <h1>Your Request(one request example)</h1>
                 <p>List of Interested Buyers</p>
@@ -164,15 +241,26 @@
                     <input type="submit" name="AC" value="ACCEPTDEAL" />
                 </div>
             </div>
-        </form>
-        {% else %}
-        <h1>Requests pending</h1>
-        <h3>Enter your filter</h3>
-        {% endif %}
-        {% if buy_items %}
-        {{buy_items}}
-        {% endif %}
-    </div>
-</body>
-
+        </form> -->
 </html>
+    <script>
+        $(document).ready(function () {
+            //Fixing jQuery Click Events for the iPad
+            var ua = navigator.userAgent,
+                event = (ua.match(/iPad/i)) ? "touchstart" : "click";
+            if ($('.table').length > 0) {
+                $('.table .header').on(event, function () {
+                    $(this).toggleClass("active", "").nextUntil('.header').css('display', function (i, v) {
+                        return this.style.display === 'table-row' ? 'none' : 'table-row';
+                    });
+                });
+            }
+        });
+        (() => {
+        let customSelects = document.querySelectorAll(".custom-dropdown__select");
+        customSelects.forEach(el => {
+            if (el.disabled)
+                el.parentNode.classList.add("custom-dropdown--disabled");
+        })
+    })();
+    </script>
