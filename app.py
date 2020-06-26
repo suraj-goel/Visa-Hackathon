@@ -6,7 +6,7 @@ from search_merchants.searchMerchant import getCurrentLocation
 from place_order.displayProduct import displayAllProducts, displayAllOffers
 from search_merchants.searchProducts import getSearchResults
 from accounts.validate_accounts import validation  # validate_accounts.py
-from place_order.displayCart import addToCart,getMerchantInfo
+from place_order.displayCart import addToCart, getMerchantInfo
 from manage_inventory.SearchInventory import *
 from manage_inventory.addProduct import addNewProduct, getCategories
 from manage_inventory.updateProduct import *
@@ -19,6 +19,8 @@ from requirements.showRequirements import *
 from negotiation.negotiation import *
 from payment.confirmPayment import *
 from manage_inventory.supplierupdater import *
+from manage_offers.displayOffers import *
+
 app = Flask(__name__, static_folder='')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader, jinja2.FileSystemLoader(['.'])])
 app.secret_key = 'super secret key'
@@ -181,7 +183,7 @@ def showCart(merchant_id):
             Price = session['Price']
             Offers = session['offers']
             discountPrice = session['discountPrice']
-            data = getMerchantInfo(mysql,merchant_id)
+            data = getMerchantInfo(mysql, merchant_id)
             emailID = data[0]
             contact = data[1]
             l = len(qty)
@@ -192,7 +194,8 @@ def showCart(merchant_id):
 
         return render_template("./place_order/cart.html", merchantID=merchant_id, qty=qty, ProductID=ProductID,
                                Name=Name, Description=Description, Price=Price, Offers=Offers,
-                               discountPrice=discountPrice, len=len(qty), totalQuantity=totalQuantity,emailID=emailID,contact=contact)
+                               discountPrice=discountPrice, len=len(qty), totalQuantity=totalQuantity, emailID=emailID,
+                               contact=contact)
     else:
         ProductID = request.form.getlist("ProductId[]")
         qty = request.form.getlist("qty[]")
@@ -210,24 +213,23 @@ def showCart(merchant_id):
             addToCart(mysql, qty, ProductID, Name, Description, Price, merchant_id, status, finalPrice,
                       finalDiscountPrice, NegotitatedRequestAmount)
             modify()
-        if(Type != 'Process Payment'):
+        if (Type != 'Process Payment'):
             session.clear()
-        if(Type == 'Process Payment'):
+        if (Type == 'Process Payment'):
             amount = finalDiscountPrice
-            return render_template('./payment/payment.html',amount=amount)
+            return render_template('./payment/payment.html', amount=amount)
         else:
             return redirect(url_for('negotiation'))
 
 
-
 @app.route('/accounts/', methods=['GET', 'POST'])
 def displayaccountsdetails():
-    merchant_id = '2' #session['MerchantID']
+    merchant_id = '2'  # session['MerchantID']
     cur = mysql.connection.cursor()
-    cur.execute("select * from PaymentType where MerchantID='"+merchant_id+"';")
+    cur.execute("select * from PaymentType where MerchantID='" + merchant_id + "';")
     r = cur.fetchone()
 
-    cur.execute("select * from Merchant where MerchantID='"+merchant_id+"';")
+    cur.execute("select * from Merchant where MerchantID='" + merchant_id + "';")
     result = cur.fetchone()
     cur.close()
     if r == None:
@@ -278,7 +280,7 @@ def editAccountDetails():
                 flash("Password already exists, please enter a new one.")
             return render_template("./accounts/editAccountDetails.html", result=result)
     merchant_id = "2"
-    cur.execute("select * from Merchant where MerchantID='{}'".format(merchant_id))  #scope problem
+    cur.execute("select * from Merchant where MerchantID='{}'".format(merchant_id))  # scope problem
     # "select * from Merchant where MerchantID = '"+str(session['Merchantid'])+"';"
     result = cur.fetchone()
     cur.close()
@@ -319,58 +321,21 @@ def registerCyber():
         return redirect('/accounts/')
     return render_template("./accounts/cyberSourceDetails.html", result=result)
 
-@ app.route('/payments/',methods=['GET', 'POST'])
+
+@app.route('/payments/', methods=['GET', 'POST'])
 def payment():
     amount = 0
     try:
         amount = request.form['finalDiscountPrice']
     except Exception as e:
-        print("payment"+str(e))
-    return render_template("./payment/payment.html",amount = amount)
+        print("payment" + str(e))
+    return render_template("./payment/payment.html", amount=amount)
 
 
 @app.route('/cybersource/', methods=['GET', 'POST'])
 def cybersource():
     merchant_id = "2"  # session['merchantID']
 
-    qty=session['qty']
-    ProductID=session['ProductID']
-    Name = session['Name']
-    Description =session['Description']
-    Price = session['Price']
-    Offers = session['offers']
-    discountPrice = session['discountPrice']
-    sellerId = session['mid']
-
-    cur = mysql.connection.cursor()
-    cur.execute("select AggregatorID,CardAcceptorID,Name from CybersourceMerchant where MerchantID='"+sellerId+"';")
-    result = cur.fetchone()
-    aggregatorID,cardAcceptorID,name = result['AggregatorID'],result['CardAcceptorID'],result['Name']
-
-    if request.method == 'POST':
-        print(request.form)
-        amount = request.form.getlist('amount')[0]
-        username = request.form.getlist('username')[0]
-        cardNumber = request.form.getlist('cardNumber')[0]
-        month = request.form.getlist('month')[0]
-        year = request.form.getlist('year')[0]
-        cvv = request.form.getlist('CVV')[0]
-        status = simple_authorizationinternet(cardNumber,month,year,amount,aggregatorID,cardAcceptorID,username)
-        if (status == 1):
-            print('Payment Authorized')
-            #addToOrders(mysql,qty,ProductID,Name,Description,Price,sellerId,"no",discountPrice,datetime.today().strftime('%Y-%m-%d'))
-            #updateSupplierInventory(mysql, productList)'''
-            return redirect(url_for('showAll'))
-        else:
-            print('Payment not authorized, please enter the correct details')
-            flash("Some details were invalid, please enter the correct values.")
-        # pass the correct values recieved from session (refer this for more info @app.route("/merchant/<merchant_id>/cart",methods=['GET','POST']))
-    return render_template("./payment/payment.html",amount=amount)
-
-
-@app.route('/b2bpay/', methods=['GET','POST'])
-def b2bpay():
-    merchant_id = '2'#session['MerchantID']
     qty = session['qty']
     ProductID = session['ProductID']
     Name = session['Name']
@@ -380,70 +345,109 @@ def b2bpay():
     discountPrice = session['discountPrice']
     sellerId = session['mid']
 
-    sellerId = '2'#Temporarily because merchantid 1 isn't actually registered, for demo let's show this, but change later once login is added.
+    cur = mysql.connection.cursor()
+    cur.execute("select AggregatorID,CardAcceptorID,Name from CybersourceMerchant where MerchantID='" + sellerId + "';")
+    result = cur.fetchone()
+    aggregatorID, cardAcceptorID, name = result['AggregatorID'], result['CardAcceptorID'], result['Name']
+
+    if request.method == 'POST':
+        print(request.form)
+        amount = request.form.getlist('amount')[0]
+        username = request.form.getlist('username')[0]
+        cardNumber = request.form.getlist('cardNumber')[0]
+        month = request.form.getlist('month')[0]
+        year = request.form.getlist('year')[0]
+        cvv = request.form.getlist('CVV')[0]
+        status = simple_authorizationinternet(cardNumber, month, year, amount, aggregatorID, cardAcceptorID, username)
+        if (status == 1):
+            print('Payment Authorized')
+            # addToOrders(mysql,qty,ProductID,Name,Description,Price,sellerId,"no",discountPrice,datetime.today().strftime('%Y-%m-%d'))
+            # updateSupplierInventory(mysql, productList)'''
+            return redirect(url_for('showAll'))
+        else:
+            print('Payment not authorized, please enter the correct details')
+            flash("Some details were invalid, please enter the correct values.")
+        # pass the correct values recieved from session (refer this for more info @app.route("/merchant/<merchant_id>/cart",methods=['GET','POST']))
+    return render_template("./payment/payment.html", amount=amount)
+
+
+@app.route('/b2bpay/', methods=['GET', 'POST'])
+def b2bpay():
+    merchant_id = '2'  # session['MerchantID']
+    qty = session['qty']
+    ProductID = session['ProductID']
+    Name = session['Name']
+    Description = session['Description']
+    Price = session['Price']
+    Offers = session['offers']
+    discountPrice = session['discountPrice']
+    sellerId = session['mid']
+
+    sellerId = '2'  # Temporarily because merchantid 1 isn't actually registered, for demo let's show this, but change later once login is added.
 
     cur = mysql.connection.cursor()
-    cur.execute("select AccountNumber from B2BDetails where MerchantID='"+sellerId+"';")
+    cur.execute("select AccountNumber from B2BDetails where MerchantID='" + sellerId + "';")
     accountNumber = cur.fetchone()['AccountNumber']
     if request.method == 'POST':
         print(request.form)
         amount = request.form.getlist('amount')[0]
-        #buyerid = merchant_id, supplier_account_no = accountNumber
-        status = paymentProcessing(amount, merchant_id, accountNumber)#clientid is a default parameter but can be added
-        if status==1:
+        # buyerid = merchant_id, supplier_account_no = accountNumber
+        status = paymentProcessing(amount, merchant_id,
+                                   accountNumber)  # clientid is a default parameter but can be added
+        if status == 1:
             print("Payment Authorized")
-            #addToOrders(mysql,qty,ProductID,Name,Description,Price,sellerId,"no",discountPrice,datetime.today().strftime('%Y-%m-%d'))
-            #updateSupplierInventory(mysql, productList) #productList?
+            # addToOrders(mysql,qty,ProductID,Name,Description,Price,sellerId,"no",discountPrice,datetime.today().strftime('%Y-%m-%d'))
+            # updateSupplierInventory(mysql, productList) #productList?
             return redirect(url_for('showAll'))
         else:
             print("Payment not authorized")
             flash("Error in payment, check account details again or try different payment")
-    return render_template("./payment/payment.html",amount=amount)
+    return render_template("./payment/payment.html", amount=amount)
 
 
-
-@app.route('/negotiation',methods=['GET','POST'])
+@app.route('/negotiation', methods=['GET', 'POST'])
 def negotiation():
-    if(request.method=='GET'):
-        merchant_id = 1 #get from seearch
-        allNegotiation = displayAllNegotiation(mysql,merchant_id)
-        return render_template("./negotiation/negotiation.html",negotiations = allgofiiNegotiation)
+    if (request.method == 'GET'):
+        merchant_id = 1  # get from seearch
+        allNegotiation = displayAllNegotiation(mysql, merchant_id)
+        return render_template("./negotiation/negotiation.html", negotiations=allNegotiation)
+
 
 @app.route('/requirementssupplier', methods=['GET', 'POST'])
 def showsupplierrequirements():
-    merchantid = 3
+    merchantid = 2
     items = getSupplierRequests(mysql, merchantid)
-    choice = 'P'
     if request.method == 'POST':
         print(request.form)
         try:
             choice = request.form['filtersupplier']
             items = getSupplierRequests(mysql, merchantid, choice)
+            print('$$', items)
             return render_template('./requirements/requirements.html', sup_items=items, choice=choice, profile=2)
         except Exception as e:
-            print("filtersupplier"+str(e))
+            print("filtersupplier" + str(e))
 
         try:
             approve = request.form['Approve']
             requirementid = request.form['requirementID']
             price = request.form['expectPrice']
             expectdelivery = request.form['expectDelivery']
-            #approvedDeal(mysql,requirementid,merchantid)
+            # approvedDeal(mysql,requirementid,merchantid)
             return redirect(request.url)
         except Exception as e:
-            print("APPROVE"+str(e))
+            print("APPROVE" + str(e))
 
         try:
             reject = request.form['Reject']
             requirementid = request.form['requirementID']
-            #rejectedDeal(mysql,requirementid,merchantid)
+            # rejectedDeal(mysql,requirementid,merchantid)
             return redirect(request.url)
         except Exception as e:
             print("Reject" + str(e))
         return render_template(url_for('requirements'))
     else:
-        choice = 'W'
-        items = getSupplierRequests(mysql,merchantid,choice)
+        choice = 'P'
+        items = getSupplierRequests(mysql, merchantid, choice)
         return render_template('./requirements/requirements.html', sup_items=items, choice=choice, profile=2)
 
 
@@ -453,52 +457,58 @@ def showbuyerrequirements():
     items = getSupplierRequests(mysql, merchantid)
     choice = 'R'
     if request.method == 'POST':
-        print(request.form)
         try:
             choice = request.form['filterbuyer']
             items = getBuyerRequests(mysql, merchantid, choice)
             print(items)
-            return render_template('./requirements/requirements.html', buy_items=items, buyer_choice=choice, profile=3,loop=len(items))
+            return render_template('./requirements/requirements.html', buy_items=items, buyer_choice=choice, profile=3)
         except Exception as e:
-            print("filterbuyer"+str(e))
+            print("filterbuyer" + str(e))
 
         try:
             accept = request.form['AC']
             requirementID = request.form['requirementID']
-            #acceptDeal(mysql,requirementID)
-            #change this to payment after payment module is finish
+            # acceptDeal(mysql,requirementID)
+            # change this to payment after payment module is finish
             return redirect(url_for('requirements'))
         except Exception as e:
-            print("AC"+str(e))
+            print("AC" + str(e))
         return render_template(url_for("requirements"))
     else:
         choice = 'W'
-        items = getBuyerRequests(mysql,merchantid,choice)
-        return render_template('./requirements/requirements.html', buy_items=items, buyer_choice=choice, profile=3,loop=len(items))
-
-
-
-
+        items = getBuyerRequests(mysql, merchantid, choice)
+    return render_template('./requirements/requirements.html', buy_items=items, buyer_choice=choice, profile=3)
 
 
 @app.route('/requirements', methods=['GET', 'POST'])
 def requirements():
-	if (request.method == 'GET'):
-		merchant_id = 3  # get from session
-		registeredName = showBusinessName(mysql, merchant_id)
-		return render_template("./requirements/requirements.html", registeredName=registeredName, profile=1)
-	else:
-		merchant_id = 3  # get from session
-		title = request.form.get('title')
-		description = request.form.get('description')
-		quantity = request.form.get('Quantity')
-		price = request.form.get('price')
-		status = "Post"
-		saveRequirements(mysql, merchantID=merchant_id, title=title, description=description, quantity=quantity,
+    if (request.method == 'GET'):
+        merchant_id = 3  # get from session
+        registeredName = showBusinessName(mysql, merchant_id)
+        return render_template("./requirements/requirements.html", registeredName=registeredName, profile=1)
+    else:
+        merchant_id = 3  # get from session
+        title = request.form.get('title')
+        description = request.form.get('description')
+        quantity = request.form.get('Quantity')
+        price = request.form.get('price')
+        status = "Post"
+        saveRequirements(mysql, merchantID=merchant_id, title=title, description=description, quantity=quantity,
                          price=price, status=status)
-		return redirect(request.url)
+        return redirect(request.url)
+
+
+@app.route('/offers', methods=['GET', 'POST'])
+def showoffers():
+    merchantID = 1  # is equal to logged in user
+    data = displayOffersPage(mysql, merchantID)
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT Name FROM Product WHERE MerchantID = '{}'".format(merchantID))
+
+    product = [i['Name'] for i in list(cur.fetchall())]
+    return render_template("./manage_offers/offers.html", data=data, product=product)
 
 
 if __name__ == '__main__':
-	# threaded allows multiple users (for hosting)
-	app.run(debug=True, threaded=True, port=5000)
+    # threaded allows multiple users (for hosting)
+    app.run(debug=True, threaded=True, port=5000)
