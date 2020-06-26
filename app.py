@@ -434,7 +434,7 @@ def negotiation():
 
 @app.route('/requirementssupplier', methods=['GET', 'POST'])
 def showsupplierrequirements():
-    merchantid = session['merchantid']
+    merchantid = 1
     sellProduct = allProductID(mysql,merchantid)
     items = getSupplierRequests(mysql, merchantid)
     if request.method == 'POST':
@@ -527,7 +527,7 @@ def showbuyerrequirements():
 @app.route('/requirements', methods=['GET', 'POST'])
 def requirements():
     if (request.method == 'GET'):
-        merchant_id = session['merchantid']  # get from session
+        merchant_id = 1  # get from session
         registeredName = showBusinessName(mysql, merchant_id)
         return render_template("./requirements/requirements.html", registeredName=registeredName, profile=1)
     else:
