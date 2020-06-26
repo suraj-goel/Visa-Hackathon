@@ -407,7 +407,7 @@ def negotiation():
     if(request.method=='GET'):
         merchant_id = 1 #get from seearch
         allNegotiation = displayAllNegotiation(mysql,merchant_id)
-        return render_template("./negotiation/negotiation.html",negotiations = allgofiiNegotiation)
+        return render_template("./negotiation/negotiation.html",negotiations = allNegotiation)
 
 @app.route('/requirementssupplier', methods=['GET', 'POST'])
 def showsupplierrequirements():
