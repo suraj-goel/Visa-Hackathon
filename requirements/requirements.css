@@ -74,10 +74,9 @@ input[type="submit"]:hover {
   cursor: pointer;
 }
 
-/* h3:hover {
-  color: #fdbb0a;
-  cursor: pointer;
-} */
+h4 {
+  color: #ffffff;
+}
 
 h4:hover {
   cursor: pointer;
