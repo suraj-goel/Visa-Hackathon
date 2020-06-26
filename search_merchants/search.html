@@ -1,5 +1,6 @@
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./search_merchants/search.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <body>
     <h1>
@@ -86,9 +87,16 @@
         {% endif %}
     </center>
     <br>
-    <div>
-        <iframe width="350" height="430" allow="microphone;" src="https://console.dialogflow.com/api-client/demo/embedded/33d94654-7c6f-473a-abde-6f0da2f227de"></iframe>
+    <div id="testChat">
+        <div class="message-div" id="minimizeChatbox">
+            <span class="minimize">Chatbox</span>
+            <i class="fa fa-window-minimize" id="minimizeChat"></i>
+        </div>
+
+        <iframe id="chatbox" width="350" height="430" allow="microphone;"
+            src="https://console.dialogflow.com/api-client/demo/embedded/33d94654-7c6f-473a-abde-6f0da2f227de"></iframe>
     </div>
+    
     <script>
         $(document).ready(function () {
             //Fixing jQuery Click Events for the iPad
@@ -101,6 +109,10 @@
                     });
                 });
             }
+
+            $("#minimizeChat").click(function () {
+                $("#chatbox").toggle();
+            });
         });
     </script>
 </body>

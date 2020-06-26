@@ -257,3 +257,36 @@ form.example::after {
 .custom-dropdown--white::after {
   color: #1a1f71;
 }
+
+iframe{
+  border: none;
+}
+
+#testChat{
+  bottom: 0px;
+  right: 0px;
+  float: right;
+  position: fixed;
+  border-right: 2px solid #ffffff;
+}
+
+.minimize{
+  padding-right: 10px;
+}
+
+#minimizeChatbox, i .fa-window-minimize{
+  background-color: #2b313f;
+  color: #ffffff;
+}
+
+#minimizeChatbox{
+  padding: 10px;
+  padding-bottom: 5px;
+}
+
+#minimizeChat{
+  border: 1px solid #ffffff;
+  padding: 2px;
+  float: right;
+  margin-right: 0px;
+}
