@@ -176,6 +176,8 @@ def showCart(merchant_id):
     print(session)
     seller_id = session['mid']
     type = session['type']
+    totalCost = 0
+    totalDiscountCost = 0
 
     if request.method == 'GET':
         try:
@@ -191,8 +193,11 @@ def showCart(merchant_id):
                 emailID = data[0]
                 contact = data[1]
                 l = len(qty)
-                for i in qty:
-                    totalQuantity += int(i)
+                for i in range(0,l):
+                    totalQuantity += int(qty[i])
+                    totalCost += (int)(Price[i])
+                    totalDiscountCost += (int)(discountPrice[i])
+
             elif type =='request':
                 qty = session['qty']
                 ProductID = session['ProductID']
@@ -201,17 +206,20 @@ def showCart(merchant_id):
                 Price = session['Price']
                 Offers.append("No Discount")
                 discountPrice = session['discountPrice']
+
                 data = getMerchantInfo(mysql,merchant_id)
                 l = len(qty)
-                for i in qty:
-                    totalQuantity += int(i)
+                for i in range(0,l):
+                    totalQuantity += int(qty[i])
+                    totalCost += (int)(Price[i])
+                    totalDiscountCost += (int)(discountPrice[i])
         except Exception as e:
             print("exception details " + str(e))
 
         return render_template("./place_order/cart.html", merchantID=merchant_id, qty=qty, ProductID=ProductID,
                                Name=Name, Description=Description, Price=Price, Offers=Offers,
                                discountPrice=discountPrice, len=len(qty), totalQuantity=totalQuantity, emailID=emailID,
-                               contact=contact,type=type)
+                               contact=contact,type=type,totalDiscountCost=totalDiscountCost,totalCost=totalCost)
     else:
         ProductID = request.form.getlist("ProductId[]")
         qty = request.form.getlist("qty[]")
@@ -468,7 +476,7 @@ def showsupplierrequirements():
 
 @app.route('/requirementsbuyer', methods=['GET', 'POST'])
 def showbuyerrequirements():
-    merchantid = session['merchantid']
+    merchantid = 1
     items = getSupplierRequests(mysql, merchantid)
     choice = 'R'
     print("helloagain")

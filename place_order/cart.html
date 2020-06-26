@@ -111,15 +111,13 @@
                     </tr>
                     {% endfor %}
                 </table>
-                <input type="hidden" id="finalPrice1" name="finalPrice" value="0" />
-                <input type="hidden" id="finalDiscountPrice1" name="finalDiscountPrice" value="0" />
+                <input type="hidden" id="finalPrice1" name="finalPrice" value="{{totalCost}}" />
+                <input type="hidden" id="finalDiscountPrice1" name="finalDiscountPrice" value="{{totalDiscountCost}}" />
                 
-                <h3>Total Cost: Rs <span id="finalPrice">0</span></h3>
-                <h3 style="color: #053ea9;">Total Cost(After Discount): Rs <span id="discountPrice">0</span></h3>
+                <h3>Total Cost: Rs <span id="finalPrice">{{totalCost}}</span></h3>
+                <h3 style="color: #053ea9;">Total Cost(After Discount): Rs <span id="discountPrice">{{totalDiscountCost}}</span></h3>
                 
-                <script> FinalPrice();
-                    DiscountPrice();
-                </script>
+
                 <br><br>
 
                 <input type="hidden" id="Negotiated" name="NegotiatedRequestAmount" value="0" />
