@@ -413,14 +413,14 @@ def negotiation():
 
 @app.route('/requirementssupplier', methods=['GET', 'POST'])
 def showsupplierrequirements():
-    merchantid = 3
+    merchantid = 2
     items = getSupplierRequests(mysql, merchantid)
-    choice = 'P'
     if request.method == 'POST':
         print(request.form)
         try:
             choice = request.form['filtersupplier']
             items = getSupplierRequests(mysql, merchantid, choice)
+            print('$$',items)
             return render_template('./requirements/requirements.html', sup_items=items, choice=choice, profile=2)
         except Exception as e:
             print("filtersupplier"+str(e))
@@ -444,7 +444,7 @@ def showsupplierrequirements():
             print("Reject" + str(e))
         return render_template(url_for('requirements'))
     else:
-        choice = 'W'
+        choice = 'P'
         items = getSupplierRequests(mysql,merchantid,choice)
         return render_template('./requirements/requirements.html', sup_items=items, choice=choice, profile=2)
 
@@ -455,12 +455,11 @@ def showbuyerrequirements():
     items = getSupplierRequests(mysql, merchantid)
     choice = 'R'
     if request.method == 'POST':
-        print(request.form)
         try:
             choice = request.form['filterbuyer']
             items = getBuyerRequests(mysql, merchantid, choice)
             print(items)
-            return render_template('./requirements/requirements.html', buy_items=items, buyer_choice=choice, profile=3,loop=len(items))
+            return render_template('./requirements/requirements.html', buy_items=items, buyer_choice=choice, profile=3)
         except Exception as e:
             print("filterbuyer"+str(e))
 
@@ -476,7 +475,7 @@ def showbuyerrequirements():
     else:
         choice = 'W'
         items = getBuyerRequests(mysql,merchantid,choice)
-        return render_template('./requirements/requirements.html', buy_items=items, buyer_choice=choice, profile=3,loop=len(items))
+    return render_template('./requirements/requirements.html', buy_items=items, buyer_choice=choice, profile=3)
 
 
 
