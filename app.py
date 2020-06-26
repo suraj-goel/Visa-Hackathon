@@ -503,8 +503,11 @@ def requirements():
 def showoffers():
     merchantID = 1 #is equal to logged in user
     data = displayOffersPage(mysql,merchantID)
-
-    return render_template("./manage_offers/offers.html",data=data)
+    cur=mysql.connection.cursor()
+    cur.execute("SELECT Name FROM Product WHERE MerchantID = '{}'".format(merchantID))
+    
+    product=[i['Name'] for i in list(cur.fetchall())]
+    return render_template("./manage_offers/offers.html",data=data,product=product)
 
 if __name__ == '__main__':
 	# threaded allows multiple users (for hosting)

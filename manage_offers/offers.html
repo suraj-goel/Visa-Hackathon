@@ -16,20 +16,20 @@
             <table border="0" style="border-spacing: 10px 15px; border-collapse: initial;">
                 <tr>
                     <td>
-                        <h4>Product name </h4>
+                        <h4>Discount Percentage</h4>
                     </td>
                     <td> <input type="text" name="name" required></h4>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <h4>Product Description</h4>
+                        <h4>Information</h4>
                     </td>
                     <td><textarea name="description" required></textarea></td>
                 </tr>
                 <tr>
                     <td>
-                        <h4>Price per piece</h4>
+                        <h4>Valid Till</h4>
                     </td>
                     <td>
                         <input type="number" min='1' name="price" id='price' onchange="validate(this.id)" required>
@@ -37,7 +37,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <h4>Quantity</h4>
+                        <h4>Quantity Required</h4>
                     </td>
                     <td><input type="number" min='0' name="quantity" id='quantity' onchange="validate(this.id)"
                             required>
@@ -45,34 +45,28 @@
                 </tr>
                 <tr>
                     <td>
-                        <h4>Category</h4>
+                        <h4>Product</h4>
                     </td>
                     <td>
-                        <span class="custom-dropdown custom-dropdown--white">
-                            <select name="category" class="custom-dropdown__select custom-dropdown__select--white"
-                                onchange="checkvalue(this.value)">
-                                {% for i in category %}
-                                <option value="{{i}}">{{i}}</option>
-                                {% endfor %}
-                                <option value="others">Others</option>
-                            </select>
-                        </span>
+                        {% if product %}
+                        
+                        {% for i in product %}
+                            <input type="checkbox" value="{{i}}" name='selectedProducts'> {{i}} <br>
+                        {% endfor %}
+                        {% else %}
+                        No Product in your inventory
+                        {% endif %}
                     </td>
                 </tr>
             </table>
 
-            <div id='category' style='display:none'>
-                <h4 for="other_category">Type Your Category: </h4><br>
-                <input id="other_category" type="text" name="other_category" value=''>
-            </div><br><br>
+            
 
-            <input type="radio" name="sell" value="1" checked><b> Show as selling to other merchants</b><br>
-            <input type="radio" name="sell" value="0"><b> Add to inventory without showing to other
-                merchants</b><br><br>
+            
             <input style="display: block; 
           margin-right: auto;
           margin-left: auto;" type="submit" class="button" value="Submit"
-                onclick="javascript: form.action='/addproduct';">
+                onclick="javascript: form.action='/addoffer';">
         </div>
     </form>
 
