@@ -477,11 +477,6 @@ def showbuyerrequirements():
         items = getBuyerRequests(mysql,merchantid,choice)
     return render_template('./requirements/requirements.html', buy_items=items, buyer_choice=choice, profile=3)
 
-
-
-
-
-
 @app.route('/requirements', methods=['GET', 'POST'])
 def requirements():
 	if (request.method == 'GET'):
@@ -498,6 +493,7 @@ def requirements():
 		saveRequirements(mysql, merchantID=merchant_id, title=title, description=description, quantity=quantity,
                          price=price, status=status)
 		return redirect(request.url)
+	
 @app.route('/offers',methods=['GET', 'POST'])
 def showoffers():
     merchantID = 1 #is equal to logged in user
