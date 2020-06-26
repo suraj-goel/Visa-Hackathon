@@ -29,7 +29,7 @@ def addToOrders(mysql,qty,ProductID,Name,Description,Price,merchant_id,status,fi
             return None
     try:
         # print("Insert INTO Orders Values ('{}','no','{}','NULL','{}') ".format(orderID,cart_id,currentDate))
-        cur.execute("Insert INTO Orders Values ('{}','{}','2100-12-31','{}') ".format(orderID,cart_id,currentDate))
+        cur.execute("Insert INTO Orders(OrderID,CartID,OrderedDate) Values ('{}','{}','{}') ".format(orderID,cart_id,currentDate))
         mysql.connection.commit()
         print("Added to Orders table")
     except Exception as e:
