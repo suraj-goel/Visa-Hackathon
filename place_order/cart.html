@@ -131,7 +131,11 @@
                     
                     <br><br><br>
                 </div>
+                {% if type=='simple'  %}
                 <button type="button" class="button" onclick="goBack()"><span> Edit Cart </span></button>
+                {%else%}
+                <button type="button" class="button" onclick="goBack()"><span> Cancel Requirement Order </span></button>
+                {%endif%}
                 <input type="submit" name="type" class="button" onclick="payment()" value="Process Payment" />
             </form>
         </div>

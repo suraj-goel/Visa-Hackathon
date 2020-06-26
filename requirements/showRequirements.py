@@ -167,9 +167,11 @@ def getBuyerRequests(mysql,merchantid,choice='R'):
 
 
 #SUPPLIER
-def approveDeal(mysql,requirementID,merchantIDWhoPosted):
+def approveDeal(mysql,requirementID,productID):
     cur = mysql.connection.cursor()
-    cur.execute("UPDATE RequirementAccepted,Requirement SET RequirementAccepted.Status='{}' WHERE RequirementAccepted.RequirementID='{}' AND Requirement.RequirementID='{}' AND Requirement.MerchantID='{}'".format("yes",requirementID,requirementID,merchantIDWhoPosted))
+    cur.execute("UPDATE RequirementAccepted,Requirement SET RequirementAccepted.Status='{}'  WHERE RequirementAccepted.RequirementID='{}' AND Requirement.RequirementID='{}'".format("yes",requirementID,requirementID,))
+    mysql.connection.commit()
+    cur.execute("UPDATE RequirementAccepted,Requirement SET RequirementAccepted.ProductID='{}'  WHERE RequirementAccepted.RequirementID='{}' AND Requirement.RequirementID='{}'".format(productID,requirementID,requirementID))
     mysql.connection.commit()
 
 
@@ -182,20 +184,28 @@ def acceptDeal(mysql,requirementID,merchantIDwhoPost,cartID):
 
 
 #SUPPLIER
-def rejectDeal(mysql,requirementID,merchantIDWhoPosted):
+def rejectDeal(mysql,requirementID):
     cur = mysql.connection.cursor()
-    cur.execute("UPDATE RequirementAccepted,Requirement SET RequirementAccepted.Status='{}' WHERE RequirementAccepted.RequirementID='{}' AND Requirement.RequirementID='{}' AND Requirement.MerchantID='{}'".format("no",requirementID,requirementID,merchantIDWhoPosted))
+    #cur.execute("UPDATE RequirementAccepted,Requirement SET RequirementAccepted.Status='{}' WHERE RequirementAccepted.RequirementID='{}' AND Requirement.RequirementID='{}'".format("no",requirementID,requirementID))
+    cur.execute("Delete from RequirementAccepted WHERE RequirementID='{}'".format(requirementID))
     mysql.connection.commit()
 
 
 #SUPPLIER
 def allProductID(mysql,merchantID):
     cur = mysql.connection.cursor()
-    cur.execute("select * from Product where Sell=1 and MerchantID='{}'".format(merchantID))
+    cur.execute("select * from Product where Sell='1' and MerchantID='{}'".format(merchantID))
     sellProduct = list(cur.fetchall())
+    #print(sellProduct)
     return sellProduct
 
 
+
+def getInfo(mysql,requiremenID):
+    cur = mysql.connection.cursor()
+    cur.execute("select * from Requirement where RequirementID='{}'".format(requiremenID))
+    a=cur.fetchall()
+    return a
 
 # product name = sellProduct[i]['Name']
 # Price = sellProduct[i]['Price']

@@ -152,6 +152,7 @@ def showPlaceOrder(merchant_id):
         session['offers'] = request.form.getlist("offers[]")
         session['discountPrice'] = request.form.getlist("discountPrice[]")
         session['mid'] = merchant_id
+        session['type'] = 'simple'
         print(session['discountPrice'])
         return redirect(url_for('showCart', merchant_id=merchant_id))
 
@@ -174,28 +175,47 @@ def showCart(merchant_id):
     Price = []
     Offers = []
     discountPrice = []
+    emailID = ""
+    contact = ""
+    print(session)
+    seller_id = session['mid']
+    type = session['type']
+
     if request.method == 'GET':
         try:
-            qty = session['qty']
-            ProductID = session['ProductID']
-            Name = session['Name']
-            Description = session['Description']
-            Price = session['Price']
-            Offers = session['offers']
-            discountPrice = session['discountPrice']
-            data = getMerchantInfo(mysql, merchant_id)
-            emailID = data[0]
-            contact = data[1]
-            l = len(qty)
-            for i in qty:
-                totalQuantity += int(i)
+            if type=='simple':
+                qty = session['qty']
+                ProductID = session['ProductID']
+                Name = session['Name']
+                Description = session['Description']
+                Price = session['Price']
+                Offers = session['offers']
+                discountPrice = session['discountPrice']
+                data = getMerchantInfo(mysql, seller_id)
+                emailID = data[0]
+                contact = data[1]
+                l = len(qty)
+                for i in qty:
+                    totalQuantity += int(i)
+            elif type =='request':
+                qty = session['qty']
+                ProductID = session['ProductID']
+                Name = session['Name']
+                Description = session['Description']
+                Price = session['Price']
+                Offers.append("No Discount")
+                discountPrice = session['discountPrice']
+                data = getMerchantInfo(mysql,merchant_id)
+                l = len(qty)
+                for i in qty:
+                    totalQuantity += int(i)
         except Exception as e:
             print("exception details " + str(e))
 
         return render_template("./place_order/cart.html", merchantID=merchant_id, qty=qty, ProductID=ProductID,
                                Name=Name, Description=Description, Price=Price, Offers=Offers,
                                discountPrice=discountPrice, len=len(qty), totalQuantity=totalQuantity, emailID=emailID,
-                               contact=contact)
+                               contact=contact,type=type)
     else:
         ProductID = request.form.getlist("ProductId[]")
         qty = request.form.getlist("qty[]")
@@ -416,23 +436,27 @@ def negotiation():
 @app.route('/requirementssupplier', methods=['GET', 'POST'])
 def showsupplierrequirements():
     merchantid = 2
+    sellProduct = allProductID(mysql,merchantid)
     items = getSupplierRequests(mysql, merchantid)
     if request.method == 'POST':
+        print("hello")
         print(request.form)
+
         try:
             choice = request.form['filtersupplier']
             items = getSupplierRequests(mysql, merchantid, choice)
             print('$$', items)
-            return render_template('./requirements/requirements.html', sup_items=items, choice=choice, profile=2)
+            return render_template('./requirements/requirements.html', sup_items=items, choice=choice, profile=2,sellProduct=sellProduct)
         except Exception as e:
             print("filtersupplier" + str(e))
 
         try:
             approve = request.form['Approve']
             requirementid = request.form['requirementID']
-            price = request.form['expectPrice']
-            expectdelivery = request.form['expectDelivery']
-            # approvedDeal(mysql,requirementid,merchantid)
+            productID = request.form['selectProduct']
+
+            #price = request.form['expectPrice']
+            approveDeal(mysql,requirementid,productID)
             return redirect(request.url)
         except Exception as e:
             print("APPROVE" + str(e))
@@ -440,7 +464,7 @@ def showsupplierrequirements():
         try:
             reject = request.form['Reject']
             requirementid = request.form['requirementID']
-            # rejectedDeal(mysql,requirementid,merchantid)
+            #rejectDeal(mysql,requirementid)
             return redirect(request.url)
         except Exception as e:
             print("Reject" + str(e))
@@ -448,7 +472,7 @@ def showsupplierrequirements():
     else:
         choice = 'P'
         items = getSupplierRequests(mysql, merchantid, choice)
-        return render_template('./requirements/requirements.html', sup_items=items, choice=choice, profile=2)
+        return render_template('./requirements/requirements.html', sup_items=items, choice=choice, profile=2,sellProduct=sellProduct)
 
 
 @app.route('/requirementsbuyer', methods=['GET', 'POST'])
@@ -456,6 +480,8 @@ def showbuyerrequirements():
     merchantid = 1
     items = getSupplierRequests(mysql, merchantid)
     choice = 'R'
+    print("helloagain")
+    print(request.form)
     if request.method == 'POST':
         try:
             choice = request.form['filterbuyer']
@@ -466,11 +492,30 @@ def showbuyerrequirements():
             print("filterbuyer" + str(e))
 
         try:
-            accept = request.form['AC']
-            requirementID = request.form['requirementID']
+            accept = request.form['request']
+
+
             # acceptDeal(mysql,requirementID)
             # change this to payment after payment module is finish
-            return redirect(url_for('requirements'))
+            session['type'] = 'request'
+            session['ProductID'] = request.form.getlist('ProductID[]')
+            session['Name'] = request.form.getlist('Name[]')
+            session['Description'] = request.form.getlist('Description[]')
+            session['qty'] = request.form.getlist('qty[]')
+            #session['merchantID'] = request.form.get('merchantWhoAp')
+            session['PriceItem'] = request.form.getlist('PriceItem[]')
+            session['mid'] = request.form.get('merchantWhoAP')
+            Price = []
+
+            print(session)
+            loop = len(session['PriceItem'])
+            print(loop)
+            print('yeah cart')
+            for i in range(0,loop):
+                Price.append((str)((int)(session['PriceItem'][i])*(int)(session['qty'][i])))
+            session['Price'] = Price
+            session['discountPrice'] = Price
+            return redirect(url_for('showCart',merchant_id=merchantid))
         except Exception as e:
             print("AC" + str(e))
         return render_template(url_for("requirements"))

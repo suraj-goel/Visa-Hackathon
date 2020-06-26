@@ -98,15 +98,47 @@
                         {% if item['Price']!='' and item['Price']!=None %} <h3>Price: {{item['Price']}}</h3> {% endif %}
                         <h3>Quantity: {{item['Quantity']}}</h3>
                     </td>
-                    <tr>
+                    <td>
                 <td colspan="2"><b>Merchant details:<br>Name:</b>{% if item['Merchant.Name'] %}{{item['Merchant.Name']}} {% else %}{{item['Name']}} {% endif %}<br><b>Registered Shop:</b>{{item['RegisteredName']}}, {{item['Address']}}<br></td>
                 {% if item['Product.ProductID'] %}
                 <td colspan="1"><b>Product Details:<br>Name:</b> {{item['Name']}}<br><b>Description:</b> {{item['Product.Description']}}<br><b>Category:</b> {{item['Category']}}</td>
                 <td colspan="1"><b>Contact details of merchant:<br>Email:</b> {{item['EmailID']}}<br><b>Phone:</b> {{item['ContactNumber']}}</td>
              {% elif choice=='P' %}
                 <td colspan="1"><b>Contact details of merchant:<br>Email:</b> {{item['EmailID']}}<br><b>Phone:</b> {{item['ContactNumber']}}</td>
-                <td colspan="1"><button >Approve request</button></td>
-                   {% endif %}
+                <form method="post" action="" onsubmit="getBack({{loop.index}})">
+                    <input type="hidden" name="requirementID" value="{{item['RequirementID']}}" >
+                <td colspan="1"> <div id="showProducts{{loop.index}}" style="display: none">
+                                 <select name="selectProduct" >
+                                  {%for item in sellProduct %}
+                                     <option value="{{item['ProductID']}}" selected >
+                                         <p>{{item['Name']}}
+                                             {{item['Description']}}
+                                         </p>
+                                     </option>
+                                     {% endfor %}
+                                 </select>
+                </div>
+                    <p><input type="submit" name="Approve" value="Send request"  style="display: none" id="sendRequest{{loop.index}}"><br>
+                    <input type="button" name="Approve" value="Approve request"  onclick="showProducts({{loop.index}})" id="ApproveRequest{{loop.index}}">
+                    </p>
+
+                </td>
+
+                </form>
+                    <script> function showProducts(id) {
+
+                        document.getElementById("showProducts"+id).style.display = "block";
+                        document.getElementById("sendRequest"+id).style.display = "block";
+                        document.getElementById("ApproveRequest"+id).style.display="none";
+
+                    }
+                    function getBack(id) {
+                        document.getElementById("showProducts"+id).style.display = "none";
+                        document.getElementById("ApproveRequest"+id).value="Approve request";
+                        document.getElementById("ApproveRequest"+id).type="button";
+                    }
+                    </script>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </table>
@@ -114,31 +146,9 @@
         {% else %}
         <h2> Could not find any match</h2>
         {% endif %}
-        <!--
-                <form method="post" action="/requirementssupplier">
-            <h3>Title of requirement</h3>
-            <div>
-                <button type="button" class="button">Show Detailed Request and Contact Info after clicking and ask for
-                    price id
-                    approving</button>
-                <div name="requestSending" style="opacity: 50%">
-                    <h3> show Info</h3>
-                    <label for="expectPrice">ExpectPrice: </label>
-                    <input type="number" id="expectPrice" style="height: 40px ;width: 80px;" name="expectPrice"
-                        value="1">
-                    <label for="expectDelivery">ExpectDeliveryDate: </label>
-                    <input type="date" id="expectDelivery" name="expectDelivery">
-
-                    <input type="hidden" name="requirementID" value="requirementID">
-                    <input type="submit" name="Approve" value="Approve">
-                    <input type="submit" name="Reject" value="Reject">
-                </div>
-            </div>
-        </form>
-        -->
     </div>
     <div id="thisDiv3" style="display: none" class="split1 right">
-        <!--  FIRST THIS -->
+
         <h1>Your buyer profile for requirements</h1>
         <form method="post" action="">
             <select name="filterbuyer">
@@ -200,10 +210,22 @@
                 </tr>
                     {% elif item['Status']!='Pending' %} {% for x in item['Accepts'] %}
                 <tr>
+
                 <td colspan="1"><b>Merchant:</b> {{x['Name']}}<br><b>Registered Shop:</b> {{x['RegisteredName']}}, {{x['Address']}}</td>
                 <td colspan="1"><b>Item:</b><br>{{x['Product.Name']}}<br><b>Description:</b> {{x['Product.Description']}}</td>
                 <td colspan="1"><b>Contact details of merchant:<br>Email:</b> {{x['EmailID']}}<br><b>Phone:</b> {{x['ContactNumber']}}</td>
-                <td><button >add to cart</button></td>
+                <td>
+
+                    <form method="post" action="">
+                    <input type="submit" name="request" value="add to cart">
+                    <input type="hidden" name="ProductID[]" value="{{x['Product.ProductID']}}">
+                    <input type="hidden" name="Name[]" value="{{x['Product.Name']}}">
+                    <input type="hidden" name="Description[]" value="{{x['Product.Description']}}">
+                    <input type="hidden" name="merchantWhoAP" value="{{x['MerchantID']}}">
+                    <input type="hidden" name="qty[]" value="{{item['Quantity']}}">
+                    <input type="hidden" name="PriceItem[]" value="{{x['Product.Price']}}">
+                    </form>
+                </td>
                 </tr>
                 {% endfor %}
                 {% endif %}
@@ -217,31 +239,6 @@
     </div>
 </center>
 </body>
-<!--
-<form method="post" action="/requirementsbuyer">
-            <div id="accept/reject">
-                <h1>Your Request(one request example)</h1>
-                <p>List of Interested Buyers</p>
-                <div>
-                    <input type="radio" name="buyer1" value="buyer1" id="buyer1" />
-                    <label for="buyer1">buyer1</label>
-                    <input type="hidden" name="requirementID" value="requirementID1">
-                    <input type="submit" name="AC" value="ACCEPT DEAL" />
-                </div>
-                <div>
-                    <input type="radio" name="buyer2" id="buyer2" value="buyer2" />
-                    <label for="buyer2">buyer2</label>
-                    <input type="hidden" name="requirementID" value="requirementID2">
-                    <input type="submit" name="AC" value="ACCEPT DEAL" />
-                </div>
-                <div>
-                    <input type="radio" name="buyer3" value="buyer3" id="buyer3" />
-                    <label for="buyer3">buyer3</label>
-                    <input type="hidden" name="requirementID" value="requirementID3">
-                    <input type="submit" name="AC" value="ACCEPTDEAL" />
-                </div>
-            </div>
-        </form> -->
 </html>
     <script>
         $(document).ready(function () {
