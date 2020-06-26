@@ -1,6 +1,8 @@
 import uuid
 def updateBuyerInventoryOrder(mysql,orderID,buyerMerchantID):
-    query = "SELECT Name , Description,Price,ProductCart.Quantity as Quantity,Category FROM Orders,ProductCart,Product WHERE OrderID = '{}' AND Orders.CartID = ProductCart.CartID AND ProductCart.ProductID = Product.ProductID".format(orderID)
+    print('here')
+    query = "SELECT Name , Description,Price,ProductCart.Quantity as Quantity,Category FROM Orders,ProductCart,Product " \
+            "WHERE OrderID = '{}' AND Orders.CartID = ProductCart.CartID AND ProductCart.ProductID = Product.ProductID".format(orderID)
 
     cur = mysql.connection.cursor()
     cur.execute(query)

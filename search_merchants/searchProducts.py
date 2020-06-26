@@ -37,7 +37,6 @@ def getSearchResults(mysql,merchantid,name='',search_option='initial',filters=Fa
         cur.execute("SELECT * from Location,Merchant,Product WHERE (Product.Name like %s OR Category like %s ) and Product.MerchantID <> %s and Product.MerchantID=Merchant.MerchantID and Location.MerchantID=Merchant.MerchantID and Product.Sell=1",
                 ("%"+product+"%","%"+product+"%",merchantid))
         data = list(cur.fetchall())
-
         # similar category search
         product_tags=product.split(" ")
         if len(product_tags)>1:
@@ -75,7 +74,7 @@ def getSearchResults(mysql,merchantid,name='',search_option='initial',filters=Fa
             x = list(cur.fetchall())
             if x:
                 i['Offers'] = x
-                data_res.append(i)
-    
+            data_res.append(i)
     finalResult=sortByDistance(cur,data_res,merchantid,radius)
+    print(finalResult)
     return finalResult

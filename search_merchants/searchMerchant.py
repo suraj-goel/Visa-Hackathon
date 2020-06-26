@@ -24,15 +24,17 @@ def getAllMerchants(mysql,merchantID,radius):
             dic = {"distance" : distance}
             dic.update(a[i])
             nearbymerchants.append(dic)
+    print(nearbymerchants)
     data_res = []
 
     for i in nearbymerchants:
-            cur.execute("select distinct * from Product,Offer,OfferOnProduct where Product.MerchantID=%s and Product.ProductID = OfferOnProduct.ProductID and OfferOnProduct.offerID = Offer.offerID and CURDATE()<=ValidTill and Product.Sell=1", (i['MerchantID'],))
+            cur.execute("select distinct * from Product,Offer,OfferOnProduct where Product.MerchantID=%s and "
+                        "Product.ProductID = OfferOnProduct.ProductID and OfferOnProduct.offerID = Offer.offerID "
+                        "and CURDATE()<=ValidTill and Product.Sell=1", (i['MerchantID'],))
             x = list(cur.fetchall())
             if x:
                 i['Offers'] = x
-                data_res.append(i)
-
+            data_res.append(i)
     cur.close()
    
     

@@ -8,8 +8,8 @@
     {% if message=='no' %}
     <span style="color:red;"> Already exists. Edit the offer </span>
     {% endif %}
-    <h1 style="color: #1a1f71;">Offers</h1>
-    <button type="button" class="button" id="formButton"><span> Add Offer </span></button>
+    <h1 style="color: #1a1f71;">Edit Offer</h1>
+    <button type="button" class="button" id="formButton"><span> Show Offer </span></button>
 
     <form id="form1" method="post" style="border: none;">
         <div id="newForm" class="containerForm">
@@ -18,28 +18,28 @@
                     <td>
                         <h4>Discount Percentage</h4>
                     </td>
-                    <td> <input type="text" name="percentage" required></h4>
+                    <td> <input type="text" name="percentage" required value="{{data['DiscountPercentage']}}"></h4>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <h4>Information</h4>
                     </td>
-                    <td><textarea name="info" required></textarea></td>
+                    <td><textarea name="info"  required>{{data['Information']}}</textarea></td>
                 </tr>
                 <tr>
                     <td>
                         <h4>Valid Till</h4>
                     </td>
                     <td>
-                        <input type="date"  name="date" id='date'  required>
+                        <input type="date"  name="date" id='date' value="{{data['ValidTill']}}" required>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <h4>Quantity Required</h4>
                     </td>
-                    <td><input type="number" min='0' name="quantity" id='quantity' onchange="validate(this.id)"
+                    <td><input type="number" min='0' name="quantity" id='quantity' value = "{{data['QuantityRequired']}}" onchange="validate(this.id)"
                             required>
                     </td>
                 </tr>
@@ -48,6 +48,12 @@
                         <h4>Product</h4>
                     </td>
                     <td>
+                        {% if productChecked %}
+                        
+                        {% for i in productChecked %}
+                            <input type="checkbox" value="{{i}}" name='selectedProducts' checked> {{i}} <br>
+                        {% endfor %}
+                        {% endif %}
                         {% if product %}
                         
                         {% for i in product %}
@@ -66,45 +72,13 @@
             <input style="display: block; 
           margin-right: auto;
           margin-left: auto;" type="submit" class="button" value="Submit"
-                onclick="javascript: form.action='/';">
+                onclick="javascript: form.action='/offers/edit/{{offerID}}';">
         </div>
     </form>
 
     <br><br>
     
-    {% if data %}
-    <div class="container">
-        <table class="table table-bordered">
-            {% for item in data %}
-            <tr style="all: none;">
-                <td style="background-color: white; border: none;"></td>
-            </tr>
-            <tr class="header">
-                <td colspan="2">
-                    <h4>Offer ID: {{item['OfferID']}}</h4> <br>
-                    Information: {{item['Information']}} <br>
-                    Discount Percentage: {{item['DiscountPercentage']}} <br>
-                    Valid Till: {{item['ValidTill']}} <br>
-                    Quantity Required: {{item['QuantityRequired']}}
-                    <h5><a title="Edit Product" href="/offers/edit/{{item['OfferID']}}"
-                            style="color: #337ab7;">Edit
-                            Offer</a></h5>
-                    
-                </td>
-            </tr>
-            {% if item['Products'] %} {% for x in item['Products'] %}
-            <tr>
-                <td>{{x['Name']}}</td>
-                <td>{{x['Category']}}</td>
-            </tr>
-            {% endfor %} {% else %}
-            <tr>
-                <td>No Products associated with this offer</td>
-            </tr>
-            {% endif %} {% endfor %}
-        </table>
-    </div>
-    {% endif %}
+    
 </center>
 
 </html>
