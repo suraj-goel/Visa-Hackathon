@@ -114,8 +114,8 @@
                                   {%for items in sellProduct %}
                                     {% if (items['Quantity']|int()) >= (item['Quantity']|int()) %}
                                      <option value="{{items['ProductID']}}" selected>
-                                         <p><h3>{{items['Name']}}</h3>
-                                         <h4 style="opacity: 50%;">{{items['Description']}}</h4>
+                                         <p><h3>Name: {{items['Name']}}</h3><br>
+                                         <h4 style="opacity: 50%;">Descrtiption: {{items['Description']}}</h4><br>
                                              <h4>Quantity: {{items['Quantity']}}</h4>
                                          </p>
                                      </option>
@@ -260,7 +260,7 @@
                     <input type="hidden" name="ProductID[]" value="{{x['Product.ProductID']}}">
                     <input type="hidden" name="Name[]" value="{{x['Product.Name']}}">
                     <input type="hidden" name="Description[]" value="{{x['Product.Description']}}">
-                    <input type="hidden" name="merchantWhoAP" value="{{x['MerchantID']}}">
+                    <input type="hidden" name="merchantWhoAP" value="{{x['Merchant.MerchantID']}}">
                     <input type="hidden" name="qty[]" value="{{item['Quantity']}}">
                     <input type="hidden" name="PriceItem[]" value="{{x['Product.Price']}}">
                     </form>

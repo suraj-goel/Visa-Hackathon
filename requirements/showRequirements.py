@@ -176,7 +176,7 @@ def approveDeal(mysql,requirementID,productID):
         cur.execute("INSERT INTO RequirementAccepted values('{}','{}','{}')".format(requirementID,productID,"no"))
     except Exception as e:
         print("insert "+str(e))
-        
+
     cur.execute("UPDATE RequirementAccepted,Requirement SET RequirementAccepted.Status='{}'  WHERE RequirementAccepted.RequirementID='{}' AND Requirement.RequirementID='{}'".format("yes",requirementID,requirementID,))
     mysql.connection.commit()
     cur.execute("UPDATE RequirementAccepted,Requirement SET RequirementAccepted.ProductID='{}'  WHERE RequirementAccepted.RequirementID='{}' AND Requirement.RequirementID='{}'".format(productID,requirementID,requirementID))
