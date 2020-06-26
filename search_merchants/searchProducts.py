@@ -74,7 +74,7 @@ def getSearchResults(mysql,merchantid,name='',search_option='initial',filters=Fa
             x = list(cur.fetchall())
             if x:
                 i['Offers'] = x
-                data_res.append(i)
+            data_res.append(i)
     finalResult=sortByDistance(cur,data_res,merchantid,radius)
     print(finalResult)
     return finalResult
