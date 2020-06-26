@@ -51,6 +51,11 @@ textarea {
   margin-bottom: 16px;
   resize: vertical;
 }
+
+select{
+  width: 250px;
+}
+
 input[type="number"] {
   padding: 12px;
   border: 1px solid #ccc;
