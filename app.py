@@ -213,7 +213,8 @@ def showCart(merchant_id):
         if(Type != 'Process Payment'):
             session.clear()
         if(Type == 'Process Payment'):
-            return redirect(url_for('payment'))
+            amount = finalDiscountPrice
+            return render_template('./payment/payment.html',amount=amount)
         else:
             return redirect(url_for('negotiation'))
 
@@ -276,8 +277,8 @@ def editAccountDetails():
             if (r[1][5]):
                 flash("Password already exists, please enter a new one.")
             return render_template("./accounts/editAccountDetails.html", result=result)
-
-    cur.execute("select * from Merchant where MerchantID='"+merchant_id+"';")
+    merchant_id = "2"
+    cur.execute("select * from Merchant where MerchantID='{}'".format(merchant_id))  #scope problem
     # "select * from Merchant where MerchantID = '"+str(session['Merchantid'])+"';"
     result = cur.fetchone()
     cur.close()
@@ -320,9 +321,12 @@ def registerCyber():
 
 @ app.route('/payments/',methods=['GET', 'POST'])
 def payment():
-    if request.method == 'POST':
+    amount = 0
+    try:
         amount = request.form['finalDiscountPrice']
-    return render_template("./payment/payment.html", amount=amount)
+    except Exception as e:
+        print("payment"+str(e))
+    return render_template("./payment/payment.html",amount = amount)
 
 
 @app.route('/cybersource/', methods=['GET', 'POST'])
@@ -369,7 +373,7 @@ def negotiation():
     if(request.method=='GET'):
         merchant_id = 1 #get from seearch
         allNegotiation = displayAllNegotiation(mysql,merchant_id)
-        return render_template("./negotiation/negotiation.html",negotiations = allNegotiation)
+        return render_template("./negotiation/negotiation.html",negotiations = allgofiiNegotiation)
 
 @app.route('/requirementssupplier', methods=['GET', 'POST'])
 def showsupplierrequirements():
