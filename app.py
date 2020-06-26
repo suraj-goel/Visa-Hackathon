@@ -95,6 +95,12 @@ def editProduct(productID):
         data = cur.fetchall()
         return render_template("./manage_inventory/editProduct.html", data=data[0], category=c, productID=productID)
 
+@app.route('/delivered', methods=['POST'])
+def delivered():
+    merchantid=1
+    orderid=request.form['orderid']
+    Delivered(mysql,orderid,merchantid)
+    return redirect(url_for('orders'))
 
 @app.route('/orders', methods=['POST', 'GET'])
 def orders():
