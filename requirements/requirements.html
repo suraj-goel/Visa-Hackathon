@@ -108,28 +108,50 @@
                 <form method="post" action="" onsubmit="getBack({{loop.index}})">
                     <input type="hidden" name="requirementID" value="{{item['RequirementID']}}" >
                 <td colspan="1"> <div id="showProducts{{loop.index}}" style="display: none">
+
                                  <select name="selectProduct" >
-                                  {%for item in sellProduct %}
-                                     <option value="{{item['ProductID']}}" selected >
-                                         <p>{{item['Name']}}
-                                             {{item['Description']}}
+
+                                  {%for items in sellProduct %}
+                                    {% if (items['Quantity']|int()) >= (item['Quantity']|int()) %}
+                                     <option value="{{items['ProductID']}}" selected>
+                                         <p><h3>{{items['Name']}}</h3>
+                                         <h4 style="opacity: 50%;">{{items['Description']}}</h4>
+                                             <h4>Quantity: {{items['Quantity']}}</h4>
                                          </p>
                                      </option>
+                                       {% endif %}
                                      {% endfor %}
                                  </select>
                 </div>
                     <p><input type="submit" name="Approve" value="Send request"  style="display: none" id="sendRequest{{loop.index}}"><br>
-                    <input type="button" name="Approve" value="Approve request"  onclick="showProducts({{loop.index}})" id="ApproveRequest{{loop.index}}">
+                    <input type="button" name="Approve" value="Approve request"  onclick="showProducts({{loop.index}},{{sellProduct}},{{item['Quantity']}})" id="ApproveRequest{{loop.index}}">
                     </p>
 
                 </td>
 
                 </form>
-                    <script> function showProducts(id) {
+                    <script> function showProducts(id,arr,req) {
 
-                        document.getElementById("showProducts"+id).style.display = "block";
-                        document.getElementById("sendRequest"+id).style.display = "block";
-                        document.getElementById("ApproveRequest"+id).style.display="none";
+                        console.log(arr);
+                        var x = arr.length;
+                        var check = false;
+                        console.log(x,req);
+                        for(var i=0;i<x;i++)
+                        {
+                            var x1 = parseInt(arr[i]['Quantity']);
+
+                            if(x1>=parseInt(req))
+                                check = true;
+                        }
+                        if(check == true) {
+                            document.getElementById("showProducts" + id).style.display = "block";
+                            document.getElementById("sendRequest" + id).style.display = "block";
+                            document.getElementById("ApproveRequest" + id).style.display = "none";
+                        }
+                        else
+                        {
+                            alert("You cannot approve Request.You don't have that much of stock");
+                        }
 
                     }
                     function getBack(id) {
@@ -137,6 +159,23 @@
                         document.getElementById("ApproveRequest"+id).value="Approve request";
                         document.getElementById("ApproveRequest"+id).type="button";
                     }
+                    function isPossible(quantityHave, quantityRequired) {
+
+                        var x1 = parseInt(quantityHave);
+                        var x2 = parseInt(quantityRequired);
+                        if(x1<x2){
+                            alert("U have "+quantityHave + "in your stock only");
+                            return false;
+                        }
+                        else{
+                            return true;
+                        }
+
+                        return true;
+
+                    }
+
+
                     </script>
                     {% endif %}
                 </tr>
