@@ -1,21 +1,115 @@
-<!DOCTYPE html>
-<html lang="en">
+{% include "./common/header.html" %}
+<link rel="stylesheet" href="{{ url_for('static',filename='./manage_offers/offers.css') }}">
+<script type="text/javascript" src="{{url_for('static',filename='./manage_offers/offers.js') }}"></script>
+<center>
+    {% if message=='yes' %}
+    <span style="color:green">Successfully added/edited offer</span>
+    {% endif %}
+    {% if message=='no' %}
+    <span style="color:red;"> Already exists. Edit the offer </span>
+    {% endif %}
+    <h1 style="color: #1a1f71;">Offers</h1>
+    <button type="button" class="button" id="formButton"><span> Add Offer </span></button>
 
-<head>
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
-    <style>
-        body {
-            color: black;
-        }
-    </style>
+    <form id="form1" method="post" style="border: none;">
+        <div id="newForm" class="containerForm">
+            <table border="0" style="border-spacing: 10px 15px; border-collapse: initial;">
+                <tr>
+                    <td>
+                        <h4>Product name </h4>
+                    </td>
+                    <td> <input type="text" name="name" required></h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4>Product Description</h4>
+                    </td>
+                    <td><textarea name="description" required></textarea></td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4>Price per piece</h4>
+                    </td>
+                    <td>
+                        <input type="number" min='1' name="price" id='price' onchange="validate(this.id)" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4>Quantity</h4>
+                    </td>
+                    <td><input type="number" min='0' name="quantity" id='quantity' onchange="validate(this.id)"
+                            required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4>Category</h4>
+                    </td>
+                    <td>
+                        <span class="custom-dropdown custom-dropdown--white">
+                            <select name="category" class="custom-dropdown__select custom-dropdown__select--white"
+                                onchange="checkvalue(this.value)">
+                                {% for i in category %}
+                                <option value="{{i}}">{{i}}</option>
+                                {% endfor %}
+                                <option value="others">Others</option>
+                            </select>
+                        </span>
+                    </td>
+                </tr>
+            </table>
 
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-    </head>
+            <div id='category' style='display:none'>
+                <h4 for="other_category">Type Your Category: </h4><br>
+                <input id="other_category" type="text" name="other_category" value=''>
+            </div><br><br>
 
-    <body>
-        {{data}}
-    </body>
+            <input type="radio" name="sell" value="1" checked><b> Show as selling to other merchants</b><br>
+            <input type="radio" name="sell" value="0"><b> Add to inventory without showing to other
+                merchants</b><br><br>
+            <input style="display: block; 
+          margin-right: auto;
+          margin-left: auto;" type="submit" class="button" value="Submit"
+                onclick="javascript: form.action='/addproduct';">
+        </div>
+    </form>
+
+    <br><br>
+    
+    {% if data %}
+    <div class="container">
+        <table class="table table-bordered">
+            {% for item in data %}
+            <tr style="all: none;">
+                <td style="background-color: white; border: none;"></td>
+            </tr>
+            <tr class="header">
+                <td colspan="2">
+                    <h4>{{item['OfferID']}}</h4> <br>
+                    Information: {{item['Information']}} <br>
+                    Discount Percentage: {{item['DiscountPercentage']}} <br>
+                    Valid Till: {{item['ValidTill']}} <br>
+                    Quantity Required: {{item['QuantityRequired']}}
+                    <!-- <h5><a title="Edit Product" href="/inventory/edit/{{item['ProductID']}}"
+                            style="color: #337ab7;">Edit
+                            Product</a></h5> -->
+                </td>
+            </tr>
+            {% if item['Products'] %} {% for x in item['Products'] %}
+            <tr>
+                <td>{{x['Name']}}</td>
+                <td>{{x['Category']}}</td>
+            </tr>
+            {% endfor %} {% else %}
+            <tr>
+                <td>No Products associated with this offer</td>
+            </tr>
+            {% endif %} {% endfor %}
+        </table>
+    </div>
+    {% endif %}
+</center>
 
 </html>
