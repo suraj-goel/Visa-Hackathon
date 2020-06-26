@@ -498,15 +498,33 @@ def requirements():
         return redirect(request.url)
 
 
-@app.route('/offers', methods=['GET', 'POST'])
+@app.route('/offers',methods=['GET', 'POST'])
 def showoffers():
-    merchantID = 1  # is equal to logged in user
-    data = displayOffersPage(mysql, merchantID)
-    cur = mysql.connection.cursor()
+    merchantID = 1 #is equal to logged in user
+    data = displayOffersPage(mysql,merchantID)
+    cur=mysql.connection.cursor()
     cur.execute("SELECT Name FROM Product WHERE MerchantID = '{}'".format(merchantID))
+    try:
+        message = session['message_offer_add']
+        session['message_offer_add'] = None
+    except:
+        message = None
+    product=[i['Name'] for i in list(cur.fetchall())]
+    return render_template("./manage_offers/offers.html",data=data,product=product,message=message)
 
-    product = [i['Name'] for i in list(cur.fetchall())]
-    return render_template("./manage_offers/offers.html", data=data, product=product)
+@app.route('/addoffer',methods=['GET', 'POST'])
+def addoffer():
+    if(request.method=='POST'):
+        # print(request.form)
+        discount = request.form['percentage']
+        info = request.form['info']
+        date=request.form['date']
+        quantity = request.form['quantity']
+        selectedProducts = request.form.getlist('selectedProducts')
+        merchantID = 1 #get from session when user is logged in
+        message = addoffersindb(mysql,merchantID,discount,info,date,quantity,selectedProducts)
+        session['message_offer_add'] = message
+    return redirect(url_for('showoffers'))
 
 
 if __name__ == '__main__':
