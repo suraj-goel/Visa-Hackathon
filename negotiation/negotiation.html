@@ -7,15 +7,18 @@
     <div>
         <ul class="split left">
             <li>
-                <h4 style="color:white" onclick="showThis(2)">Supplier Side</h4><br>
+                <h4 onclick="showThis(1)"  id="buyerTab">Supplier Side</h4>
+            </li>
+            <li style="margin-left: 25px; display: none" id="createReqTab">
+                <h4 onclick="showThis(3)">Create Request</h4>
             </li>
             <li>
-                <h4 style="color:white" onclick="showThis(1)">Buyer Side</h4>
+                <br><h4 onclick="showThis(2)">Buyer Side</h4>
             </li>
         </ul>
     </div>
 
-    <div id="thisDiv1" class="split1 right">
+    <div id="thisDiv2" class="split1 right">
 
         <h1 style="color:#1a1f71">Buyer Side</h1>
         {{negotiations}}
@@ -25,7 +28,7 @@
         </form>
 
     </div>
-    <div id="thisDiv2" style="display: none" class="split1 right">
+    <div id="thisDiv1" style="display: none" class="split1 right">
         <h2>SUPPLIER SIDE</h2>
 
     </div>

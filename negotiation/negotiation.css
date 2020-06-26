@@ -24,6 +24,14 @@
   padding: 25px 20px;
 }
 
+.left h4 {
+  color: #ffffff;
+}
+
+.left h4:hover {
+  color: #fdbb0a;
+}
+
 .right {
   right: 2%;
 }
