@@ -8,7 +8,7 @@ def RequestsReceived(mysql, merchantid):
     cur = mysql.connection.cursor()
     cur.execute("select * from Requirement as R, Merchant where R.Status='Post' and Merchant.MerchantID=R.MerchantID and R.MerchantID <> '%s' and "
                 "NOT EXISTS( select * from RequirementAccepted where RequirementAccepted.RequirementID=R.RequirementId "
-                " and RequirementAccepted.Status='yes');", (merchantid,))
+                "and RequirementAccepted.Status='yes');", (merchantid,))
     posts = cur.fetchall()
     for i in range(len(posts)):
         posts[i]['Status'] = 'Open'
@@ -62,6 +62,7 @@ def RequestsRecievedAndPending(mysql, merchantid):
     return pending
 
 def getSupplierRequests(mysql,merchantid,choice='P'):
+    merchantid=int(merchantid)
     if choice=='P':
         return RequestsReceived(mysql,merchantid)
     elif choice=='A':
@@ -152,6 +153,7 @@ def PostedAndDone(mysql, merchantid):
     return delivered
 
 def getBuyerRequests(mysql,merchantid,choice='R'):
+    merchantid=int(merchantid)
     if choice=='R':
         return PostedAndPending(mysql,merchantid)
     elif choice=='A':

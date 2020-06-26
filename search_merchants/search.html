@@ -24,17 +24,15 @@
                 </select>
             </span>
             <br><br>
-
+            <div class="example">
+                <input type="text" placeholder="Search by name" name="name" id="check">
+                <button type="submit" id="submitButton"><i class="fa fa-search"></i>
+                </button>
+            </div><br><br>
             <label style="color: #1a1f71;">
                 <input type="checkbox" name="offerbox" value="True">
                 Only display results of merchants who give offers
             </label><br>
-
-            <div class="example">
-                <input type="text" placeholder="Search by product name" name="name" id="check">
-                <button type="submit" id="submitButton"><i class="fa fa-search"></i>
-                </button>
-            </div>
 
         </form>
         <br><br><br><br><br>
@@ -43,7 +41,7 @@
 
         {% if data %}
         <h2 style="color: #1a1f71;">
-            Search results :
+            Search results:
         </h2>
         <div class="container">
             <table class="table table-bordered">
