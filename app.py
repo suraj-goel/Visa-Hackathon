@@ -20,6 +20,7 @@ from negotiation.negotiation import *
 from payment.confirmPayment import *
 from manage_inventory.supplierupdater import *
 from manage_offers.displayOffers import *
+from orders_management.orderHistory import Delivered
 
 app = Flask(__name__, static_folder='')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader, jinja2.FileSystemLoader(['.'])])
