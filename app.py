@@ -517,6 +517,32 @@ def addoffer():
         session['message_offer_add'] = message
     return redirect(url_for('showoffers'))
 
+@app.route('/offers/edit/<OfferID>',methods=['GET', 'POST'])
+def editoffer(OfferID):
+    merchantID = 1 #get from session
+    if(request.method=='GET'):
+        
+        offerID = OfferID
+        data = getOffer(mysql,offerID)
+        productChecked=[i['Name'] for i in list(data['Products'])]
+        cur = mysql.connect.cursor()
+        cur.execute("SELECT Name FROM Product WHERE MerchantID = '{}'".format(merchantID))
+        productAll=[i['Name'] for i in list(cur.fetchall())]
+        product = [x for x in productAll if x not in productChecked]
+        return render_template("./manage_offers/editoffer.html",data=data,product=product,productChecked=productChecked,offerID = OfferID)
+    else:
+        discount = request.form['percentage']
+        info = request.form['info']
+        date=request.form['date']
+        quantity = request.form['quantity']
+        selectedProducts = request.form.getlist('selectedProducts')
+        merchantID = 1 #get from session when user is logged in
+        print(request.form)
+        message = updateoffersindb(mysql,merchantID,discount,info,date,quantity,selectedProducts,OfferID)
+        print(message)
+        session['message_offer_add'] = message
+        return redirect(url_for('showoffers'))
+
 
 if __name__ == '__main__':
     # threaded allows multiple users (for hosting)
