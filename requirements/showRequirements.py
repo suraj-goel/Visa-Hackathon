@@ -196,7 +196,10 @@ def acceptDeal(mysql,requirementID,merchantIDwhoPost,cartID):
 def rejectDeal(mysql,requirementID):
     cur = mysql.connection.cursor()
     #cur.execute("UPDATE RequirementAccepted,Requirement SET RequirementAccepted.Status='{}' WHERE RequirementAccepted.RequirementID='{}' AND Requirement.RequirementID='{}'".format("no",requirementID,requirementID))
-    cur.execute("Delete from RequirementAccepted WHERE RequirementID='{}'".format(requirementID))
+    try:
+        cur.execute("INSERT INTO RequirementAccepted values('{}','{}','{}')".format(requirementID,"nothing","no"))
+    except Exception as e:
+        print("insert "+str(e))
     mysql.connection.commit()
 
 
