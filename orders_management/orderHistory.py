@@ -1,5 +1,5 @@
 from manage_inventory.buyerUpdater import updateBuyerInventoryOrder
-
+import uuid
 
 def getOrders(mysql,merchantid,delivered_filter):
     cur=mysql.connection.cursor()
@@ -27,4 +27,18 @@ def Delivered(mysql,orderid,merchantid):
     cur.execute("update Orders set DeliveredDate=CURDATE() WHERE OrderID=%s;",(orderid,))
     mysql.connection.commit()
     updateBuyerInventoryOrder(mysql, orderid, merchantid)
+
+def IsRated(mysql,orderid):
+    cur = mysql.connection.cursor()
+    cur.execute("select * from Ratings where OrderID='%s'",(orderid,))
+    if cur.fetchall():
+        return True
+    return False
+
+def AddRating(mysql,orderid):
+    cur=mysql.connection.cursor()
+    cur.execute("insert into Ratings values ('%s','%s')",(uuid.uuid1(),orderid))
+    mysql.connection.commit()
+
+def SearchRatings(mysql):
     pass
