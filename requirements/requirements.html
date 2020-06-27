@@ -211,7 +211,7 @@
                         {% if item['Price']!='' and item['Price']!=None %} <h3>Price: {{item['Price']}}</h3> {% endif %}
                         <h3>Quantity: {{item['Quantity']}}</h3>
                     </td>
-                    <td>
+                    
                 <td colspan="2"><b>Merchant details:<br>Name:</b>{% if item['Merchant.Name'] %}{{item['Merchant.Name']}} {% else %}{{item['Name']}} {% endif %}<br><b>Registered Shop:</b>{{item['RegisteredName']}}, {{item['Address']}}<br></td>
                 {% if item['Product.ProductID'] %}
                 <td colspan="1"><b>Product Details:<br>Name:</b> {{item['Name']}}<br><b>Description:</b> {{item['Product.Description']}}<br><b>Category:</b> {{item['Category']}}</td>
