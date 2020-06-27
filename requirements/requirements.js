@@ -6,6 +6,12 @@ $(document).ready(function () {
 
 
 
+function showThis(ii) {
+    document.getElementById("thisDiv1").style.display = "none";
+    document.getElementById("thisDiv2").style.display = "none";
+    document.getElementById("thisDiv3").style.display = "none";
+    document.getElementById("thisDiv" + ii).style.display = "block";
+}
 
 function validateForm() {
     var x = document.forms["requirementForm"]["title"].value;
@@ -18,5 +24,4 @@ function validateForm() {
         alert("Error in Creating Request. Fill all Information Carefully");
         return false;
     }
-    return alert("Post Requirement?");
 }

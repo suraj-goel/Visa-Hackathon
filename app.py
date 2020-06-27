@@ -529,6 +529,7 @@ def showbuyerrequirements():
     else:
         choice = 'E'
         items = getBuyerRequests(mysql, merchantid, choice)
+        print(items)
     return render_template('./requirements/requirements.html', buy_items=items, buyer_choice=choice, profile=3)
 
 
