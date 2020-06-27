@@ -1,17 +1,18 @@
 import uuid
 
 
-def addToOrders(mysql,qty,ProductID,Name,Description,Price,merchant_id,status,finalDiscountPrice,amount,currentDate):
+def addToOrders(mysql,qty,ProductID,merchant_id,amount,currentDate):
     orderID = uuid.uuid1()
     cart_id = uuid.uuid1()
     cur = mysql.connection.cursor()
 
     try:
         # print('INSERT INTO Cart(CartID, Total,Status, MerchantID) VALUES(%s,%s,%s,%s)',(cart_id,finalDiscountPrice,status,merchant_id))
-        print(cart_id,finalDiscountPrice,'P',merchant_id)
+        print(cart_id,amount,'P',merchant_id)
         cur.execute("INSERT INTO Cart(CartID, Total,Status, MerchantID) VALUES(%s,%s,%s,%s)",(cart_id,amount,'P',merchant_id))
         mysql.connection.commit()
         print("Added to Cart Table")
+
     except Exception as e:
         print('*****')
         print("Problem in inserting in db"+ str(e))
