@@ -493,8 +493,6 @@ def showbuyerrequirements():
 
         try:
             accept = request.form['request']
-
-
             # acceptDeal(mysql,requirementID)
             # change this to payment after payment module is finish
             session['type'] = 'request'
@@ -523,7 +521,7 @@ def showbuyerrequirements():
             print("AC" + str(e))
         return render_template(url_for("requirements"))
     else:
-        choice = 'W'
+        choice = 'E'
         items = getBuyerRequests(mysql, merchantid, choice)
     return render_template('./requirements/requirements.html', buy_items=items, buyer_choice=choice, profile=3)
 
@@ -531,11 +529,11 @@ def showbuyerrequirements():
 @app.route('/requirements', methods=['GET', 'POST'])
 def requirements():
     if (request.method == 'GET'):
-        merchant_id = session['merchantID']  # get from session
+        merchant_id = session['merchantID']# get from session
         registeredName = showBusinessName(mysql, merchant_id)
         return render_template("./requirements/requirements.html", registeredName=registeredName, profile=1)
     else:
-        merchant_id = '2' # get from session
+        merchant_id = session['merchantID'] # get from session
         title = request.form.get('title')
         description = request.form.get('description')
         quantity = request.form.get('Quantity')
@@ -543,7 +541,7 @@ def requirements():
         status = "Post"
         saveRequirements(mysql, merchantID=merchant_id, title=title, description=description, quantity=quantity,
                          price=price, status=status)
-        return redirect(request.url)
+        return redirect(url_for('showbuyerrequirements'))
 
 
 @app.route('/offers',methods=['GET', 'POST'])

@@ -17,6 +17,6 @@ def saveRequirements(mysql,merchantID,title,description,quantity,price,status):
 
 def showBusinessName(mysql,merchantID):
     cur = mysql.connection.cursor()
-    cur.execute("select RegisteredName from Merchant where MerchantID=%s",(str(merchantID)))
+    cur.execute("select RegisteredName from Merchant where MerchantID='{}'".format(merchantID))
     a = cur.fetchall()
     return a[0]['RegisteredName']

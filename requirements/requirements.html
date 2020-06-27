@@ -1,20 +1,65 @@
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./requirements/requirements.css') }}">
 <script type="text/javascript" src="{{url_for('static',filename='./requirements/requirements.js') }}"></script>
+<style>
+    .dropbtn1 {
+        background-color: #fdbb0a;
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+
+    }
+
+    .dropdown1 {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content1 {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+    .dropdown-content1 a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown-content1 a:hover {background-color: #ddd;}
+
+    .dropdown1:hover .dropdown-content1 {display: block;
+        opacity: 50%;}
+
+    .dropdown1:hover .dropbtn1 {background-color: red;}
+</style>
 
 <body onload="showThis({{profile}})">
 
     <div>
         <ul class="split left">
-            <li>
-                <h4 onclick="showThis(2)">Supplier profile</h4><br>
-            </li>
-            <li>
-                <h4 onclick="showThis(3)" id="buyerTab">Buyer profile</h4>
-            </li>
-            <li style="margin-left: 25px; display: none" id="createReqTab">
-                <h4 onclick="showThis(1)">Create Request</h4>
-            </li>
+            <br><br>
+            <li><div class="dropdown1">
+            <button class="dropbtn1" >Supplier Profile</button>
+            <div class="dropdown-content1">
+                <h4><a href="/requirementssupplier">All Posts</a></h4>
+            </div>
+            </div></li>
+            <br><br><br>
+            <li><div class="dropdown1">
+                <button class="dropbtn1" >Buyer Profile&emsp;</button>
+                <div class="dropdown-content1">
+                    <h4><a href="/requirements">Create Request</a></h4>
+                    <h4 id="buyerTab"><a href="/requirementsbuyer">All Posts</a></h4>
+                </div>
+            </div></li>
+
         </ul>
     </div>
 <center>
@@ -86,14 +131,14 @@
             }
         </style>
         <h1 style="color:#1a1f71">Create Your Request</h1>
-        <form name="requirementForm" action="" onsubmit="return validateForm()" method="post" required>
+        <form name="requirementForm" action="" onsubmit="return validateForm()" method="post">
 
             <div id="requestForm" class="containerForm ">
                 <label for="title1">Title: </label>
                 <input type="text" name="title" id="title1"  placeholder="Item Name" required /><br>
 
-                <label for="requesterName">Merchant Business Name: </label><br>
-                <input type="text" name="requesterName" id="requesterName" value="{{registeredName}}"  style="font-weight: bold;color: black" readonly />
+               <!-- <label for="requesterName">Merchant Business Name: </label><br>
+                <input type="text" name="requesterName" id="requesterName" value="{{registeredName}}"  style="font-weight: bold;color: black" readonly />-->
                 <label for="description">Description: </label><br>
                 <textarea id="description" name="description" placeholder="Write About Your Requirement...">
                     </textarea>
@@ -103,7 +148,7 @@
                 <label for="Price">Amount in Rs: </label>
                 <input type="number" name="Price" id="Price" style="height:50px" placeholder="Expected Amount" />
                 <br><br>
-                <input name="createRequest" class="button" type="submit" value="Post Request">
+                <input name="createRequest" class="button" type="submit"  value="Post Request">
 
             </div>
         </form>
