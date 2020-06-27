@@ -19,15 +19,82 @@
     </div>
 <center>
     <div id="thisDiv1" class="split1 right">
+        <style>
+
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            * {
+                box-sizing: border-box;
+            }
+
+            input[type="text"],
+            select,
+            textarea {
+                width: 100%;
+                padding: 12px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+                margin-top: 6px;
+                margin-bottom: 16px;
+                resize: vertical;
+            }
+
+            select{
+                width: 250px;
+            }
+
+            input[type="number"] {
+                padding: 12px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+                margin-top: 6px;
+                margin-bottom: 16px;
+                resize: vertical;
+            }
+
+            input[type="submit"] {
+                color: white;
+                padding: 12px 20px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                background-color: #fdbb0a;
+            }
+
+            input[type="submit"]:hover {
+                cursor: pointer;
+            }
+
+            h4 {
+                color: #ffffff;
+            }
+
+            h4:hover {
+                cursor: pointer;
+                color: #fdbb0a;
+            }
+
+
+
+            .containerForm {
+                border-radius: 5px;
+                background-color: #f2f2f2;
+                padding: 15px;
+            }
+        </style>
         <h1 style="color:#1a1f71">Create Your Request</h1>
         <form name="requirementForm" action="" onsubmit="return validateForm()" method="post" required>
 
             <div id="requestForm" class="containerForm ">
-                <label for="title1">Title</label>
-                <input type="text" name="title" id="title1" placeholder="Item Name" required />
-                <label for="requesterName">Merchant Business Name</label>
-                <input type="text" name="requesterName" id="requesterName" value="{{registeredName}}" readonly />
-                <label for="description">Description</label>
+                <label for="title1">Title: </label>
+                <input type="text" name="title" id="title1"  placeholder="Item Name" required /><br>
+
+                <label for="requesterName">Merchant Business Name: </label><br>
+                <input type="text" name="requesterName" id="requesterName" value="{{registeredName}}"  style="font-weight: bold;color: black" readonly />
+                <label for="description">Description: </label><br>
                 <textarea id="description" name="description" placeholder="Write About Your Requirement...">
                     </textarea>
                 <label for="Quantity">Quantity Required: </label>
@@ -41,6 +108,7 @@
             </div>
         </form>
     </div>
+
     <div id="thisDiv2" style="display: none" class="split1 right">
         <h1>Your supplier profile for requirements</h1>
         <form class="example" method="post" action="" style="margin:auto;max-width:600px">
@@ -108,28 +176,50 @@
                 <form method="post" action="" onsubmit="getBack({{loop.index}})">
                     <input type="hidden" name="requirementID" value="{{item['RequirementID']}}" >
                 <td colspan="1"> <div id="showProducts{{loop.index}}" style="display: none">
+
                                  <select name="selectProduct" >
-                                  {%for item in sellProduct %}
-                                     <option value="{{item['ProductID']}}" selected >
-                                         <p>{{item['Name']}}
-                                             {{item['Description']}}
+
+                                  {%for items in sellProduct %}
+                                    {% if (items['Quantity']|int()) >= (item['Quantity']|int()) %}
+                                     <option value="{{items['ProductID']}}" selected>
+                                         <p><h3>Name: {{items['Name']}}</h3><br>
+                                         <h4 style="opacity: 50%;">Descrtiption: {{items['Description']}}</h4><br>
+                                             <h4>Quantity: {{items['Quantity']}}</h4>
                                          </p>
                                      </option>
+                                       {% endif %}
                                      {% endfor %}
                                  </select>
                 </div>
                     <p><input type="submit" name="Approve" value="Send request"  style="display: none" id="sendRequest{{loop.index}}"><br>
-                    <input type="button" name="Approve" value="Approve request"  onclick="showProducts({{loop.index}})" id="ApproveRequest{{loop.index}}">
+                    <input type="button" name="Approve" value="Approve request"  onclick="showProducts({{loop.index}},{{sellProduct}},{{item['Quantity']}})" id="ApproveRequest{{loop.index}}">
                     </p>
 
                 </td>
 
                 </form>
-                    <script> function showProducts(id) {
+                    <script> function showProducts(id,arr,req) {
 
-                        document.getElementById("showProducts"+id).style.display = "block";
-                        document.getElementById("sendRequest"+id).style.display = "block";
-                        document.getElementById("ApproveRequest"+id).style.display="none";
+                        console.log(arr);
+                        var x = arr.length;
+                        var check = false;
+                        console.log(x,req);
+                        for(var i=0;i<x;i++)
+                        {
+                            var x1 = parseInt(arr[i]['Quantity']);
+
+                            if(x1>=parseInt(req))
+                                check = true;
+                        }
+                        if(check == true) {
+                            document.getElementById("showProducts" + id).style.display = "block";
+                            document.getElementById("sendRequest" + id).style.display = "block";
+                            document.getElementById("ApproveRequest" + id).style.display = "none";
+                        }
+                        else
+                        {
+                            alert("You cannot approve Request.You don't have that much of stock");
+                        }
 
                     }
                     function getBack(id) {
@@ -137,6 +227,23 @@
                         document.getElementById("ApproveRequest"+id).value="Approve request";
                         document.getElementById("ApproveRequest"+id).type="button";
                     }
+                    function isPossible(quantityHave, quantityRequired) {
+
+                        var x1 = parseInt(quantityHave);
+                        var x2 = parseInt(quantityRequired);
+                        if(x1<x2){
+                            alert("U have "+quantityHave + "in your stock only");
+                            return false;
+                        }
+                        else{
+                            return true;
+                        }
+
+                        return true;
+
+                    }
+
+
                     </script>
                     {% endif %}
                 </tr>
@@ -221,7 +328,7 @@
                     <input type="hidden" name="ProductID[]" value="{{x['Product.ProductID']}}">
                     <input type="hidden" name="Name[]" value="{{x['Product.Name']}}">
                     <input type="hidden" name="Description[]" value="{{x['Product.Description']}}">
-                    <input type="hidden" name="merchantWhoAP" value="{{x['MerchantID']}}">
+                    <input type="hidden" name="merchantWhoAP" value="{{x['Merchant.MerchantID']}}">
                     <input type="hidden" name="qty[]" value="{{item['Quantity']}}">
                     <input type="hidden" name="PriceItem[]" value="{{x['Product.Price']}}">
                     </form>

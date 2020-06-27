@@ -170,7 +170,13 @@ def getBuyerRequests(mysql,merchantid,choice='R'):
 
 #SUPPLIER
 def approveDeal(mysql,requirementID,productID):
+
     cur = mysql.connection.cursor()
+    try:
+        cur.execute("INSERT INTO RequirementAccepted values('{}','{}','{}')".format(requirementID,productID,"no"))
+    except Exception as e:
+        print("insert "+str(e))
+
     cur.execute("UPDATE RequirementAccepted,Requirement SET RequirementAccepted.Status='{}'  WHERE RequirementAccepted.RequirementID='{}' AND Requirement.RequirementID='{}'".format("yes",requirementID,requirementID,))
     mysql.connection.commit()
     cur.execute("UPDATE RequirementAccepted,Requirement SET RequirementAccepted.ProductID='{}'  WHERE RequirementAccepted.RequirementID='{}' AND Requirement.RequirementID='{}'".format(productID,requirementID,requirementID))
@@ -182,6 +188,7 @@ def approveDeal(mysql,requirementID,productID):
 def acceptDeal(mysql,requirementID,merchantIDwhoPost,cartID):
     cur = mysql.connection.cursor()
     cur.execute("UPDATE Requirement,RequirementAccepted,Cart,Orders SET Requirement.Status= '{}' where Requirement.RequirementID='{}' and Orders.CartID='{}' and Requirement.MerchantID".format("Done",requirementID,cartID,merchantIDwhoPost))
+
     mysql.connection.commit()
 
 
@@ -189,7 +196,10 @@ def acceptDeal(mysql,requirementID,merchantIDwhoPost,cartID):
 def rejectDeal(mysql,requirementID):
     cur = mysql.connection.cursor()
     #cur.execute("UPDATE RequirementAccepted,Requirement SET RequirementAccepted.Status='{}' WHERE RequirementAccepted.RequirementID='{}' AND Requirement.RequirementID='{}'".format("no",requirementID,requirementID))
-    cur.execute("Delete from RequirementAccepted WHERE RequirementID='{}'".format(requirementID))
+    try:
+        cur.execute("INSERT INTO RequirementAccepted values('{}','{}','{}')".format(requirementID,"nothing","no"))
+    except Exception as e:
+        print("insert "+str(e))
     mysql.connection.commit()
 
 
