@@ -18,6 +18,8 @@ def getOrders(mysql,merchantid,delivered_filter):
         cartid=i['CartID']
         cur.execute("select * from Cart,Product,ProductCart where Product.ProductID=ProductCart.ProductID and ProductCart.CartID=Cart.CartID and Cart.CartID='"+str(cartid)+"';")
         data['Products_list']=list(cur.fetchall())
+        if IsRated(mysql,i['OrderID']):
+            data['Rated']=IsRated(mysql,i['OrderID'])
         res.append(data)
     print(res)
     return res
@@ -30,15 +32,24 @@ def Delivered(mysql,orderid,merchantid):
 
 def IsRated(mysql,orderid):
     cur = mysql.connection.cursor()
-    cur.execute("select * from Ratings where OrderID='%s'",(orderid,))
-    if cur.fetchall():
-        return True
+    cur.execute("select * from Ratings where OrderID=%s",(orderid,))
+    a=cur.fetchone()
+    if a:
+        return a['Value']
     return False
 
-def AddRating(mysql,orderid):
+def AddRating(mysql,orderid,rating):
     cur=mysql.connection.cursor()
-    cur.execute("insert into Ratings values ('%s','%s')",(uuid.uuid1(),orderid))
+    cur.execute("insert into Ratings values (%s,%s,%s)",(uuid.uuid1(),orderid,rating))
     mysql.connection.commit()
 
-def SearchRatings(mysql):
-    pass
+
+# average rating for every merchant id
+def SearchRatings(mysql,merchantid):
+    cur=mysql.connection.cursor()
+    cur.execute("select Count(distinct Ratings.Value) as Votes, AVG(distinct Ratings.Value) as Avg_rating from Ratings,Orders,Cart,ProductCart,Product where "
+                "Orders.OrderID=Ratings.OrderID and Cart.CartID=Orders.CartID and ProductCart.CartID=Cart.CartID and "
+                "Product.ProductID=ProductCart.ProductID and Product.MerchantID=%s;",(merchantid,))
+    ratings=cur.fetchall()
+    return ratings
+
