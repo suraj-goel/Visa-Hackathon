@@ -250,6 +250,10 @@ def showCart(merchant_id):
             addToCart(mysql, qty, ProductID, Name, Description, Price, merchant_id, status, finalPrice,
                       finalDiscountPrice, NegotitatedRequestAmount)
             modify()
+            session.clear()
+            session['type']=type
+            session['mid'] = seller_id
+            session['merchantID'] = merchant_id
         if (Type == 'Process Payment'):
             amount = finalDiscountPrice
             return render_template('./payment/payment.html', amount=amount)
@@ -359,6 +363,7 @@ def registerCyber():
 
 @app.route('/payments/', methods=['GET', 'POST'])
 def payment():
+
     amount = 0
     try:
         amount = request.form['finalDiscountPrice']
@@ -377,6 +382,7 @@ def cybersource():
     Offers = session['offers']
     discountPrice = session['discountPrice']
     sellerId = session['mid'] # why?
+
 
     cur = mysql.connection.cursor()
     cur.execute("select AggregatorID,CardAcceptorID,Name from CybersourceMerchant where MerchantID='"+sellerId+"';")

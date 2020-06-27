@@ -18,6 +18,5 @@ function validateForm() {
         alert("Error in Creating Request. Fill all Information Carefully");
         return false;
     }
-    alert("REQUIREMENT POSTED");
-    return true;
+    return alert("Post Requirement?");
 }
