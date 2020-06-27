@@ -77,20 +77,23 @@ def login():
 
         return redirect(url_for('login'))
 
-    return render_template("./login_registration/login.html")
+    return render_template("./login_registration/login_template.html")
+    #return render_template("./login_registration/login.html")
 
 @app.route('/register', methods=['GET', 'POST'])
 @login_required
 def register():
+    print("register")
     if request.method == 'POST':
         #session.pop('user_id', None)
 
-        #username = request.form['username']
-        #password = request.form['password']
         email = request.form.get('email')
-        name = request.form.get('name')
+        merchantName = request.form.get('name')
         password = request.form.get('password')
-        confirmPassword = request.form.get('confirmPassword')
+        confirmPassword = request.form.get('confirm_password')
+        address = request.form.get('address')
+        contactNumber = request.form.get('contact_number')
+        registeredName = request.form.get('registered_name')
 
         if password != confirmPassword:
             flash('Passwords do not match')
@@ -105,8 +108,9 @@ def register():
             session['session_id'] = id
 
         return redirect(url_for('login'))
-
-    return render_template("./login_registration/registration.html")
+    print("get")
+    return render_template("./login_registration/registration_template.html")
+    #return render_template("./login_registration/registration.html")
 
 @app.route('/logout')
 @login_required

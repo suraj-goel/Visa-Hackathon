@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='../static/css/style.css')}}">
+
+    <title>Hello, world!</title>
+  </head>
+  <body class="bg-nav">
+    <nav class="navbar ">
+        <a href="" class="navbar-brand text-light">Small Business</a>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+
+                <h1 class="text-light display-4 mt-50" style="font-size: 80px"> Some Quote</h1>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card mt-100">
+                    <div class="card-body">
+                        <form class="form" method="post" action="/register">
+                            <label>Email</label><br>
+                            <input type="email" class="form-control" name="email"><br>
+                            <label>Password</label><br>
+                            <input type="password" class="form-control" name="password"><br>
+                            <label>Confirm Password</label><br>
+                            <input type="password" class="form-control" name="confirm_password"><br>
+                            <label>Merchant Name</label><br>
+                            <input type="text" class="form-control" name="merchant_name"><br>
+                            <label>Registered Name</label><br>
+                            <input type="text" class="form-control" name="registered_name"><br>
+                            <label>Contact Number</label><br>
+                            <input type="number" class="form-control" name="contact_number"><br>
+                            <label>Address</label><br>
+                            <input type="text" class="form-control" name="address"><br>
+                            <input type="submit" class="btn btn-primary btn-block btn-lg" value="Register">
+                        </form>
+                        <p class="mt-4">Already a member? <a href="/login">Login</a></p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </di>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+  </body>
+</html>
