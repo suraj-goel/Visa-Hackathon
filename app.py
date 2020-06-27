@@ -537,12 +537,11 @@ def showbuyerrequirements():
 
 @app.route('/requirements', methods=['GET', 'POST'])
 def requirements():
+    merchant_id = session['merchantID']
     if (request.method == 'GET'):
-        merchant_id = session['merchantID']  # get from session
         registeredName = showBusinessName(mysql, merchant_id)
         return render_template("./requirements/requirements.html", registeredName=registeredName, profile=1)
     else:
-        merchant_id = '2' # get from session
         title = request.form.get('title')
         description = request.form.get('description')
         quantity = request.form.get('Quantity')
