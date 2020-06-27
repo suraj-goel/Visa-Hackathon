@@ -1,4 +1,4 @@
-
+from orders_management.orderHistory import SearchRatings
 from .distanceCoordinates import distanceInKMBetweenCoordinates
 def getAllMerchants(mysql,merchantID,radius):
     cur = mysql.connection.cursor()
@@ -34,6 +34,7 @@ def getAllMerchants(mysql,merchantID,radius):
             x = list(cur.fetchall())
             if x:
                 i['Offers'] = x
+            i['rate']=SearchRatings(mysql,i['MerchantID'])
             data_res.append(i)
     cur.close()
    

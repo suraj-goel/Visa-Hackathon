@@ -20,7 +20,7 @@ from negotiation.negotiation import *
 from payment.confirmPayment import *
 from manage_inventory.supplierupdater import *
 from manage_offers.displayOffers import *
-from orders_management.orderHistory import Delivered
+from orders_management.orderHistory import Delivered, AddRating
 
 app = Flask(__name__, static_folder='')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader, jinja2.FileSystemLoader(['.'])])
@@ -101,6 +101,13 @@ def delivered():
     merchantid= session['merchantID']
     orderid=request.form['orderid']
     Delivered(mysql,orderid,merchantid)
+    return redirect(url_for('orders'))
+
+@app.route('/rating',methods=['POST','GET'])
+def ratings():
+    rating= request.form['rating']
+    order=request.form['orderidrated']
+    AddRating(mysql,order,rating)
     return redirect(url_for('orders'))
 
 @app.route('/orders', methods=['POST', 'GET'])
@@ -528,6 +535,7 @@ def showbuyerrequirements():
 
 @app.route('/requirements', methods=['GET', 'POST'])
 def requirements():
+    merchant_id = session['merchantID']
     if (request.method == 'GET'):
         merchant_id = session['merchantID']# get from session
         registeredName = showBusinessName(mysql, merchant_id)
