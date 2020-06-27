@@ -265,24 +265,10 @@ def showCart(merchant_id):
 def displayaccountsdetails():
     merchant_id = session['merchantID']
     cur = mysql.connection.cursor()
-    cur.execute("select * from PaymentType where MerchantID='" + merchant_id + "';")
-    r = cur.fetchone()
-
     cur.execute("select * from Merchant where MerchantID='" + merchant_id + "';")
     result = cur.fetchone()
     cur.close()
-    if r == None:
-        return render_template("./accounts/displayAccountDetails.html", result=result, b2bregistered=0,
-                               cyberregistered=0)
-    elif r['PayType'] == '1':
-        return render_template("./accounts/displayAccountDetails.html", result=result, b2bregistered=0,
-                               cyberregistered=1)
-    elif r['PayType'] == '2':
-        return render_template("./accounts/displayAccountDetails.html", result=result, b2bregistered=1,
-                               cyberregistered=0)
-    else:
-        return render_template("./accounts/displayAccountDetails.html", result=result, b2bregistered=1,
-                               cyberregistered=1)
+    return render_template("./accounts/displayAccountDetails.html", result=result)
 
 
 @app.route('/editaccountinfo/', methods=['GET', 'POST'])
@@ -325,7 +311,7 @@ def editAccountDetails():
     cur.close()
     return render_template("./accounts/editAccountDetails.html", result=result)
 
-
+#Will be removed once registration is added, register_merchant call will be made in the backend and then forwarded to registercyber
 @app.route('/registerB2B/<merchant_id>', methods=['GET', 'POST'])
 def registerB2B(merchant_id):
     register_merchant(mysql, merchant_id)
