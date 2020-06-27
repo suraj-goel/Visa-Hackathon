@@ -255,6 +255,8 @@ def showCart(merchant_id):
             session['mid'] = seller_id
             session['merchantID'] = merchant_id
             session['finalDiscountPrice'] = finalDiscountPrice
+            session['fqty']=qty
+            session['fProductID']=ProductID
         if (Type == 'Process Payment'):
             amount = finalDiscountPrice
             return render_template('./payment/payment.html', amount=amount)
@@ -350,7 +352,6 @@ def registerCyber():
 
 @app.route('/payments/', methods=['GET', 'POST'])
 def payment():
-
     amount = 0
     try:
         amount = request.form['finalDiscountPrice']
@@ -361,15 +362,10 @@ def payment():
 
 @app.route('/cybersource/', methods=['GET', 'POST'])
 def cybersource():
-    qty=session['qty']
-    ProductID=session['ProductID']
-    Name = session['Name']
-    Description =session['Description']
-    Price = session['Price']
-    Offers = session['offers']
-    discountPrice = session['discountPrice']
+    qty=session['fqty']
+    ProductID=session['fProductID']
     sellerId = session['mid'] # why?
-
+    merchant_id = session['merchantID']
 
     cur = mysql.connection.cursor()
     cur.execute("select AggregatorID,CardAcceptorID,Name from CybersourceMerchant where MerchantID='"+sellerId+"';")
@@ -387,7 +383,7 @@ def cybersource():
         status = simple_authorizationinternet(cardNumber,month,year,amount,aggregatorID,cardAcceptorID,username)
         if (status == 1):
             print('Payment Authorized')
-            addToOrders(mysql,qty,ProductID,Name,Description,Price,sellerId,"no",discountPrice,amount,datetime.today().strftime('%Y-%m-%d'))
+            addToOrders(mysql,qty,ProductID,merchant_id,amount,datetime.today().strftime('%Y-%m-%d'))
             updateSupplierInventory(mysql, ProductID,qty) #productID=ProductList
             return redirect(url_for('showAll'))
         else:
@@ -400,14 +396,9 @@ def cybersource():
 @app.route('/b2bpay/', methods=['GET','POST'])
 def b2bpay():
     merchant_id = session['merchantID']
-    qty = session['qty']
-    ProductID = session['ProductID']
-    Name = session['Name']
-    Description = session['Description']
-    Price = session['Price']
-    Offers = session['offers']
-    discountPrice = session['discountPrice']
-    sellerId = session['mid'] #Temporarily because merchantid 1 isn't actually registered, for demo let's show this, but change later once login is added.
+    qty = session['fqty']
+    ProductID = session['fProductID']
+    sellerId = session['mid']
 
     cur = mysql.connection.cursor()
     cur.execute("select AccountNumber from B2BDetails where MerchantID='"+sellerId+"';")
@@ -419,14 +410,13 @@ def b2bpay():
         status = paymentProcessing(amount, merchant_id, accountNumber)#clientid is a default parameter but can be added
         if status==1:
             print("Payment Authorized")
-            addToOrders(mysql,qty,ProductID,Name,Description,Price,merchant_id,"no",discountPrice,amount,datetime.today().strftime('%Y-%m-%d'))
+            addToOrders(mysql,qty,ProductID,merchant_id,amount,datetime.today().strftime('%Y-%m-%d'))
             updateSupplierInventory(mysql, ProductID,qty) #productID=ProductList
             return redirect(url_for('showAll'))
         else:
             print("Payment not authorized")
             flash("Error in payment, check account details again or try different payment")
     return render_template("./payment/payment.html",amount=amount)
-
 
 @app.route('/negotiation', methods=['GET', 'POST'])
 def negotiation():
