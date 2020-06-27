@@ -254,6 +254,7 @@ def showCart(merchant_id):
             session['type']=type
             session['mid'] = seller_id
             session['merchantID'] = merchant_id
+            session['finalDiscountPrice'] = finalDiscountPrice
         if (Type == 'Process Payment'):
             amount = finalDiscountPrice
             return render_template('./payment/payment.html', amount=amount)
@@ -505,6 +506,13 @@ def showbuyerrequirements():
             print("filterbuyer" + str(e))
 
         try:
+            deleteRequest = request.form['Delete']
+            requirementID = request.form['requirementID']
+            deletePending(mysql,requirementID)
+            return redirect(request.url)
+        except Exception as e:
+            print("NO NOT DELETE"+ str(e))
+        try:
             accept = request.form['request']
             # acceptDeal(mysql,requirementID)
             # change this to payment after payment module is finish
@@ -518,9 +526,7 @@ def showbuyerrequirements():
             session['mid'] = request.form.get('merchantWhoAP')
             #session['mid'] = '1'
             print(session['mid'])
-
             Price = []
-
             print(session)
             loop = len(session['PriceItem'])
             print(loop)
@@ -533,6 +539,7 @@ def showbuyerrequirements():
         except Exception as e:
             print("AC" + str(e))
         return render_template(url_for("requirements"))
+
     else:
         choice = 'E'
         items = getBuyerRequests(mysql, merchantid, choice)

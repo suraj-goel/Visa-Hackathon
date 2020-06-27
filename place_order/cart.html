@@ -1,86 +1,18 @@
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./place_order/place_order.css') }}">
 <script type="text/javascript" src="{{url_for('static',filename='./place_order/cart_feature.js') }}"></script>
-<script>
-    //will shift this later on different page
-    var finalPrice = sessionStorage.getItem("finalPrice");
-    var discountPrice = sessionStorage.getItem("discountPrice");
-    var check = false;
-    function save(event) {
 
-        if (check == true) {
-            event.preventDefault();
-        }
-        check = true;
-    }
-
-    function negotiate() {
-        check = true;
-        var tprice = sessionStorage.getItem("discountPrice");
-        var negprice = prompt("Please enter the amount you want", tprice);
-        console.log(tprice, negprice);
-        var priceSent = tprice;
-        if (parseInt(negprice) <= parseInt(tprice) && parseInt(negprice) >= 0) {
-            priceSent = negprice;
-            alert("Negotiated price (" + priceSent + ") sent to merchant");
-        } else if (parseInt(negprice) > parseInt(tprice) || parseInt(negprice) < 0) {
-            priceSent = tprice;
-            alert("Negotiated Price should be greater than 0 and less than Discount price(" + tprice + ")");
-            alert("Discount price (" + priceSent + ") sent to merchant");
-        }
-        document.getElementById("Negotiated").value = parseInt(priceSent);
-    }
-
-    function payment() {
-        check = true;
-    }
-
-    function goBack() {
-        window.history.back();
-    }
-
-    function FinalPrice() {
-        var v1 = document.getElementById("finalPrice");
-        v1.innerHTML = finalPrice;
-        var v2 = document.getElementById("finalPrice1");
-        v2.value = finalPrice;
-    }
-
-    function DiscountPrice() {
-        var v1 = document.getElementById("discountPrice");
-        v1.innerHTML = discountPrice;
-        var v2 = document.getElementById("finalDiscountPrice1");
-        v2.value = discountPrice;
-    }
-
-    function deleteAllHistory() {
-        window.history.go(-(window.history.length - 1));
-        window.history.back()
-    }
-
-    function showDetails() {
-        document.getElementById("contact").style.display = "block";
-    }
-
-    function hideDetails() {
-        document.getElementById("contact").style.display = "none";
-    }
-
-    function addItems() {
-        var x = document.getElementById("emptyCart").name;
-        return window.location = x;
-    }
-</script>
 
 <body>
     <center>
         {%if totalQuantity ==0 %}
         <h2 style="color: chocolate"><b>YOUR CART IS EMPTY</b></h2>
-
-        <div style="margin-left: 45%">
-            <button id="emptyCart" class="button" name="{{url_for('showPlaceOrder',merchant_id=merchantID)}}" type="button"
+         <center>
+        <div>
+            <button id="emptyCart"  class="button" name="{{url_for('showPlaceOrder',merchant_id=merchantID)}}" type="button"
                 onclick="addItems()"><span> ADD ITEMS </span></button>
         </div>
+         </center>
         {%else%}
 
         <h2 style="color:#1a1f71"> Your Cart </h2>
@@ -125,8 +57,8 @@
                 <div id="contact" style="display: none">
                     <p style="color: #053ea9;"> <b>Phone No:</b> {{contact}}</p>
                     <p style="color: #053ea9;"> <b>Email ID</b>: {{emailID}}</p>
-                    <input type="submit" name="type" class="button" onclick="negotiate()" value="Enter Your Amount" />
-                    
+                    <input type="submit" name="type" class="button" onclick="negotiate({{totalDiscountCost}})" value="Enter Your Amount" />
+
                     <br><br><br>
                 </div>
                 {% if type=='simple'  %}

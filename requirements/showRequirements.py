@@ -211,6 +211,16 @@ def allProductID(mysql,merchantID):
     #print(sellProduct)
     return sellProduct
 
+#BUYER
+def deletePending(mysql,requirementID):
+
+    cur = mysql.connection.cursor()
+    cur.execute("select * from RequirementAccepted where RequirementID='{}' and Status='{}'".format(requirementID,"yes"))
+    a = cur.fetchall();
+    loop = len(a)
+    if(loop == 0):
+        cur.execute("Delete from Requirement where RequirementID='{}'".format(requirementID))
+        mysql.connection.commit()
 
 
 def getInfo(mysql,requiremenID):
