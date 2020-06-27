@@ -64,7 +64,6 @@
 
         </ul>
     </div>
-<center>
     <div id="thisDiv1" class="split1 right">
         <style>
 
@@ -124,15 +123,15 @@
                 color: #fdbb0a;
             }
 
-
-
             .containerForm {
                 border-radius: 5px;
                 background-color: #f2f2f2;
                 padding: 15px;
             }
         </style>
+         <center>
         <h1 style="color:#1a1f71">Create Your Request</h1>
+         </center>
         <form name="requirementForm" action="" onsubmit="return validateForm()" method="post">
 
             <div id="requestForm" class="containerForm ">
@@ -142,20 +141,20 @@
                <!-- <label for="requesterName">Merchant Business Name: </label><br>
                 <input type="text" name="requesterName" id="requesterName" value="{{registeredName}}"  style="font-weight: bold;color: black" readonly />-->
                 <label for="description">Description: </label><br>
-                <textarea id="description" name="description" placeholder="Write About Your Requirement...">
-                    </textarea>
+                <textarea id="description" name="description" placeholder="Write About Your Requirement..."></textarea>
                 <label for="Quantity">Quantity Required: </label>
-                <input type="number" name="Quantity" id="Quantity" style="height:50px" min="1"
+                <input type="number" name="Quantity" id="Quantity" style="height:50px;width: 20%;" min="1"
                     placeholder="Quantity Required" required /> <br>
-                <label for="Price">Amount in Rs: </label>
-                <input type="number" name="Price" id="Price" style="height:50px" placeholder="Expected Amount" />
+                <label for="Price">Amount in Rs: &emsp;&ensp; </label>
+                <input type="number" name="Price" id="Price" style="height:50px;width: 20%" placeholder="Expected Amount" />
                 <br><br>
-                <input name="createRequest" class="button" type="submit"   value="Post Request">
-
+                <center>
+                <input name="createRequest" class="button" type="submit"value="Post Request">
+                </center>
             </div>
         </form>
     </div>
-
+    <center>
     <div id="thisDiv2" style="display: none" class="split1 right">
         <h1>Your supplier profile for requirements</h1>
         <form class="example" method="post" action="" style="margin:auto;max-width:600px">

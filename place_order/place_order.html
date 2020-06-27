@@ -3,7 +3,7 @@
     xmlns="http://www.w3.org/1999/html">
 <script type="text/javascript" src="{{url_for('static',filename='./place_order/place_order.js') }}"></script>
 
-<body onmouseover="validate()">
+<body onload="validate()">
     <h2 style="color:#1a1f71"> Place your Orders here </h2>
 
     {% if products %}
