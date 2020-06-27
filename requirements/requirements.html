@@ -208,12 +208,12 @@
                         {% elif item['Status']=='Buyer accepted and paid' %}<span style="color:green">Status: Buyer accepted and paid</span></span>
                         {% elif item['Status']=='Rejected and closed' %}<span style="color:red">Status: Rejected and closed </span></span>
                         {% endif %}</span>
-                        <h3>Description: {{item['Description']}}</h3>
-                        {% if item['Price']!='' and item['Price']!=None %} <h3>Price Expected: Rs {{item['Price']}}</h3>
+                        <h5>Description: {{item['Description']}}</h5>
+                        {% if item['Price']!='' and item['Price']!=None %} <h5>Price Expected: Rs {{item['Price']}}</h5>
                         {%else%}
-                        <h3>Price Expected: Any Price</h3>
+                        <h5>Price Expected: Any Price</h5>
                         {% endif %}
-                        <h3>Quantity Required: {{item['Quantity']}}</h3>
+                        <h5>Quantity Required: {{item['Quantity']}}</h5>
                     </td>
                 <td colspan="2"><b>Merchant details:<br>Name:</b>{% if item['Merchant.Name'] %}{{item['Merchant.Name']}} {% else %}{{item['Name']}} {% endif %}<br><b>Registered Shop:</b>{{item['RegisteredName']}}, {{item['Address']}}<br></td>
                 {% if item['Product.ProductID'] %}
@@ -359,12 +359,12 @@
                         {% elif item['Status']=='Done' %}<span style="color:blue">Closed</span></span>
                         {% elif item['Status']=='Accepted' %}<span style="color:green">Accepted by supplier</span></span>
                         {% endif %}</span>
-                        <h3>Description: {{item['Description']}}</h3>
-                        {% if item['Price']!='' and item['Price']!=None %} <h3>Expect Price: Rs {{item['Price']}}</h3>
+                        <h5>Description: {{item['Description']}}</h5>
+                        {% if item['Price']!='' and item['Price']!=None %} <h5>Expect Price: Rs {{item['Price']}}</h5>
                         {%else%}
-                        <h3>Price Expected: Any Price</h3>
+                        <h5>Price Expected: Any Price</h5>
                         {% endif %}
-                        <h3>Quantity Required: {{item['Quantity']}}</h3>
+                        <h5>Quantity Required: {{item['Quantity']}}</h5>
 
                     </td>
                     {% if item['Status']=='Done' %}
