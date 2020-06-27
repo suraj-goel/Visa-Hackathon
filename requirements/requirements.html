@@ -19,15 +19,82 @@
     </div>
 <center>
     <div id="thisDiv1" class="split1 right">
+        <style>
+
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            * {
+                box-sizing: border-box;
+            }
+
+            input[type="text"],
+            select,
+            textarea {
+                width: 100%;
+                padding: 12px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+                margin-top: 6px;
+                margin-bottom: 16px;
+                resize: vertical;
+            }
+
+            select{
+                width: 250px;
+            }
+
+            input[type="number"] {
+                padding: 12px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+                margin-top: 6px;
+                margin-bottom: 16px;
+                resize: vertical;
+            }
+
+            input[type="submit"] {
+                color: white;
+                padding: 12px 20px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                background-color: #fdbb0a;
+            }
+
+            input[type="submit"]:hover {
+                cursor: pointer;
+            }
+
+            h4 {
+                color: #ffffff;
+            }
+
+            h4:hover {
+                cursor: pointer;
+                color: #fdbb0a;
+            }
+
+
+
+            .containerForm {
+                border-radius: 5px;
+                background-color: #f2f2f2;
+                padding: 15px;
+            }
+        </style>
         <h1 style="color:#1a1f71">Create Your Request</h1>
         <form name="requirementForm" action="" onsubmit="return validateForm()" method="post" required>
 
             <div id="requestForm" class="containerForm ">
-                <label for="title1">Title</label>
-                <input type="text" name="title" id="title1" placeholder="Item Name" required />
-                <label for="requesterName">Merchant Business Name</label>
+                <label for="title1">Title: </label>
+                <input type="text" name="title" id="title1"  placeholder="Item Name" required /><br>
+
+                <label for="requesterName">Merchant Business Name: </label><br>
                 <input type="text" name="requesterName" id="requesterName" value="{{registeredName}}" readonly />
-                <label for="description">Description</label>
+                <label for="description">Description: </label><br>
                 <textarea id="description" name="description" placeholder="Write About Your Requirement...">
                     </textarea>
                 <label for="Quantity">Quantity Required: </label>
@@ -41,6 +108,7 @@
             </div>
         </form>
     </div>
+
     <div id="thisDiv2" style="display: none" class="split1 right">
         <h1>Your supplier profile for requirements</h1>
         <form class="example" method="post" action="" style="margin:auto;max-width:600px">
