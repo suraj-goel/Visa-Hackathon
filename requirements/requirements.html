@@ -203,17 +203,17 @@
                 </tr>
                 <tr class="header">
                     <td colspan="4">
-                        <h3>{{item['Title']}}</h3><span style="float:right;">
+                        <h3><b>Require Item: {{item['Title']}}</b></h3><span style="float:right;">
                         {% if item['Status']=='Waiting for buyer response' %} <span style="color:orange">Status: Waiting for buyer response</span>
                         {% elif item['Status']=='Buyer accepted and paid' %}<span style="color:green">Status: Buyer accepted and paid</span></span>
                         {% elif item['Status']=='Rejected and closed' %}<span style="color:red">Status: Rejected and closed </span></span>
                         {% endif %}</span>
-                        <h4>{{item['Description']}}</h4>
-                        {% if item['Price']!='' and item['Price']!=None %} <h3>Expected Price: Rs {{item['Price']}}</h3>
+                        <h3>Description: {{item['Description']}}</h3>
+                        {% if item['Price']!='' and item['Price']!=None %} <h3>Price Expected: Rs {{item['Price']}}</h3>
                         {%else%}
-                        <h3>Expected Price: Any Price</h3>
+                        <h3>Price Expected: Any Price</h3>
                         {% endif %}
-                        <h3>Quantity: {{item['Quantity']}}</h3>
+                        <h3>Quantity Required: {{item['Quantity']}}</h3>
                     </td>
                 <td colspan="2"><b>Merchant details:<br>Name:</b>{% if item['Merchant.Name'] %}{{item['Merchant.Name']}} {% else %}{{item['Name']}} {% endif %}<br><b>Registered Shop:</b>{{item['RegisteredName']}}, {{item['Address']}}<br></td>
                 {% if item['Product.ProductID'] %}
@@ -346,7 +346,7 @@
                 </tr>
                 <tr class="header">
                     <td colspan="4">
-                        <h3>{{item['Title']}}</h3><span style="float:right;">Status:
+                        <h3><b>Require Item: {{item['Title']}}</b></h3><span style="float:right;">Status:
                         {% if item['Status']=='Pending' %} <span style="color:red">Pending
                             <form method="post" action="">
                               <input type="hidden" name="requirementID" value="{{item['RequirementID']}}">
@@ -359,12 +359,12 @@
                         {% elif item['Status']=='Done' %}<span style="color:blue">Closed</span></span>
                         {% elif item['Status']=='Accepted' %}<span style="color:green">Accepted by supplier</span></span>
                         {% endif %}</span>
-                        <h3>{{item['Description']}}</h3>
+                        <h3>Description: {{item['Description']}}</h3>
                         {% if item['Price']!='' and item['Price']!=None %} <h3>Expect Price: Rs {{item['Price']}}</h3>
                         {%else%}
-                        <h3>Expect Price: Any Price</h3>
+                        <h3>Price Expected: Any Price</h3>
                         {% endif %}
-                        <h3>Quantity: {{item['Quantity']}}</h3>
+                        <h3>Quantity Required: {{item['Quantity']}}</h3>
 
                     </td>
                     {% if item['Status']=='Done' %}
