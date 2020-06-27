@@ -535,7 +535,8 @@ def requirements():
         title = request.form.get('title')
         description = request.form.get('description')
         quantity = request.form.get('Quantity')
-        price = request.form.get('price')
+        price = request.form.get('ExpectPrice')
+        print(price)
         status = "Post"
         saveRequirements(mysql, merchantID=merchant_id, title=title, description=description, quantity=quantity,
                          price=price, status=status)

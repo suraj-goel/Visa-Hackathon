@@ -24,5 +24,4 @@ function validateForm() {
         alert("Error in Creating Request. Fill all Information Carefully");
         return false;
     }
-    return alert("Want to Post your requirement?");
 }

@@ -146,7 +146,7 @@
                 <input type="number" name="Quantity" id="Quantity" style="height:50px;width: 20%;" min="1"
                     placeholder="Quantity Required" required /> <br>
                 <label for="Price">Amount in Rs: &emsp;&ensp; </label>
-                <input type="number" name="Price" id="Price" style="height:50px;width: 20%" placeholder="Expected Amount" />
+                <input type="number" name="ExpectPrice" id="Price" style="height:50px;width: 20%" placeholder="Expected Amount" />
                 <br><br>
                 <center>
                 <input name="createRequest" class="button" type="submit"value="Post Request">
@@ -209,7 +209,10 @@
                         {% elif item['Status']=='Rejected and closed' %}<span style="color:red">Status: Rejected and closed </span></span>
                         {% endif %}</span>
                         <h4>{{item['Description']}}</h4>
-                        {% if item['Price']!='' and item['Price']!=None %} <h3>Price: {{item['Price']}}</h3> {% endif %}
+                        {% if item['Price']!='' and item['Price']!=None %} <h3>Expected Price: Rs {{item['Price']}}</h3>
+                        {%else%}
+                        <h3>Expected Price: Any Price</h3>
+                        {% endif %}
                         <h3>Quantity: {{item['Quantity']}}</h3>
                     </td>
                 <td colspan="2"><b>Merchant details:<br>Name:</b>{% if item['Merchant.Name'] %}{{item['Merchant.Name']}} {% else %}{{item['Name']}} {% endif %}<br><b>Registered Shop:</b>{{item['RegisteredName']}}, {{item['Address']}}<br></td>
@@ -227,9 +230,10 @@
                                   {%for items in sellProduct %}
                                     {% if (items['Quantity']|int()) >= (item['Quantity']|int()) %}
                                      <option value="{{items['ProductID']}}" selected>
-                                         <p><h3>Name: {{items['Name']}}</h3><br>
-                                         <h4 style="opacity: 50%;">Descrtiption: {{items['Description']}}</h4><br>
-                                             <h4>Quantity: {{items['Quantity']}}</h4>
+                                         <p><h3>Name: {{items['Name']}}. </h3><br>
+                                         <h4 style="opacity: 50%;">Description: {{items['Description']}}. </h4><br>
+                                             <h4>Quantity: {{items['Quantity']}}. </h4>
+                                             <h4>Price/Item: Rs {{items['Price']}}. </h4>
                                          </p>
                                      </option>
                                        {% endif %}
@@ -245,10 +249,8 @@
                 </form>
                     <script> function showProducts(id,arr,req) {
 
-                        console.log(arr);
                         var x = arr.length;
                         var check = false;
-                        console.log(x,req);
                         for(var i=0;i<x;i++)
                         {
                             var x1 = parseInt(arr[i]['Quantity']);
@@ -358,7 +360,10 @@
                         {% elif item['Status']=='Accepted' %}<span style="color:green">Accepted by supplier</span></span>
                         {% endif %}</span>
                         <h3>{{item['Description']}}</h3>
-                        {% if item['Price']!='' and item['Price']!=None %} <h3>Price: {{item['Price']}}</h3> {% endif %}
+                        {% if item['Price']!='' and item['Price']!=None %} <h3>Expect Price: Rs {{item['Price']}}</h3>
+                        {%else%}
+                        <h3>Expect Price: Any Price</h3>
+                        {% endif %}
                         <h3>Quantity: {{item['Quantity']}}</h3>
 
                     </td>
