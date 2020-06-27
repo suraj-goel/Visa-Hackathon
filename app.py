@@ -135,6 +135,7 @@ def showAll():
 def showPlaceOrder(merchant_id):
     if request.method == 'GET':
         currentSelectedMerchantID = merchant_id
+        session['mid'] = currentSelectedMerchantID
         # get the currentSelectedMerchantID from function
         products = displayAllProducts(mysql, currentSelectedMerchantID)
         offers = displayAllOffers(mysql, currentSelectedMerchantID)
@@ -198,7 +199,7 @@ def showCart(merchant_id):
                 l = len(qty)
                 for i in range(0,l):
                     totalQuantity += int(qty[i])
-                    totalCost += (int)(Price[i])
+                    totalCost += (int)(Price[i])*(int)(qty[i])
                     totalDiscountCost += (int)(discountPrice[i])
 
             elif type =='request':
@@ -242,8 +243,6 @@ def showCart(merchant_id):
             addToCart(mysql, qty, ProductID, Name, Description, Price, merchant_id, status, finalPrice,
                       finalDiscountPrice, NegotitatedRequestAmount)
             modify()
-        if (Type != 'Process Payment'):
-            session.clear()
         if (Type == 'Process Payment'):
             amount = finalDiscountPrice
             return render_template('./payment/payment.html', amount=amount)
@@ -432,7 +431,8 @@ def b2bpay():
 @app.route('/negotiation', methods=['GET', 'POST'])
 def negotiation():
     if (request.method == 'GET'):
-        merchant_id = session['merchantid']
+        session['merchantID'] = '1'
+        merchant_id = session['merchantID']
         allNegotiation = displayAllNegotiation(mysql, merchant_id)
         return render_template("./negotiation/negotiation.html", negotiations=allNegotiation)
 
