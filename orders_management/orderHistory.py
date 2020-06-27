@@ -47,9 +47,9 @@ def AddRating(mysql,orderid,rating):
 # average rating for every merchant id
 def SearchRatings(mysql,merchantid):
     cur=mysql.connection.cursor()
-    cur.execute("select Count(distinct Ratings.Value) as Votes, AVG(distinct Ratings.Value) as Avg_rating from Ratings,Orders,Cart,ProductCart,Product where "
+    cur.execute("select FLOOR(AVG(distinct Ratings.Value)+0.5) as stars ,Count(distinct Ratings.Value) as Votes, AVG(distinct Ratings.Value) as Avg_rating from Ratings,Orders,Cart,ProductCart,Product where "
                 "Orders.OrderID=Ratings.OrderID and Cart.CartID=Orders.CartID and ProductCart.CartID=Cart.CartID and "
                 "Product.ProductID=ProductCart.ProductID and Product.MerchantID=%s;",(merchantid,))
-    ratings=cur.fetchall()
+    ratings=cur.fetchone()
     return ratings
 
