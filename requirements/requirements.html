@@ -2,6 +2,42 @@
 <link rel="stylesheet" href="{{ url_for('static',filename='./requirements/requirements.css') }}">
 <script type="text/javascript" src="{{url_for('static',filename='./requirements/requirements.js') }}"></script>
 <style>
+#check::-webkit-outer-spin-button,
+#check::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+#check  {
+  width: 80%;
+  box-sizing: border-box;
+  border-radius: 4px;
+  border: 2px solid #faaa13;
+  float: left;
+  font-size: 1.7rem;
+  font-family: "open-sans", sans-serif, Tahoma;
+  font-weight: 300;
+  background-color: white;
+  padding: 12px 20px 12px 40px;
+  transition: width 0.4s ease-in-out;
+}
+#search {
+  float: left;
+  width: 10%;
+  padding: 8px;
+  background: #fdbb0a;
+  color: white;
+  font-size: 1.7rem;
+  font-family: "open-sans", sans-serif, Tahoma;
+  font-weight: 300;
+  border: 2px solid #faaa13;
+  border-left: none;
+  cursor: pointer;
+  height: 55px;
+}
+
+#search:hover {
+  background: #faaa13;
+}
     .dropbtn1 {
         background-color: #fdbb0a;
         color: white;
@@ -193,6 +229,10 @@
         <h1>All Approved by you</h1>
         {% else %}
         <h1>Open posts</h1><br>
+        <form action="/search_requirement" method="post">
+            <input type="text" name="search_name" id="check">
+            <button type="submit" placeholder="Search by requirement name" id="search">Search &nbsp; <i class="fa fa-search"></i></button>
+            </form>
         {% endif %}
         {% if sup_items %}
         <div class="container">
