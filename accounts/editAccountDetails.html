@@ -5,10 +5,6 @@
     <div>
         <form action="/editaccountinfo/" method="POST">
             <p>
-                <label>Merchant ID : </label>
-                <label>{{ result['MerchantID'] }}</label>
-            </p>
-            <p>
                 <label>Name : </label>
                 <input value="{{ result['Name'] }}" name="name" type="text" required>
             </p>
