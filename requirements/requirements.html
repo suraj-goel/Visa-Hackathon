@@ -242,6 +242,7 @@
                 </div>
                     <p><input type="submit" name="Approve" value="Send request"  style="display: none" id="sendRequest{{loop.index}}"><br>
                     <input type="button" name="Approve" value="Approve request"  onclick="showProducts({{loop.index}},{{sellProduct}},{{item['Quantity']}})" id="ApproveRequest{{loop.index}}">
+                     <input type="button" name="Cancel" value="Cancel Request" style="display: none" onclick="hideProducts({{loop.index}})" id="CancelRequest{{loop.index}}">
                     </p>
 
                 </td>
@@ -262,11 +263,20 @@
                             document.getElementById("showProducts" + id).style.display = "block";
                             document.getElementById("sendRequest" + id).style.display = "block";
                             document.getElementById("ApproveRequest" + id).style.display = "none";
+                            document.getElementById("CancelRequest"+id).style.display = "block";
                         }
                         else
                         {
                             alert("You cannot approve Request.You don't have that much of stock");
                         }
+
+                    }
+                    function hideProducts(id) {
+
+                        document.getElementById("showProducts"+id).style.display = "none";
+                        document.getElementById("sendRequest"+id).style.display = "none";
+                        document.getElementById("CancelRequest"+id).style.display = "none";
+                        document.getElementById("ApproveRequest"+id).style.display = "block";
 
                     }
                     function getBack(id) {
