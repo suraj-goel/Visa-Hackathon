@@ -1,11 +1,23 @@
+from functools import wraps
+#from flask_googlemaps import GoogleMaps
+#from flask_googlemaps import Map
 from datetime import datetime
 import jinja2
+import os
+import uuid
+from datetime import timedelta
+from flask import Flask, render_template, request
 from flask import *
 from flask import session
 from services.db.db_connection import set_connection
 from search_merchants.searchMerchant import getCurrentLocation
 from place_order.displayProduct import displayAllProducts, displayAllOffers
 from search_merchants.searchProducts import getSearchResults
+# from place_order.displayCart import displayALLCart
+from login_registration.registerMerchant import checkIfExistingMerchant, registerNewMerchant, checkPayType
+from login_registration.loginMerchant import checkEmailAndPassword
+from accounts.validate_accounts import validation  # validate_accounts.py
+from place_order.displayCart import addToCart
 from accounts.validate_accounts import validation  # validate_accounts.py
 from place_order.displayCart import addToCart, getMerchantInfo
 from manage_inventory.SearchInventory import *
@@ -22,18 +34,116 @@ from payment.confirmPayment import *
 from manage_inventory.supplierupdater import *
 from manage_offers.displayOffers import *
 from orders_management.orderHistory import Delivered, AddRating
+import requests
+import geocoder
 from delivery_management.delivery import getDelivery,YourRatings
 
 app = Flask(__name__, static_folder='')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader, jinja2.FileSystemLoader(['.'])])
-app.secret_key = 'super secret key'
+app.config['GOOGLEMAPS_KEY'] = ""
+app.secret_key = os.urandom(24)
+app.permanent_session_lifetime = timedelta(minutes=5)
 mysql = set_connection(app)
+geocode_api_key = 'AIzaSyAntxrxhQu11TxFD9wEe7JxxW1UZ0HQXR'
+geocode_url = 'https://maps.googleapis.com/maps/api/geocode/json'
+#https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyAntxrxhQu11TxFD9wEe7JxxW1UZ0HQXRY
+#GoogleMaps(app)
 
 
-@app.route('/login')
+# auth decorator
+def login_required(function_to_protect):
+    @wraps(function_to_protect)
+    def wrapper(*args, **kwargs):
+        if 'session_id' in session:
+            id = session['session_id']
+            if 'pay_type' in session:
+                return function_to_protect(*args, **kwargs)
+            elif checkPayType(mysql, id):
+                session.permanent = True
+                session['pay_type'] = True
+                return redirect('/home')
+            else:
+                #haridher add your route
+                return redirect('/payment')
+        elif request.path == '/register' or request.path == '/login':
+            return function_to_protect(*args, **kwargs)
+        else:
+            flash("Please log in")
+            return redirect(url_for('login'))
+    return wrapper
+
+
+@app.route('/login', methods=['GET', 'POST'])
+@login_required
 def login():
-    session['merchantID'] = '1'
+    if request.method == 'POST':
+        session.pop('session_id', None)
+
+        email = request.form.get('email')
+        password = request.form.get('password')
+
+        users = checkEmailAndPassword(email,password)
+        if len(users) >0:
+            session.permanent = True
+            session['session_id'] = users[0][0]
+            return redirect(url_for('/home'))
+        else:
+            flash('Incorrect Email and Password combination')
+            return redirect(url_for('login'))
+
+        return redirect(url_for('login'))
+
     return render_template("./login_registration/login.html")
+
+@app.route('/register', methods=['GET', 'POST'])
+@login_required
+def register():
+    print("register")
+    if request.method == 'POST':
+        #session.pop('user_id', None)
+
+        email = request.form.get('email')
+        merchantName = request.form.get('merchant_name')
+        password = request.form.get('password')
+        confirmPassword = request.form.get('confirm_password')
+        address = request.form.get('address')
+        contactNumber = request.form.get('contact_number')
+        registeredName = request.form.get('registered_name')
+
+        if password != confirmPassword:
+            flash('Passwords do not match')
+            print("passwords do not match")
+            return redirect(url_for('register'))
+
+        if checkIfExistingMerchant(mysql,email):
+            print("email already exists")
+            flash('Email already registered')
+            return redirect(url_for('register'))
+        else:
+            params = {'address': "1600 Amphitheatre Parkway, Mountain View, CA",'key':geocode_api_key}
+            r = requests.get(geocode_url, params=params)
+            print(r)
+            print(r.url)
+            print(r.json())
+            results = r.json()['results']
+            print(results)
+            #location = results[0]['geometry']['location']
+            #print(location)
+            return redirect(url_for('register'))
+            session.permanent = True
+            id = registerNewMerchant(mysql, email, password,merchantName,address,contactNumber,registeredName)
+            session['session_id'] = id
+
+        return redirect(url_for('login'))
+    print("get")
+    return render_template("./login_registration/register.html")
+
+@app.route('/logout')
+@login_required
+def logout():
+    session.pop('session_id', None)
+    return redirect(url_for('login'))
+
 
 
 @app.route('/addproduct', methods=['POST', 'GET'])
@@ -136,7 +246,7 @@ def orders():
 @app.route('/search', methods=['POST', 'GET'])
 def showAll():
     session['merchantID'] = '1'
-    
+
     currentMerchantID =  session['merchantID']
     currentLocation = getCurrentLocation(mysql, currentMerchantID)
     if request.method == "POST":
