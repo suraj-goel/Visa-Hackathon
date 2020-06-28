@@ -270,6 +270,7 @@ def showCart(merchant_id):
             session['finalDiscountPrice'] = finalDiscountPrice
             session['fqty']=qty
             session['fProductID']=ProductID
+            session['payment_flag']='1'
         if (Type == 'Process Payment'):
             amount = finalDiscountPrice
             return render_template('./payment/payment.html', amount=amount)
@@ -396,7 +397,12 @@ def cybersource():
         status = simple_authorizationinternet(cardNumber,month,year,amount,aggregatorID,cardAcceptorID,username)
         if (status == 1):
             print('Payment Authorized')
-            addToOrders(mysql,qty,ProductID,merchant_id,amount,datetime.today().strftime('%Y-%m-%d'))
+            if (session['payment_flag'] == '1'):
+                addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'))
+            elif (session['payment_flag'] == '2'):
+                addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['requirementid'])
+            else:
+                addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['negotiationid'])
             updateSupplierInventory(mysql, ProductID,qty) #productID=ProductList
             return redirect(url_for('showAll'))
         else:
@@ -421,9 +427,14 @@ def b2bpay():
         amount = request.form.getlist('amount')[0]
         #buyerid = merchant_id, supplier_account_no = accountNumber
         status = paymentProcessing(amount, merchant_id, accountNumber)#clientid is a default parameter but can be added
-        if status==1:
-            print("Payment Authorized")
-            addToOrders(mysql,qty,ProductID,merchant_id,amount,datetime.today().strftime('%Y-%m-%d'))
+        if (status == 1):
+            print('Payment Authorized')
+            if (session['payment_flag'] == '1'):
+                addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'))
+            elif (session['payment_flag'] == '2'):
+                addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['requirementid'])
+            else:
+                addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['negotiationid'])
             updateSupplierInventory(mysql, ProductID,qty) #productID=ProductList
             return redirect(url_for('showAll'))
         else:
