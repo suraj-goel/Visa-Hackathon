@@ -1,3 +1,4 @@
+from orders_management.orderHistory import SearchRatings
 ##   SUPPLIER SIDE    ##
 # Received request posted by others
 # proposal button can be added here and then we can add to RequirementAccepted database
@@ -61,6 +62,17 @@ def RequestsRecievedAndPending(mysql, merchantid):
         pending[i]['Status'] = 'Waiting for buyer response'
     return pending
 
+def getSupplierRequestsSearch(mysql, merchantid,search):
+    cur = mysql.connection.cursor()
+    cur.execute("select * from Requirement as R, Merchant where R.Status='Post' and Merchant.MerchantID=R.MerchantID and R.MerchantID <> %s and "
+                "NOT EXISTS( select * from RequirementAccepted where RequirementAccepted.RequirementID=R.RequirementId "
+                "and RequirementAccepted.Status='yes') and R.Title like %s;", (merchantid,'%'+search+'%'))
+    posts = cur.fetchall()
+    for i in range(len(posts)):
+        posts[i]['Status'] = 'Open'
+    return posts
+
+
 def getSupplierRequests(mysql,merchantid,choice='P'):
     merchantid=int(merchantid)
     if choice=='P':
@@ -111,6 +123,7 @@ def PostedAndPending(mysql, merchantid):
 # Requirement status as 'Done'
 # RequirementsAccepted status as 'yes' for that merchant
 # the info is now visible in order table
+# also return ratings of that supplier
 def PostedAndAcceptedBySupplier(mysql, merchantid):
     cur = mysql.connection.cursor()
     cur.execute("select * from Requirement where MerchantID = '%s' and Requirement.Status='Post';", (merchantid,))
@@ -134,11 +147,13 @@ def PostedAndAcceptedBySupplier(mysql, merchantid):
             if x:
                 data = []
                 for j in x:
+                    j['rating']=SearchRatings(mysql,j['MerchantID'])
                     data.append(j)
                 res['Accepts'] = data
                 data_res.append(res)
         for i in range(len(data_res)):
             data_res[i]['Status'] = 'Accepted'
+
         return data_res
 
 def PostedAndDone(mysql, merchantid):

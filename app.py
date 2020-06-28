@@ -26,6 +26,7 @@ from manage_inventory.updateProduct import *
 from orders_management.orderHistory import getOrders
 from requirements.requirements import *
 from services.visa_api_services import register_merchant, paymentProcessing
+from services.visa_api_services import getMerchantsByMLOCAPI
 from services.cybersourcePayment import simple_authorizationinternet
 from requirements.showRequirements import *
 from negotiation.negotiation import *
@@ -35,6 +36,7 @@ from manage_offers.displayOffers import *
 from orders_management.orderHistory import Delivered, AddRating
 import requests
 import geocoder
+from delivery_management.delivery import getDelivery,YourRatings
 
 app = Flask(__name__, static_folder='')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader, jinja2.FileSystemLoader(['.'])])
@@ -220,6 +222,16 @@ def ratings():
     AddRating(mysql,order,rating)
     return redirect(url_for('orders'))
 
+@app.route('/delivery_management', methods=['GET', 'POST'])
+def delivery_management():
+    merchantid = session['merchantID']
+    delivered_filter = 'yes'
+    if request.method == 'POST':
+        delivered_filter = request.form['filter']
+    delivery = getDelivery(mysql, merchantid, delivered_filter)
+    avg_ratings=YourRatings(mysql,merchantid)
+    return render_template('./delivery_management/delivery_management.html',history=delivery,avg_ratings=avg_ratings,filter=delivered_filter)
+
 @app.route('/orders', methods=['POST', 'GET'])
 def orders():
     merchantid =  session['merchantID']
@@ -234,6 +246,7 @@ def orders():
 @app.route('/search', methods=['POST', 'GET'])
 def showAll():
     session['merchantID'] = '1'
+
     currentMerchantID =  session['merchantID']
     currentLocation = getCurrentLocation(mysql, currentMerchantID)
     if request.method == "POST":
@@ -367,6 +380,7 @@ def showCart(merchant_id):
             session['finalDiscountPrice'] = finalDiscountPrice
             session['fqty']=qty
             session['fProductID']=ProductID
+            session['payment_flag']='1'
         if (Type == 'Process Payment'):
             amount = finalDiscountPrice
             return render_template('./payment/payment.html', amount=amount)
@@ -493,7 +507,12 @@ def cybersource():
         status = simple_authorizationinternet(cardNumber,month,year,amount,aggregatorID,cardAcceptorID,username)
         if (status == 1):
             print('Payment Authorized')
-            addToOrders(mysql,qty,ProductID,merchant_id,amount,datetime.today().strftime('%Y-%m-%d'))
+            if (session['payment_flag'] == '1'):
+                addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'))
+            elif (session['payment_flag'] == '2'):
+                addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['requirementid'])
+            else:
+                addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['negotiationid'])
             updateSupplierInventory(mysql, ProductID,qty) #productID=ProductList
             return redirect(url_for('showAll'))
         else:
@@ -518,9 +537,14 @@ def b2bpay():
         amount = request.form.getlist('amount')[0]
         #buyerid = merchant_id, supplier_account_no = accountNumber
         status = paymentProcessing(amount, merchant_id, accountNumber)#clientid is a default parameter but can be added
-        if status==1:
-            print("Payment Authorized")
-            addToOrders(mysql,qty,ProductID,merchant_id,amount,datetime.today().strftime('%Y-%m-%d'))
+        if (status == 1):
+            print('Payment Authorized')
+            if (session['payment_flag'] == '1'):
+                addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'))
+            elif (session['payment_flag'] == '2'):
+                addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['requirementid'])
+            else:
+                addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['negotiationid'])
             updateSupplierInventory(mysql, ProductID,qty) #productID=ProductList
             return redirect(url_for('showAll'))
         else:
@@ -536,6 +560,16 @@ def negotiation():
         allNegotiation = displayAllNegotiation(mysql, merchant_id)
         return render_template("./negotiation/negotiation.html", negotiations=allNegotiation)
 
+@app.route('/search_requirement', methods=['POST'])
+def search_requirement():
+    merchantid=session['merchantID']
+    search=request.form['search_name']
+    print(search)
+    choice = 'P'
+    items = getSupplierRequestsSearch(mysql, merchantid,search)
+    sellProduct = allProductID(mysql,merchantid)
+    return render_template('./requirements/requirements.html', sup_items=items, choice=choice, profile=2,sellProduct=sellProduct)
+
 
 @app.route('/requirementssupplier', methods=['GET', 'POST'])
 def showsupplierrequirements():
@@ -543,7 +577,6 @@ def showsupplierrequirements():
     sellProduct = allProductID(mysql,merchantid)
     items = getSupplierRequests(mysql, merchantid)
     if request.method == 'POST':
-
         try:
             choice = request.form['filtersupplier']
             items = getSupplierRequests(mysql, merchantid, choice)
@@ -603,6 +636,7 @@ def showbuyerrequirements():
             # acceptDeal(mysql,requirementID)
             # change this to payment after payment module is finish
             session['type'] = 'request'
+            session['requirement_payment']=True
             session['ProductID'] = request.form.getlist('ProductID[]')
             session['Name'] = request.form.getlist('Name[]')
             session['Description'] = request.form.getlist('Description[]')
@@ -610,6 +644,7 @@ def showbuyerrequirements():
             #session['merchantID'] = request.form.get('merchantWhoAp')
             session['PriceItem'] = request.form.getlist('PriceItem[]')
             session['mid'] = request.form.get('merchantWhoAP')
+            session['requirementid'] = request.form.get('requirementID')
             #session['mid'] = '1'
             print(session['mid'])
             Price = []
@@ -707,7 +742,30 @@ def editoffer(OfferID):
         session['message_offer_add'] = message
         return redirect(url_for('showoffers'))
 
+@app.route('/checkout', methods=['GET', 'POST'])
+def checkout():
+    qty=session['fqty']
+    ProductID=session['fProductID']
+    sellerId = session['mid'] # why?
+    merchant_id = session['merchantID']
+    amount  = session['finalDiscountPrice']
+    cur = mysql.connection.cursor()
+    status = 1
+    if (status == 1):
+        print('Payment Authorized')
+        addToOrders(mysql,qty,ProductID,merchant_id,amount,datetime.today().strftime('%Y-%m-%d'))
+        updateSupplierInventory(mysql, ProductID,qty) #productID=ProductList
+        return redirect(url_for('showAll'))
+    else:
+        print('Payment not authorized, please enter the correct details')
+        flash("Some details were invalid, please enter the correct values.")
+        # pass the correct values recieved from session (refer this for more info @app.route("/merchant/<merchant_id>/cart",methods=['GET','POST']))
+    return render_template("./payment/payment.html",amount=amount)
+
+
+# merchants = getMerchantsByMLOCAPI("5814","20","1","37.363922","-121.929163") sample merchant locator api call
+
 
 if __name__ == '__main__':
-	#threaded allows multiple users (for hosting)
-	app.run(debug=True,threaded=True, port=5000)
+    # threaded allows multiple users (for hosting)
+    app.run(debug=True, threaded=True, port=5000)
