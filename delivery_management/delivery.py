@@ -3,7 +3,7 @@ def getDelivery(mysql, merchantid, delivered_filter):
     if delivered_filter == 'all':
         cur.execute("select distinct ProductCart.CartID,Orders.OrderID, Orders.DeliveredDate ,Orders.OrderedDate, Cart.Total from Cart, "
                     "Orders,ProductCart,Product where Orders.CartID=ProductCart.CartID and ProductCart.ProductID="
-                    "Product.ProductID and Product.MerchantID=%s;" ,merchantid)
+                    "Product.ProductID and Product.MerchantID=%s and Cart.CartID=ProductCart.CartID" ,merchantid)
     elif delivered_filter == 'no':
         cur.execute("select distinct ProductCart.CartID,Orders.OrderID, Orders.DeliveredDate ,Orders.OrderedDate, Cart.Total from Cart, "
                     "Orders,ProductCart,Product where Orders.CartID=ProductCart.CartID and ProductCart.ProductID="
@@ -12,8 +12,8 @@ def getDelivery(mysql, merchantid, delivered_filter):
         cur.execute("select distinct ProductCart.CartID,Orders.OrderID, Orders.DeliveredDate ,Orders.OrderedDate,Cart.Total from Cart, "
                     "Orders,ProductCart,Product where Orders.CartID=ProductCart.CartID and ProductCart.ProductID="
                     "Product.ProductID and Product.MerchantID=%s and Orders.DeliveredDate is not null and Cart.CartID=ProductCart.CartID" , merchantid)
-    carts = cur.fetchall()
     res = []
+    carts=cur.fetchall()
     for i in carts:
         data = i
         cartid = i['CartID']
@@ -24,7 +24,7 @@ def getDelivery(mysql, merchantid, delivered_filter):
         if IsRated(mysql, i['OrderID']):
             data['Rated'] = IsRated(mysql, i['OrderID'])
         res.append(data)
-    print(res)
+    cur.close()
     return res
 
 
@@ -32,6 +32,7 @@ def IsRated(mysql, orderid):
     cur = mysql.connection.cursor()
     cur.execute("select * from Ratings where OrderID=%s", (orderid,))
     a = cur.fetchone()
+    cur.close()
     if a:
         return a['Value']
     return False

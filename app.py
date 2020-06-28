@@ -119,7 +119,7 @@ def delivery_management():
         delivered_filter = request.form['filter']
     delivery = getDelivery(mysql, merchantid, delivered_filter)
     avg_ratings=YourRatings(mysql,merchantid)
-    return render_template('./delivery_management/delivery_management.html',history=delivery,avg_ratings=avg_ratings)
+    return render_template('./delivery_management/delivery_management.html',history=delivery,avg_ratings=avg_ratings,filter=delivered_filter)
 
 @app.route('/orders', methods=['POST', 'GET'])
 def orders():
