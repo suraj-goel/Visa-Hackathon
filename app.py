@@ -110,6 +110,10 @@ def ratings():
     AddRating(mysql,order,rating)
     return redirect(url_for('orders'))
 
+@app.route('/delivery_management', methods=['GET', 'POST'])
+def delivery_management():
+    return render_template('./delivery_management/delivery_management.html')
+
 @app.route('/orders', methods=['POST', 'GET'])
 def orders():
     merchantid =  session['merchantID']
