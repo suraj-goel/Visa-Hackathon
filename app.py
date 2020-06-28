@@ -14,6 +14,7 @@ from manage_inventory.updateProduct import *
 from orders_management.orderHistory import getOrders
 from requirements.requirements import *
 from services.visa_api_services import register_merchant, paymentProcessing
+from services.visa_api_services import getMerchantsByMLOCAPI
 from services.cybersourcePayment import simple_authorizationinternet
 from requirements.showRequirements import *
 from negotiation.negotiation import *
@@ -135,6 +136,7 @@ def orders():
 @app.route('/search', methods=['POST', 'GET'])
 def showAll():
     session['merchantID'] = '1'
+    
     currentMerchantID =  session['merchantID']
     currentLocation = getCurrentLocation(mysql, currentMerchantID)
     if request.method == "POST":
@@ -639,6 +641,8 @@ def checkout():
         # pass the correct values recieved from session (refer this for more info @app.route("/merchant/<merchant_id>/cart",methods=['GET','POST']))
     return render_template("./payment/payment.html",amount=amount)
 
+
+# merchants = getMerchantsByMLOCAPI("5814","20","1","37.363922","-121.929163") sample merchant locator api call
 
 
 if __name__ == '__main__':

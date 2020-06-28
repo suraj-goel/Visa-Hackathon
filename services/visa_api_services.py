@@ -1,7 +1,7 @@
 import requests
 import json
 import os
-
+import datetime
 #cert=('./cert.pem','./key_374cc983-558b-49dd-a55b-99d3cb3afac5.pem') #if you on MAC
 cert=(os.path.abspath("services/cert.pem"),os.path.abspath("services/key_374cc983-558b-49dd-a55b-99d3cb3afac5.pem")) #if you on Windows
 auth=("STT3WACAH2W19FH6H48A2117b1JIIYevI8qRcIQn2Zwhtdp4M", "81SYH42zc2CwJgtOzInj50e8zT6vr")
@@ -206,3 +206,56 @@ def register_merchant(mysql,mid):
 #payment
 #payment_amount=1200
 #paymentProcessing(payment_amount,"12324",acc)
+
+def getMerchantsByMLOCAPI(merchantCategoryCode,radius,merchantID,latitude,longitude):
+    
+    url = "https://sandbox.api.visa.com/merchantlocator/v1/locator"
+    now = datetime.datetime.now()
+    messageDateTime = now.strftime("%Y-%m-%dT%H:%M:%S.000")
+    p = json.loads(
+        '''
+            
+    {
+    "header": {
+        "messageDateTime": "'''+messageDateTime+'''",
+        "requestMessageId": "'''+merchantID+'''",
+        "startIndex": "0"
+    },
+    "searchAttrList": {
+        "merchantCategoryCode": ["'''+merchantCategoryCode+'''"],
+        "latitude": "'''+latitude+'''",
+        "longitude": "'''+longitude+'''",
+        "distance": "'''+radius+'''",
+        "distanceUnit": "KM"
+    },
+    "responseAttrList": [
+    "GNLOCATOR"
+    ],
+    "searchOptions": {
+    "maxRecords": "10",
+    "matchIndicators": "true",
+    "matchScore": "true"
+    }
+    }
+
+        '''
+    )
+    r = requests.post(url, timeout=100,
+                      cert=cert,
+                      headers=header,
+                      auth=auth,
+                      json=p)
+    result = r.json()
+    merchants = []
+    result = result["merchantLocatorServiceResponse"]
+    if(result["response"]):
+        print("Merchants found")
+        responses = result["response"]
+        for response in responses:
+            merchants.append(response["responseValues"])
+        
+
+    else:
+        print("No Mechants found")
+
+    return merchants
