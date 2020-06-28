@@ -50,170 +50,48 @@
         <li><div class="dropdown1">
             <button class="dropbtn1" >Supplier Profile</button>
             <div class="dropdown-content1">
-                <h4><a href="/requirementssupplier">All Posts</a></h4>
+                <h4><a href="/negotiationsupplier">All Posts</a></h4>
             </div>
         </div></li>
         <br><br><br>
         <li><div class="dropdown1">
             <button class="dropbtn1" >Buyer Profile&emsp;</button>
             <div class="dropdown-content1">
-                <h4><a href="/requirements">Create Request</a></h4>
-                <h4 id="buyerTab"><a href="/requirementsbuyer">All Posts</a></h4>
+                <h4 id="buyerTab"><a href="/negotiation">All Posts</a></h4>
             </div>
         </div></li>
 
     </ul>
 </div>
-<div id="thisDiv1" class="split1 right">
-    <style>
 
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-        }
-        * {
-            box-sizing: border-box;
-        }
-
-        input[type="text"],
-        select,
-        textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            margin-top: 6px;
-            margin-bottom: 16px;
-            resize: vertical;
-        }
-
-        select{
-            width: 250px;
-        }
-
-        input[type="number"] {
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            margin-top: 6px;
-            margin-bottom: 16px;
-            resize: vertical;
-        }
-
-        input[type="submit"] {
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            background-color: #fdbb0a;
-        }
-
-        input[type="submit"]:hover {
-            cursor: pointer;
-        }
-
-        h4 {
-            color: #ffffff;
-        }
-
-        h4:hover {
-            cursor: pointer;
-            color: #fdbb0a;
-        }
-
-        .containerForm {
-            border-radius: 5px;
-            background-color: #f2f2f2;
-            padding: 15px;
-        }
-    </style>
-    <center>
-        <h1 style="color:#1a1f71">Create Your Request</h1>
-    </center>
-    <form name="requirementForm" action="" onsubmit="return validateForm()" method="post">
-
-        <div id="requestForm" class="containerForm ">
-            <label for="title1">Title: </label>
-            <input type="text" name="title" id="title1"  placeholder="Item Name" required /><br>
-
-            <!-- <label for="requesterName">Merchant Business Name: </label><br>
-             <input type="text" name="requesterName" id="requesterName" value="{{registeredName}}"  style="font-weight: bold;color: black" readonly />-->
-            <label for="description">Description: </label><br>
-            <textarea id="description" name="description" placeholder="Write About Your Requirement..."></textarea>
-            <label for="Quantity">Quantity Required: </label>
-            <input type="number" name="Quantity" id="Quantity" style="height:50px;width: 20%;" min="1"
-                   placeholder="Quantity Required" required /> <br>
-            <label for="Price">Amount in Rs: &emsp;&ensp; </label>
-            <input type="number" name="ExpectPrice" id="Price" style="height:50px;width: 20%" placeholder="Expected Amount" />
-            <br><br>
-            <center>
-                <input name="createRequest" class="button" type="submit"value="Post Request">
-            </center>
-        </div>
-    </form>
-</div>
 <center>
-    <div id="thisDiv2" style="display: none" class="split1 right">
+    <div id="thisDiv1" style="display: none" class="split1 right">
         <h1>Your supplier profile for requirements</h1>
-        <form class="example" method="post" action="" style="margin:auto;max-width:600px">
-            <select name="filtersupplier">
-                {% if choice=='P' %}
-                <option value="P" selected>Open posts</option>
-                {% else %}
-                <option value="P">Open posts</option>{% endif %}
-                {% if choice=='A' %}
-                <option value="A" selected>Approved by buyer</option>
-                {% else %}
-                <option value="A">Approved by buyer</option>{% endif %}
-                {% if choice=='R' %}
-                <option value="R" selected>Rejected by buyer</option>
-                {% else %}
-                <option value="R">Rejected by buyer</option>{% endif %}
-                {% if choice=='W' %}
-                <option value="W" selected>Approved by you and pending</option>
-                {% else %}
-                <option value="W">Approved by you and pending</option>{% endif %}
-                {% if choice=='E' %}
-                <option value="E" selected>All approved by you</option>
-                {% else %}
-                <option value="E">All approved by you</option>{% endif %}
-            </select>
-            <input type="submit" class="button" onclick="javascript: form.action='/requirementssupplier';"
-                   value="Submit">
-        </form><br><br><br>
-        {% if choice=='A' %}
-        <h1>Approved by buyer</h1>
-        {% elif choice=='R' %}
-        <h1>Rejected by buyer</h1>
-        {% elif choice=='W' %}
-        <h1>Approved by you and pending buyer's response</h1>
-        {% elif choice=='E' %}
-        <h1>All Approved by you</h1>
-        {% else %}
-        <h1>Open posts</h1><br>
-        {% endif %}
-        {% if sup_items %}
+        <br><br><br>
+        <h1>Negotiation Requests</h1><br>
+         {{totalAmount}}
+        {% if totalAmount %}
+
         <div class="container">
             <table class="table table-bordered">
-                {% for item in sup_items %}
+                {% for items in totalAmount %}
                 <tr style="all: none;">
                     <td style="background-color: white; border: none;"></td>
                 </tr>
                 <tr class="header">
                     <td colspan="4">
-                        <h3><b>Require Item: {{item['Title']}}</b></h3><span style="float:right;">
-                        {% if item['Status']=='Waiting for buyer response' %} <span style="color:orange">Status: Waiting for buyer response</span>
-                        {% elif item['Status']=='Buyer accepted and paid' %}<span style="color:green">Status: Buyer accepted and paid</span></span>
-                        {% elif item['Status']=='Rejected and closed' %}<span style="color:red">Status: Rejected and closed </span></span>
-                        {% endif %}</span>
-                        <h5>Description: {{item['Description']}}</h5>
-                        {% if item['Price']!='' and item['Price']!=None %} <h5>Price Expected: Rs {{item['Price']}}</h5>
-                        {%else%}
-                        <h5>Price Expected: Any Price</h5>
-                        {% endif %}
-                        <h5>Quantity Required: {{item['Quantity']}}</h5>
+                        {{item['Total']}} {{item['Price']}}
+                        <h3><b>Negotiation Amount Request: {{totalAmount[loop.index-1]['Price']}} </b></h3><span style="float:right;"></span>
+                        <h5>Cart Details: </h5>
+                        <ul>
+
+                            {% for products in sup_items[loop.index-1] %}
+                            <li><h5>Name: {{products['Name']}}</h5>
+                                <h5>Quantity: {{products['Quantity']}}</h5>
+                            </li>
+                            {% endfor %}
+                            <h5>Original Amount: {{totalAmount[loop.index-1]['Total']}}</h5>
+                        </ul>
                     </td> </tr>
                 <tr>
                     <td colspan="2"><b>Merchant details:<br>Name:</b>{% if item['Merchant.Name'] %}{{item['Merchant.Name']}} {% else %}{{item['Name']}} {% endif %}<br><b>Registered Shop:</b>{{item['RegisteredName']}}, {{item['Address']}}<br></td>
@@ -312,40 +190,40 @@
         <h2> Could not find any match</h2>
         {% endif %}
     </div>
-    <div id="thisDiv3" style="display: none" class="split1 right">
+    <div id="thisDiv2" style="display: none" class="split1 right">
 
-        <h1>Your buyer profile for requirements</h1>
+        <h1>Your buyer profile for Negotiation</h1>
         <form method="post" action="">
             <select name="filterbuyer">
                 {% if buyer_choice=='R' %}
-                <option value="R" selected>Your pending requests</option>
+                <option value="R" selected>Your pending negotiation</option>
                 {% else %}
-                <option value="R">Your pending requests</option>{% endif %}
+                <option value="R">Your pending negotiation</option>{% endif %}
                 {% if buyer_choice=='A' %}
                 <option value="A" selected>Accepted by supplier</option>
                 {% else %}
                 <option value="A">Accepted by supplier</option>{% endif %}
                 {% if buyer_choice=='D' %}
-                <option value="D" selected>Completed requirements</option>
+                <option value="D" selected>Rejected by supplier</option>
                 {% else %}
-                <option value="D">Completed requirements</option>{% endif %}
+                <option value="D">Rejected by supplier</option>{% endif %}
                 {% if buyer_choice=='E' %}
-                <option value="E" selected>All requests</option>
+                <option value="E" selected>All unprocessed negotiation</option>
                 {% else %}
-                <option value="E">All requests</option>{% endif %}
+                <option value="E">All unprocessed negotiation</option>{% endif %}
             </select>
-            <input type="submit" value="filter" class="button" onclick="javascript: form.action='/requirementsbuyer';">
+            <input type="submit" value="filter" class="button" onclick="javascript: form.action='/negotiation';">
         </form>
         {% if buyer_choice=='A' %}
-        <h2>Accepted</h2>
+        <h2>Accepted by Supplier</h2>
         {% elif buyer_choice=='D' %}
-        <h2>Completed requests</h2>
+        <h2>Rejected by Supplier</h2>
         {% elif buyer_choice=='E' %}
-        <h2>All requests</h2>
+        <h2>All unprocessed negotiation</h2>
         {% elif buyer_choice=='R' %}
-        <h2>Requests pending</h2>
+        <h2>Pending Negotiations</h2>
         {% else %}
-        <h2>Requests pending</h2>
+        <h2>Pending Negotiations</h2>
         {% endif %}
         {% if buy_items %}
         <h2 style="color: #1a1f71;"></h2>
@@ -357,29 +235,33 @@
                 </tr>
                 <tr class="header">
                     <td colspan="4">
-                        <h3><b>Require Item: {{item['Title']}}</b></h3><span style="float:right;">Status:
-                        {% if item['Status']=='Pending' %} <span style="color:red">Pending
+                        <h3><b>Expect Negotiate Price: Rs {{item['Price']}}</b></h3><span style="float:right;">Status:
+                        {% if item['Status']=='pending' %} <span style="color:red">Pending
                             <br/>
                             <form method="post" action="">
-                              <input type="hidden" name="requirementID" value="{{item['RequirementID']}}">
+                              <input type="hidden" name="negotiationID" value="{{item['NegotiationID']}}">
                             <input type="hidden" name="Delete" value="Delete"><button type="submit"> <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
   <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
                             </svg> Delete</button>
+                                <button type="submit" name="add to cart" >Pay with Original Amount</button>
+                                <input type="hidden" name="add to cart" value="{{item['Total']}}">
                         </form>
                         </span>
-                        {% elif item['Status']=='Done' %}<span style="color:blue">Closed</span></span>
-                        {% elif item['Status']=='Accepted' %}<span style="color:green">Accepted by supplier</span></span>
+                        {% elif item['Status']=='reject' %}<span style="color:blue">Closed</span></span>
+                        {% elif item['Status']=='accept' %}<span style="color:green">Accepted by supplier</span></span>
                         {% endif %}</span>
-                        <h5>Description: {{item['Description']}}</h5>
-                        {% if item['Price']!='' and item['Price']!=None %} <h5>Expect Price: Rs {{item['Price']}}</h5>
-                        {%else%}
-                        <h5>Price Expected: Any Price</h5>
-                        {% endif %}
-                        <h5>Quantity Required: {{item['Quantity']}}</h5>
-
+                        <h5> <b>Cart Details: </b></h5>
+                        <ul>
+                        {% for products in productList[loop.index-1] %}
+                            <li><h5>Name: {{products['Name']}}</h5>
+                        <h5>Quantity: {{products['Quantity']}}</h5>
+                        </li>
+                            {%endfor%}
+                        </ul>
+                        <h5><b>Original Total Price: {{item['Total']}}</b></h5>
                     </td>
-                    {% if item['Status']=='Done' %}
+                    {% if item['Status']=='done' %}
                 <tr>
                     <td colspan="4"><b>Merchant:</b>{{item['Name']}}<br><b>Registered Shop:</b>{{item['RegisteredName']}}, {{item['Address']}}<br>
                         <b>Item:</b><br>{{item['Product.Name']}}<br><b>Description:</b> {{item['Product.Description']}}<br>
@@ -395,7 +277,7 @@
 
                         <form method="post" action="">
                             <input type="submit" name="request" value="add to cart">
-                            <input type="hidden" name="requirementID" value="{{item['RequirementID']}}">
+                            <input type="hidden" name="requirementID" value="{{item['negotiationID']}}">
                             <input type="hidden" name="ProductID[]" value="{{x['Product.ProductID']}}">
                             <input type="hidden" name="Name[]" value="{{x['Product.Name']}}">
                             <input type="hidden" name="Description[]" value="{{x['Product.Description']}}">

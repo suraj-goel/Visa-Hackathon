@@ -250,17 +250,16 @@ def showCart(merchant_id):
         status = 'N'
         if (Type == 'Process Payment'):
             status = 'P'
-        if (Check == False):
-            addToCart(mysql, qty, ProductID, Name, Description, Price, merchant_id, status, finalPrice,
+
+        addToCart(mysql, qty, ProductID, Name, Description, Price, merchant_id, status, finalPrice,
                       finalDiscountPrice, NegotitatedRequestAmount)
-            modify()
-            session.clear()
-            session['type']=type
-            session['mid'] = seller_id
-            session['merchantID'] = merchant_id
-            session['finalDiscountPrice'] = finalDiscountPrice
-            session['fqty']=qty
-            session['fProductID']=ProductID
+        session.clear()
+        session['type']=type
+        session['mid'] = seller_id
+        session['merchantID'] = merchant_id
+        session['finalDiscountPrice'] = finalDiscountPrice
+        session['fqty']=qty
+        session['fProductID']=ProductID
         if (Type == 'Process Payment'):
             amount = finalDiscountPrice
             return render_template('./payment/payment.html', amount=amount)
@@ -421,14 +420,51 @@ def b2bpay():
             print("Payment not authorized")
             flash("Error in payment, check account details again or try different payment")
     return render_template("./payment/payment.html",amount=amount)
-
-@app.route('/negotiation', methods=['GET', 'POST'])
+@app.route('/negotiation',methods=['GET','POST'])
 def negotiation():
-    if (request.method == 'GET'):
-        session['merchantID'] = '1'
-        merchant_id = session['merchantID']
-        allNegotiation = displayAllNegotiation(mysql, merchant_id)
-        return render_template("./negotiation/negotiation.html", negotiations=allNegotiation)
+    choice = 'R'
+    merchant_id = session['merchantID']
+    allNegotiation =[]
+    productList = []
+    gotList = displayAllNegotiation(mysql, merchant_id)
+    productList = gotList[1]
+    allNegotiation = gotList[0]
+    if (request.method == 'POST'):
+        print("nego")
+        print(allNegotiation)
+        try:
+            choice = request.form["filterbuyer"]
+            if(choice!='E'):
+                gotList = displayNegotiationType(mysql,merchant_id,choice)
+                productList = gotList[1]
+                allNegotiation = gotList[0]
+                return render_template("./negotiation/negotiation.html", buy_items=allNegotiation,profile=2,buyer_choice=choice,productList=productList)
+        except Exception as e:
+            print("Nofiter"+str(e))
+        try:
+            deleteRequest = request.form["Delete"]
+            negotiationID = request.form["negotiationID"]
+            deleteNegotiation(mysql,negotiationID)
+            return redirect(request.url)
+        except Exception as e:
+            print("no delete"+ str(e))
+
+        print(choice,allNegotiation,productList)
+        return render_template("./negotiation/negotiation.html", buy_items=allNegotiation,profile=2,buyer_choice=choice,productList=productList)
+    else:
+        return render_template("./negotiation/negotiation.html",buy_items=allNegotiation,profile=2,buyer_choice=choice,productList=productList)
+
+@app.route('/negotiationsupplier',methods=['GET','POST'])
+def negotiationsupplier():
+    merchant_id = session['merchantID']
+    groupList = showNegotiation(mysql, merchant_id)
+    totalAmount = groupList[1]
+    purchaseCart = groupList[0]
+    loop = len(purchaseCart)
+    if (request.method == 'POST'):
+        return render_template("./negotiation/negotiation.html",sup_items=purchaseCart,profile=1,totalAmount=totalAmount,loop=loop)
+    else:
+        return render_template("./negotiation/negotiation.html",sup_items=purchaseCart,profile=1,totalAmount=totalAmount,loop=loop)
 
 @app.route('/search_requirement', methods=['POST'])
 def search_requirement():
