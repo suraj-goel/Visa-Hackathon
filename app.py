@@ -1,6 +1,6 @@
 from functools import wraps
-from flask_googlemaps import GoogleMaps
-from flask_googlemaps import Map
+#from flask_googlemaps import GoogleMaps
+#from flask_googlemaps import Map
 from datetime import datetime
 import jinja2
 import os
@@ -33,6 +33,8 @@ from payment.confirmPayment import *
 from manage_inventory.supplierupdater import *
 from manage_offers.displayOffers import *
 from orders_management.orderHistory import Delivered, AddRating
+import requests
+import geocoder
 
 app = Flask(__name__, static_folder='')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader, jinja2.FileSystemLoader(['.'])])
@@ -40,7 +42,10 @@ app.config['GOOGLEMAPS_KEY'] = ""
 app.secret_key = os.urandom(24)
 app.permanent_session_lifetime = timedelta(minutes=5)
 mysql = set_connection(app)
-GoogleMaps(app)
+geocode_api_key = 'AIzaSyAntxrxhQu11TxFD9wEe7JxxW1UZ0HQXR'
+geocode_url = 'https://maps.googleapis.com/maps/api/geocode/json'
+#https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyAntxrxhQu11TxFD9wEe7JxxW1UZ0HQXRY
+#GoogleMaps(app)
 
 
 # auth decorator
@@ -72,10 +77,10 @@ def login():
     if request.method == 'POST':
         session.pop('session_id', None)
 
-        username = request.form['username']
-        password = request.form['password']
+        email = request.form.get('email')
+        password = request.form.get('password')
 
-        users = checkEmailAndPassword(username,password)
+        users = checkEmailAndPassword(email,password)
         if len(users) >0:
             session.permanent = True
             session['session_id'] = users[0][0]
@@ -113,6 +118,16 @@ def register():
             flash('Email already registered')
             return redirect(url_for('register'))
         else:
+            params = {'address': "1600 Amphitheatre Parkway, Mountain View, CA",'key':geocode_api_key}
+            r = requests.get(geocode_url, params=params)
+            print(r)
+            print(r.url)
+            print(r.json())
+            results = r.json()['results']
+            print(results)
+            #location = results[0]['geometry']['location']
+            #print(location)
+            return redirect(url_for('register'))
             session.permanent = True
             id = registerNewMerchant(mysql, email, password,merchantName,address,contactNumber,registeredName)
             session['session_id'] = id
