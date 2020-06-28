@@ -597,6 +597,27 @@ def editoffer(OfferID):
         session['message_offer_add'] = message
         return redirect(url_for('showoffers'))
 
+@app.route('/checkout', methods=['GET', 'POST'])
+def checkout():
+    qty=session['fqty']
+    ProductID=session['fProductID']
+    sellerId = session['mid'] # why?
+    merchant_id = session['merchantID']
+    amount  = session['finalDiscountPrice']
+    cur = mysql.connection.cursor()
+    status = 1
+    if (status == 1):
+        print('Payment Authorized')
+        addToOrders(mysql,qty,ProductID,merchant_id,amount,datetime.today().strftime('%Y-%m-%d'))
+        updateSupplierInventory(mysql, ProductID,qty) #productID=ProductList
+        return redirect(url_for('showAll'))
+    else:
+        print('Payment not authorized, please enter the correct details')
+        flash("Some details were invalid, please enter the correct values.")
+        # pass the correct values recieved from session (refer this for more info @app.route("/merchant/<merchant_id>/cart",methods=['GET','POST']))
+    return render_template("./payment/payment.html",amount=amount)
+
+
 
 if __name__ == '__main__':
     # threaded allows multiple users (for hosting)

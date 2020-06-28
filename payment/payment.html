@@ -4,7 +4,7 @@
    <head>
       <meta charset='utf-8'>
       <meta name='viewport' content='width=device-width, initial-scale=1'>
-      <title>Snippet - BBBootstrap</title>
+      <title>Payment</title>
       <link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' rel='stylesheet'>
       <link href='https://use.fontawesome.com/releases/v5.8.1/css/all.css' rel='stylesheet'>
       <style>body {
@@ -52,7 +52,10 @@
 
             V.on("payment.success", function(payment)
               { console.log(payment);
-                alert(JSON.stringify(payment)); });
+                alert('Payment Succesful');
+                t1 = window.setTimeout(function(){ window.location = "/checkout"; },1000); 
+                
+                });
             V.on("payment.cancel", function(payment)
               {alert(JSON.stringify(payment)); });
             V.on("payment.error", function(payment, error)
@@ -65,7 +68,7 @@
       <!-- For demo purpose -->
          <div class="row mb-4">
             <div class="col-lg-8 mx-auto text-center">
-               <h1 class="display-4">........</h1>
+               <h1 class="display-4"></h1>
             </div>
          </div>
          <!-- End -->
