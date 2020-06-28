@@ -27,7 +27,7 @@ function negotiate(dP) {
 
 function payment() {
     check = true;
-    return alert("you want to proceed for payment?");
+    return alert("you want to proceed for payment? Once Proceed you will not able to edit your cart.");
 }
 
 function goBack() {
