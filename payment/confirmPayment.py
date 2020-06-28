@@ -1,7 +1,7 @@
 import uuid
 
 
-def addToOrders(mysql,qty,ProductID,merchant_id,amount,currentDate):
+def addToOrders(mysql,qty,ProductID,merchant_id,amount,currentDate,requirement_flag=False,requirementid=''):
     orderID = uuid.uuid1()
     cart_id = uuid.uuid1()
     cur = mysql.connection.cursor()
@@ -33,6 +33,10 @@ def addToOrders(mysql,qty,ProductID,merchant_id,amount,currentDate):
         cur.execute("Insert INTO Orders(OrderID,CartID,OrderedDate) Values ('{}','{}','{}') ".format(orderID,cart_id,currentDate))
         mysql.connection.commit()
         print("Added to Orders table")
+        if requirement_flag==True and requirementid!='':
+            cur.execute("update Requirement set Status='Done' where RequirementID=%s;",(requirementid))
+            mysql.connection.commit()
+            print('completed requirement')
     except Exception as e:
         print('*****')
         print("Problem in inserting in db"+ str(e))

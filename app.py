@@ -493,6 +493,7 @@ def showbuyerrequirements():
             # acceptDeal(mysql,requirementID)
             # change this to payment after payment module is finish
             session['type'] = 'request'
+            session['requirement_payment']=True
             session['ProductID'] = request.form.getlist('ProductID[]')
             session['Name'] = request.form.getlist('Name[]')
             session['Description'] = request.form.getlist('Description[]')
