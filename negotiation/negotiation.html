@@ -1,21 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
+{% include "./common/header.html" %}
+<link rel="stylesheet" href="{{ url_for('static',filename='./negotiation/negotiation.css') }}">
+<script type="text/javascript" src="{{url_for('static',filename='./negotiation/negotiation.js') }}"></script>
 
-<head>
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
-    <style>
-        body {
-            color: black;
-        }
-    </style>
+<body>
 
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-    </head>
+    <div>
+        <ul class="split left">
+            <li>
+                <h4 onclick="showThis(1)"  id="buyerTab">Supplier Side</h4>
+            </li>
+            <li style="margin-left: 25px; display: none" id="createReqTab">
+                <h4 onclick="showThis(3)">Create Request</h4>
+            </li>
+            <li>
+                <br><h4 onclick="showThis(2)">Buyer Side</h4>
+            </li>
+        </ul>
+    </div>
 
-    <body>
-        You have searched
-    </body>
+    <div id="thisDiv2" class="split1 right">
+
+        <h1 style="color:#1a1f71">Buyer Side</h1>
+        {{negotiations}}
+        <form method="post" action="">
+            <h1 style="color:#1a1f71">Negotiation Accepted</h1>
+            <button type="submit" class="button"><span>PAY</span></button>
+        </form>
+
+    </div>
+    <div id="thisDiv1" style="display: none" class="split1 right">
+        <h2>SUPPLIER SIDE</h2>
+
+    </div>
+</body>
 
 </html>

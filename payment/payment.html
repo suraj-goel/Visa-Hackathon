@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html>
    <head>
@@ -31,87 +32,135 @@
          $('[data-toggle="tooltip"]').tooltip()
          })
       </script>
+      <script type="text/javascript">
+         function onVisaCheckoutReady(){
+           V.init( {
+           apikey: "Y55V0UIV66A96MF4EA4N217VEuC-EP55F-s2B9sHOX05ye4I4",
+           settings: {
+                 displayName: "My Site",
+                 review: {
+                     buttonAction: "Pay"
+                 },
+                 dataLevel: "FULL"
+           },
+           paymentRequest:{
+             currencyCode: "USD",
+             subtotal: "11.00"
+           },
+           // encryptionKey: "YEDEGDD6UYS38ROQ2A5N13768f1At7jM-kZr10nnZviZvafMY"
+           });
+
+            V.on("payment.success", function(payment)
+              { console.log(payment);
+                alert(JSON.stringify(payment)); });
+            V.on("payment.cancel", function(payment)
+              {alert(JSON.stringify(payment)); });
+            V.on("payment.error", function(payment, error)
+              {alert(JSON.stringify(error)); });
+         }
+      </script>
    </head>
    <body>
       <div class="container py-5">
       <!-- For demo purpose -->
-      <div class="row mb-4">
-         <div class="col-lg-8 mx-auto text-center">
-            <h1 class="display-4">........</h1>
-         </div>
-      </div>
-      <!-- End -->
-      <div class="row">
-      <div class="col-lg-6 mx-auto">
-         <div class="card ">
-            <div class="card-header">
-               <div class="bg-white shadow-sm pt-4 pl-2 pr-2 pb-2">
-                  <!-- Credit card form tabs -->
-                  <ul role="tablist" class="nav bg-light nav-pills rounded nav-fill mb-3">
-                     <li class="nav-item"> <a data-toggle="pill" href="#credit-card" class="nav-link active "> <i class="fas fa-credit-card mr-2"></i> Credit Card </a> </li>
-                     <li class="nav-item"> <a data-toggle="pill" href="#checkout" class="nav-link "> <i class="fab  mr-2"></i> Checkout </a> </li>
-                     <li class="nav-item"> <a data-toggle="pill" href="#net-banking" class="nav-link "> <i class="fas  mr-2"></i> Visa B2B </a> </li>
-                  </ul>
-               </div>
-               <!-- End -->
-               <!-- Credit card form content -->
-               <div class="tab-content">
-                  <!-- credit card info-->
-                  <div id="credit-card" class="tab-pane fade show active pt-3">
-                     <form role="form">
-                        <div class="form-group">
-                           <label for="username">
-                              <h6>Card Owner</h6>
-                           </label>
-                           <input type="text" name="username" placeholder="Card Owner Name" required class="form-control "> 
-                        </div>
-                        <div class="form-group">
-                           <label for="cardNumber">
-                              <h6>Card number</h6>
-                           </label>
-                           <div class="input-group">
-                              <input type="text" name="cardNumber" placeholder="Valid card number" class="form-control " required>
-                              <div class="input-group-append"> <span class="input-group-text text-muted"> <i class="fab fa-cc-visa mx-1"></i> <i class="fab fa-cc-mastercard mx-1"></i> <i class="fab fa-cc-amex mx-1"></i> </span> </div>
-                           </div>
-                        </div>
-                        <div class="row">
-                           <div class="col-sm-8">
-                              <div class="form-group">
-                                 <label>
-                                    <span class="hidden-xs">
-                                       <h6>Expiration Date</h6>
-                                    </span>
-                                 </label>
-                                 <div class="input-group"> <input type="number" placeholder="MM" name="" class="form-control" required> <input type="number" placeholder="YY" name="" class="form-control" required> </div>
-                              </div>
-                           </div>
-                           <div class="col-sm-4">
-                              <div class="form-group mb-4">
-                                 <label data-toggle="tooltip" title="Three digit CV code on the back of your card">
-                                    <h6>CVV <i class="fa fa-question-circle d-inline"></i></h6>
-                                 </label>
-                                 <input type="text" required class="form-control"> 
-                              </div>
-                           </div>
-                        </div>
-                        <div class="card-footer"> <button type="button" class="subscribe btn btn-primary btn-block shadow-sm"> Confirm Payment </button>
-                     </form>
-                     </div>
-                  </div>
-                  <!-- End -->
-                  <!-- checkout info -->
-                  <div id="checkout" class="tab-pane fade pt-3">
-                     
-                  </div>
-                  <!-- End -->
-                  <!-- bank transfer info -->
-                  <div id="net-banking" class="tab-pane fade pt-3">
-                   
-                  </div>
-                  <!-- End -->
-                  <!-- End -->
-               </div>
+         <div class="row mb-4">
+            <div class="col-lg-8 mx-auto text-center">
+               <h1 class="display-4">........</h1>
             </div>
+         </div>
+         <!-- End -->
+         <div class="row">
+            <div class="col-lg-6 mx-auto">
+               <div class="card ">
+                  <div class="card-header">
+                     <div class="bg-white shadow-sm pt-4 pl-2 pr-2 pb-2">
+                     <!-- Credit card form tabs -->
+                        <ul role="tablist" class="nav bg-light nav-pills rounded nav-fill mb-3">
+                           <li class="nav-item"> <a data-toggle="pill" href="#credit-card" class="nav-link active "> <i class="fas fa-credit-card mr-2"></i> Credit Card </a> </li>
+                           <li class="nav-item"> <a data-toggle="pill" href="#checkout" class="nav-link "> <i class="fab  mr-2"></i> Checkout </a> </li>
+                           <li class="nav-item"> <a data-toggle="pill" href="#net-banking" class="nav-link "> <i class="fas  mr-2"></i> Visa B2B </a> </li>
+                        </ul>
+                     </div>
+                     <!-- End -->
+                     <!-- Credit card form content -->
+                     <div class="tab-content">
+                     <!-- credit card info-->
+                        <div id="credit-card" class="tab-pane fade show active pt-3">
+                           <form role="form" action="/cybersource/" method="post">
+                              <input type="hidden" name="amount" value="{{ amount }}">
+                              <div class="form-group">
+                                 <label for="username">
+                                    <h6>Card Owner</h6>
+                                 </label>
+                                 <input type="text" name="username" placeholder="Card Owner Name" required class="form-control ">
+                              </div>
+                              <div class="form-group">
+                                 <label for="cardNumber">
+                                    <h6>Card number</h6>
+                                 </label>
+                                 <div class="input-group">
+                                    <input type="text" name="cardNumber" placeholder="Valid card number" class="form-control " required>
+                                    <div class="input-group-append"> <span class="input-group-text text-muted"> <i class="fab fa-cc-visa mx-1"></i> <i class="fab fa-cc-mastercard mx-1"></i> <i class="fab fa-cc-amex mx-1"></i> </span> </div>
+                                 </div>
+                              </div>
+                              <div class="row">
+                                 <div class="col-sm-8">
+                                    <div class="form-group">
+                                       <label>
+                                          <span class="hidden-xs">
+                                             <h6>Expiration Date</h6>
+                                          </span>
+                                       </label>
+                                       <div class="input-group">
+                                          <input type="number" placeholder="MM" name="month" class="form-control" required>
+                                          <input type="number" placeholder="YY" name="year" class="form-control" required>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="col-sm-4">
+                                    <div class="form-group mb-4">
+                                       <label data-toggle="tooltip" title="Three digit CV code on the back of your card">
+                                          <h6>CVV <i class="fa fa-question-circle d-inline"></i></h6>
+                                       </label>
+                                       <input type="text" required class="form-control" name="CVV">
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="card-footer"> <button type="submit" class="subscribe btn btn-primary btn-block shadow-sm" "> Confirm Payment </button>
+                                 <!-- On click () open some prompt saying u okay to paying this much -->
+                           </form>
+                        </div>
+                     </div>
+                     <!-- End -->
+                     <!-- checkout info -->
+                     <div id="checkout" class="tab-pane fade pt-3">
+                        <img alt="Visa Checkout" class="v-button" role="button" style="display: block;margin-left: auto;margin-right: auto;width: 40%;" src="https://sandbox.secure.checkout.visa.com/wallet-services-web/xo/button.png"/>
+                        <script type="text/javascript" src="https://sandbox-assets.secure.checkout.visa.com/checkout-widget/resources/js/integration/v1/sdk.js">
+                        </script>
+                     </div>
+                     <!-- End -->
+                     <!-- bank transfer info -->
+                     <div id="net-banking" class="tab-pane fade pt-3">
+                        <form action="/b2bpay/" method="post">
+                           <input type="hidden" name="amount" value="{{ amount }}">
+                           <div class="card-footer"> <button type="submit" class="subscribe btn btn-primary btn-block shadow-sm" "> Confirm Payment </button>
+                        </form>
+                     </div>
+                     <!-- End -->
+                     <!-- End -->
+                  </div>
+               </div>
+         </div>
+         <div>
+              {% with messages =  get_flashed_messages(with_categories =  true) %}
+                  {%if messages %}
+                      {% for category, message in messages %}
+                          <div class="alert alert-{{ category }}">
+                              <p style="font-size: 24px;">{{ message }}</p>
+                          </div>
+                      {% endfor %}
+                  {% endif %}
+              {% endwith %}
          </div>
       </div>
    </body>

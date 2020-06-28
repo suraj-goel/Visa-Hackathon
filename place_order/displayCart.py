@@ -31,3 +31,13 @@ def addToCart(mysql,qty,ProductID,Name,Description,Price,merchant_id,status,fina
             print("Problem in inserting in db"+ str(e))
             return None
     cur.close()
+
+
+def getMerchantInfo(mysql,merchantID):
+    cur = mysql.connection.cursor()
+    cur.execute('SELECT EmailID,ContactNumber FROM Merchant where MerchantID=%s',(merchantID))
+    a = cur.fetchall()
+    data = []
+    data.append(a[0]['EmailID'])
+    data.append(a[0]['ContactNumber'])
+    return data

@@ -25,9 +25,14 @@ navbar a {
   -ms-user-select: none;
 }
 
-navbar a:hover {
+navbar a:hover, a:active{
   text-decoration: none;
   color: #f7b600;
+}
+
+navbar a:visited {
+  color: #ffffff;
+  text-decoration: none;
 }
 
 navbar a:active {
@@ -143,6 +148,7 @@ navbar button:active {
 
 .navbar div ul li div a:active {
   background-color: #1a1f71;
+  text-decoration: none;
 }
 
 .navbar div ul li div .back:hover {
@@ -233,6 +239,7 @@ navbar div.search.focused.not-null .ico-btn.search-btn {
 navbar .tabs .navbar-body li.active a {
   color: #f7b600;
   background-color: #1a1f71;
+  text-decoration: none;
 }
 
 navbar .tabs .navbar-body li {
@@ -250,12 +257,14 @@ navbar .tabs .navbar-body li:hover {
 
 navbar .tabs .navbar-body li:active {
   background: rgb(26, 30, 113);
+  text-decoration: none;
 }
 
 navbar .tabs .navbar-body li a:hover,
 .tabs .navbar-body li a:active {
   background: rgb(26, 30, 113);
   color: #f7b600;
+  text-decoration: none;
 }
 
 /*Styling Tab Highlighter*/
@@ -297,4 +306,30 @@ navbar .tab-highlighter {
     opacity: 0;
     margin-right: -30px;
   }
+}
+
+
+/* notification for requirements     */
+.notification {
+  background-color: #555;
+  color: white;
+  text-decoration: none;
+  padding: 15px 26px;
+  position: relative;
+  display: inline-block;
+  border-radius: 2px;
+}
+
+.notification:hover {
+  background: red;
+}
+
+.notification .badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  padding: 5px 10px;
+  border-radius: 50%;
+  background-color: red;
+  color: white;
 }

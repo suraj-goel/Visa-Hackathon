@@ -1,0 +1,24 @@
+{% include "./common/header.html" %}
+
+<body>
+
+    <center>
+        {{details}}
+    <form method="post" action="">
+         <select name="selectProduct">
+            {% for item in sellProduct %}
+          <option value="{{item['ProductID']}}" selected>
+              <p>{{item['Name']}}
+                  {{item['Quantity']}}
+                  {{item['Price']}}
+              </p>
+              <input type="submit" value="">
+          </option>
+
+          {%endfor %}
+         </select>
+    </form>
+    </center>
+
+</body>
+</html>

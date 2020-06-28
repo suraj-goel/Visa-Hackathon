@@ -36,14 +36,14 @@
                     <li class="active"><a href="/" class="active">Search</a></li>
                     <li><a href="/orders">Orders</a></li>
                     <li><a href="/inventory">Inventory</a></li>
-                    <li><a>Requirements</a></li>
-                    <li><a>Negotiation</a></li>
-                    <li><a>Manage Offers</a></li>
+                    <li><a href="/requirements">Requirements<span class="badge">New</span></a></li>
+                    <li><a href="/negotiation">Negotiation</a></li>
+                    <li><a href="/offers">Manage Offers</a></li>
                     <li class="w3-dropdown-hover w3-right">
                         <button>Profile</button>
                         <div class="w3-dropdown-content w3-bar-block w3-border"
                             style="right:0;background-color:#1a1f71;">
-                            <a href="#" style="color:white" class="w3-bar-item w3-button back">Settings</a>
+                            <a href="{{ url_for('registerCyber') }}" style="color:white" class="w3-bar-item w3-button back">Cyber-Source Details</a>
                             <a href="{{ url_for('displayaccountsdetails') }}" style="color:white"
                                 class="w3-bar-item w3-button back">Accounts</a>
                             <a href="login" style="color:white" class="w3-bar-item w3-button back">Log out</a>
