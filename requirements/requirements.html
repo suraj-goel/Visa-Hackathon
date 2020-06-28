@@ -2,6 +2,49 @@
 <link rel="stylesheet" href="{{ url_for('static',filename='./requirements/requirements.css') }}">
 <script type="text/javascript" src="{{url_for('static',filename='./requirements/requirements.js') }}"></script>
 <style>
+    .star-rating {
+  display: inline-block;
+  padding: 0;
+  width: auto;
+}
+
+.star {
+  display: inline-block;
+  float: left;
+  height: 25px;
+  margin: 0;
+  width: 25px;
+}
+
+.star::after {
+  background-color: #fff;
+  color: gold;
+  content: "\2605";
+  display: block;
+  font-size: 15px;
+  height: 25px;
+  text-align: center;
+  width: 25px;
+}
+
+.star:checked::after {
+  color: gold;
+}
+
+.star:checked ~ .star::after,
+.star-rating:hover .star:hover ~ .star::after {
+  color: grey;
+}
+
+.star-rating:hover .star::after {
+  color: gold;
+  content: "\2606"; /* use an open star on hover */
+  font-size: 15px;
+}
+
+
+</style>
+<style>
 #check::-webkit-outer-spin-button,
 #check::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -429,12 +472,12 @@
                 </tr>
                     {% elif item['Status']!='Pending' %} {% for x in item['Accepts'] %}
                 <tr>
-
-                <td colspan="1"><b>Merchant:</b> {{x['Name']}}<br><b>Registered Shop:</b> {{x['RegisteredName']}}, {{x['Address']}}</td>
-                <td colspan="1"><b>Item:</b><br>{{x['Product.Name']}}<br><b>Description:</b> {{x['Product.Description']}}</td>
-                <td colspan="1"><b>Contact details of merchant:<br>Email:</b> {{x['EmailID']}}<br><b>Phone:</b> {{x['ContactNumber']}}</td>
+                    <td colspan="1"><b>Item approved:</b><br>{{x['Product.Name']}}<br><b>Description:</b> {{x['Product.Description']}}</td>
+                    <td colspan="1"><b>Merchant:</b> {{x['Name']}}<br><b>Registered Shop:</b> {{x['RegisteredName']}}, {{x['Address']}}
+                        <br>{% if x['rating'] %}<b>Ratings:</b>{{x['rating']['Avg_rating']}} for {{x['rating']['Votes']}} deliveries
+                        {% endif %}</td>
+                    <td colspan="1"><b>Contact details of merchant:<br>Email:</b> {{x['EmailID']}}<br><b>Phone:</b> {{x['ContactNumber']}}</td>
                 <td>
-
                     <form method="post" action="">
                     <input type="submit" name="request" value="add to cart">
                     <input type="hidden" name="requirementID" value="{{item['RequirementID']}}">
