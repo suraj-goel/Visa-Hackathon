@@ -500,6 +500,7 @@ def showbuyerrequirements():
             #session['merchantID'] = request.form.get('merchantWhoAp')
             session['PriceItem'] = request.form.getlist('PriceItem[]')
             session['mid'] = request.form.get('merchantWhoAP')
+            session['requirementid'] = request.form.get('requirementID')
             #session['mid'] = '1'
             print(session['mid'])
             Price = []
