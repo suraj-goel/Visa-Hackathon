@@ -3,37 +3,33 @@ import uuid
 
 def checkIfExistingMerchant(mysql,merchantEmail):
   cursor = mysql.connection.cursor()
-  query = 'select COUNT(*) from MERCHANT where email=%s'
-  cursor.execute(query, merchantEmail)
-  if next(cursor, None) is None:
+  query = "select * from Merchant where EmailID='{}';".format(merchantEmail)
+  cursor.execute(query)
+  u = cursor.fetchall()
+
+  if len(u) == 0:
     return False
   else:
     return True
 
-def registerNewMerchant(mysql, email, password,name):
+def registerNewMerchant(mysql, email, password, merchantName,address,contactNumber,registeredName):
   id = uuid.uuid1()
   print(id)
-  cur = mysql.connection.cursor
-  query = """INSERT INTO 
-        MERCHANT (
-            MerchantID,
-            Name,
-            RegisteredName,
-            EmailID,
-            ContactNumber,
-            Address,
-            Password)
-    VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"""
-  cur.execute(query, (id, name, mRegisteredName, email, mContactNumber, mAddress, password))
+  print(email,password,merchantName,address,contactNumber,registeredName)
+  cur = mysql.connection.cursor()
+  #query = "select * from Merchant where EmailID='{}';".format(merchantEmail)
+  query = """INSERT INTO Merchant (MerchantID,Name,RegisteredName,EmailID,ContactNumber,Address,Password)VALUES(%s, %s, %s, %s, %s, %s, %s);"""
+  cur.execute(query, (id, merchantName, registeredName, email, contactNumber, address, password))
   mysql.connection.commit()
   cur.close()
   return id
 
 def checkPayType(mysql,id):
-  cur = mysql.connection.cursor
-  query = "check if id has a fixed payment type in the table "
-  cur.execute(query)
-  if next(cur, None) is None:
+  cursor = mysql.connection.cursor
+  query = "select * from PaymentType where MerchantID='{}';".format(id)
+  cursor.execute(query)
+  u = cursor.fetchall()
+  if len(u) == 0:
     return False
   else:
     return True

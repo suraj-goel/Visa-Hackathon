@@ -44,6 +44,7 @@ def login_required(function_to_protect):
                 session['pay_type'] = True
                 return redirect('/home')
             else:
+                #haridher add your route
                 return redirect('/payment')
         elif request.path == '/register' or request.path == '/login':
             return function_to_protect(*args, **kwargs)
@@ -88,7 +89,7 @@ def register():
         #session.pop('user_id', None)
 
         email = request.form.get('email')
-        merchantName = request.form.get('name')
+        merchantName = request.form.get('merchant_name')
         password = request.form.get('password')
         confirmPassword = request.form.get('confirm_password')
         address = request.form.get('address')
@@ -97,14 +98,17 @@ def register():
 
         if password != confirmPassword:
             flash('Passwords do not match')
+            print("passwords do not match")
             return redirect(url_for('register'))
 
         if checkIfExistingMerchant(mysql,email):
+            print("email already exists")
             flash('Email already registered')
             return redirect(url_for('register'))
         else:
+            #return redirect(url_for('login'))
             session.permanent = True
-            id = registerNewMerchant(mysql, email, password, name)
+            id = registerNewMerchant(mysql, email, password,merchantName,address,contactNumber,registeredName)
             session['session_id'] = id
 
         return redirect(url_for('login'))
