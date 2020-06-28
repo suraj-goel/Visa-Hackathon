@@ -430,6 +430,16 @@ def negotiation():
         allNegotiation = displayAllNegotiation(mysql, merchant_id)
         return render_template("./negotiation/negotiation.html", negotiations=allNegotiation)
 
+@app.route('/search_requirement', methods=['POST'])
+def search_requirement():
+    merchantid=session['merchantID']
+    search=request.form['search_name']
+    print(search)
+    choice = 'P'
+    items = getSupplierRequestsSearch(mysql, merchantid,search)
+    sellProduct = allProductID(mysql,merchantid)
+    return render_template('./requirements/requirements.html', sup_items=items, choice=choice, profile=2,sellProduct=sellProduct)
+
 
 @app.route('/requirementssupplier', methods=['GET', 'POST'])
 def showsupplierrequirements():
@@ -437,7 +447,6 @@ def showsupplierrequirements():
     sellProduct = allProductID(mysql,merchantid)
     items = getSupplierRequests(mysql, merchantid)
     if request.method == 'POST':
-
         try:
             choice = request.form['filtersupplier']
             items = getSupplierRequests(mysql, merchantid, choice)

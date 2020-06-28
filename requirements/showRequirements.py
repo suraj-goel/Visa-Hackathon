@@ -61,6 +61,17 @@ def RequestsRecievedAndPending(mysql, merchantid):
         pending[i]['Status'] = 'Waiting for buyer response'
     return pending
 
+def getSupplierRequestsSearch(mysql, merchantid,search):
+    cur = mysql.connection.cursor()
+    cur.execute("select * from Requirement as R, Merchant where R.Status='Post' and Merchant.MerchantID=R.MerchantID and R.MerchantID <> %s and "
+                "NOT EXISTS( select * from RequirementAccepted where RequirementAccepted.RequirementID=R.RequirementId "
+                "and RequirementAccepted.Status='yes') and R.Title like %s;", (merchantid,'%'+search+'%'))
+    posts = cur.fetchall()
+    for i in range(len(posts)):
+        posts[i]['Status'] = 'Open'
+    return posts
+
+
 def getSupplierRequests(mysql,merchantid,choice='P'):
     merchantid=int(merchantid)
     if choice=='P':
