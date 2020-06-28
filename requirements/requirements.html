@@ -214,7 +214,8 @@
                         <h5>Price Expected: Any Price</h5>
                         {% endif %}
                         <h5>Quantity Required: {{item['Quantity']}}</h5>
-                    </td>
+                    </td> </tr>
+                    <tr>
                 <td colspan="2"><b>Merchant details:<br>Name:</b>{% if item['Merchant.Name'] %}{{item['Merchant.Name']}} {% else %}{{item['Name']}} {% endif %}<br><b>Registered Shop:</b>{{item['RegisteredName']}}, {{item['Address']}}<br></td>
                 {% if item['Product.ProductID'] %}
                 <td colspan="1"><b>Product Details:<br>Name:</b> {{item['Name']}}<br><b>Description:</b> {{item['Product.Description']}}<br><b>Category:</b> {{item['Category']}}</td>
