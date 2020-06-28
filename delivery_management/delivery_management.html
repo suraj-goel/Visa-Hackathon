@@ -8,6 +8,34 @@
   width: auto;
 }
 
+.star1{
+  display: inline-block;
+  float: left;
+  height: 45px;
+  margin: 0;
+  width: 45px;
+}
+
+.star1::after {
+  background-color: #fff;
+  color: #1a1f71;
+  content: "\2605";
+  display: block;
+  font-size: 45px;
+  height: 45px;
+  text-align: center;
+  width: 45px;
+}
+
+.star1:checked::after {
+  color: #1a1f71;
+}
+
+.star1:checked ~ .star1::after,
+.star-rating:hover .star1:hover ~ .star1::after {
+  color: grey;
+}
+
 .star {
   display: inline-block;
   float: left;
@@ -17,7 +45,7 @@
 }
 
 .star::after {
-  background-color: #1a1f71;
+  background-color: #fff;
   color: gold;
   content: "\2605";
   display: block;
@@ -41,15 +69,58 @@
   content: "\2606"; /* use an open star on hover */
   font-size: 15px;
 }
-
-
 </style>
 <center>
     <h1 style="color: #1a1f71;">Product Delivery</h1>
+    {% if avg_ratings %}
+        <h3>
+            Your average rating       </h3><br>
+    {%set b=avg_ratings['Avg_rating']|float%}
+    {% set a= avg_ratings['stars']|int %}
+                            <fieldset style="width: 225px;" title="{{avg_ratings['Avg_rating']}} for {{avg_ratings['Votes']}} deliveries">
+                            {% if a==1 %}
+                                    <input class="star1" name="rating11" type="radio" value="1" checked="checked" />
+                                    <input class="star1" name="rating11" type="radio" value="2" disabled />
+                                    <input class="star1" name="rating11" type="radio" value="3" disabled/>
+                                    <input class="star1" name="rating11" type="radio" value="4" disabled/>
+                                    <input class="star1" name="rating11" type="radio" value="5" disabled/><br>
+                                {% elif a==2 %}
+                                    <input class="star1" name="rating22" type="radio" value="1" disabled/>
+                                    <input class="star1" name="rating22" type="radio" value="2" checked="checked" />
+                                    <input class="star1" name="rating22" type="radio" value="3" disabled/>
+                                    <input class="star1" name="rating22" type="radio" value="4" disabled/>
+                                    <input class="star1" name="rating22" type="radio" value="5" disabled/><br>
+                                 {% elif a==3 %}
+                                    <input class="star1" name="rating33" type="radio" value="1" disabled/>
+                                    <input class="star1" name="rating33" type="radio" value="2" disabled/>
+                                    <input class="star1" name="rating33" type="radio" value="3" checked="checked" />
+                                    <input class="star1" name="rating33" type="radio" value="4" disabled/>
+                                    <input class="star1" name="rating33" type="radio" value="5" disabled/><br>
+                                {% elif a==4 %}
+                                     <input class="star1" name="rating44" type="radio" value="1" disabled/>
+                                    <input class="star1" name="rating44" type="radio" value="2"  disabled/>
+                                    <input class="star1" name="rating44" type="radio" value="3" disabled/>
+                                    <input class="star1" name="rating44" type="radio" value="4" checked disabled/>
+                                    <input class="star1" name="rating44" type="radio" value="5" disabled/><br>
+                                 {% elif a==5 %}
+                                    <input class="star1" name="rating55" type="radio" value="1" disabled/>
+                                    <input class="star1" name="rating55" type="radio" value="2" disabled/>
+                                    <input class="star1" name="rating55" type="radio" value="3" disabled/>
+                                    <input class="star1" name="rating55" type="radio" value="4" disabled/>
+                                    <input class="star1" name="rating55" type="radio" value="5" checked="checked" /><br>
+                                {% endif %}
+                            </fieldset><br><br>
+            {% if b >= 3 %}
+<span style="color:green;">{{avg_ratings['Avg_rating']}} for {{avg_ratings['Votes']}} deliveries<br> Great job :)</span>
+
+            {% else %}
+            <span style="color:red;">{{avg_ratings['Avg_rating']}} for {{avg_ratings['Votes']}} deliveries<br> You have to improve your ratings :(</span>
+{% endif %}<br><br>
+    {% endif %}
     <form class="example" method="post" action="" style="margin:auto;max-width:600px">
         <span class="custom-dropdown custom-dropdown--white">
             <select name="filter" class="custom-dropdown__select">
-                <option value="yes">Delivered</option>
+                <option value="yes">Delivered to customer</option>
                 {% if filter=='no' %}
                 <option value="no" selected>Not delivered</option>
                 {% else %}
@@ -77,19 +148,9 @@
 
                     <h3>Cart Details</h3>
                     {% if not item['Rated'] %}
-                    <form method="post">
-                            <fieldset class="star-rating" id="rate-item-12343" style="padding-left:580px">
-<input class="star" name="rating" type="radio" checked="checked" value="1"/>
-                                  <input class="star" name="rating" type="radio" value="2" />
-                                  <input class="star" name="rating" type="radio" value="3" />
-                                  <input class="star" name="rating" type="radio" value="4"/>
-                                  <input class="star" name="rating" type="radio" value="5"/>
-                                  <input type="hidden" value="{{item['OrderID']}}" name="orderidrated">
-                            </fieldset>
-                        <button type="submit" onclick="javascript: form.action='/rating';"><h5>Rate your experience!</h5></button><br>
-                               </form><br>
+                    <span style="float:right;">You were not rated for this order</span>
                     {% else %}
-                    <div style="padding-left:750px">
+                    <div style="float:right;">
                        Your rating   :           {{ item['Rated'] }}<br>
                         <fieldset>
                             {% if item['Rated']=='1' %}
@@ -122,7 +183,7 @@
                                     <input class="star" name="rating5" type="radio" value="3" disabled/>
                                     <input class="star" name="rating5" type="radio" value="4" disabled/>
                                     <input class="star" name="rating5" type="radio" value="5" checked="checked" /><br> {% endif %}
-                            </fieldset><br></div>
+                            </fieldset></div>
                     {% endif %}
                     {% endif %}
                     Total: &#8377;{{item['Total']}} 	<br>

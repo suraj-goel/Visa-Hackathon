@@ -21,6 +21,7 @@ from payment.confirmPayment import *
 from manage_inventory.supplierupdater import *
 from manage_offers.displayOffers import *
 from orders_management.orderHistory import Delivered, AddRating
+from delivery_management.delivery import getDelivery,YourRatings
 
 app = Flask(__name__, static_folder='')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader, jinja2.FileSystemLoader(['.'])])
@@ -112,7 +113,13 @@ def ratings():
 
 @app.route('/delivery_management', methods=['GET', 'POST'])
 def delivery_management():
-    return render_template('./delivery_management/delivery_management.html')
+    merchantid = session['merchantID']
+    delivered_filter = 'yes'
+    if request.method == 'POST':
+        delivered_filter = request.form['filter']
+    delivery = getDelivery(mysql, merchantid, delivered_filter)
+    avg_ratings=YourRatings(mysql,merchantid)
+    return render_template('./delivery_management/delivery_management.html',history=delivery,avg_ratings=avg_ratings)
 
 @app.route('/orders', methods=['POST', 'GET'])
 def orders():
