@@ -282,7 +282,8 @@ def searchbycategory():
         code = str(categorycode[0]['Code'])
         try:
             data = getMerchantsByMLOCAPI(code,radius,currentMerchantID,currentLocation['Latitude'],currentLocation['Longitude'])
-        except:
+        except Exception as e:
+            print(e)
             data = []
     
     print(data)
