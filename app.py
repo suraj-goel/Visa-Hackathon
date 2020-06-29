@@ -278,13 +278,17 @@ def searchbycategory():
         category = request.form["name"]
         radius = str(request.form['radius'])
         categorycode = getMerchantCategoryCode(mysql,category)
-        print(categorycode[0]['Code'])
-        code = str(categorycode[0]['Code'])
-        try:
-            data = getMerchantsByMLOCAPI(code,radius,currentMerchantID,currentLocation['Latitude'],currentLocation['Longitude'])
-        except Exception as e:
-            print(e)
-            data = []
+        if(len(categorycode)):
+            print(categorycode[0]['Code'])
+            code = str(categorycode[0]['Code'])
+            try:
+                data = getMerchantsByMLOCAPI(code,radius,currentMerchantID,currentLocation['Latitude'],currentLocation['Longitude'])
+            except Exception as e:
+                print(e)
+                data = []
+        else:
+            data=[]
+
     
     print(data)
     return render_template('./search_merchants/searchbycategory.html',data=data,currentLocation=currentLocation)
