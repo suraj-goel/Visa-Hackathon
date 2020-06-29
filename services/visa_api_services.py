@@ -2,8 +2,8 @@ import requests
 import json
 import os
 import datetime
-cert=("/Users/sahanas/Desktop/Visa-Hackathon/services/cert.pem", '/Users/sahanas/Desktop/Visa-Hackathon/services/key_374cc983-558b-49dd-a55b-99d3cb3afac5.pem') #if you on MAC
-#cert=(os.path.abspath("services/cert.pem"),os.path.abspath("services/key_374cc983-558b-49dd-a55b-99d3cb3afac5.pem")) #if you on Windows
+# cert=("/Users/sahanas/Desktop/Visa-Hackathon/services/cert.pem", '/Users/sahanas/Desktop/Visa-Hackathon/services/key_374cc983-558b-49dd-a55b-99d3cb3afac5.pem') #if you on MAC
+cert=(os.path.abspath("services/cert.pem"),os.path.abspath("services/key_374cc983-558b-49dd-a55b-99d3cb3afac5.pem")) #if you on Windows
 auth=("STT3WACAH2W19FH6H48A2117b1JIIYevI8qRcIQn2Zwhtdp4M", "81SYH42zc2CwJgtOzInj50e8zT6vr")
 header={'Accept': 'application/json'}
 
