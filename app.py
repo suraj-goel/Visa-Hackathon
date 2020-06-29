@@ -245,7 +245,8 @@ def orders():
 
 @app.route('/performance', methods=['POST', 'GET'])
 def performance():
-    data=getPerformanceStats()
+    merchantid=session["merchantID"]
+    data=getPerformanceStats(mysql,merchantid)
     return render_template('./merchant_performance/merchant_performance.html',data=data)
 
 @app.route('/', methods=['POST', 'GET'])
