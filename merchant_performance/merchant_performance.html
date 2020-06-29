@@ -9,6 +9,10 @@
     font-size:20px;
     padding:5px;
     }
+    i{
+    float:right;
+    padding-left:6px;
+    }
 </style>
    <center>
     <h1>Performance</h1>
@@ -56,8 +60,8 @@
     <tr>
         <td>sales volume growth this year</td>
         <td>{{data['sales_volume_growth_yearly']}}
-                {% if data['sales_volume_growth_yearly']|float < 0 %} <i class="fa fa-chevron-circle-down" style="font-size:28px;color:red"></i>
-        {% else %} <i class="fa fa-chevron-circle-up" style="font-size:28px;color:green"></i> {% endif %}
+                {% if data['sales_volume_growth_yearly']|float < 0 %} <i class="fa fa-chevron-circle-down" style="font-size:28px;color:red;float:right"></i>
+        {% else %} <i class="fa fa-chevron-circle-up" style="font-size:28px;color:green;float:right"></i> {% endif %}
         </td>
     </tr>
 </table>
@@ -66,9 +70,9 @@
        <h4><b>Total spending:</b> &#8377;{{data['total_spendings']}} </h4>
        <h4><b>Total earnings:</b> &#8377;{{data['total_earnings']}}</h4>
        {% if data['total_spendings']|float > data['total_earnings']|float %}
-       You are at loss<i class="fa fa-chevron-circle-down" style="font-size:28px;color:red"></i>
+       You are at loss<i class="fa fa-chevron-circle-down" style="font-size:28px;color:red;float:right"></i>
        {% else %}
-       You are in profit!!<i class="fa fa-chevron-circle-up" style="font-size:28px;color:green"></i>
+       You are in profit!!<i class="fa fa-chevron-circle-up" style="font-size:28px;color:green;float:right"></i>
        {% endif %}
        <hr>
        <b><h4>Monthly summary</h4></b>
