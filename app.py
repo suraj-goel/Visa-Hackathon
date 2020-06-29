@@ -38,6 +38,7 @@ import requests
 import geocoder
 from delivery_management.delivery import getDelivery,YourRatings
 from search_merchants.searchMerchantCategory import *
+from merchant_performance.merchant_performance import getPerformanceStats
 
 app = Flask(__name__, static_folder='')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader, jinja2.FileSystemLoader(['.'])])
@@ -242,6 +243,10 @@ def orders():
     history = getOrders(mysql, merchantid, delivered_filter)
     return render_template('./orders_management/order_management.html', history=history, filter=delivered_filter)
 
+@app.route('/performance', methods=['POST', 'GET'])
+def performance():
+    data=getPerformanceStats()
+    return render_template('./merchant_performance/merchant_performance.html',data=data)
 
 @app.route('/', methods=['POST', 'GET'])
 @app.route('/search', methods=['POST', 'GET'])
