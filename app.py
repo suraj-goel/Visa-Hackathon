@@ -54,18 +54,19 @@ geocode_url = 'https://maps.googleapis.com/maps/api/geocode/json'
 def login_required(function_to_protect):
     @wraps(function_to_protect)
     def wrapper(*args, **kwargs):
-        if 'session_id' in session:
-            id = session['session_id']
+        print("Login check")
+        if 'merchantID' in session:
+            id = session['merchantID']
             if 'pay_type' in session:
                 return function_to_protect(*args, **kwargs)
             elif checkPayType(mysql, id):
                 session.permanent = True
                 session['pay_type'] = True
-                return redirect('/home')
+                return redirect('/search')
             else:
                 #haridher add your route
-                return redirect('/payment')
-        elif request.path == '/register' or request.path == '/login':
+                return redirect(url_for('registerCyber'))
+        elif request.path == '/register/' or request.path == '/login/':
             return function_to_protect(*args, **kwargs)
         else:
             flash("Please log in")
@@ -73,30 +74,30 @@ def login_required(function_to_protect):
     return wrapper
 
 
-@app.route('/login', methods=['GET', 'POST'])
-@login_required
+@app.route('/login/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        session.pop('session_id', None)
+        session.pop('merchantID', None)
 
         email = request.form.get('email')
         password = request.form.get('password')
 
-        users = checkEmailAndPassword(email,password)
+        cur = mysql.connection.cursor()
+        cur.execute("select * from Merchant where EmailID='{}' and Password='{}';".format(email, password))
+        users = cur.fetchone()
+        cur.close()
         if len(users) >0:
             session.permanent = True
-            session['session_id'] = users[0][0]
-            return redirect(url_for('/home'))
+            session['merchantID'] = users['MerchantID']
+            return redirect(url_for('showAll'))
         else:
             flash('Incorrect Email and Password combination')
             return redirect(url_for('login'))
 
         return redirect(url_for('login'))
-
     return render_template("./login_registration/login.html")
 
-@app.route('/register', methods=['GET', 'POST'])
-@login_required
+@app.route('/register/', methods=['GET', 'POST'])
 def register():
     print("register")
     if request.method == 'POST':
@@ -120,7 +121,7 @@ def register():
             flash('Email already registered')
             return redirect(url_for('register'))
         else:
-            params = {'address': "1600 Amphitheatre Parkway, Mountain View, CA",'key':geocode_api_key}
+            '''params = {'address': "1600 Amphitheatre Parkway, Mountain View, CA",'key':geocode_api_key}
             r = requests.get(geocode_url, params=params)
             print(r)
             print(r.url)
@@ -128,22 +129,21 @@ def register():
             results = r.json()['results']
             print(results)
             #location = results[0]['geometry']['location']
-            #print(location)
-            return redirect(url_for('register'))
+            #print(location)'''
+            #return redirect(url_for('register')) #why this line?@Praj
             session.permanent = True
             id = registerNewMerchant(mysql, email, password,merchantName,address,contactNumber,registeredName)
-            session['session_id'] = id
-
-        return redirect(url_for('login'))
+            session['merchantID'] = id
+            register_merchant(mysql, session['merchantID'])
+            return redirect(url_for('registerCyber'))
     print("get")
     return render_template("./login_registration/register.html")
 
-@app.route('/logout')
-@login_required
+@app.route('/logout/')
 def logout():
-    session.pop('session_id', None)
+    session.clear()
+    print(session,"lolol")
     return redirect(url_for('login'))
-
 
 
 @app.route('/addproduct', methods=['POST', 'GET'])
