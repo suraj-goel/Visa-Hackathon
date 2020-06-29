@@ -111,6 +111,7 @@
 
 
     var data = '{{ data|tojson }}';
+    
     var currentLocation = '{{ currentLocation|tojson }}'
     var jsonData = JSON.parse(data);
     var currentLocationJSONData = JSON.parse(currentLocation)
@@ -122,19 +123,12 @@
             lng: 78.9629
         };
         var map;
-        if (jsonData.length == 0)
-            map = new google.maps.Map(
-                document.getElementById('map'), {
-                zoom: 4,
-                center: india
-            });
-        else
+        
             map = new google.maps.Map(
                 document.getElementById('map'), {
                 zoom: 7,
                 center: {
-                    lat: parseFloat(jsonData[0].Latitude),
-                    lng: parseFloat(jsonData[0].Longitude)
+                    lat:parseFloat(currentLocationJSONData.Latitude), lng :parseFloat(currentLocationJSONData.Longitude)
                 }
             });
 
@@ -145,7 +139,7 @@
 
         for (i = 0; i < jsonData.length; i++) {
             marker = new google.maps.Marker({
-                position: new google.maps.LatLng(parseFloat(jsonData[i].Latitude), parseFloat(jsonData[i].Longitude)),
+                position: new google.maps.LatLng(parseFloat(jsonData[i].locationAddressLatitude), parseFloat(jsonData[i].locationAddressLongitude)),
                 map: map
             });
             if (parseInt(jsonData[i].distance) === 0) {
@@ -156,7 +150,9 @@
 
             google.maps.event.addListener(marker, 'mouseover', (function (marker, i) {
                 return function () {
-                    infowindow.setContent(jsonData[i].RegisteredName);
+                    var info = "Store Name : " + jsonData[i].visaStoreName + "\n";
+                    info+="Distance : " + jsonData[i].distance + "\n";
+                    infowindow.setContent(info);
                     infowindow.open(map, marker);
                 }
             })(marker, i));
@@ -169,10 +165,10 @@
 
 
             google.maps.event.addListener(marker, 'click', (function (marker, i) {
-                return function () {
-                    if (parseInt(jsonData[i].distance) !== 0)
-                        window.location.href = '/merchant/' + jsonData[i].MerchantID;
-                }
+                // return function () {
+                //     if (parseInt(jsonData[i].distance) !== 0)
+                //         window.location.href = '/merchant/' + jsonData[i].MerchantID;
+                // }
             })(marker, i));
         }
         marker = new google.maps.Marker({
