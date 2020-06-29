@@ -1,4 +1,4 @@
-import uuid
+import random
 
 
 def checkIfExistingMerchant(mysql,merchantEmail):
@@ -13,7 +13,8 @@ def checkIfExistingMerchant(mysql,merchantEmail):
     return True
 
 def registerNewMerchant(mysql, email, password, merchantName,address,contactNumber,registeredName):
-  id = uuid.uuid1()
+  id = random.randint(1,1000)
+  id = str(id)
   print(id)
   print(email,password,merchantName,address,contactNumber,registeredName)
   cur = mysql.connection.cursor()
@@ -25,10 +26,10 @@ def registerNewMerchant(mysql, email, password, merchantName,address,contactNumb
   return id
 
 def checkPayType(mysql,id):
-  cursor = mysql.connection.cursor
+  cur = mysql.connection.cursor()
   query = "select * from PaymentType where MerchantID='{}';".format(id)
-  cursor.execute(query)
-  u = cursor.fetchall()
+  cur.execute(query)
+  u = cur.fetchall()
   if len(u) == 0:
     return False
   else:
