@@ -37,6 +37,7 @@ from orders_management.orderHistory import Delivered, AddRating
 import requests
 import geocoder
 from delivery_management.delivery import getDelivery,YourRatings
+from search_merchants.searchMerchantCategory import *
 
 app = Flask(__name__, static_folder='')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader, jinja2.FileSystemLoader(['.'])])
@@ -260,6 +261,27 @@ def showAll():
     data = getSearchResults(mysql, currentMerchantID)
     return render_template("./search_merchants/search.html", currentLocation=currentLocation, data=data)
 
+@app.route('/searchbycategory',methods=['POST', 'GET'])
+def searchbycategory():
+    session['merchantID'] = '5'
+
+    currentMerchantID =  session['merchantID']
+    currentLocation = getCurrentLocation(mysql, currentMerchantID)
+    data=[]
+    if request.method == "POST":
+        category = request.form["name"]
+        radius = str(request.form['radius'])
+        categorycode = getMerchantCategoryCode(mysql,category)
+        print(categorycode[0]['Code'])
+        code = str(categorycode[0]['Code'])
+        try:
+            data = getMerchantsByMLOCAPI(code,radius,currentMerchantID,currentLocation['Latitude'],currentLocation['Longitude'])
+        except:
+            data = []
+    
+    print(data)
+    return render_template('./search_merchants/searchbycategory.html',data=data,currentLocation=currentLocation)
+    
 
 @app.route('/merchant/<merchant_id>', methods=['GET', 'POST'])
 def showPlaceOrder(merchant_id):
