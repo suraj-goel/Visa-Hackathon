@@ -358,3 +358,75 @@ def getMerchantsByMLOCAPI(merchantCategoryCode,radius,merchantID,latitude,longit
         print("No Mechants found")
 
     return merchants
+
+def registerOnVTC(primaryAccountNumber):
+    url = "https://sandbox.api.visa.com/vctc/customerrules/v1/consumertransactioncontrols"
+    p = json.loads(
+        '''
+    {
+    "primaryAccountNumber": "'''+ primaryAccountNumber +'''"
+    }
+
+        '''
+    )
+    r = requests.post(url, timeout=100,
+                      cert=cert,
+                      headers=header,
+                      auth=auth,
+                      json=p)
+    result = r.json()
+    if(result["resource"]):
+        if(result["resource"]["documentID"]):
+            return result["resource"]["documentID"]
+    
+    return None
+
+
+def getAvailableMerchantControls(primaryAccountNumber):
+    url = "https://sandbox.api.visa.com/vctc/customerrules/v1/merchanttypecontrols/cardinquiry"
+    p = json.loads(
+        '''
+            
+    
+    {
+    "primaryAccountNumber": "'''+ primaryAccountNumber +'''"
+    }
+
+        '''
+    )
+    r = requests.post(url, timeout=100,
+                        cert=cert,
+                        headers=header,
+                        auth=auth,
+                        json=p)
+    result = r.json()
+    data = []
+    if(result["resource"]):
+        if(result["resource"]["availableMerchantTypeRules"]):
+            for res in result["resource"]["availableMerchantTypeRules"]:
+              data.append(res["name"])
+            return data      
+
+    return None
+
+def getMerchantControlRules(documentID):
+    url = "https://sandbox.api.visa.com/vctc/customerrules/v1/consumertransactioncontrols/"+documentID+"/rules"
+    # print(url)
+    p = json.loads(
+        '''
+            {}
+        '''
+    )
+    r = requests.post(url, timeout=100,
+                        cert=cert,
+                        headers=header,
+                        auth=auth,
+                        json=p)
+    result = r.json()
+    data = []
+    if(result["resource"]):
+        return result["resource"]
+    return None
+
+
+
