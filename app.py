@@ -57,11 +57,11 @@ def login_required(function_to_protect):
         print("Login check")
         if 'merchantID' in session:
             id = session['merchantID']
-            if 'pay_type' in session:
+            if 'register_cyber' in session or request.path =='/registerCyber/':
                 return function_to_protect(*args, **kwargs)
             elif checkPayType(mysql, id):
                 session.permanent = True
-                session['pay_type'] = True
+                session['register_cyber'] = True
                 return redirect('/search')
             else:
                 #haridher add your route
@@ -445,6 +445,7 @@ def registerB2B(merchant_id):
 
 
 @app.route('/registerCyber/', methods=['GET', 'POST'])
+@login_required
 def registerCyber():
     merchant_id = session['merchantID']  # retrieve from session
     cur = mysql.connection.cursor()
@@ -469,6 +470,8 @@ def registerCyber():
             cur.execute(
                 "update CybersourceMerchant set Name = '" + name + "', AggregatorID = '" + aggregatorID + "', CardAcceptorID = '" + cardAcceptorID + "' where MerchantID='" + merchant_id + "';")
         mysql.connection.commit()
+        session.permanent = True
+        session['register_cyber'] = True
         return redirect('/accounts/')
     return render_template("./accounts/cyberSourceDetails.html", result=result)
 
