@@ -23,7 +23,7 @@ def createSupplier(mysql,acc,supplier_id,buyerid,clientid="B2BWS_1_1_9999"):
     #fetch buyer id from db corresponding to merchantid and set a new supplier id with account number for payment
     cur = mysql.connection.cursor()
     cur.execute("select * from Merchant where MerchantID='"+supplier_id+"';")
-    mid, name, registeredName, email, contactNumber, address, password = cur.fetchone()
+    mid, name, registeredName, email, contactNumber, address, password, mcc = cur.fetchone()
     cur.close()
     url = 'https://sandbox.api.visa.com/vpa/v1/supplier/CreateSupplier'
     p = json.loads(
@@ -102,7 +102,7 @@ def createBuyer(mysql,buyerid,clientid="B2BWS_1_1_9999"):
     # client id is supplied by visa to identify the finantial institutaion that is offering this service(ignore it)
     cur = mysql.connection.cursor()
     cur.execute("select * from Merchant where MerchantID='"+buyerid+"';")
-    mid,name,registeredName,email,contactNumber,address,password = cur.fetchone()
+    mid,name,registeredName,email,contactNumber,address,password,mcc = cur.fetchone()
     cur.close()
     #The Company ID must be the same Company ID at the processor
     url='https://sandbox.api.visa.com/vpa/v1/buyerManagement/buyer/create'
