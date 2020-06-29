@@ -81,7 +81,7 @@ def createBuyerAccount(mysql,buyerid,clientid="B2BWS_1_1_9999"):
         "numberOfCards": "1",
         "messageId": "1526077012761",
         "action": "A",
-        "buyerId": '''+buyerid+'''
+        "buyerId": "'''+buyerid+'''"
         }
     ''')
     r = requests.post(url, timeout=10,
@@ -190,7 +190,7 @@ def register_merchant(mysql,mid):
     #we need to set up account number for buyer.. once buyer is created, the account number can be assigned and returned using this call
     account_number = createBuyerAccount(mysql,buyerid)
     #we can then use this account number to create his supplier profile
-    createSupplier(mysql,account_number,supplier_id)
+    createSupplier(mysql,account_number,supplier_id,buyerid)
     #payment needs supplier account number and buyerid
     cur = mysql.connection.cursor()
     cur.execute("select * from PaymentType where MerchantID='"+mid+"';")
