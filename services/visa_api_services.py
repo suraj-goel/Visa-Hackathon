@@ -208,7 +208,8 @@ def register_merchant(mysql,mid):
 #paymentProcessing(payment_amount,"12324",acc)
 
 def getMerchantsByMLOCAPI(merchantCategoryCode,radius,merchantID,latitude,longitude):
-    
+    if not radius:
+        radius = '99'   
     url = "https://sandbox.api.visa.com/merchantlocator/v1/locator"
     now = datetime.datetime.now()
     messageDateTime = now.strftime("%Y-%m-%dT%H:%M:%S.000")
