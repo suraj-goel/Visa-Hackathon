@@ -378,6 +378,7 @@ def showCart(merchant_id):
     print(type)
     print(request.form)
     session['merchantID'] = loggmerchant_id
+    pf = '0'
     if request.method == 'GET':
         try:
             if type=='simple':
@@ -391,6 +392,7 @@ def showCart(merchant_id):
                 data = getMerchantInfo(mysql, seller_id)
                 emailID = data[0]
                 contact = data[1]
+                pf = '1'
                 l = len(qty)
                 for i in range(0,l):
                     totalQuantity += int(qty[i])
@@ -407,6 +409,7 @@ def showCart(merchant_id):
                 data = getMerchantInfo(mysql,seller_id)
                 emailID = data[0]
                 contact = data[1]
+                pf = '2'
                 l = len(qty)
                 for i in range(0,l):
                     totalQuantity += int(qty[i])
@@ -422,6 +425,7 @@ def showCart(merchant_id):
                 data = getMerchantInfo(mysql,seller_id)
                 emailID = data[0]
                 contact = data[1]
+                pf = '3'
                 totalDiscountCost = session['finalPriceChange']
                 l = len(qty)
                 for i in range(0,l):
@@ -460,7 +464,8 @@ def showCart(merchant_id):
         session['finalDiscountPrice'] = finalDiscountPrice
         session['fqty']=qty
         session['fProductID']=ProductID
-        session['payment_flag']='1'
+        session['payment_flag']= pf
+        pf = '0'
         if (Type == 'Process Payment'):
             amount = finalDiscountPrice
             return render_template('./payment/payment.html', amount=amount)
