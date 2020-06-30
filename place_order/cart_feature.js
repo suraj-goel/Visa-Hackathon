@@ -14,10 +14,10 @@ function negotiate(dP) {
     var negprice = prompt("Please enter the amount you want", tprice);
     console.log(tprice, negprice);
     var priceSent = tprice;
-    if (parseInt(negprice) <= parseInt(tprice) && parseInt(negprice) >= 0) {
+    if (parseInt(negprice) < parseInt(tprice) && parseInt(negprice) >= 0) {
         priceSent = negprice;
         alert("Negotiated price (" + priceSent + ") sent to merchant");
-    } else if (parseInt(negprice) > parseInt(tprice) || parseInt(negprice) < 0) {
+    } else if (parseInt(negprice) >= parseInt(tprice) || parseInt(negprice) < 0) {
         priceSent = tprice;
         alert("Negotiated Price should be greater than 0 and less than Discount price(" + tprice + ")");
         alert("Discount price (" + priceSent + ") sent to merchant");
