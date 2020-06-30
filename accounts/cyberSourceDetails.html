@@ -1,7 +1,8 @@
 {% include "./common/header.html" %}
+<link rel="stylesheet" href="{{ url_for('static',filename='./accounts/cybersource.css') }}">
 <body>
     <h1>Cyber Source Payment Details</h1>
-    <form action="" method="post">
+    <form class="containerForm" action="" method="post">
         <p>
             <label>Aggregator ID : </label>
             <input value="{{ result['AggregatorID'] }}" name="aggregatorid" type="number" required>

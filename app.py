@@ -595,7 +595,7 @@ def b2bpay():
 @app.route('/negotiation',methods=['GET','POST'])
 def negotiation():
     choice = 'R'
-    merchantID = '3'
+    merchantID = '1'
     session['merchantID'] = merchantID
     merchant_id = session['merchantID']
     allNegotiation =[]
@@ -627,7 +627,7 @@ def negotiation():
         try:
             gotToCart = request.form['addtocart2']
             session['type'] = 'negotiate'
-            session['negotitationID'] = request.form['negotiationID']
+            session['negotiationID'] = request.form['negotiationID']
             session['finalPriceChange'] = request.form['Amount2']
             session['qty'] = request.form.getlist('qty[]')
             session['Description'] = request.form.getlist('Description[]')
@@ -661,7 +661,7 @@ def negotiation():
 
 @app.route('/negotiationsupplier',methods=['GET','POST'])
 def negotiationsupplier():
-    merchant_id = '3'
+    merchant_id = '1'
     session['merchantID'] = merchant_id
     groupList = showNegotiation(mysql, merchant_id)
 
