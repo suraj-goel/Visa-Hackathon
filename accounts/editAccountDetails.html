@@ -40,7 +40,7 @@
         border-radius: 4px;
         cursor: pointer;
         background-color: #fdbb0a;
-        width: 10%;
+        width: 50%;
     }
 
     input[type="submit"]:hover {
@@ -51,7 +51,7 @@
         padding: 10px;
         border: 10px;
         border-radius: 10px;
-        background-color: #dddddd;
+        background-color: #f2f2f2;
         box-shadow: #555555;
         text-align: center;
     }
@@ -59,7 +59,6 @@
     .containerForm {
         box-sizing: border-box;
         border-radius: 5px;
-        background-color: #f2f2f2;
         padding: 15px;
     }
 
@@ -73,7 +72,7 @@
 </script>
 <body>
 <center>
-    <h1 style="color:#faaa13; font-weight: bold;">Account Details</h1>
+    <h1 style="color:#1a1f71; font-weight: bold;">Account Details</h1>
     <form id="form1" method="post" style="border: none;" action="/editaccountinfo/">
         <div id="newForm" class="containerForm">
             <table style="border-spacing: 10px 15px; border-collapse: initial;">
@@ -102,7 +101,7 @@
                     <td>
                         <h4><label for="contact" style="font-weight: bold">Contact number : </label></h4>
                     </td>
-                    <td>                <input id="contact"value="{{ result['ContactNumber'] }}" name="contactno" type="text" required>
+                    <td> <input id="contact"value="{{ result['ContactNumber'] }}" name="contactno" type="text" required>
 
                     </td>
                 </tr>
@@ -121,7 +120,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="10"><input type="submit" value="Confirm Changes">
+                    <td colspan="6"><h4><input type="submit" value="Confirm Changes" ></h4>
                     </td>
                 </tr>
 
