@@ -177,9 +177,15 @@ def getBuyerRequests(mysql,merchantid,choice='R'):
         return PostedAndDone(mysql,merchantid)
     elif choice=='E':
         res=[]
-        res.extend(PostedAndPending(mysql,merchantid))
-        res.extend(PostedAndAcceptedBySupplier(mysql,merchantid))
-        res.extend(PostedAndDone(mysql,merchantid))
+        a= PostedAndPending(mysql,merchantid)
+        b= PostedAndAcceptedBySupplier(mysql,merchantid)
+        c= PostedAndDone(mysql,merchantid)
+        if a :
+            res.extend(a)
+        if b:
+            res.extend(b)
+        if c:
+            res.extend(c)
         return res
 
 

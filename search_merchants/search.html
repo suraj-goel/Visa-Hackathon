@@ -110,9 +110,9 @@
                                 href="/merchant/{{item['MerchantID']}}">
                                 {{item['RegisteredName']}}
                             </a></h5>
+                                           {% endif %}
 <span style="float:right">
-                    {% if item['rate']%}
-
+                    {% if item['rate']['stars'] %}
                             {% set a= item['rate']['stars']|int %}
                             <fieldset>
                             {% if a==1 %}
@@ -147,12 +147,13 @@
                                     <input class="star" name="rating5" type="radio" value="5" checked="checked" /><br>
                                 {% endif %}
                             </fieldset>
+      <h6>Rated {{item['rate']['Avg_rating']}} for {{item['rate']['Votes']}} deliveries</h6>
                             {% else %}
-                                No ratings available yet
+                             <h6>No ratings available yet</h6>
                             {% endif %}
-    <h6>Rated {{item['rate']['Avg_rating']}} for {{item['rate']['Votes']}} deliveries</h6></span><br><br><br>
+  </span><br><br><br>
                     </td>
-                    {% endif %}
+
                 </tr>
                 {% if item['Offers'] %} {% for x in item['Offers'] %}
                 <tr>

@@ -183,7 +183,7 @@ def addproduct():
         if category == 'others':
             category = request.form['other_category']
         sell = request.form['sell']
-        merchantID = session['merchanID']
+        merchantID = session['merchantID']
         message = addNewProduct(name, description, price, quantity, category, sell, merchantID, mysql)
         session['message_product_add'] = message
     return redirect(url_for('inventory'))
@@ -625,8 +625,6 @@ def b2bpay():
 @app.route('/negotiation',methods=['GET','POST'])
 def negotiation():
     choice = 'R'
-    merchantID = '1'
-    session['merchantID'] = merchantID
     merchant_id = session['merchantID']
     allNegotiation =[]
     productList = []
