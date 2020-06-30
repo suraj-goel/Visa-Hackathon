@@ -7,7 +7,7 @@
 importance of this idea and overall project working in short
 ## Project features ##
 explain modulewise
-## Visa APIs used and use cases##
+## Visa APIs used and use cases ##
 
 ## project structure ##
 1. common : html, css and js needed for all packages
