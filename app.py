@@ -949,8 +949,9 @@ def checkout():
     return render_template("./payment/payment.html",amount=amount)
 
 
-# merchants = getMerchantsByMLOCAPI("5814","20","1","37.363922","-121.929163") sample merchant locator api call
-
+@app.route('/vtc', methods=['GET', 'POST'])
+def vtc():
+    return render_template("./transactionControl/transactionControl.html")
 
 if __name__ == '__main__':
     # threaded allows multiple users (for hosting)

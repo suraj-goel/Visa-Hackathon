@@ -1,0 +1,308 @@
+#form1 {
+    padding: 15px;
+    border: 1px solid #666;
+    background: #fff;
+    display: none;
+  }
+  
+  #formButton {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  
+  body {
+    font-family: "open-sans", sans-serif, Tahoma;
+    color: #6a6c6f;
+    margin-top: 30px;
+  }
+  
+  h5 {
+    margin-bottom: 0px;
+  }
+  
+  h4 {
+    margin-bottom: 0px;
+  }
+  
+  h3 {
+    margin: 0px 0px;
+  }
+  
+  b {
+    color: #1a1f71;
+  }
+  
+  * {
+    box-sizing: border-box;
+  }
+  
+  a:link,
+  a:hover,
+  a:active,
+  a:visited {
+    text-decoration: none;
+  }
+  
+  form.example input[type="text"] {
+    padding: 10px;
+    font-size: 17px;
+    border: 1px solid grey;
+    float: left;
+    width: 80%;
+    background: #f1f1f1;
+  }
+  
+  form.example::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+  
+  button,
+  input[type="submit"] {
+    /* float: left; */
+    width: 20%;
+    padding: 9px;
+    background: #fdbb0a;
+    color: white;
+    font-size: 1.7rem;
+    font-family: "open-sans", sans-serif, Tahoma;
+    font-weight: 300;
+    border: 2px solid #faaa13;
+    border-radius: 5px;
+    border-left: none;
+    cursor: pointer;
+  }
+  
+  form.example button:hover {
+    background: #faaa13;
+  }
+  
+  #formButton,
+  input[type="submit"] {
+    background-color: #1a1f71;
+    border: 2px solid #1a1f71;
+  }
+  
+  .button {
+    display: inline-block;
+    border-radius: 4px;
+    background-color: #1a1f71;
+    border: none;
+    color: #ffffff;
+    text-align: center;
+    font-size: 14px;
+    padding: 10px;
+    width: 250px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+  }
+  
+  .button span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+  }
+  
+  .button span:after {
+    content: "\00bb";
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+  }
+  
+  .button:hover span {
+    padding-right: 25px;
+  }
+  
+  .button:hover span:after {
+    opacity: 1;
+    right: 0;
+  }
+  
+  input {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  textarea {
+    width: 215px;
+    height: 50px;
+    resize: none;
+  }
+  
+  .container {
+    max-width: 960px;
+  }
+  
+  .table > tbody > tr.active > td,
+  .table > tbody > tr.active > th,
+  .table > tbody > tr > td.active,
+  .table > tbody > tr > th.active,
+  .table > tfoot > tr.active > td,
+  .table > tfoot > tr.active > th,
+  .table > tfoot > tr > td.active,
+  .table > tfoot > tr > th.active,
+  .table > thead > tr.active > td,
+  .table > thead > tr.active > th,
+  .table > thead > tr > td.active,
+  .table > thead > tr > th.active {
+    background-color: #fff;
+  }
+  
+  .table-bordered > tbody > tr > td,
+  .table-bordered > tbody > tr > th,
+  .table-bordered > tfoot > tr > td,
+  .table-bordered > tfoot > tr > th,
+  .table-bordered > thead > tr > td,
+  .table-bordered > thead > tr > th {
+    border-color: #1a1f71;
+    padding-left: 20px;
+  }
+  
+  .table {
+    margin: 40px 0px;
+    border: none;
+    border-collapse: separate;
+    /* border-spacing: 0px 10px; */
+  }
+  
+  .table tr {
+    margin-bottom: 20px;
+    margin: 25px;
+    padding-bottom: 0px;
+    border: 2px solid #1a1f71;
+    background-color: #f7f7f7;
+  }
+  
+  .table td {
+    padding: 0px;
+    padding-left: 10px;
+    font-size: 1.7rem;
+    font-family: "open-sans", sans-serif, Tahoma;
+    font-weight: 300;
+    color: #1a1f71;
+  }
+  
+  .table tr.header {
+    /* font-weight: bold; */
+    background-color: #fff;
+    cursor: pointer;
+    -webkit-user-select: none;
+    /* Chrome all / Safari all */
+    -moz-user-select: none;
+    /* Firefox all */
+    -ms-user-select: none;
+    /* IE 10+ */
+    user-select: none;
+    /* Likely future */
+  }
+  
+  .table tr:not(.header) {
+    display: none;
+  }
+  
+  .table .header td:after {
+    content: "\002b";
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: "open-sans", sans-serif, Tahoma;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    float: right;
+    color: #faaa13;
+    text-align: center;
+    padding: 3px;
+    transition: transform 0.25s linear;
+    -webkit-transition: -webkit-transform 0.25s linear;
+  }
+  
+  .table .header.active td:after {
+    content: "\2212";
+  }
+  
+  .custom-dropdown {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0px;
+  }
+  
+  .custom-dropdown__select {
+    font-size: 1.7rem;
+    font-family: "open-sans", sans-serif, Tahoma;
+    font-weight: 300;
+    padding: 0.5em; /* add some space*/
+    margin: 0; /* remove default margins */
+    width: 200px;
+    padding-right: 2.5em;
+    border-radius: 3px;
+    border: 1px solid #1a1f71;
+    border-radius: 3px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+  
+  .custom-dropdown__select--white {
+    border: 1px solid #faaa13;
+    color: #1a1f71;
+  }
+  .custom-dropdown::before,
+  .custom-dropdown::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+  }
+  
+  .custom-dropdown::after {
+    /*  Custom dropdown arrow */
+    content: "\25BC";
+    height: 1em;
+    font-size: 1.7rem;
+    font-family: "open-sans", sans-serif, Tahoma;
+    font-weight: 300;
+    line-height: 1;
+    right: 0.5em;
+    top: 50%;
+    margin-top: -0.5em;
+  }
+  
+  .custom-dropdown::before {
+    /*  Custom dropdown arrow cover */
+    width: 2em;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: 0 3px 3px 0;
+  }
+  
+  .custom-dropdown__select[disabled] {
+    color: rgba(0, 0, 0, 0.3);
+  }
+  
+  .custom-dropdown.custom-dropdown--disabled::after {
+    color: rgba(0, 0, 0, 0.1);
+  }
+  
+  /* White dropdown style */
+  .custom-dropdown--white::before {
+    top: 0.5em;
+    bottom: 0.5em;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .custom-dropdown--white::after {
+    color: #1a1f71;
+  }
+  
