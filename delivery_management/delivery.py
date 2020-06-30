@@ -3,15 +3,15 @@ def getDelivery(mysql, merchantid, delivered_filter):
     if delivered_filter == 'all':
         cur.execute("select distinct ProductCart.CartID,Orders.OrderID, Orders.DeliveredDate ,Orders.OrderedDate, Cart.Total from Cart, "
                     "Orders,ProductCart,Product where Orders.CartID=ProductCart.CartID and ProductCart.ProductID="
-                    "Product.ProductID and Product.MerchantID=%s and Cart.CartID=ProductCart.CartID" ,merchantid)
+                    "Product.ProductID and Product.MerchantID=%s and Cart.CartID=ProductCart.CartID" ,(merchantid,))
     elif delivered_filter == 'no':
         cur.execute("select distinct ProductCart.CartID,Orders.OrderID, Orders.DeliveredDate ,Orders.OrderedDate, Cart.Total from Cart, "
                     "Orders,ProductCart,Product where Orders.CartID=ProductCart.CartID and ProductCart.ProductID="
-                    "Product.ProductID and Product.MerchantID=%s and Orders.DeliveredDate is null and Cart.CartID=ProductCart.CartID" , merchantid)
+                    "Product.ProductID and Product.MerchantID=%s and Orders.DeliveredDate is null and Cart.CartID=ProductCart.CartID" , (merchantid,))
     else:
         cur.execute("select distinct ProductCart.CartID,Orders.OrderID, Orders.DeliveredDate ,Orders.OrderedDate,Cart.Total from Cart, "
                     "Orders,ProductCart,Product where Orders.CartID=ProductCart.CartID and ProductCart.ProductID="
-                    "Product.ProductID and Product.MerchantID=%s and Orders.DeliveredDate is not null and Cart.CartID=ProductCart.CartID" , merchantid)
+                    "Product.ProductID and Product.MerchantID=%s and Orders.DeliveredDate is not null and Cart.CartID=ProductCart.CartID" , (merchantid,))
     res = []
     carts=cur.fetchall()
     for i in carts:
@@ -46,4 +46,5 @@ def YourRatings(mysql, merchantid):
         "Orders.OrderID=Ratings.OrderID and Cart.CartID=Orders.CartID and ProductCart.CartID=Cart.CartID and "
         "Product.ProductID=ProductCart.ProductID and Product.MerchantID=%s;", (merchantid,))
     ratings = cur.fetchone()
+    print(ratings)
     return ratings

@@ -66,26 +66,32 @@
     </tr>
 </table>
 <hr style="height:2px;border-width:0;color:yellow;background-color:gold">
-       <h3 style="color: #1a1f71;">Your earnings and spendings</h3>
-       <h4><b>Total spending:</b> &#8377;{{data['total_spendings']}} </h4>
-       <h4><b>Total earnings:</b> &#8377;{{data['total_earnings']}}</h4>
+              <h3 style="color: #1a1f71;">Your earnings and spendings</h3>
+       {% if data['total_spendings'] or data['total_earnings'] %}
+       {% if data['total_spendings'] %}<h4><b>Total spending:</b> &#8377;{{data['total_spendings']}} </h4>{% endif %}
+       {% if data['total_earnings'] %}<h4><b>Total earnings:</b> &#8377;{{data['total_earnings']}}</h4>{% endif %}
+       {% if data['total_earnings'] and data['total_spendings'] %}
        {% if data['total_spendings']|float > data['total_earnings']|float %}
        You are at loss<i class="fa fa-chevron-circle-down" style="font-size:28px;color:red;float:right"></i>
        {% else %}
        You are in profit!!<i class="fa fa-chevron-circle-up" style="font-size:28px;color:green;float:right"></i>
        {% endif %}
+       {% endif %}
        <hr>
        <b><h4>Monthly summary</h4></b>
-       <h6 style="padding-left:10px;"><b>Monthly spending:</b>  &#8377;{{data['total_spendings_monthly'][-1]['Total']}} </h6>
-       <h6 style="padding-left:10px;"><b>Monthly earning:</b> &#8377;{{data['total_earnings_monthly'][-1]['Total']}}</h6>
+       {% if data['total_spendings_monthly']%}<h6 style="padding-left:10px;"><b>Monthly spending:</b>  &#8377;{{data['total_spendings_monthly'][-1]['Total']}} </h6>{% endif %}
+       {% if data['total_earnings_monthly']%}<h6 style="padding-left:10px;"><b>Monthly earning:</b> &#8377;{{data['total_earnings_monthly'][-1]['Total']}}</h6>{% endif %}
 
        <hr>
-        <canvas id="myChart" width="600" height="400"></canvas> <h6>Month</h6>
+        <canvas id="myChart" width="600" height="400"></canvas> <h6>Month</h6>{% else %}No data available{% endif %}
        <hr style="height:2px;border-width:0;color:yellow;background-color:gold">
+
         <h3 style="color: #1a1f71;">Transactions this month</h3>
+              {% if data['total_trasactions'] %}
        <h4><b>Total transactions:</b> {{data['total_trasactions']}} </h4>
        <h4><b>Total Transactions this month:</b> {{data['total_transactions_monthly'][-1]['orders']}}</h4><hr>
-        <canvas id="myChart2" width="600" height="400"></canvas>
+        <canvas id="myChart2" width="600" height="400"></canvas>{% else %} No data available
+       {% endif %}
 <script>
 
     // Global parameters:

@@ -14,7 +14,7 @@ def getPerformanceStats(mysql,merchantid):
 
 def TotalSpendings(mysql,merchantid):
     cur=mysql.connection.cursor()
-    cur.execute("select SUM(Total) as Total from Cart where MerchantID = %s;",(merchantid))
+    cur.execute("select SUM(Total) as Total from Cart where MerchantID = %s;",(merchantid,))
     return cur.fetchone()['Total']
 
 def TotalSpendingsMonthly(mysql,merchantid):
@@ -28,7 +28,7 @@ def TotalEarnings(mysql,merchantid):
     cur=mysql.connection.cursor()
     cur.execute("select Sum(A.Total) as Total from (select distinct Cart.CartID,Total from Cart,ProductCart,Product,Orders where "
                 "Cart.CartID=ProductCart.CartID and ProductCart.ProductID=Product.ProductID and Orders.CartID=Cart.CartID"
-                " and Product.MerchantID=%s) as A;",(merchantid))
+                " and Product.MerchantID=%s) as A;",(merchantid,))
     return cur.fetchone()['Total']
 
 def TotalEarningsMonthly(mysql,merchantid):
@@ -43,7 +43,7 @@ def TotalTransaction(mysql,merchantid):
     cur=mysql.connection.cursor()
     cur.execute("select COUNT(distinct OrderID) as Orders from Orders,Cart,ProductCart,Product where Orders.CartID="
                 "Cart.CartID and ProductCart.CartID=Cart.CartID and ProductCart.ProductID=Product.ProductID and "
-                "Product.MerchantID=%s;",(merchantid))
+                "Product.MerchantID=%s;",(merchantid,))
     return cur.fetchone()['Orders']
 
 def TotalTransactionsMonthnly(mysql,merchantid):

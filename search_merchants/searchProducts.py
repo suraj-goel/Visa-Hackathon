@@ -1,6 +1,7 @@
 from builtins import list, len
 from .distanceCoordinates import distanceInKMBetweenCoordinates
 from search_merchants.searchMerchant import getAllMerchants
+from orders_management.orderHistory import SearchRatings
 
 def sortByDistance(cur,data_res,merchantid,radius):
     finalResult = []
@@ -49,6 +50,8 @@ def getSearchResults(mysql,merchantid,name='',search_option='initial',filters=Fa
         res=[]
         data_res=[]
         for i in range(len(data)):
+            data[i]['rate'] = SearchRatings(mysql, data[i]['MerchantID'])
+
             if data[i]['ProductID'] not in res:
                 cur.execute("select distinct * from Product,Offer,OfferOnProduct where OfferOnProduct.ProductID=%s and Product.ProductID = OfferOnProduct.ProductID and  OfferOnProduct.offerID = Offer.offerID and CURDATE()<=ValidTill and Product.Sell=1", (data[i]['ProductID'],))
                 x=list(cur.fetchall())
@@ -58,6 +61,7 @@ def getSearchResults(mysql,merchantid,name='',search_option='initial',filters=Fa
                     data[i]['Offers']=x
                     res.append(data[i]['ProductID'])
                     data_res.append(data[i])
+        print(data_res[0]['rate'])
         
     else:
         merchant=name
@@ -74,7 +78,7 @@ def getSearchResults(mysql,merchantid,name='',search_option='initial',filters=Fa
             x = list(cur.fetchall())
             if x:
                 i['Offers'] = x
+            i['rate'] = SearchRatings(mysql, i['MerchantID'])
             data_res.append(i)
     finalResult=sortByDistance(cur,data_res,merchantid,radius)
-    print(finalResult)
     return finalResult
