@@ -4,6 +4,7 @@
 
     body {
         font-family: Arial, Helvetica, sans-serif;
+        font-size: 20px;
     }
 
     * {
@@ -34,32 +35,32 @@
 </script>
 <body>
 <center>
-    <h1 style="color:#faaa13; font-weight: bold;">Account Details</h1>
+    <h1 style="color:#1a1f71; font-weight: bold;">Account Details</h1>
 </center>
     <div class="containerForm">
         <p>
-            <label>Name : </label>
-            <label style="width: 50%;">{{ result['Name'] }}</label>
+            <label style="color: #1a1f71">Name : </label>
+            <label style="width: 50%; color: #fdbb0a">{{ result['Name'] }}</label>
         </p>
         <p>
-            <label>Registered Name : </label>
-            <label style=" width: 50%;" >{{ result['RegisteredName'] }}</label>
+            <label style="color: #1a1f71">Registered Name : </label>
+            <label style=" width: 50%;color: #fdbb0a  " >{{ result['RegisteredName'] }}</label>
         </p>
         <p>
-            <label>Email id : </label>
-            <label style=" width: 50%;">{{ result['EmailID'] }}</label>
+            <label style="color: #1a1f71">Email id : </label>
+            <label style=" width: 50%;color: #fdbb0a">{{ result['EmailID'] }}</label>
         </p>
         <p>
-            <label>Contact Number : </label>
-            <label style="width: 50%;">{{ result['ContactNumber'] }}</label>
+            <label style="color: #1a1f71">Contact Number : </label>
+            <label style="width: 50%;color: #fdbb0a">{{ result['ContactNumber'] }}</label>
         </p>
         <p>
-            <label>Address : </label>
-            <label style="width: 50%;">{{ result['Address'] }}</label>
+            <label style="color: #1a1f71">Address : </label>
+            <label style="width: 50%;color: #fdbb0a">{{ result['Address'] }}</label>
         </p>
         <p>
-            <label>Password : </label>
-            <label style=" width: 50%;">
+            <label style="color: #1a1f71">Password : </label>
+            <label style=" width: 50%;color: #fdbb0a">
             {% for i in result['Password'] %}
                 *
             {% endfor %}
