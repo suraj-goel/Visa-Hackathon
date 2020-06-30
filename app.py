@@ -614,6 +614,8 @@ def b2bpay():
 @app.route('/negotiation',methods=['GET','POST'])
 def negotiation():
     choice = 'R'
+    merchantID = '3'
+    session['merchantID'] = merchantID
     merchant_id = session['merchantID']
     allNegotiation =[]
     productList = []
@@ -688,6 +690,7 @@ def negotiationsupplier():
     loop = len(sellCart)
     if (request.method == 'POST'):
         try:
+            Approve = request.form['Approve']
             negotiationID = request.form['negotiationID']
             NegAmount  = request.form['NegPrice']
             status = "accepted"
@@ -702,6 +705,7 @@ def negotiationsupplier():
             print("apn"+str(e))
 
         try:
+            Reject = request.form['Reject']
             negotiationID = request.form['negotiationID']
             NegAmount = request.form['NegPrice']
             print(negotiationID)
