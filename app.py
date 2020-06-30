@@ -338,7 +338,6 @@ def modify():
 
 
 @app.route("/merchant/<merchant_id>/cart", methods=['GET', 'POST'])
-@login_required
 def showCart(merchant_id):
     totalQuantity = 0
     session['mid'] = merchant_id
@@ -615,7 +614,6 @@ def b2bpay():
     return render_template("./payment/payment.html",amount=amount)
 
 @app.route('/negotiation',methods=['GET','POST'])
-@login_required
 def negotiation():
     choice = 'R'
     merchant_id = session['merchantID']
@@ -685,14 +683,14 @@ def negotiation():
         return render_template("./negotiation/negotiation.html",buy_items=allNegotiation,profile=2,buyer_choice=choice,productList=productList,sellInfo = contactInfo)
 
 @app.route('/negotiationsupplier',methods=['GET','POST'])
-@login_required
 def negotiationsupplier():
-    #merchant_id = session['merchantID']
-    merchant_id = '1'
+    merchant_id = '3'
+    session['merchantID'] = merchant_id
     groupList = showNegotiation(mysql, merchant_id)
 
     contactInfo = groupList[0]
     sellCart = groupList[1]
+    Amount = groupList[2]
     loop = len(sellCart)
     if (request.method == 'POST'):
         try:
@@ -716,9 +714,10 @@ def negotiationsupplier():
         groupList = showNegotiation(mysql,merchant_id)
         contactInfo = groupList[0]
         sellCart  = groupList[1]
-        return render_template("./negotiation/negotiation.html",sup_items=sellCart,profile=1,contactInfo=contactInfo,loop=loop)
+        Amount = groupList[2]
+        return render_template("./negotiation/negotiation.html",sup_items=sellCart,profile=1,contactInfo=contactInfo,loop=loop,Amount=Amount)
     else:
-        return render_template("./negotiation/negotiation.html",sup_items=sellCart,profile=1,contactInfo=contactInfo,loop=loop)
+        return render_template("./negotiation/negotiation.html",sup_items=sellCart,profile=1,contactInfo=contactInfo,loop=loop,Amount=Amount)
 
 @app.route('/search_requirement', methods=['POST'])
 @login_required

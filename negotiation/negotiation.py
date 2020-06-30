@@ -73,23 +73,27 @@ def showNegotiation(mysql,merchant_id):
 
     NegList = []
     for i in uniCart:
-        cur.execute("select NegotiationID from Negotiation where CartID='{}'".format(i))
+        cur.execute("select NegotiationID from Negotiation where CartID='{}' and Negotiation.Status='pending'".format(i))
         b = cur.fetchall()
         for j in b:
             NegList.append(j)
     uniNeg = list(set(val for dic in NegList for val in dic.values()))
     contactInfo = []
     productCartList = []
+    Amount = []
     for i in uniNeg:
         cur.execute("select distinct * from Negotiation,Cart,ProductCart,Product where Negotiation.CartID=Cart.CartID and Cart.CartID=ProductCart.CartID and Negotiation.NegotiationID='{}' and Product.ProductID=ProductCart.ProductID and Negotiation.Status='pending'".format(i))
         b = cur.fetchall()
         productCartList.append(b)
+        cur.execute("select * from Negotiation,Cart where Negotiation.NegotiationID='{}' and Negotiation.CartID=Cart.CartID".format(i))
+        Amount.append(cur.fetchall())
         cur.execute("select Merchant.RegisteredName,Merchant.MerchantID,Merchant.Name,Merchant.ContactNumber, Merchant.EmailID from Cart,Negotiation,Merchant where Cart.CartID = Negotiation.CartID and Cart.MerchantID=Merchant.MerchantID and Negotiation.NegotiationID='{}'".format(i))
         contactInfo.append(cur.fetchall())
 
     print(productCartList)
     print(contactInfo)
-    return [contactInfo,productCartList]
+    print(Amount)
+    return [contactInfo,productCartList,Amount]
 
 
 #supplier
