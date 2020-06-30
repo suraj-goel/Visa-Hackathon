@@ -22,8 +22,11 @@
                     <tr>
                         <th>Product Details</th>
                         <th>Quantity</th>
+                        {% if type=='simple' %}
                         <th>Offers Selected</th>
+
                         <th style="color: #053ea9;">Cost Price/<br> Discount Price </th>
+                        {%endif%}
                     </tr>
                     {% for i in range(0,len) %}
                     <tr>
@@ -36,8 +39,12 @@
                         <input type="hidden" name="Description[]" value="{{Description[i]}}">
                         <td> {{qty[i]}}</td>
                         <input type="hidden" name="qty[]" value="{{qty[i]}}">
+                        {% if type=='simple' %}
                         <td>{{Offers[i]}}</td>
+                        {%endif %}
+                        {%if type=='simple' %}
                         <td style="color: #053ea9;"> {{discountPrice[i]}}</td>
+                        {%endif%}
                         <input type="hidden" name="Price[]" value="{{discountPrice[i]}}">
                         {% endif %}
                     </tr>
@@ -47,24 +54,28 @@
                 <input type="hidden" id="finalDiscountPrice1" name="finalDiscountPrice" value="{{totalDiscountCost}}" />
                 
                 <h3>Total Cost: Rs <span id="finalPrice">{{totalCost}}</span></h3>
+                {% if type!='negotiate' %}
                 <h3 style="color: #053ea9;">Total Cost(After Discount): Rs <span id="discountPrice">{{totalDiscountCost}}</span></h3>
-                
-
+                {%else%}
+                <h3 style="color: #053ea9;">Total Cost(After Negotiate): Rs <span id="discountPrice1">{{totalDiscountCost}}</span></h3>
+                {%endif%}
                 <br><br>
-
+                {% if type!='negotiate'%}
                 <input type="hidden" id="Negotiated" name="NegotiatedRequestAmount" value="0" />
                 <button type="button" class="button" onclick="showDetails()"><span>Click Here For Negotiation</span></button>
                 <div id="contact" style="display: none">
                     <p style="color: #053ea9;"> <b>Phone No:</b> {{contact}}</p>
                     <p style="color: #053ea9;"> <b>Email ID</b>: {{emailID}}</p>
                     <input type="submit" name="type" class="button" onclick="negotiate({{totalDiscountCost}})" value="Enter Your Amount" />
-
                     <br><br><br>
                 </div>
+                {%endif%}
                 {% if type=='simple'  %}
                 <button type="button" class="button" onclick="goBack()"><span> Edit Cart </span></button>
-                {%else%}
+                {%elif type == 'request'%}
                 <button type="button" class="button" onclick="goBack()"><span> Cancel Requirement Order </span></button>
+                {%else%}
+                <button type="button" class="button" onclick="goBack()"><span> Go Back To Negotiation Page</span></button>
                 {%endif%}
                 <input type="submit" name="type" class="button" onclick="payment()" value="Process Payment" />
             </form>

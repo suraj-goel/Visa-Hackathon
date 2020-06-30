@@ -296,6 +296,8 @@ def modify():
 @app.route("/merchant/<merchant_id>/cart", methods=['GET', 'POST'])
 def showCart(merchant_id):
     totalQuantity = 0
+    session['mid'] = merchant_id
+    seller_id = session['mid']
     qty = []
     ProductID = []
     Name = []
@@ -305,12 +307,13 @@ def showCart(merchant_id):
     discountPrice = []
     emailID = ""
     contact = ""
-    print(session)
-    seller_id = session['mid']
     type = session['type']
     totalCost = 0
     totalDiscountCost = 0
-
+    loggmerchant_id = '1'
+    print(type)
+    print(request.form)
+    session['merchantID'] = loggmerchant_id
     if request.method == 'GET':
         try:
             if type=='simple':
@@ -321,17 +324,14 @@ def showCart(merchant_id):
                 Price = session['Price']
                 Offers = session['offers']
                 discountPrice = session['discountPrice']
-                seller_id = session['mid']
                 data = getMerchantInfo(mysql, seller_id)
                 emailID = data[0]
                 contact = data[1]
-
                 l = len(qty)
                 for i in range(0,l):
                     totalQuantity += int(qty[i])
                     totalCost += (int)(Price[i])*(int)(qty[i])
                     totalDiscountCost += (int)(discountPrice[i])
-
             elif type =='request':
                 qty = session['qty']
                 ProductID = session['ProductID']
@@ -340,7 +340,6 @@ def showCart(merchant_id):
                 Price = session['Price']
                 Offers.append("No Discount")
                 discountPrice = session['discountPrice']
-                seller_id = session['mid']
                 data = getMerchantInfo(mysql,seller_id)
                 emailID = data[0]
                 contact = data[1]
@@ -349,6 +348,22 @@ def showCart(merchant_id):
                     totalQuantity += int(qty[i])
                     totalCost += (int)(Price[i])
                     totalDiscountCost += (int)(discountPrice[i])
+            elif type == 'negotiate':
+                qty = session['qty']
+                ProductID = session['ProductID']
+                Name = session['Name']
+                Description = session['Description']
+                totalCost = session['totalCost']
+                seller_id = session['mid']
+                data = getMerchantInfo(mysql,seller_id)
+                emailID = data[0]
+                contact = data[1]
+                totalDiscountCost = session['finalPriceChange']
+                l = len(qty)
+                for i in range(0,l):
+                    totalQuantity += int(qty[i])
+                    totalCost += (int)(Price[i])
+
         except Exception as e:
             print("exception details " + str(e))
 
@@ -370,12 +385,13 @@ def showCart(merchant_id):
         if (Type == 'Process Payment'):
             status = 'P'
 
-        addToCart(mysql, qty, ProductID, Name, Description, Price, merchant_id, status, finalPrice,
+        addToCart(mysql, qty, ProductID, Name, Description, Price, loggmerchant_id, status, finalPrice,
                       finalDiscountPrice, NegotitatedRequestAmount)
-        session.clear()
+        session['qty'] = []
+        totalQuantity = 0
         session['type']=type
         session['mid'] = seller_id
-        session['merchantID'] = merchant_id
+        session['merchantID'] = loggmerchant_id
         session['finalDiscountPrice'] = finalDiscountPrice
         session['fqty']=qty
         session['fProductID']=ProductID
@@ -553,48 +569,107 @@ def b2bpay():
 @app.route('/negotiation',methods=['GET','POST'])
 def negotiation():
     choice = 'R'
-    merchant_id = session['merchantID']
+    #merchant_id = session['merchantID']
+    merchant_id = '1'
     allNegotiation =[]
     productList = []
+    contactInfo = []
     gotList = displayAllNegotiation(mysql, merchant_id)
     productList = gotList[1]
     allNegotiation = gotList[0]
+    contactInfo  = gotList[2]
     if (request.method == 'POST'):
         print("nego")
         print(allNegotiation)
+        print(request.form)
         try:
             choice = request.form["filterbuyer"]
             if(choice!='E'):
                 gotList = displayNegotiationType(mysql,merchant_id,choice)
                 productList = gotList[1]
                 allNegotiation = gotList[0]
-                return render_template("./negotiation/negotiation.html", buy_items=allNegotiation,profile=2,buyer_choice=choice,productList=productList)
+                contactInfo = gotList[2]
+                return render_template("./negotiation/negotiation.html", buy_items=allNegotiation,profile=2,buyer_choice=choice,productList=productList,sellInfo=contactInfo)
         except Exception as e:
             print("Nofiter"+str(e))
         try:
-            deleteRequest = request.form["Delete"]
+            delete = request.form["Delete"]
             negotiationID = request.form["negotiationID"]
             deleteNegotiation(mysql,negotiationID)
             return redirect(request.url)
         except Exception as e:
-            print("no delete"+ str(e))
+            print("noD"+str(e))
+        try:
+            gotToCart = request.form['addtocart2']
+            session['type'] = 'negotiate'
+            session['negotitationID'] = request.form['negotiationID']
+            session['finalPriceChange'] = request.form['Amount2']
+            session['qty'] = request.form.getlist('qty[]')
+            session['Description'] = request.form.getlist('Description[]')
+            session['ProductID'] = request.form.getlist('ProductID[]')
+            session['Name']  = request.form.getlist('Name[]')
+            seller_id = request.form['supplier']
+            session['mid'] = seller_id
+            session['totalCost'] = request.form['Amount1']
+            return redirect(url_for('showCart',merchant_id=seller_id))
+        except Exception as e:
+            print("a2"+str(e))
+
+        try:
+            goToCart = request.form['addtocart1']
+            session['type'] = 'negotiate'
+            session['negotiationID'] = request.form['negotiationID']
+            session['finalPriceChange'] = request.form['Amount1']
+            session['qty'] = request.form.getlist('qty[]')
+            session['Description'] = request.form.getlist('Description[]')
+            session['ProductID'] = request.form.getlist('ProductID[]')
+            session['Name']  = request.form.getlist('Name[]')
+            seller_id = request.form['supplier']
+            session['mid'] = seller_id
+            session['totalCost'] = request.form['Amount1']
+            return redirect(url_for('showCart',merchant_id=seller_id))
+        except Exception as e:
+            print("a1"+str(e))
 
         print(choice,allNegotiation,productList)
-        return render_template("./negotiation/negotiation.html", buy_items=allNegotiation,profile=2,buyer_choice=choice,productList=productList)
+        return render_template("./negotiation/negotiation.html", buy_items=allNegotiation,profile=2,buyer_choice=choice,productList=productList,sellInfo = contactInfo)
     else:
-        return render_template("./negotiation/negotiation.html",buy_items=allNegotiation,profile=2,buyer_choice=choice,productList=productList)
+        return render_template("./negotiation/negotiation.html",buy_items=allNegotiation,profile=2,buyer_choice=choice,productList=productList,sellInfo = contactInfo)
 
 @app.route('/negotiationsupplier',methods=['GET','POST'])
 def negotiationsupplier():
-    merchant_id = session['merchantID']
+    #merchant_id = session['merchantID']
+    merchant_id = '1'
     groupList = showNegotiation(mysql, merchant_id)
-    totalAmount = groupList[1]
-    purchaseCart = groupList[0]
-    loop = len(purchaseCart)
+
+    contactInfo = groupList[0]
+    sellCart = groupList[1]
+    loop = len(sellCart)
     if (request.method == 'POST'):
-        return render_template("./negotiation/negotiation.html",sup_items=purchaseCart,profile=1,totalAmount=totalAmount,loop=loop)
+        try:
+            Approve = request.form['Approve']
+            negotiationID = request.form['negotiationID']
+            NegAmount  = request.form['NegPrice']
+            status = "accepted"
+            print(updateNegotiation(mysql,negotiationID,status,NegAmount))
+        except Exception as e:
+            print("apn"+str(e))
+
+        try:
+            Reject = request.form['Reject']
+            negotiationID = request.form['negotiationID']
+            NegAmount = request.form['NegPrice']
+            print(negotiationID)
+            status = "rejected"
+            print(updateNegotiation(mysql,negotiationID,status,NegAmount))
+        except Exception as e:
+            print("rn"+str(e))
+        groupList = showNegotiation(mysql,merchant_id)
+        contactInfo = groupList[0]
+        sellCart  = groupList[1]
+        return render_template("./negotiation/negotiation.html",sup_items=sellCart,profile=1,contactInfo=contactInfo,loop=loop)
     else:
-        return render_template("./negotiation/negotiation.html",sup_items=purchaseCart,profile=1,totalAmount=totalAmount,loop=loop)
+        return render_template("./negotiation/negotiation.html",sup_items=sellCart,profile=1,contactInfo=contactInfo,loop=loop)
 
 @app.route('/search_requirement', methods=['POST'])
 def search_requirement():
@@ -661,7 +736,7 @@ def showbuyerrequirements():
             print("filterbuyer" + str(e))
 
         try:
-            deleteRequest = request.form['Delete']
+            deleteRequest = request.formName['Delete']
             requirementID = request.form['requirementID']
             deletePending(mysql,requirementID)
             return redirect(request.url)
@@ -683,6 +758,7 @@ def showbuyerrequirements():
             session['requirementid'] = request.form.get('requirementID')
             #session['mid'] = '1'
             print(session['mid'])
+            seller_id = session['mid']
             Price = []
             print(session)
             loop = len(session['PriceItem'])
@@ -692,7 +768,7 @@ def showbuyerrequirements():
                 Price.append((str)((int)(session['PriceItem'][i])*(int)(session['qty'][i])))
             session['Price'] = Price
             session['discountPrice'] = Price
-            return redirect(url_for('showCart',merchant_id=merchantid))
+            return redirect(url_for('showCart',merchant_id=seller_id))
         except Exception as e:
             print("AC" + str(e))
         return render_template(url_for("requirements"))

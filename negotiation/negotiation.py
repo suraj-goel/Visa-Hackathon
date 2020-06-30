@@ -1,9 +1,11 @@
+import numpy as np
 #buyer
 def displayAllNegotiation(mysql,merchant_id):
     cur = mysql.connection.cursor()
 
     negotiationCollection = []
     productCartList = []
+    contactInfo = []
     cur.execute("select * from Negotiation,Cart where Cart.CartID=Negotiation.CartID and Cart.Status = 'N' and Cart.MerchantID='{}'".format(merchant_id))
     a = cur.fetchall()
     for i in a:
@@ -11,75 +13,91 @@ def displayAllNegotiation(mysql,merchant_id):
             continue
         else:
             negotiationCollection.append(i)
-            cur.execute("select Product.Name,ProductCart.Quantity from Product,ProductCart where ProductCart.CartID='{}' and Product.ProductID=ProductCart.ProductID".format(i['CartID']))
-            productCartList.append(cur.fetchall())
-    print(negotiationCollection,productCartList)
+            cur.execute("select distinct * from Negotiation,Cart,ProductCart,Product where Negotiation.CartID=Cart.CartID and Cart.CartID=ProductCart.CartID and Negotiation.NegotiationID='{}' and Product.ProductID=ProductCart.ProductID".format(i['NegotiationID']))
+            b = cur.fetchall()
+            productCartList.append(b)
+            cur.execute("select * from Merchant where MerchantID='{}'".format(b[0]['Product.MerchantID']))
+            c = cur.fetchall()
+            contactInfo.append(c)
+    print(productCartList)
 
-    return [negotiationCollection,productCartList]
+    return [negotiationCollection,productCartList,contactInfo]
 
 #buyer
 def displayNegotiationType(mysql,merchant_id,status):
     cur = mysql.connection.cursor()
     if(status == 'A'):
-        status = 'accept'
+        status = 'accepted'
     elif(status == 'D'):
-        status = 'reject'
+        status = 'rejected'
     elif(status == 'R'):
         status = 'pending'
     cur = mysql.connection.cursor()
 
     negotiationCollection = []
     productCartList = []
+    contactInfo = []
     cur.execute("select * from Negotiation,Cart where Cart.CartID=Negotiation.CartID and Cart.Status='{}'and Cart.MerchantID='{}' and Negotiation.Status='{}'".format('N',merchant_id,status))
     a = cur.fetchall()
     print(status)
 
     for i in a:
         negotiationCollection.append(i)
-        cur.execute("select Product.Name,ProductCart.Quantity from Product,ProductCart where ProductCart.CartID='{}' and Product.ProductID=ProductCart.ProductID".format(i['CartID']))
-        productCartList.append(cur.fetchall())
-    print(negotiationCollection,productCartList)
-    return [negotiationCollection,productCartList]
+        cur.execute("select distinct * from Negotiation,Cart,ProductCart,Product where Negotiation.CartID=Cart.CartID and Cart.CartID=ProductCart.CartID and Negotiation.NegotiationID='{}' and Product.ProductID=ProductCart.ProductID".format(i['NegotiationID']))
+        b = cur.fetchall()
+        productCartList.append(b)
+        cur.execute("select * from Merchant where MerchantID='{}'".format(b[0]['Product.MerchantID']))
+        c = cur.fetchall()
+        contactInfo.append(c)
+    print(productCartList)
+    print(contactInfo)
+    return [negotiationCollection,productCartList,contactInfo]
 #buyer
 def deleteNegotiation(mysql,negotiationID):
     cur = mysql.connection.cursor()
-    cur.execute("delete from Negotiation where Status='pending' and NegotiationID='{}'".format(negotiationID))
+    cur.execute("delete from Negotiation where NegotiationID='{}'".format(negotiationID))
     mysql.connection.commit()
 #supplier
 def showNegotiation(mysql,merchant_id):
     cur = mysql.connection.cursor()
-    cur.execute("select Cart.CartID from Negotiation,Cart where Negotiation.Status='pending' and Negotiation.CartID=Cart.CartID and Cart.Status='N'")
+    cur.execute("select ProductID from Product where MerchantID='{}'".format(merchant_id))
     a = cur.fetchall()
-    purchaseCart = []
-    totalAmountCart = []
+    CartList= []
     for i in a:
-        cur.execute("select ProductID from ProductCart where CartID='{}'".format(i['CartID']))
-        oneItem = cur.fetchall()[0]
-        cur.execute("select MerchantID from Product where ProductID='{}'".format(oneItem['ProductID']))
-        merchantID = cur.fetchall()[0]
-        #print(merchantID)
-        if(merchantID['MerchantID'] == merchant_id):
+        cur.execute("select CartID from ProductCart where ProductID='{}'".format(i['ProductID']))
+        b = cur.fetchall()
+        for j in b:
+            CartList.append(j)
 
-            cur.execute("select Product.Name,ProductCart.Quantity from ProductCart,Product where CartID='{}' ".format(i['CartID']))
-            b=cur.fetchall()
-            purchaseCart.append(b)
-            cur.execute("select Negotiation.NegotiationID,Cart.Total,Negotiation.Price from Cart,Negotiation where Cart.CartID=Negotiation.CartID and Negotiation.CartID='{}'".format(i['CartID']))
-            c = cur.fetchall()
-            totalAmountCart.append(c)
-    print("show")
-    print(purchaseCart,totalAmountCart)
-    return [purchaseCart,totalAmountCart]
+    uniCart = list(set(val for dic in CartList for val in dic.values()))
 
-#suppier
-def confirmNegotiation(mysql,negotiationID):
+    NegList = []
+    for i in uniCart:
+        cur.execute("select NegotiationID from Negotiation where CartID='{}'".format(i))
+        b = cur.fetchall()
+        for j in b:
+            NegList.append(j)
+    uniNeg = list(set(val for dic in NegList for val in dic.values()))
+    contactInfo = []
+    productCartList = []
+    for i in uniNeg:
+        cur.execute("select distinct * from Negotiation,Cart,ProductCart,Product where Negotiation.CartID=Cart.CartID and Cart.CartID=ProductCart.CartID and Negotiation.NegotiationID='{}' and Product.ProductID=ProductCart.ProductID and Negotiation.Status='pending'".format(i))
+        b = cur.fetchall()
+        productCartList.append(b)
+        cur.execute("select Merchant.RegisteredName,Merchant.MerchantID,Merchant.Name,Merchant.ContactNumber, Merchant.EmailID from Cart,Negotiation,Merchant where Cart.CartID = Negotiation.CartID and Cart.MerchantID=Merchant.MerchantID and Negotiation.NegotiationID='{}'".format(i))
+        contactInfo.append(cur.fetchall())
+
+    print(productCartList)
+    print(contactInfo)
+    return [contactInfo,productCartList]
+
+
+#supplier
+def updateNegotiation(mysql,negotiationID,status,NegAmount):
     cur = mysql.connection.cursor()
-    cur.execute("Update Negotiation SET Status = 'accept' WHERE NegotiationID = '{}' ".format(negotiationID))
+    cur.execute("Update Negotiation SET Status = '{}' WHERE NegotiationID = '{}' ".format(status,negotiationID))
     mysql.connection.commit()
-    return "Success"
-
-def rejectNegotiation(mysql,negotiationID):
-    cur = mysql.connection.cursor()
-    cur.execute("Update Negotiation SET Status = 'reject' WHERE NegotiationID = '{}' ".format(negotiationID))
+    cur.execute("Update Negotiation SET Price = '{}' WHERE NegotiationID = '{}' ".format(NegAmount,negotiationID))
     mysql.connection.commit()
     return "Success"
 
