@@ -73,7 +73,7 @@ def createSupplier(mysql,acc,supplier_id,buyerid,clientid="B2BWS_1_1_9999"):
         print('error creating supplier')
         return 0
 
-def createBuyerAccount(mysql,buyerid,clientid="B2BWS_1_1_9999"):
+def createBuyerAccount(mysql,buyerid,pool_id,clientid="B2BWS_1_1_9999"):
     url='https://sandbox.api.visa.com/vpa/v1/requisitionService'
     p= json.loads('''
         {
@@ -81,7 +81,8 @@ def createBuyerAccount(mysql,buyerid,clientid="B2BWS_1_1_9999"):
         "numberOfCards": "1",
         "messageId": "1526077012761",
         "action": "A",
-        "buyerId": "'''+buyerid+'''"
+        "buyerId": "'''+buyerid+'''",
+        "proxyPoolId": "'''+pool_id+'''"
         }
     ''')
     r = requests.post(url, timeout=10,
@@ -183,12 +184,16 @@ def paymentProcessing(amount,buyerid,supplier_account_no ,clientid='B2BWS_1_1_99
         return 0
 
 
-def register_merchant(mysql,mid):
+def register_merchant(mysql,mid,funding_acc_number):
     #first we need to create a buyer profile for the merchant for which we need any unique number called buyerid
     buyerid,supplier_id = mid,mid
     createBuyer(mysql,buyerid)
-    #we need to set up account number for buyer.. once buyer is created, the account number can be assigned and returned using this call
-    account_number = createBuyerAccount(mysql,buyerid)
+    # we need to create a funding account for this buyer and then a proxy pool for this buyer id
+    #CreateFundingAccount(funding_acc_number,buyerid)
+    pool_id='Pool'+buyerid
+    #CreateProxyPool(funding_acc_number,buyerid,pool_id)
+    # once pool is created, we can request for virtual account using pool id
+    account_number = createBuyerAccount(mysql,buyerid,pool_id)
     #we can then use this account number to create his supplier profile
     createSupplier(mysql,account_number,supplier_id,buyerid)
     #payment needs supplier account number and buyerid
@@ -304,6 +309,55 @@ def CheckB2BBalance(buyerid,supplier_account_no ,clientid='B2BWS_1_1_9999',amoun
 #payment
 #payment_amount=1200
 #paymentProcessing(payment_amount,"12324",acc)
+
+def CreateFundingAccount(funding_acc_no,buyerid,clientid='B2BWS_1_1_9999'):
+    url = "https://sandbox.api.visa.com/vpa/v1/accountManagement/fundingAccount/create"
+    p = json.loads(
+        '''
+    {
+    "messageId": "2020-06-30T10:55:37.000Z",
+    "clientId": "'''+clientid+'''",
+    "buyerId": '''+buyerid+''',
+    "accountNumber": '''+funding_acc_no+''',
+    "currencyCode": "IND",
+    "creditLimit": 10,
+    "expirationDate": "2020-06-30T10:55:37.000Z"
+    }
+    ''')
+    r = requests.post(url, timeout=10,
+                      cert=cert,
+                      headers=header,
+                      auth=auth,
+                      json=p)
+    result = r.json()
+    print(result)
+
+
+def CreateProxyPool(funding_acc_no,buyerid,pool_name,clientid='B2BWS_1_1_9999'):
+    url = "https://sandbox.api.visa.com/vpa/v1/proxy/CreateProxyPool"
+    p = json.loads(
+        '''
+    {
+    "messageId": "2020-06-30T11:11:13.000Z",
+    "clientId": "'''+clientid+'''",
+    "buyerId": "'''+buyerid+'''",
+    "proxyAccountNumber": "'''+pool_name+'''",
+    "proxyAccountType": "2",
+    "proxyPoolType": "1",
+    "authControlEnabled": true,
+    "fundingAccountNumber":'''+funding_acc_no+''' ,
+    "minAvailableAccounts": "3",
+    "initialOrderCount": "5",
+    "reOrderCount": "2"
+    }
+    ''')
+    r = requests.post(url, timeout=10,
+                      cert=cert,
+                      headers=header,
+                      auth=auth,
+                      json=p)
+    result = r.json()
+    print(result)
 
 def getMerchantsByMLOCAPI(merchantCategoryCode,radius,merchantID,latitude,longitude):
     if not radius:
@@ -424,8 +478,15 @@ def getMerchantControlRules(documentID):
                         json=p)
     result = r.json()
     data = []
+
     if(result["resource"]):
-        return result["resource"]
+        result = result["resource"]
+        for control in result["globalControls"]:
+          data.append(control)
+        for control in result["merchantControls"]:
+          data.append(control)
+        return data
+
     return None
 
 
