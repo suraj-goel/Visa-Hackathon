@@ -39,6 +39,7 @@ import geocoder
 from delivery_management.delivery import getDelivery,YourRatings
 from search_merchants.searchMerchantCategory import *
 from merchant_performance.merchant_performance import getPerformanceStats
+from services.visa_api_services import registerOnVTC,getAvailableMerchantControls,getMerchantControlRules,addMerchantControlRule
 
 app = Flask(__name__, static_folder='')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader, jinja2.FileSystemLoader(['.'])])
@@ -172,6 +173,7 @@ def logout():
     return redirect(url_for('login'))
 
 @app.route('/addproduct', methods=['POST', 'GET'])
+@login_required
 def addproduct():
     if request.method == 'POST':
         print(request.form)
@@ -190,6 +192,7 @@ def addproduct():
 
 
 @app.route('/inventory/', methods=['POST', 'GET'])
+@login_required
 def inventory():
     merchantid = session['merchantID']
     c = getCategories(mysql)
@@ -210,6 +213,7 @@ def inventory():
 
 
 @app.route('/inventory/edit/<productID>', methods=['POST', 'GET'])
+@login_required
 def editProduct(productID):
     productID = productID
     c = getCategories(mysql)
@@ -234,6 +238,7 @@ def editProduct(productID):
         return render_template("./manage_inventory/editProduct.html", data=data[0], category=c, productID=productID)
 
 @app.route('/delivered', methods=['POST'])
+@login_required
 def delivered():
     merchantid= session['merchantID']
     orderid=request.form['orderid']
@@ -241,6 +246,7 @@ def delivered():
     return redirect(url_for('orders'))
 
 @app.route('/rating',methods=['POST','GET'])
+@login_required
 def ratings():
     rating= request.form['rating']
     order=request.form['orderidrated']
@@ -248,6 +254,7 @@ def ratings():
     return redirect(url_for('orders'))
 
 @app.route('/delivery_management', methods=['GET', 'POST'])
+@login_required
 def delivery_management():
     merchantid = session['merchantID']
     delivered_filter = 'yes'
@@ -258,6 +265,7 @@ def delivery_management():
     return render_template('./delivery_management/delivery_management.html',history=delivery,avg_ratings=avg_ratings,filter=delivered_filter)
 
 @app.route('/orders', methods=['POST', 'GET'])
+@login_required
 def orders():
     merchantid =  session['merchantID']
     delivered_filter = 'yes'
@@ -267,6 +275,7 @@ def orders():
     return render_template('./orders_management/order_management.html', history=history, filter=delivered_filter)
 
 @app.route('/performance', methods=['POST', 'GET'])
+@login_required
 def performance():
     merchantid=session["merchantID"]
     data=getPerformanceStats(mysql,merchantid)
@@ -274,9 +283,8 @@ def performance():
 
 @app.route('/', methods=['POST', 'GET'])
 @app.route('/search', methods=['POST', 'GET'])
+@login_required
 def showAll():
-    #session['merchantID'] = '1'# to be removed once geolocation works
-
     currentMerchantID =  session['merchantID']
     currentLocation = getCurrentLocation(mysql, currentMerchantID)
     if request.method == "POST":
@@ -291,8 +299,9 @@ def showAll():
     return render_template("./search_merchants/search.html", currentLocation=currentLocation, data=data)
 
 @app.route('/searchbycategory',methods=['POST', 'GET'])
+@login_required
 def searchbycategory():
-    currentMerchantID = '5'
+    currentMerchantID = session['merchantID']
     currentLocation = getCurrentLocation(mysql, currentMerchantID)
     data=[]
     if request.method == "POST":
@@ -316,6 +325,7 @@ def searchbycategory():
 
 
 @app.route('/merchant/<merchant_id>', methods=['GET', 'POST'])
+@login_required
 def showPlaceOrder(merchant_id):
     if request.method == 'GET':
         currentSelectedMerchantID = merchant_id
@@ -347,6 +357,7 @@ def modify():
 
 
 @app.route("/merchant/<merchant_id>/cart", methods=['GET', 'POST'])
+@login_required
 def showCart(merchant_id):
     totalQuantity = 0
     session['mid'] = merchant_id
@@ -458,6 +469,7 @@ def showCart(merchant_id):
 
 
 @app.route('/accounts/', methods=['GET', 'POST'])
+@login_required
 def displayaccountsdetails():
     merchant_id = session['merchantID']
     cur = mysql.connection.cursor()
@@ -468,6 +480,7 @@ def displayaccountsdetails():
 
 
 @app.route('/editaccountinfo/', methods=['GET', 'POST'])
+@login_required
 def editAccountDetails():
     cur = mysql.connection.cursor()
     if request.method == 'POST':
@@ -511,8 +524,8 @@ def editAccountDetails():
 @app.route('/registerCyber/', methods=['GET', 'POST'])
 @login_required
 def registerCyber():
-    #if 'merchantID' not in session:
-    #    return redirect(url_for('login'))
+    if 'merchantID' not in session:
+        return redirect(url_for('login'))
     merchant_id = session['merchantID']  # retrieve from session
     cur = mysql.connection.cursor()
     cur.execute("select * from CybersourceMerchant where MerchantID='" + merchant_id + "';")
@@ -544,6 +557,7 @@ def registerCyber():
 
 
 @app.route('/payments/', methods=['GET', 'POST'])
+@login_required
 def payment():
     amount = 0
     try:
@@ -554,6 +568,7 @@ def payment():
 
 
 @app.route('/cybersource/', methods=['GET', 'POST'])
+@login_required
 def cybersource():
     qty=session['fqty']
     ProductID=session['fProductID']
@@ -623,8 +638,11 @@ def b2bpay():
     return render_template("./payment/payment.html",amount=amount)
 
 @app.route('/negotiation',methods=['GET','POST'])
+@login_required
 def negotiation():
     choice = 'R'
+    #merchantID = '1'
+    #session['merchantID'] = merchantID
     merchant_id = session['merchantID']
     allNegotiation =[]
     productList = []
@@ -688,6 +706,7 @@ def negotiation():
         return render_template("./negotiation/negotiation.html",buy_items=allNegotiation,profile=2,buyer_choice=choice,productList=productList,sellInfo = contactInfo)
 
 @app.route('/negotiationsupplier',methods=['GET','POST'])
+@login_required
 def negotiationsupplier():
     merchant_id = '1'
     session['merchantID'] = merchant_id
@@ -734,6 +753,7 @@ def negotiationsupplier():
         return render_template("./negotiation/negotiation.html",sup_items=sellCart,profile=1,contactInfo=contactInfo,loop=loop,Amount=Amount)
 
 @app.route('/search_requirement', methods=['POST'])
+@login_required
 def search_requirement():
     merchantid=session['merchantID']
     search=request.form['search_name']
@@ -745,6 +765,7 @@ def search_requirement():
 
 
 @app.route('/requirementssupplier', methods=['GET', 'POST'])
+@login_required
 def showsupplierrequirements():
     merchantid = session['merchantID']
     sellProduct = allProductID(mysql,merchantid)
@@ -782,6 +803,7 @@ def showsupplierrequirements():
 
 
 @app.route('/requirementsbuyer', methods=['GET', 'POST'])
+@login_required
 def showbuyerrequirements():
     merchantid = session['merchantID']
     items = getSupplierRequests(mysql, merchantid)
@@ -843,6 +865,7 @@ def showbuyerrequirements():
 
 
 @app.route('/requirements', methods=['GET', 'POST'])
+@login_required
 def requirements():
     merchant_id = session['merchantID']
     if (request.method == 'GET'):
@@ -863,6 +886,7 @@ def requirements():
 
 
 @app.route('/offers',methods=['GET', 'POST'])
+@login_required
 def showoffers():
     merchantID = session['merchantID'] #is equal to logged in user
     data = displayOffersPage(mysql,merchantID)
@@ -877,6 +901,7 @@ def showoffers():
     return render_template("./manage_offers/offers.html",data=data,product=product,message=message)
 
 @app.route('/addoffer',methods=['GET', 'POST'])
+@login_required
 def addoffer():
     if(request.method=='POST'):
         # print(request.form)
@@ -891,6 +916,7 @@ def addoffer():
     return redirect(url_for('showoffers'))
 
 @app.route('/offers/edit/<OfferID>',methods=['GET', 'POST'])
+@login_required
 def editoffer(OfferID):
     merchantID = session['merchantID'] #get from session
     if(request.method=='GET'):
@@ -917,6 +943,7 @@ def editoffer(OfferID):
         return redirect(url_for('showoffers'))
 
 @app.route('/checkout', methods=['GET', 'POST'])
+@login_required
 def checkout():
     qty=session['fqty']
     ProductID=session['fProductID']
@@ -937,9 +964,106 @@ def checkout():
     return render_template("./payment/payment.html",amount=amount)
 
 
+
+
 @app.route('/vtc', methods=['GET', 'POST'])
+@login_required
 def vtc():
-    return render_template("./transactionControl/transactionControl.html")
+
+    data=[]
+    if('pan' in session):
+        pan = session['pan']
+    else:
+        pan = None
+    if('documentID' in session):
+        documentID =session['documentID']
+    else:
+        documentID = None
+    alertmsg = None
+    categories = None
+    msg = None
+    if request.method=="POST":
+        if not pan:
+            try:
+                pan = request.form['pan']
+                session['pan'] = pan
+            except:
+                print('Pan not submitted')
+        if(pan):
+            try:
+                if not documentID:
+                    documentID = registerOnVTC(pan)
+                session['documentID'] = documentID
+                data = getMerchantControlRules(documentID)
+                categories = getAvailableMerchantControls(pan)
+            except:
+                alertmsg = "Invalid Account Number"
+                pan = None
+
+        try:
+            alertThreshold = request.form['alertThreshold']
+            declineThreshold = request.form['declineThreshold']
+            selectedCategory  = request.form.get('category')
+            enabled = request.form.getlist('enabled')
+            if(len(enabled)):
+                enabled = "true"
+            else:
+                enabled = "false"
+            decline = request.form.getlist('decline')
+
+            if(len(decline)):
+                decline = "true"
+            else:
+                decline = "false"
+            print(alertThreshold,declineThreshold,selectedCategory,enabled,decline)
+            controlRule = None
+            if(selectedCategory == "global"):
+                controlRuleString = '''
+                {
+                        "globalControls": [
+                            {
+                                "shouldDeclineAll": '''+decline+''',
+                                "alertThreshold": '''+alertThreshold+''',
+                                "isControlEnabled": '''+enabled+''',
+                                "declineThreshold": '''+declineThreshold+'''
+                            }
+                        ]
+                }
+
+                '''
+                controlRule = json.loads(controlRuleString)
+            else:
+                controlRuleString = '''
+                {
+                    "merchantControls": [
+                    {
+                        "shouldDeclineAll": '''+decline+''',
+                        "isControlEnabled": '''+enabled+''',
+                        "alertThreshold": '''+alertThreshold+''',
+                        "declineThreshold": '''+declineThreshold+''',
+                        "controlType": "'''+selectedCategory+'''"
+                    }
+                    ]
+
+                }
+
+                '''
+                controlRule = json.loads(controlRuleString)
+            
+            documentID = session['documentID']
+            
+            if(controlRule):
+                addMerchantControlRule(documentID,controlRule)
+                msg = "yes"
+                
+
+        except Exception as e:
+            print(e)
+            alertmsg = "problem adding control"
+        
+        
+
+    return render_template("./transactionControl/transactionControl.html",pan=pan,items=data,alertmsg=alertmsg,categories = categories,msg=msg)
 
 if __name__ == '__main__':
     # threaded allows multiple users (for hosting)

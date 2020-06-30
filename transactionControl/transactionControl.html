@@ -9,39 +9,65 @@
     <span style="color:red;"> Already exists. Edit the Control </span>
     {% endif %}
     <h1 style="color: #1a1f71;">Transaction Controls</h1>
+    <br>
+    {% if pan %}
     <button type="button" class="button" id="formButton"><span> Add Control </span></button>
 
     <form id="form1" method="post" style="border: none;">
         <div id="newForm" class="containerForm">
             <table border="0" style="border-spacing: 10px 15px; border-collapse: initial;">
+                
                 <tr>
                     <td>
-                        <h4>Product name </h4>
+                        <h4>Alert Threshold</h4>
                     </td>
-                    <td> <input type="text" name="name" required></h4>
+                    <td> <input type="text" name="alertThreshold" required></h4>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <h4>Product Description</h4>
-                    </td>
-                    <td><textarea name="description" required></textarea></td>
-                </tr>
-                <tr>
-                    <td>
-                        <h4>Price per piece</h4>
+                        <h4>Decline Threshold</h4>
                     </td>
                     <td>
-                        <input type="number" min='1' name="price" id='price' onchange="validate(this.id)" required>
+                        <input type="number" min='1' name="declineThreshold" id='price' onchange="validate(this.id)" required>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <h4>Quantity</h4>
+                        <h4>Enabled</h4>
                     </td>
-                    <td><input type="number" min='0' name="quantity" id='quantity' onchange="validate(this.id)"
-                            required>
+                    <td>
+                        <input type="checkbox" value="enabled" name='enabled' >
                     </td>
+
+                    
+                </tr>
+
+                <tr>
+                    <td>
+                        <h4>Decline All Transactions</h4>
+                    </td>
+                    <td>
+                        <input type="checkbox" value="decline" name='decline' >
+                    </td>
+
+                    
+                </tr>
+                <tr>
+                    <td>
+                        <h4>Category</h4>
+                </td>
+                    <td>
+                    <span class="custom-dropdown custom-dropdown--white">
+                        <select name="category" class="custom-dropdown__select custom-dropdown__select--white"
+                            onchange="checkvalue(this.value)">
+                            {% for i in categories %}
+                            <option value="{{i}}">{{i}}</option>
+                            {% endfor %}
+                            <option value="global">Global</option>
+                        </select>
+                    </span>
+                </td>
                 </tr>
                 
             </table>
@@ -55,12 +81,40 @@
             <input style="display: block; 
           margin-right: auto;
           margin-left: auto;" type="submit" class="button" value="Submit"
-                onclick="javascript: form.action='/addproduct';">
+                onclick="javascript: form.action='/vtc';">
         </div>
     </form>
 
+
+    {% else %}
     <br><br>
     
+    <form id="form" method="post" style="border: none;">
+        <div id="newForm" class="containerForm">
+            <table border="0" style="border-spacing: 10px 15px; border-collapse: initial;">
+                <tr>
+                    <td>
+                        <h4>Primary Account Number </h4>
+                    </td>
+                    
+                    
+                </tr>
+                <tr>
+                    <td> <input type="text" name="pan" required></h4>
+                    </td>
+                </tr>
+            </table>
+            <input style="display: block; 
+          margin-right: auto;
+          margin-left: auto;" type="submit" class="button" value="Submit"
+                onclick="javascript: form.action='/vtc';">
+        </div>
+        {% if alertmsg %}
+        <h4>{{alertmsg }}</h4>
+        {% endif %}
+    </form>
+    <br><br>
+    {% endif %}
     {% if items %}
     <div class="container">
         <table class="table table-bordered">
@@ -70,25 +124,54 @@
             </tr>
             <tr class="header">
                 <td colspan="2">
-                    <h4>{{item['Name']}}</h4> <br>
-                    Description: {{item['Description']}} <br>
-                    Category: {{item['Category']}} <br>
-                    Cost per unit: {{item['Price']}} <br>
-                    Quantity: {{item['Quantity']}}
-                    <h5><a title="Edit Product" href="/inventory/edit/{{item['ProductID']}}"
+                    {% if item['controlType'] %}
+                    <h4>{{item['controlType']}}</h4> 
+                    
+                    {% else %}
+                    <h4>Global Control</h4> 
+                    {% endif %}
+                    <br>
+                    {% if item['alertThreshold'] %}
+                    Alert Threshold: $ {{item['alertThreshold']}} <br>
+                    {% else %}
+                    Alert Threshold: Not Set <br>
+                    {% endif %}
+
+                    {% if item['declineThreshold'] %}
+                    Decline Threshold: $ {{item['declineThreshold']}} 
+                    {% else %}
+                    Decline Threshold: Not Set
+                    {% endif %}
+                    
+                    
+                    <!-- <h5><a title="Edit Product" href="/inventory/edit/{{item['ProductID']}}"
                             style="color: #337ab7;">Edit
-                            Product</a></h5>
+                            Product</a></h5> -->
                 </td>
             </tr>
-            {% if item['offers'] %} {% for x in item['offers'] %}
+            
             <tr>
-                <td>{{x['Information']}}</td>
+
+                <td>
+                    {% if item['isControlEnabled'] %}
+                    Enabled : {{item['isControlEnabled']}}
+                    {% else %}
+                    Enabled : Not Set
+                    {% endif %}
+                </td>
             </tr>
-            {% endfor %} {% else %}
+            
             <tr>
-                <td>No discounts available</td>
+                <td>
+                    
+                    {% if item['shouldDeclineAll'] %}
+                    Decline All Transactions : {{item['shouldDeclineAll']}}
+                    {% else %}
+                    Decline All Transactions : Not Set
+                    {% endif %}
+                </td>
             </tr>
-            {% endif %} {% endfor %}
+        {% endfor %}
         </table>
     </div>
     {% endif %}
