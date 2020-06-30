@@ -278,7 +278,7 @@ def performance():
 @app.route('/search', methods=['POST', 'GET'])
 @login_required
 def showAll():
-    session['merchantID'] = '1'# to be removed once geolocation works
+    #session['merchantID'] = '1'# to be removed once geolocation works
 
     currentMerchantID =  session['merchantID']
     currentLocation = getCurrentLocation(mysql, currentMerchantID)
