@@ -1,18 +1,15 @@
-
+{% include "./common/header.html" %}
 <style>
 
 
     body {
         font-family: Arial, Helvetica, sans-serif;
     }
-    * {
-        box-sizing: border-box;
-    }
 
     input[type="text"],input[type='email'],input[type='password'],
     select,
     textarea {
-        width: 50%;
+        width: 100%;
         padding: 12px;
         border: 1px solid #ccc;
         border-radius: 4px;
@@ -43,22 +40,24 @@
         border-radius: 4px;
         cursor: pointer;
         background-color: #fdbb0a;
+        width: 10%;
     }
 
     input[type="submit"]:hover {
         cursor: pointer;
     }
-
-    h4 {
-        color: #ffffff;
-    }
-
-    h4:hover {
-        cursor: pointer;
-        color: #fdbb0a;
+    table
+    {
+        padding: 10px;
+        border: 10px;
+        border-radius: 10px;
+        background-color: #dddddd;
+        box-shadow: #555555;
+        text-align: center;
     }
 
     .containerForm {
+        box-sizing: border-box;
         border-radius: 5px;
         background-color: #f2f2f2;
         padding: 15px;
@@ -66,50 +65,82 @@
 
 </style>
 <script>
-    <input type="submit" style="background: #2b313f" value="HOME" onclick="goBack()">
+    function goBack() {
+        return window.location='/';
+
+    }
+
 </script>
 <body>
-    <h1>Account Details</h1>
+<center>
+    <h1 style="color:#faaa13; font-weight: bold;">Account Details</h1>
+    <form id="form1" method="post" style="border: none;" action="/editaccountinfo/">
+        <div id="newForm" class="containerForm">
+            <table style="border-spacing: 10px 15px; border-collapse: initial;">
+                <tr>
+                    <td>
+                        <h4><label for="Name" style="font-weight: bold">Name : </label> </h4>
+                    </td>
+                    <td>  <input id="Name" value="{{ result['Name'] }}" name="name" type="text" required></h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4><label for="rName" style="font-weight: bold">Registered Name : </label> </h4>
+                    </td>
+                    <td> <input id="rName"value="{{ result['RegisteredName'] }}" name="registeredName" type="text" required></td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4><label for="email" style="font-weight: bold">Email id : </label></h4>
+                    </td>
+                    <td>
+                        <input id="email"value="{{ result['EmailID']}}" name="emailid" type="email" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4><label for="contact" style="font-weight: bold">Contact number : </label></h4>
+                    </td>
+                    <td>                <input id="contact"value="{{ result['ContactNumber'] }}" name="contactno" type="text" required>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4><label for="add" style="font-weight: bold">Address : </label></h4>
+                    </td>
+                    <td> <input id="add"value="{{ result['Address'] }}" name="address" type="text" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4><label for="pass" style="font-weight: bold">Password : </label> </h4>
+                    </td>
+                    <td><input id="pass"value="{{ result['Password'] }}" name="password" type="password" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="10"><input type="submit" value="Confirm Changes">
+                    </td>
+                </tr>
+
+            </table>
+
+        </div>
+    </form>
     <div>
-        <form class="containerForm" action="/editaccountinfo/" method="POST">
-            <p>
-                <label for="Name">Name : </label>
-                <input id="Name" value="{{ result['Name'] }}" name="name" type="text" required>
-            </p>
-            <p>
-                <label for="rName">Registered Name : </label>
-                <input id="rName"value="{{ result['RegisteredName'] }}" name="registeredName" type="text" required>
-            </p>
-            <p>
-                <label for="email">Email id : </label>
-                <input id="email"value="{{ result['EmailID']}}" name="emailid" type="email" required>
-            </p>
-            <p>
-                <label for="contact">Contact number : </label>
-                <input id="contact"value="{{ result['ContactNumber'] }}" name="contactno" type="" required>
-            </p>
-            <p>
-                <label for="add">Address : </label>
-                <input id="add"value="{{ result['Address'] }}" name="address" type="text" required>
-            </p>
-            <p>
-                <label for="pass">Password : </label>
-                <input id="pass"value="{{ result['Password'] }}" name="password" type="password" required>
-            </p>
-            <br>
-            <input type="submit" value="Submit">
-        </form>
-    </div>
-   <div>
         {% with messages =  get_flashed_messages(with_categories =  true) %}
-            {%if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">
-                        <p style="font-size: 24px;">{{ message }}</p>
-                    </div>
-                {% endfor %}
-            {% endif %}
+        {%if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+            <p style="font-size: 24px;">{{ message }}</p>
+        </div>
+        {% endfor %}
+        {% endif %}
         {% endwith %}
     </div>
+</center>
+
 </body>
 </html>

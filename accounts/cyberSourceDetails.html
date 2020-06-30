@@ -1,4 +1,4 @@
-
+{% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./accounts/cybersource.css') }}">
 <style>
     body {
@@ -74,10 +74,8 @@
 
 </script>
 <body>
-<input type="submit" style="background: #2b313f" value="HOME" onclick="goBack()">
 <center>
-<h1 style="color:#1a1f71; font-weight: bold;"><b>CyberSource Payment Details</b></h1>
-</center>
+<h1 style="color:#faaa13; font-weight: bold;"><b>CyberSource Payment Details</b></h1>
     <form class="containerForm" action="" method="post">
         <p class="input">
             <label for="AggregatorID">Aggregator ID : </label><br/>
@@ -94,5 +92,6 @@
         <br>
         <input type="submit" value="Submit">
     </form>
+</center>
 </body>
 </html>
