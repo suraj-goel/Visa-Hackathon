@@ -69,10 +69,7 @@ def login_required(function_to_protect):
             else:
                 if 'pay_type' in session:
                     print("pay_type")
-                    if request.path == '/registerCyber/':
-                        return redirect(url_for('showAll'))
-                    else:
-                        return function_to_protect(*args, **kwargs)
+                    return function_to_protect(*args, **kwargs)
                 else:
                     print("pay_type not present in session")
                     c = checkPayType(mysql, id)
@@ -91,6 +88,7 @@ def login_required(function_to_protect):
             #flash("Please log in")
             return redirect(url_for('login'))
     return wrapper
+
 
 
 @app.route('/login/', methods=['GET', 'POST'])
@@ -161,7 +159,7 @@ def register():
             id = registerNewMerchant(mysql, email, password, merchantName, address, contactNumber, registeredName)
             insertLocation(mysql, latlong['lat'], latlong['lng'], id)
             session['merchantID'] = id
-            register_merchant(mysql, session['merchantID'])
+            #register_merchant(mysql, session['merchantID'])
             return redirect(url_for('registerCyber'))
     print("get")
     return render_template("./login_registration/register.html")
@@ -532,32 +530,36 @@ def registerCyber():
         return redirect(url_for('login'))
     merchant_id = session['merchantID']  # retrieve from session
     cur = mysql.connection.cursor()
-    cur.execute("select * from CybersourceMerchant where MerchantID='" + merchant_id + "';")
+    cur.execute("select * from CybersourceMerchant where MerchantID='{}';".format(merchant_id))
     result = cur.fetchone()
+    if 'pay_type' in session:
+        b2b = True
+    else:
+        b2b = False
     if request.method == 'POST':
         name = request.form['name']
         aggregatorID = request.form['aggregatorid']
         cardAcceptorID = request.form['cardacceptorid']
+        if b2b == False:
+            funding_acc_number = request.form['funding_acc_number']
         if result == None:
-            cur.execute(
-                "insert into CybersourceMerchant(AggregatorID,CardAcceptorID,Name,MerchantID) values (%s,%s,%s,%s);",
-                (aggregatorID, cardAcceptorID, name, merchant_id))
-            cur.execute("select * from PaymentType where MerchantID='" + merchant_id + "';")
+            cur.execute("insert into CybersourceMerchant(AggregatorID,CardAcceptorID,Name,MerchantID) values (%s,%s,%s,%s);",(aggregatorID, cardAcceptorID, name, merchant_id))
+            cur.execute("select * from PaymentType where MerchantID='{}';".format(merchant_id))
             r = cur.fetchone()
-            if r == None:
+            if r == None:#if b2b is True, this won't execute so not an issue
                 cur.execute("INSERT INTO PaymentType (MerchantID, PayType) VALUES (%s, %s);", (merchant_id, '1'))
+                register_merchant(mysql, merchant_id, funding_acc_number)
             else:
-                cur.execute("update PaymentType set PayType='3' where MerchantID='" + merchant_id + "';")
+                cur.execute("update PaymentType set PayType='3' where MerchantID='{}';".format(merchant_id))
             mysql.connection.commit()
         else:
-            cur.execute(
-                "update CybersourceMerchant set Name = '" + name + "', AggregatorID = '" + aggregatorID + "', CardAcceptorID = '" + cardAcceptorID + "' where MerchantID='" + merchant_id + "';")
+            cur.execute("update CybersourceMerchant set Name = '" + name + "', AggregatorID = '" + aggregatorID + "', CardAcceptorID = '" + cardAcceptorID + "' where MerchantID='" + merchant_id + "';")
         mysql.connection.commit()
         #session.permanent = True
         #session['register_cyber'] = True
         #return redirect('/accounts/')
         return redirect(url_for('showAll'))
-    return render_template("./accounts/cyberSourceDetails.html", result=result)
+    return render_template("./accounts/cyberSourceDetails.html", result=result, b2b=b2b)
 
 
 @app.route('/payments/', methods=['GET', 'POST'])
