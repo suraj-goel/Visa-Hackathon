@@ -524,8 +524,8 @@ def editAccountDetails():
 @app.route('/registerCyber/', methods=['GET', 'POST'])
 @login_required
 def registerCyber():
-    #if 'merchantID' not in session:
-    #    return redirect(url_for('login'))
+    if 'merchantID' not in session:
+        return redirect(url_for('login'))
     merchant_id = session['merchantID']  # retrieve from session
     cur = mysql.connection.cursor()
     cur.execute("select * from CybersourceMerchant where MerchantID='" + merchant_id + "';")

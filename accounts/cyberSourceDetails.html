@@ -64,20 +64,11 @@
         padding: 15px;
     }
 </style>
-<script>
-
-        function goBack() {
-            return window.location='/';
-
-        }
-
-
-</script>
 <body>
 <center>
 <h1 style="color:#faaa13; font-weight: bold;"><b>CyberSource Payment Details</b></h1>
-    <form class="containerForm" action="" method="post">
-        <p class="input">
+    <form class="containerForm" action="/registerCyber/" method="post">
+        <p >
             <label for="AggregatorID">Aggregator ID : </label><br/>
             <input id="AggregatorID" value="{{ result['AggregatorID'] }}" name="aggregatorid" type="number" required>
         </p>
