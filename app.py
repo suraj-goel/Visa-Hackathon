@@ -14,8 +14,8 @@ from search_merchants.searchMerchant import getCurrentLocation
 from place_order.displayProduct import displayAllProducts, displayAllOffers
 from search_merchants.searchProducts import getSearchResults
 # from place_order.displayCart import displayALLCart
-from login_registration.registerMerchant import checkIfExistingMerchant, registerNewMerchant, checkPayType
-from login_registration.loginMerchant import checkEmailAndPassword
+from login_registration.registerMerchant import checkIfExistingMerchant, registerNewMerchant, checkPayType, insertLocation
+from login_registration.addressconversion import getCoordinates
 from accounts.validate_accounts import validation  # validate_accounts.py
 from place_order.displayCart import addToCart
 from accounts.validate_accounts import validation  # validate_accounts.py
@@ -90,7 +90,7 @@ def login():
         cur.execute("select * from Merchant where EmailID='{}' and Password='{}';".format(email, password))
         users = cur.fetchone()
         cur.close()
-        if len(users) >0:
+        if users is not None:
             session.permanent = True
             session['merchantID'] = users['MerchantID']
             return redirect(url_for('showAll'))
@@ -125,19 +125,12 @@ def register():
             flash('Email already registered')
             return redirect(url_for('register'))
         else:
-            '''params = {'address': "1600 Amphitheatre Parkway, Mountain View, CA",'key':geocode_api_key}
-            r = requests.get(geocode_url, params=params)
-            print(r)
-            print(r.url)
-            print(r.json())
-            results = r.json()['results']
-            print(results)
-            #location = results[0]['geometry']['location']
-            #print(location)'''
-            #return redirect(url_for('register')) #why this line?@Praj
             session.permanent = True
             id = registerNewMerchant(mysql, email, password,merchantName,address,contactNumber,registeredName)
             session['merchantID'] = id
+            latlong = getCoordinates(address)
+            insertLocation(mysql,latlong['lat'],latlong['lng'],id)
+
             register_merchant(mysql, session['merchantID'])
             return redirect(url_for('registerCyber'))
     print("get")
@@ -513,6 +506,9 @@ def registerCyber():
             cur.execute(
                 "update CybersourceMerchant set Name = '" + name + "', AggregatorID = '" + aggregatorID + "', CardAcceptorID = '" + cardAcceptorID + "' where MerchantID='" + merchant_id + "';")
         mysql.connection.commit()
+        #session.permanent = True
+        #session['register_cyber'] = True
+        #return redirect('/accounts/')
         return redirect('/search')
     return render_template("./accounts/cyberSourceDetails.html", result=result)
 
