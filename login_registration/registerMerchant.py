@@ -13,10 +13,11 @@ def checkIfExistingMerchant(mysql,merchantEmail):
     return True
 
 def registerNewMerchant(mysql, email, password, merchantName,address,contactNumber,registeredName):
-  #id = random.randint(1,1000)
-  #id = str(id)
   id = str(uuid.uuid1().int)
   id = id[:20]
+  print(address)
+  address = address[:100]
+  print(address)
   print(id)
   print(email,password,merchantName,address,contactNumber,registeredName)
   cur = mysql.connection.cursor()

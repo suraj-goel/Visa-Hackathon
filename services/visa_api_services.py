@@ -429,4 +429,19 @@ def getMerchantControlRules(documentID):
     return None
 
 
+def addMerchantControlRule(documentID,controlRule):
+    url = "https://sandbox.api.visa.com/vctc/customerrules/v1/consumertransactioncontrols/"+documentID+"/rules"
+    # controlRule will be a dictionary containing either a global control or mercahnt control
+    p = controlRule
+    r = requests.post(url, timeout=100,
+                        cert=cert,
+                        headers=header,
+                        auth=auth,
+                        json=p)
+    result = r.json()
+    if(result["resource"]):
+        return result["resource"]
+    return None
+
+
 
