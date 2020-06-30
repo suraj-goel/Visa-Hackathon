@@ -61,17 +61,23 @@ def login_required(function_to_protect):
         if 'merchantID' in session:
             print(session['merchantID'])
             id = session['merchantID']
-            if 'pay_type' in session:
-                print("pay_type")
-                return function_to_protect(*args, **kwargs)
+            if request.path == '/register/' or request.path == '/login/':
+                return redirect('/search')
             else:
-                c = checkPayType(mysql, id)
-                if c==True:
-                    session.permanent = True
-                    session['pay_type'] = True
-                    return function_to_protect(*args, **kwargs)
+                if 'pay_type' in session:
+                    print("pay_type")
+                    if request.path == '/registerCyber/':
+                        return redirect('/search')
+                    else:
+                        return function_to_protect(*args, **kwargs)
                 else:
-                    return redirect(url_for('registerCyber'))
+                    c = checkPayType(mysql, id)
+                    if c==True:
+                        session.permanent = True
+                        session['pay_type'] = True
+                        return function_to_protect(*args, **kwargs)
+                    else:
+                        return redirect(url_for('registerCyber'))
 
         elif request.path == '/register/' or request.path == '/login/':
             return function_to_protect(*args, **kwargs)
