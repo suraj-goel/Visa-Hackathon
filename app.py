@@ -687,7 +687,6 @@ def negotiationsupplier():
     merchant_id = '3'
     session['merchantID'] = merchant_id
     groupList = showNegotiation(mysql, merchant_id)
-
     contactInfo = groupList[0]
     sellCart = groupList[1]
     Amount = groupList[2]
@@ -697,18 +696,18 @@ def negotiationsupplier():
             Approve = request.form['Approve']
             negotiationID = request.form['negotiationID']
             NegAmount  = request.form['NegPrice']
-            status = "accepted"
-            print(updateNegotiation(mysql,negotiationID,status,NegAmount))
+            status = 'accepted'
+            updateNegotiation(mysql,negotiationID,status,NegAmount)
+            return redirect(request.url)
         except Exception as e:
             print("apn"+str(e))
-
         try:
             Reject = request.form['Reject']
             negotiationID = request.form['negotiationID']
             NegAmount = request.form['NegPrice']
-            print(negotiationID)
-            status = "rejected"
-            print(updateNegotiation(mysql,negotiationID,status,NegAmount))
+            status = 'rejected'
+            updateNegotiation(mysql,negotiationID,status,NegAmount)
+            return redirect(request.url)
         except Exception as e:
             print("rn"+str(e))
         groupList = showNegotiation(mysql,merchant_id)
