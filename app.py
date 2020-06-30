@@ -39,6 +39,7 @@ import geocoder
 from delivery_management.delivery import getDelivery,YourRatings
 from search_merchants.searchMerchantCategory import *
 from merchant_performance.merchant_performance import getPerformanceStats
+from services.visa_api_services import registerOnVTC,getAvailableMerchantControls,getMerchantControlRules,addMerchantControlRule
 
 app = Flask(__name__, static_folder='')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader, jinja2.FileSystemLoader(['.'])])
@@ -939,9 +940,105 @@ def checkout():
     return render_template("./payment/payment.html",amount=amount)
 
 
+
+
 @app.route('/vtc', methods=['GET', 'POST'])
 def vtc():
-    return render_template("./transactionControl/transactionControl.html")
+
+    data=[]
+    if('pan' in session):
+        pan = session['pan']
+    else:
+        pan = None
+    if('documentID' in session):
+        documentID =session['documentID']
+    else:
+        documentID = None
+    alertmsg = None
+    categories = None
+    msg = None
+    if request.method=="POST":
+        if not pan:
+            try:
+                pan = request.form['pan']
+                session['pan'] = pan
+            except:
+                print('Pan not submitted')
+        if(pan):
+            try:
+                if not documentID:
+                    documentID = registerOnVTC(pan)
+                session['documentID'] = documentID
+                data = getMerchantControlRules(documentID)
+                categories = getAvailableMerchantControls(pan)
+            except:
+                alertmsg = "Invalid Account Number"
+                pan = None
+
+        try:
+            alertThreshold = request.form['alertThreshold']
+            declineThreshold = request.form['declineThreshold']
+            selectedCategory  = request.form.get('category')
+            enabled = request.form.getlist('enabled')
+            if(len(enabled)):
+                enabled = "true"
+            else:
+                enabled = "false"
+            decline = request.form.getlist('decline')
+
+            if(len(decline)):
+                decline = "true"
+            else:
+                decline = "false"
+            print(alertThreshold,declineThreshold,selectedCategory,enabled,decline)
+            controlRule = None
+            if(selectedCategory == "global"):
+                controlRuleString = '''
+                {
+                        "globalControls": [
+                            {
+                                "shouldDeclineAll": '''+decline+''',
+                                "alertThreshold": '''+alertThreshold+''',
+                                "isControlEnabled": '''+enabled+''',
+                                "declineThreshold": '''+declineThreshold+'''
+                            }
+                        ]
+                }
+
+                '''
+                controlRule = json.loads(controlRuleString)
+            else:
+                controlRuleString = '''
+                {
+                    "merchantControls": [
+                    {
+                        "shouldDeclineAll": '''+decline+''',
+                        "isControlEnabled": '''+enabled+''',
+                        "alertThreshold": '''+alertThreshold+''',
+                        "declineThreshold": '''+declineThreshold+''',
+                        "controlType": "'''+selectedCategory+'''"
+                    }
+                    ]
+
+                }
+
+                '''
+                controlRule = json.loads(controlRuleString)
+            
+            documentID = session['documentID']
+            
+            if(controlRule):
+                addMerchantControlRule(documentID,controlRule)
+                msg = "yes"
+                
+
+        except Exception as e:
+            print(e)
+            alertmsg = "problem adding control"
+        
+        
+
+    return render_template("./transactionControl/transactionControl.html",pan=pan,items=data,alertmsg=alertmsg,categories = categories,msg=msg)
 
 if __name__ == '__main__':
     # threaded allows multiple users (for hosting)
