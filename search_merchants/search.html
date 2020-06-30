@@ -45,10 +45,10 @@
 
 </style>
 <body>
-    <h1>
-        <center style="color: #1a1f71;">Nearby merchants</center>
-    </h1>
-    <center>
+    <div>
+    <form method="get" action="/searchbycategory"><center><button type="submit" class="button" id="submitButton"><span> Search By Category </span></button></center></form>
+    </div>
+        <center>
         <form class="example" method="post" action="" style="margin:auto;max-width:600px">
             <input type="number" name="radius" placeholder="Search radius in km">
             <br><br>
@@ -225,19 +225,12 @@
             lng: 78.9629
         };
         var map;
-        if (jsonData.length == 0)
-            map = new google.maps.Map(
-                document.getElementById('map'), {
-                zoom: 4,
-                center: india
-            });
-        else
+        
             map = new google.maps.Map(
                 document.getElementById('map'), {
                 zoom: 7,
                 center: {
-                    lat: parseFloat(jsonData[0].Latitude),
-                    lng: parseFloat(jsonData[0].Longitude)
+                    lat:parseFloat(currentLocationJSONData.Latitude), lng :parseFloat(currentLocationJSONData.Longitude)
                 }
             });
 

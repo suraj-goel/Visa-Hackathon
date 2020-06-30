@@ -4,7 +4,7 @@
     <form action="/registerCyber/" method="post">
         <p>
             <label>Aggregator ID : </label>
-            <input value="{{ result['AggregatorID'] }}" name="aggregatorid" type="text" required>
+            <input value="{{ result['AggregatorID'] }}" name="aggregatorid" type="number" required>
         </p>
         <p>
             <label>Name : </label>
@@ -12,7 +12,7 @@
         </p>
         <p>
             <label>Card Acceptor id : </label>
-            <input value="{{ result['CardAcceptorID'] }}" name="cardacceptorid" type="text" required>
+            <input value="{{ result['CardAcceptorID'] }}" name="cardacceptorid" type="number" required>
         </p>
         <br>
         <input type="submit" value="Submit">

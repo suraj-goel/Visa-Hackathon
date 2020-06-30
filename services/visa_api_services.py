@@ -2,7 +2,7 @@ import requests
 import json
 import os
 import datetime
-#cert=('./cert.pem','./key_374cc983-558b-49dd-a55b-99d3cb3afac5.pem') #if you on MAC
+# cert=("/Users/sahanas/Desktop/Visa-Hackathon/services/cert.pem", '/Users/sahanas/Desktop/Visa-Hackathon/services/key_374cc983-558b-49dd-a55b-99d3cb3afac5.pem') #if you on MAC
 cert=(os.path.abspath("services/cert.pem"),os.path.abspath("services/key_374cc983-558b-49dd-a55b-99d3cb3afac5.pem")) #if you on Windows
 auth=("STT3WACAH2W19FH6H48A2117b1JIIYevI8qRcIQn2Zwhtdp4M", "81SYH42zc2CwJgtOzInj50e8zT6vr")
 header={'Accept': 'application/json'}
@@ -23,7 +23,7 @@ def createSupplier(mysql,acc,supplier_id,buyerid,clientid="B2BWS_1_1_9999"):
     #fetch buyer id from db corresponding to merchantid and set a new supplier id with account number for payment
     cur = mysql.connection.cursor()
     cur.execute("select * from Merchant where MerchantID='"+supplier_id+"';")
-    mid, name, registeredName, email, contactNumber, address, password = cur.fetchone()
+    mid, name, registeredName, email, contactNumber, address, password, mcc = cur.fetchone()
     cur.close()
     url = 'https://sandbox.api.visa.com/vpa/v1/supplier/CreateSupplier'
     p = json.loads(
@@ -102,7 +102,7 @@ def createBuyer(mysql,buyerid,clientid="B2BWS_1_1_9999"):
     # client id is supplied by visa to identify the finantial institutaion that is offering this service(ignore it)
     cur = mysql.connection.cursor()
     cur.execute("select * from Merchant where MerchantID='"+buyerid+"';")
-    mid,name,registeredName,email,contactNumber,address,password = cur.fetchone()
+    mid,name,registeredName,email,contactNumber,address,password,mcc = cur.fetchone()
     cur.close()
     #The Company ID must be the same Company ID at the processor
     url='https://sandbox.api.visa.com/vpa/v1/buyerManagement/buyer/create'
@@ -201,6 +201,104 @@ def register_merchant(mysql,mid):
         cur.execute("INSERT INTO PaymentType (MerchantID, PayType) VALUES (%s, %s);", (mid, '2'))
     mysql.connection.commit()
 
+
+# works for only 1 merchant category code, mailed regarding this too
+def MerchantMeasurement(MCC = '5812'):
+    url = "https://sandbox.api.visa.com/merchantmeasurement/v1/merchantbenchmark"
+    p = json.loads(
+        '''  
+    {
+    "requestHeader": {
+    "messageDateTime": "2020-06-29T06:17:04.327Z",
+    "requestMessageId": "6da60e1b8b024532a2e0eacb1af58581"
+    },
+    "requestData": {
+    "naicsCodeList": [
+    ""
+    ],
+    "merchantCategoryCodeList": [
+    "''' + MCC + '''"
+    ],
+    "merchantCategoryGroupsCodeList": [
+    ""
+    ],
+    "postalCodeList": [
+    ""
+    ],
+    "msaList": [
+    "7362"
+    ],
+    "countrySubdivisionList": [
+    ""
+    ],
+    "merchantCountry": "840",
+    "monthList": [
+    "201706"
+    ],
+    "accountFundingSourceList": [
+    "ALl"
+    ],
+    "eciIndicatorList": [
+    "All"
+    ],
+    "platformIDList": [
+    "All"
+    ],
+    "posEntryModeList": [
+    "All"
+    ],
+    "cardPresentIndicator": "All",
+    "groupList": [
+    "Standard"
+    ]
+    }
+    }
+    ''')
+    r = requests.post(url,
+                      cert=cert,
+                      headers=header,
+                      auth=auth,
+                      json=p)
+    res=r.json()
+    data={}
+    try:
+        res = res['response']['responseData'][0]
+        data['fraud_checked_sales_growth']=res['fraudChbktoSalesGrowthYoY']
+        data['fraud_checked_to_Sales_Ratio']=res['fraudChbktoSalesRatio']
+        data['non_fraud_checked_to_Sales_Ratio']=res['nonfraudChbktoSalesRatio']
+        data['sales_transaction_growth_monthly']=res['salesTranCntGrowthMoM']
+        data['sales_transaction_growth_yearly']=res['salesTranCntGrowthYoY']
+        data['sales_volume_growth_monthly']=res['salesVolumeGrowthMoM']
+        data['sales_volume_growth_yearly']=res['salesVolumeGrowthYoY']
+        return data
+    except:
+        print('no data added for this code')
+        return "error"
+
+#data=MerchantMeasurement()
+#print(data)
+
+
+# getting 404 error mailed regarding this
+def CheckB2BBalance(buyerid,supplier_account_no ,clientid='B2BWS_1_1_9999',amount=10):
+    url = 'https://sandbox.api.visa.com/vpa/v1/accountManagement/fundingAccount/get'
+    p = json.loads('''          
+            {
+            "messageId": "2020-06-29T04:44:19.000Z",
+            "clientId": "'''+clientid+'''",
+            "buyerId": '''+buyerid+''',
+            "accountNumber": '''+supplier_account_no+'''
+            }
+        ''')
+    r = requests.post(url, timeout=10,
+                      cert=cert,
+                      headers=header,
+                      auth=auth,
+                      json=p)
+    result = r.json()
+    print(result)
+#CheckB2BBalance('1',"4111111111111111")
+
 #acc=register_merchant(mysql,"12324","APISupp-102")
 
 #payment
@@ -208,7 +306,8 @@ def register_merchant(mysql,mid):
 #paymentProcessing(payment_amount,"12324",acc)
 
 def getMerchantsByMLOCAPI(merchantCategoryCode,radius,merchantID,latitude,longitude):
-    
+    if not radius:
+        radius = '99'   
     url = "https://sandbox.api.visa.com/merchantlocator/v1/locator"
     now = datetime.datetime.now()
     messageDateTime = now.strftime("%Y-%m-%dT%H:%M:%S.000")
@@ -259,3 +358,75 @@ def getMerchantsByMLOCAPI(merchantCategoryCode,radius,merchantID,latitude,longit
         print("No Mechants found")
 
     return merchants
+
+def registerOnVTC(primaryAccountNumber):
+    url = "https://sandbox.api.visa.com/vctc/customerrules/v1/consumertransactioncontrols"
+    p = json.loads(
+        '''
+    {
+    "primaryAccountNumber": "'''+ primaryAccountNumber +'''"
+    }
+
+        '''
+    )
+    r = requests.post(url, timeout=100,
+                      cert=cert,
+                      headers=header,
+                      auth=auth,
+                      json=p)
+    result = r.json()
+    if(result["resource"]):
+        if(result["resource"]["documentID"]):
+            return result["resource"]["documentID"]
+    
+    return None
+
+
+def getAvailableMerchantControls(primaryAccountNumber):
+    url = "https://sandbox.api.visa.com/vctc/customerrules/v1/merchanttypecontrols/cardinquiry"
+    p = json.loads(
+        '''
+            
+    
+    {
+    "primaryAccountNumber": "'''+ primaryAccountNumber +'''"
+    }
+
+        '''
+    )
+    r = requests.post(url, timeout=100,
+                        cert=cert,
+                        headers=header,
+                        auth=auth,
+                        json=p)
+    result = r.json()
+    data = []
+    if(result["resource"]):
+        if(result["resource"]["availableMerchantTypeRules"]):
+            for res in result["resource"]["availableMerchantTypeRules"]:
+              data.append(res["name"])
+            return data      
+
+    return None
+
+def getMerchantControlRules(documentID):
+    url = "https://sandbox.api.visa.com/vctc/customerrules/v1/consumertransactioncontrols/"+documentID+"/rules"
+    # print(url)
+    p = json.loads(
+        '''
+            {}
+        '''
+    )
+    r = requests.post(url, timeout=100,
+                        cert=cert,
+                        headers=header,
+                        auth=auth,
+                        json=p)
+    result = r.json()
+    data = []
+    if(result["resource"]):
+        return result["resource"]
+    return None
+
+
+

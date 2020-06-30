@@ -1,0 +1,219 @@
+{% include "./common/header.html" %}
+<link rel="stylesheet" href="{{ url_for('static',filename='./manage_inventory/inventory.css') }}">
+<script type="text/javascript" src="{{url_for('static',filename='./manage_inventory/inventory.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+<style>
+    td{
+    font-size:20px;
+    padding:5px;
+    }
+    i{
+    float:right;
+    padding-left:6px;
+    }
+</style>
+   <center>
+    <h1>Performance</h1>
+<hr style="height:2px;border-width:0;color:yellow;background-color:gold">
+<table border="1">
+    <h3 style="color: #1a1f71;">Stat from Visa measurement API for your merchant category</h3>
+<h4>Category: {{data['category_name']}} </h4><br>
+    <tr>
+                <td>fraud checked to Sales Ratio</td>
+        <td>{{data['fraud_checked_to_Sales_Ratio']}}</td>
+    </tr>
+    <tr>
+                <td>non fraud checked to Sales Ratio</td>
+        <td>{{data['non_fraud_checked_to_Sales_Ratio']}}
+        </td>
+    </tr>
+        <tr>
+        <td>fraud checked sales growth</td>
+
+        <td>{{data['fraud_checked_sales_growth']}}
+        {% if data['fraud_checked_sales_growth']|float < 0 %} <i class="fa fa-chevron-circle-down" style="font-size:28px;color:red"></i>
+        {% else %} <i class="fa fa-chevron-circle-up" style="font-size:28px;color:green"></i> {% endif %}
+        </td>  </tr>
+        <tr>
+                <td>sales transaction growth this month</td>
+        <td>{{data['sales_transaction_growth_monthly']}}
+                {% if data['sales_transaction_growth_monthly']|float < 0 %} <i class="fa fa-chevron-circle-down" style="font-size:28px;color:red"></i>
+        {% else %} <i class="fa fa-chevron-circle-up" style="font-size:28px;color:green"></i> {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td>sales transaction growth this year</td>
+        <td>{{data['sales_transaction_growth_yearly']}}
+                {% if data['sales_transaction_growth_yearly']|float < 0 %} <i class="fa fa-chevron-circle-down" style="font-size:28px;color:red"></i>
+        {% else %} <i class="fa fa-chevron-circle-up" style="font-size:28px;color:green"></i> {% endif %}
+        </td>
+    </tr>
+    <tr>
+                <td>sales volume growth this month</td>
+        <td>{{data['sales_volume_growth_monthly']}}
+                {% if data['sales_volume_growth_monthly']|float < 0 %} <i class="fa fa-chevron-circle-down" style="font-size:28px;color:red;float:right"></i>
+        {% else %} <i class="fa fa-chevron-circle-up" style="font-size:28px;color:green"></i> {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td>sales volume growth this year</td>
+        <td>{{data['sales_volume_growth_yearly']}}
+                {% if data['sales_volume_growth_yearly']|float < 0 %} <i class="fa fa-chevron-circle-down" style="font-size:28px;color:red;float:right"></i>
+        {% else %} <i class="fa fa-chevron-circle-up" style="font-size:28px;color:green;float:right"></i> {% endif %}
+        </td>
+    </tr>
+</table>
+<hr style="height:2px;border-width:0;color:yellow;background-color:gold">
+       <h3 style="color: #1a1f71;">Your earnings and spendings</h3>
+       <h4><b>Total spending:</b> &#8377;{{data['total_spendings']}} </h4>
+       <h4><b>Total earnings:</b> &#8377;{{data['total_earnings']}}</h4>
+       {% if data['total_spendings']|float > data['total_earnings']|float %}
+       You are at loss<i class="fa fa-chevron-circle-down" style="font-size:28px;color:red;float:right"></i>
+       {% else %}
+       You are in profit!!<i class="fa fa-chevron-circle-up" style="font-size:28px;color:green;float:right"></i>
+       {% endif %}
+       <hr>
+       <b><h4>Monthly summary</h4></b>
+       <h6 style="padding-left:10px;"><b>Monthly spending:</b>  &#8377;{{data['total_spendings_monthly'][-1]['Total']}} </h6>
+       <h6 style="padding-left:10px;"><b>Monthly earning:</b> &#8377;{{data['total_earnings_monthly'][-1]['Total']}}</h6>
+
+       <hr>
+        <canvas id="myChart" width="600" height="400"></canvas> <h6>Month</h6>
+       <hr style="height:2px;border-width:0;color:yellow;background-color:gold">
+        <h3 style="color: #1a1f71;">Transactions this month</h3>
+       <h4><b>Total transactions:</b> {{data['total_trasactions']}} </h4>
+       <h4><b>Total Transactions this month:</b> {{data['total_transactions_monthly'][-1]['orders']}}</h4><hr>
+        <canvas id="myChart2" width="600" height="400"></canvas>
+<script>
+
+    // Global parameters:
+// do not resize the chart canvas when its container does (keep at 600x400px)
+Chart.defaults.global.responsive = false;
+
+// define the chart data
+var chartData = {
+  labels : [{% for item in data['total_spendings_monthly'] %}
+             "{{item['month']}}",
+            {% endfor %}],
+  datasets : [{
+      label: 'total spendings',
+      fill: true,
+      lineTension: 0.1,
+      backgroundColor: "rgba(255, 153, 153,0.4)",
+      borderColor: "rgba(255, 153, 153,1)",
+      borderCapStyle: 'butt',
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: 'miter',
+      pointBorderColor: "rgba(255, 153, 153,1)",
+      pointBackgroundColor: "#fff",
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: "rgba(255, 153, 153,1)",
+      pointHoverBorderColor: "rgba(220,220,220,1)",
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+      data : [{% for item in data['total_spendings_monthly'] %}
+                 {{ item['Total']}},
+              {% endfor %}],
+      spanGaps: false
+  },{
+        label: 'total earnings',
+      fill: true,
+      lineTension: 0.1,
+      backgroundColor: "rgba(75,192,0,0.4)",
+      borderColor: "rgba(75,192,0,1)",
+      borderCapStyle: 'butt',
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: 'miter',
+      pointBorderColor: "rgba(75,192,0,1)",
+      pointBackgroundColor: "#fff",
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: "rgba(75,192,0,1)",
+      pointHoverBorderColor: "rgba(220,220,0,1)",
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+      data : [{% for item in data['total_earnings_monthly'] %}
+          {{ item['Total']}},
+              {% endfor %}],
+      spanGaps: false
+
+  }]
+}
+
+// get chart canvas
+var ctx = document.getElementById("myChart").getContext("2d");
+
+// create the chart using the chart canvas
+var myChart = new Chart(ctx, {
+  type: 'line',
+  data: chartData,
+  options : {
+      scales: {
+        yAxes: [{
+          scaleLabel: {
+            display: true,
+            labelString: 'Money in rupees'
+          }
+        }]
+      }
+    }
+});
+</script>
+       <script>
+var chartData2 = {
+  labels : [{% for item in data['total_transactions_monthly'] %}
+             "{{item['month']}}",
+            {% endfor %}],
+  datasets : [{
+      label: 'total transactions',
+      fill: true,
+      lineTension: 0.1,
+      backgroundColor: "rgba(75,192,192,0.4)",
+      borderColor: "rgba(75,192,192,1)",
+      borderCapStyle: 'butt',
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: 'miter',
+      pointBorderColor: "rgba(75,192,192,1)",
+      pointBackgroundColor: "#fff",
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: "rgba(75,192,192,1)",
+      pointHoverBorderColor: "rgba(75,192,192,1)",
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+      data : [{% for item in data['total_transactions_monthly'] %}
+                 {{ item['orders']}},
+              {% endfor %}],
+      spanGaps: false
+  }]
+}
+
+// get chart canvas
+var ctx1 = document.getElementById("myChart2").getContext("2d");
+
+// create the chart using the chart canvas
+window.myChart2 = new Chart(ctx1, {
+  type: 'line',
+  data: chartData2,
+  options : {
+      scales: {
+        yAxes: [{
+          scaleLabel: {
+            display: true,
+            labelString: 'Transactions made'
+          }
+        }]
+      }
+    }
+});
+</script>
+              </center>
