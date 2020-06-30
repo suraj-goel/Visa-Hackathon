@@ -257,7 +257,7 @@ def orders():
 @app.route('/performance', methods=['POST', 'GET'])
 @login_required
 def performance():
-    merchantid='1'   #session["merchantID"]
+    merchantid=session["merchantID"]
     data=getPerformanceStats(mysql,merchantid)
     return render_template('./merchant_performance/merchant_performance.html',data=data)
 
@@ -283,9 +283,7 @@ def showAll():
 @app.route('/searchbycategory',methods=['POST', 'GET'])
 @login_required
 def searchbycategory():
-    session['merchantID'] = '5'
-
-    currentMerchantID =  session['merchantID']
+    currentMerchantID = '5'
     currentLocation = getCurrentLocation(mysql, currentMerchantID)
     data=[]
     if request.method == "POST":
@@ -622,6 +620,8 @@ def b2bpay():
 @app.route('/negotiation',methods=['GET','POST'])
 def negotiation():
     choice = 'R'
+    merchantID = '3'
+    session['merchantID'] = merchantID
     merchant_id = session['merchantID']
     allNegotiation =[]
     productList = []
@@ -632,8 +632,6 @@ def negotiation():
     contactInfo  = gotList[2]
     if (request.method == 'POST'):
         print("nego")
-        print(allNegotiation)
-        print(request.form)
         try:
             choice = request.form["filterbuyer"]
             if(choice!='E'):
@@ -682,8 +680,6 @@ def negotiation():
             return redirect(url_for('showCart',merchant_id=seller_id))
         except Exception as e:
             print("a1"+str(e))
-
-        print(choice,allNegotiation,productList)
         return render_template("./negotiation/negotiation.html", buy_items=allNegotiation,profile=2,buyer_choice=choice,productList=productList,sellInfo = contactInfo)
     else:
         return render_template("./negotiation/negotiation.html",buy_items=allNegotiation,profile=2,buyer_choice=choice,productList=productList,sellInfo = contactInfo)
@@ -704,7 +700,13 @@ def negotiationsupplier():
             negotiationID = request.form['negotiationID']
             NegAmount  = request.form['NegPrice']
             status = "accepted"
-            print(updateNegotiation(mysql,negotiationID,status,NegAmount))
+            print(updateNegotiation(mysql,negotiationID,status,NegAmount),status)
+            groupList = showNegotiation(mysql, merchant_id)
+            contactInfo = groupList[0]
+            sellCart = groupList[1]
+            Amount = groupList[2]
+            return render_template("./negotiation/negotiation.html", sup_items=sellCart, profile=1,
+                                   contactInfo=contactInfo, loop=loop, Amount=Amount)
         except Exception as e:
             print("apn"+str(e))
 
@@ -714,13 +716,16 @@ def negotiationsupplier():
             NegAmount = request.form['NegPrice']
             print(negotiationID)
             status = "rejected"
-            print(updateNegotiation(mysql,negotiationID,status,NegAmount))
+            print(updateNegotiation(mysql,negotiationID,status,NegAmount),status)
+            groupList = showNegotiation(mysql, merchant_id)
+            contactInfo = groupList[0]
+            sellCart = groupList[1]
+            Amount = groupList[2]
+            return render_template("./negotiation/negotiation.html", sup_items=sellCart, profile=1,
+                                   contactInfo=contactInfo, loop=loop, Amount=Amount)
         except Exception as e:
             print("rn"+str(e))
-        groupList = showNegotiation(mysql,merchant_id)
-        contactInfo = groupList[0]
-        sellCart  = groupList[1]
-        Amount = groupList[2]
+
         return render_template("./negotiation/negotiation.html",sup_items=sellCart,profile=1,contactInfo=contactInfo,loop=loop,Amount=Amount)
     else:
         return render_template("./negotiation/negotiation.html",sup_items=sellCart,profile=1,contactInfo=contactInfo,loop=loop,Amount=Amount)

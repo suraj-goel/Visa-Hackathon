@@ -1,4 +1,3 @@
-import numpy as np
 #buyer
 def displayAllNegotiation(mysql,merchant_id):
     cur = mysql.connection.cursor()
@@ -99,9 +98,8 @@ def showNegotiation(mysql,merchant_id):
 #supplier
 def updateNegotiation(mysql,negotiationID,status,NegAmount):
     cur = mysql.connection.cursor()
-    cur.execute("Update Negotiation SET Status = '{}' WHERE NegotiationID = '{}' ".format(status,negotiationID))
-    mysql.connection.commit()
-    cur.execute("Update Negotiation SET Price = '{}' WHERE NegotiationID = '{}' ".format(NegAmount,negotiationID))
+    print("updating...",negotiationID,status)
+    cur.execute("Update Negotiation SET Status = '{}' , Price = '{}' WHERE NegotiationID = '{}';".format(status,NegAmount,negotiationID))
     mysql.connection.commit()
     return "Success"
 

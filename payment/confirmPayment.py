@@ -44,7 +44,7 @@ def addToOrders(mysql,qty,ProductID,merchant_id,amount,currentDate,payment_flag=
             print('completed requirement')
         elif payment_flag=='3' and id!='':
             #negotiation update
-            cur.execute("update Negotiation set Status='Done' where NegotiationID=%s;",(id))
+            cur.execute("update Negotiation set Status='done' where NegotiationID=%s;",(id))
             mysql.connection.commit()
             print('completed negotiation')
     except Exception as e:
