@@ -56,22 +56,33 @@ geocode_url = 'https://maps.googleapis.com/maps/api/geocode/json'
 def login_required(function_to_protect):
     @wraps(function_to_protect)
     def wrapper(*args, **kwargs):
-        print("Login check")
+        print("Login check url:",request.url)
         #print(session['merchantID'])
         if 'merchantID' in session:
+            print("loggedIn")
             print(session['merchantID'])
             id = session['merchantID']
-            if 'pay_type' in session:
-                print("pay_type")
-                return function_to_protect(*args, **kwargs)
+            if request.path == '/register/' or request.path == '/login/':
+                print("redirect login or register to search")
+                return redirect('/search')
             else:
-                c = checkPayType(mysql, id)
-                if c==True:
-                    session.permanent = True
-                    session['pay_type'] = True
-                    return function_to_protect(*args, **kwargs)
+                if 'pay_type' in session:
+                    print("pay_type")
+                    if request.path == '/registerCyber/':
+                        return redirect(url_for('showAll'))
+                    else:
+                        return function_to_protect(*args, **kwargs)
                 else:
-                    return redirect(url_for('registerCyber'))
+                    print("pay_type not present in session")
+                    c = checkPayType(mysql, id)
+                    if c==True:
+                        session.permanent = True
+                        session['pay_type'] = True
+                        return function_to_protect(*args, **kwargs)
+                    elif request.path == '/registerCyber/':
+                        return function_to_protect(*args, **kwargs)
+                    else:
+                        return redirect(url_for('registerCyber'))
 
         elif request.path == '/register/' or request.path == '/login/':
             return function_to_protect(*args, **kwargs)
@@ -106,6 +117,7 @@ def login():
     return render_template("./login_registration/login.html")
 
 @app.route('/register/', methods=['GET', 'POST'])
+@login_required
 def register():
     print("register")
     if request.method == 'POST':
@@ -272,7 +284,7 @@ def performance():
 @app.route('/search', methods=['POST', 'GET'])
 @login_required
 def showAll():
-    session['merchantID'] = '1'# to be removed once geolocation works
+    #session['merchantID'] = '1'# to be removed once geolocation works
 
     currentMerchantID =  session['merchantID']
     currentLocation = getCurrentLocation(mysql, currentMerchantID)
@@ -510,9 +522,10 @@ def editAccountDetails():
 
 
 @app.route('/registerCyber/', methods=['GET', 'POST'])
+@login_required
 def registerCyber():
-    if 'merchantID' not in session:
-        return redirect(url_for('login'))
+    #if 'merchantID' not in session:
+    #    return redirect(url_for('login'))
     merchant_id = session['merchantID']  # retrieve from session
     cur = mysql.connection.cursor()
     cur.execute("select * from CybersourceMerchant where MerchantID='" + merchant_id + "';")
@@ -539,7 +552,7 @@ def registerCyber():
         #session.permanent = True
         #session['register_cyber'] = True
         #return redirect('/accounts/')
-        return redirect('/search')
+        return redirect(url_for('showAll'))
     return render_template("./accounts/cyberSourceDetails.html", result=result)
 
 
