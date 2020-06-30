@@ -67,7 +67,7 @@
 <body>
 <center>
 <h1 style="color:#1a1f71; font-weight: bold;"><b>CyberSource Payment Details</b></h1>
-    <form id="form1" method="post" style="border: none;" action="">
+    <form id="form1" method="post" style="border: none;" action="/registerCyber/">
         <div id="newForm" class="containerForm">
             <table style="border-spacing: 10px 15px; border-collapse: initial;">
                 <tr>
@@ -92,7 +92,17 @@
 
                     </td>
                 </tr>
+                {% if not b2b %}
+                <tr>
+                    <td>
+                        <h4> <label for="id">Account Number</label></h4>
+                    </td>
+                    <td>
+                       <input id="id" value="{{ result['funding_acc_number'] }}" name="funding_acc_number" type="number" required>
 
+                    </td>
+                </tr>
+                {% endif %}
                 <tr>
                     <td colspan="6"><h4><input type="submit" value="Confirm Details" ></h4>
                     </td>

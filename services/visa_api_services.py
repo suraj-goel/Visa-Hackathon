@@ -186,11 +186,10 @@ def paymentProcessing(amount,buyerid,supplier_account_no ,clientid='B2BWS_1_1_99
 
 def register_merchant(mysql,mid,funding_acc_number):
     #first we need to create a buyer profile for the merchant for which we need any unique number called buyerid
-    buyerid,supplier_id = mid,mid
+    buyerid,supplier_id,pool_id = mid,mid,mid
     createBuyer(mysql,buyerid)
     # we need to create a funding account for this buyer and then a proxy pool for this buyer id
     #CreateFundingAccount(funding_acc_number,buyerid)
-    pool_id='Pool'+buyerid
     #CreateProxyPool(funding_acc_number,buyerid,pool_id)
     # once pool is created, we can request for virtual account using pool id
     account_number = createBuyerAccount(mysql,buyerid,pool_id)
