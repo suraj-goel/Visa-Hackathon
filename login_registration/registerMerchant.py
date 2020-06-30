@@ -38,6 +38,16 @@ def checkPayType(mysql,id):
   else:
     return False
 
+def insertLocation(mysql, lat, long, mid):
+  id = str(uuid.uuid1().int)
+  id = id[:20]
+  print(id)
+  cur = mysql.connection.cursor()
+  # query = "select * from Merchant where EmailID='{}';".format(merchantEmail)
+  query = """INSERT INTO Location (LocationID,Latitude,Longitude,MerchantID)VALUES(%s, %s, %s, %s);"""
+  cur.execute(query, (id, lat, long, mid))
+  mysql.connection.commit()
+  cur.close()
 
 
 
