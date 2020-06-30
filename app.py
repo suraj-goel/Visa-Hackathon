@@ -374,7 +374,7 @@ def showCart(merchant_id):
     type = session['type']
     totalCost = 0
     totalDiscountCost = 0
-    loggmerchant_id = '1'
+    loggmerchant_id = session['merchantID']
     print(type)
     print(request.form)
     session['merchantID'] = loggmerchant_id
@@ -522,7 +522,6 @@ def editAccountDetails():
 
 
 @app.route('/registerCyber/', methods=['GET', 'POST'])
-@login_required
 def registerCyber():
     if 'merchantID' not in session:
         return redirect(url_for('login'))

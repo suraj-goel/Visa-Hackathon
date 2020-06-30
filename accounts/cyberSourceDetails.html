@@ -1,19 +1,17 @@
 {% include "./common/header.html" %}
-<link rel="stylesheet" href="{{ url_for('static',filename='./accounts/cybersource.css') }}">
-<style>
+    <style>
+
+
     body {
         font-family: Arial, Helvetica, sans-serif;
     }
-    * {
-        box-sizing: border-box;
-    }
 
-    input[type="text"],
+    input[type="text"],input[type='email'],input[type='password'],
     select,
     textarea {
-        width: 30%;
+        width: 100%;
         padding: 12px;
-        border: 1px white;
+        border: 1px solid #ccc;
         border-radius: 4px;
         box-sizing: border-box;
         margin-top: 6px;
@@ -26,9 +24,8 @@
     }
 
     input[type="number"] {
-        width: 30%;
         padding: 12px;
-        border: 1px white;
+        border: 1px solid #ccc;
         border-radius: 4px;
         box-sizing: border-box;
         margin-top: 6px;
@@ -43,45 +40,67 @@
         border-radius: 4px;
         cursor: pointer;
         background-color: #fdbb0a;
+        width: 50%;
     }
 
     input[type="submit"]:hover {
         cursor: pointer;
     }
-
-    h4 {
-        color: #ffffff;
-    }
-
-    h4:hover {
-        cursor: pointer;
-        color: #fdbb0a;
+    table
+    {
+        padding: 10px;
+        border: 10px;
+        border-radius: 10px;
+        background-color: #f2f2f2;
+        box-shadow: #555555;
+        text-align: center;
     }
 
     .containerForm {
+        box-sizing: border-box;
         border-radius: 5px;
-        background-color: #f2f2f2;
         padding: 15px;
     }
-</style>
+
+    </style>
+
 <body>
 <center>
-<h1 style="color:#faaa13; font-weight: bold;"><b>CyberSource Payment Details</b></h1>
-    <form class="containerForm" action="/registerCyber/" method="post">
-        <p >
-            <label for="AggregatorID">Aggregator ID : </label><br/>
-            <input id="AggregatorID" value="{{ result['AggregatorID'] }}" name="aggregatorid" type="number" required>
-        </p>
-        <p>
-            <label for="Name">Name : </label><br/>
-            <input id="Name" value="{{ result['Name'] }}" name="name" type="text" required>
-        </p>
-        <p>
-            <label for="id">Card Acceptor id : </label><br/>
-            <input id="id" value="{{ result['CardAcceptorID'] }}" name="cardacceptorid" type="number" required>
-        </p>
-        <br>
-        <input type="submit" value="Submit">
+<h1 style="color:#1a1f71; font-weight: bold;"><b>CyberSource Payment Details</b></h1>
+    <form id="form1" method="post" style="border: none;" action="">
+        <div id="newForm" class="containerForm">
+            <table style="border-spacing: 10px 15px; border-collapse: initial;">
+                <tr>
+                    <td>
+                        <h4><label for="AggregatorID">Aggregator ID  </label> </h4>
+                    </td>
+                    <td><input id="AggregatorID" value="{{ result['AggregatorID'] }}" name="aggregatorid" type="number" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4><label for="Name">Register Name</label> </h4>
+                    </td>
+                    <td> <input id="Name" value="{{ result['Name'] }}" name="name" type="text" required></td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4> <label for="id">Card Acceptor id </label></h4>
+                    </td>
+                    <td>
+                       <input id="id" value="{{ result['CardAcceptorID'] }}" name="cardacceptorid" type="number" required>
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="6"><h4><input type="submit" value="Confirm Details" ></h4>
+                    </td>
+                </tr>
+
+            </table>
+
+        </div>
     </form>
 </center>
 </body>
