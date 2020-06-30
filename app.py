@@ -164,7 +164,7 @@ def register():
             register_merchant(mysql, session['merchantID'])
             return redirect(url_for('registerCyber'))
     print("get")
-    return render_template("./login_registration/register.html")
+    return render_template("./login_registration/register1.html")
 
 @app.route('/logout/')
 def logout():

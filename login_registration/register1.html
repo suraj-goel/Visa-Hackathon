@@ -1,3 +1,55 @@
+<!--<!doctype html>
+<html lang="en">
+  <head>
+     Required meta tags
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+     Bootstrap CSS
+
+     <title>SBM</title>
+  </head>
+  <body class="bg-nav">
+    <nav class="navbar ">
+        <a href="" class="navbar-brand text-light">Small Business</a>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+
+
+            </div>
+
+            <div class="col-md-4">
+                <div class="card mt-100">
+                    <div class="card-body">
+                        {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <div class="notification is-danger">
+                            {{ messages[0] }}
+                            </div>
+                        {% endif %}
+                        {% endwith %}
+                        <form class="form" method="post" action="/login/">
+                            <label>Email</label><br>
+                            <input type="email" name="email" class="form-control" required><br>
+                            <label>Password</label><br>
+                            <input type="password" name="password" class="form-control" required><br><br>
+                            <input type="submit" class="btn btn-primary btn-block btn-lg" value="Login">
+                        </form>
+                        <p class="mt-2">Not a member? <a href="/register">Create Account</a></p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+  </body>
+</html>    -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,15 +63,15 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <style>
-       .navbar {
-           margin-bottom: 0;
-           border-radius: 0;
-           background-color: #1a1f71;
-           color: #FFF;
-           padding: 1% 0;
-           font-size: 1.2em;
-           border: 0;
-       }
+        .navbar {
+            margin-bottom: 0;
+            border-radius: 0;
+            background-color: #1a1f71;
+            color: #FFF;
+            padding: 1% 0;
+            font-size: 1.2em;
+            border: 0;
+        }
         .navbar-brand{
             float: left;
             min-height: 55px;
@@ -42,51 +94,51 @@
             background: #1a1f71;
             border: 2px solid #FFF;
         }
-       .container {
-           margin: 4% auto;
+        .container {
+            margin: 4% auto;
 
-       }
-       #icon {
-           max-width: 200px;
-           margin: 1% auto;
-           min-height: 200px;
-           max-height: 400px;
-       }
-       footer {
-           width: 100%;
-           background-color: #fdbb0a;
-           padding: 5%;
-           color: #FFF;
-       }
-       .fa {
-           padding: 15px;
-           font-size: 25px;
-           color: #FFF;
-       }
-       .fa:hover {
-           color: #D5D5D5;
-           text-decoration: none;
-       }
-       .blink_me {
-           animation: blinker 1s linear infinite;
-       }
+        }
+        #icon {
+            max-width: 200px;
+            margin: 1% auto;
+            min-height: 200px;
+            max-height: 400px;
+        }
+        footer {
+            width: 100%;
+            background-color: #fdbb0a;
+            padding: 5%;
+            color: #FFF;
+        }
+        .fa {
+            padding: 15px;
+            font-size: 25px;
+            color: #FFF;
+        }
+        .fa:hover {
+            color: #D5D5D5;
+            text-decoration: none;
+        }
+        .blink_me {
+            animation: blinker 1s linear infinite;
+        }
 
-       @keyframes blinker {
-           50% {
-               opacity: 0;
-           }
-       }
-       @media(max-width: 900px) {
-           .fa {
-               font-size: 20px;
-               padding: 10px;
-           }
+        @keyframes blinker {
+            50% {
+                opacity: 0;
+            }
+        }
+        @media(max-width: 900px) {
+            .fa {
+                font-size: 20px;
+                padding: 10px;
+            }
 
-       }
+        }
         @media(max-width: 600px) {
-           .carousel-caption {
-               display: none;
-           }
+            .carousel-caption {
+                display: none;
+            }
             #icon{
                 max-width: 150px;
             }
@@ -111,16 +163,16 @@
     </ol>
     <div class="carousel-inner" role="listbox">
 
-     <div class="item active">
-     <img src="{{ url_for('static',filename='../common/img/mountains.png') }}">
-        <div class="carousel-caption">
-            <h1>Let's get connect Merchants</h1>
-            <br>
-            <button type="button" class="btn btn-default" onclick="getLogin()">Get Started</button>
+        <div class="item active">
+            <img src="{{ url_for('static',filename='../common/img/mountains.png') }}">
+            <div class="carousel-caption">
+                <h1>Let's get connect Merchants</h1>
+                <br>
+                <button type="button" class="btn btn-default" onclick="getLogin()">Get Started</button>
+            </div>
         </div>
-    </div>
         <div class="item">
-             <img src="{{ url_for('static',filename='../common/img/snow.png') }}">
+            <img src="{{ url_for('static',filename='../common/img/snow.png') }}">
         </div>
         <div class="item">
             <img src="{{ url_for('static',filename='../common/img/red.png') }}">
@@ -135,16 +187,19 @@
         <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
         <span class="sr-only">Next</span>
     </a>
+
+
+
 </div>  <!--slider-->
 <div class="container" id="login/register">
     <div class="row">
         <div class="col-md-6">
+              <h1 style="color: #faaa13;font-weight: bold">REGISTER TO OUR WEBSITE!</h1>
             <img src="{{ url_for('static',filename='../common/img/visa.jpg') }}" class="img-responsive">
         </div>
-
         <div class="col-md-6">
             <div class="card mt-100">
-                <div class="card-body ">
+                <div class="card-body">
                     {% with messages = get_flashed_messages() %}
                     {% if messages %}
                     <div class="notification is-danger blink_me" style="color:red; font-weight: bold">
@@ -152,26 +207,36 @@
                     </div>
                     {% endif %}
                     {% endwith %}
-                    <form class="form" method="post" action="/login/">
+                    <form class="form" method="post" action="/register/">
                         <label>Email</label><br>
-                        <input type="email" name="email" class="form-control" required><br>
+                        <input type="email" class="form-control" name="email" required><br>
                         <label>Password</label><br>
-                        <input type="password" name="password" class="form-control" required><br><br>
-                        <input type="submit" class="btn btn-primary btn-block btn-lg" value="Login">
+                        <input type="password" class="form-control" name="password" required><br>
+                        <label>Confirm Password</label><br>
+                        <input type="password" class="form-control" name="confirm_password" required><br>
+                        <label>Merchant Name</label><br>
+                        <input type="text" class="form-control" name="merchant_name" required><br>
+                        <label>Registered Name</label><br>
+                        <input type="text" class="form-control" name="registered_name" required><br>
+                        <label>Contact Number</label><br>
+                        <input type="number" class="form-control" name="contact_number" required><br>
+                        <label>Address</label><br>
+                        <input type="text" class="form-control" name="address" required><br>
+                        <input type="submit" class="btn btn-primary btn-block btn-lg" value="Register">
                     </form>
-                    <p class="mt-2">Not a member? <a href="/register">Create Account</a></p>
+                    <p class="mt-4">Already a member? <a href="/login">Login</a></p>
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 <div class="container text-center">
-    <h2>What We Provide</h2>
+    <h2>What We Provide !</h2>
     <div class="row">
         <div class="col-sm-4">
-            <img src="{{ url_for('static',filename='../common/img/html5.png') }}" id="icon">
+            <img src="{{ url_for('static',filename='../common/img/html5.jpg') }}" id="icon">
             <h4>HTML5</h4>
-
         </div>
         <div class="col-sm-4">
             <img src="{{ url_for('static',filename='../common/img/amazon.jpg') }}" id="icon">
@@ -187,17 +252,17 @@
 
 <div class="container">
     <div class="row">
-     <div class="col-md-6">
-          <h4>ADD TEXT HERE</h4>
-         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-             Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-             It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
-             It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-         </p>
-         <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
-             The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy.
-             Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
-     </div>
+        <div class="col-md-6">
+            <h4>ADD TEXT HERE</h4>
+            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+            </p>
+            <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
+                The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy.
+                Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
+        </div>
         <div class="col-md-6">
             <img src="{{ url_for('static',filename='../common/img/bootstrap2.jpg') }}" class="img-responsive">
         </div>
@@ -235,9 +300,9 @@
 
 <div class="container">
     <div class="row">
-            <h4><a href="#hidden" data-toggle="collapse">CARE TO KNOW MORE ABOUT US!</a> </h4>
-           <div id="hidden" class="collapse">
-               <h4>ADD TEXT HERE</h4>
+        <h4><a href="#hidden" data-toggle="collapse">CARE TO KNOW MORE ABOUT US!</a> </h4>
+        <div id="hidden" class="collapse">
+            <h4>ADD TEXT HERE</h4>
             <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                 Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
                 It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
@@ -249,32 +314,32 @@
         </div>
     </div>
 </div>
- <footer class="container-fluid text-center">
-     <div class="row">
-         <div class="col-sm-4">
-             <h3>Contact Us</h3>
-             <br>
-             <h4>Our contact and email info here. </h4>
+<footer class="container-fluid text-center">
+    <div class="row">
+        <div class="col-sm-4">
+            <h3>Contact Us</h3>
+            <br>
+            <h4>Our contact and email info here. </h4>
 
-         </div>
-         <div class="col-sm-4">
-             <h3>Connect With Us.</h3>
-            <a href="#" class="fa fa-facebook" style="color: #1a1f71"></a>
-             <a href="#" class="fa fa-twitter" style="color: #337ab7"></a>
-             <a href="#" class="fa fa-google-plus" style="color: red"></a>
-             <a href="#" class="fa fa-linkedin" style="color:dodgerblue"></a>
-             <a href="#" class="fa fa-youtube" style="color:red;"></a>
+        </div>
+        <div class="col-sm-4">
+            <h3>Connect With Us.</h3>
+            <a href="#" class="fa fa-facebook"></a>
+            <a href="#" class="fa fa-twitter"></a>
+            <a href="#" class="fa fa-google-plus"></a>
+            <a href="#" class="fa fa-linkedin"></a>
+            <a href="#" class="fa fa-youtube"></a>
 
-         </div>
-     <div class="row">
-         <div class="col-sm-4">
-             <img src="{{ url_for('static',filename='../common/img/bunny.png') }}" class="icon">
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <img src="{{ url_for('static',filename='../common/img/bunny.png') }}" class="icon">
 
-         </div>
-     </div>
-     </div>
+            </div>
+        </div>
+    </div>
 
- </footer>
+</footer>
 
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
@@ -289,7 +354,3 @@
 </script>
 </body>
 </html>
-
-
-
-
