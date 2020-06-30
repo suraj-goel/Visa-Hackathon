@@ -1,32 +1,100 @@
-{% include "./common/header.html" %}
 
+<style>
+
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    * {
+        box-sizing: border-box;
+    }
+
+    input[type="text"],input[type='email'],input[type='password'],
+    select,
+    textarea {
+        width: 50%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-top: 6px;
+        margin-bottom: 16px;
+        resize: vertical;
+    }
+
+    select{
+        width: 250px;
+    }
+
+    input[type="number"] {
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-top: 6px;
+        margin-bottom: 16px;
+        resize: vertical;
+    }
+
+    input[type="submit"] {
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        background-color: #fdbb0a;
+    }
+
+    input[type="submit"]:hover {
+        cursor: pointer;
+    }
+
+    h4 {
+        color: #ffffff;
+    }
+
+    h4:hover {
+        cursor: pointer;
+        color: #fdbb0a;
+    }
+
+    .containerForm {
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        padding: 15px;
+    }
+
+</style>
+<script>
+    <input type="submit" style="background: #2b313f" value="HOME" onclick="goBack()">
+</script>
 <body>
     <h1>Account Details</h1>
     <div>
-        <form action="/editaccountinfo/" method="POST">
+        <form class="containerForm" action="/editaccountinfo/" method="POST">
             <p>
-                <label>Name : </label>
-                <input value="{{ result['Name'] }}" name="name" type="text" required>
+                <label for="Name">Name : </label>
+                <input id="Name" value="{{ result['Name'] }}" name="name" type="text" required>
             </p>
             <p>
-                <label>Registered Name : </label>
-                <input value="{{ result['RegisteredName'] }}" name="registeredName" type="text" required>
+                <label for="rName">Registered Name : </label>
+                <input id="rName"value="{{ result['RegisteredName'] }}" name="registeredName" type="text" required>
             </p>
             <p>
-                <label>Email id : </label>
-                <input value="{{ result['EmailID']}}" name="emailid" type="email" required>
+                <label for="email">Email id : </label>
+                <input id="email"value="{{ result['EmailID']}}" name="emailid" type="email" required>
             </p>
             <p>
-                <label>Contact number : </label>
-                <input value="{{ result['ContactNumber'] }}" name="contactno" type="text" required>
+                <label for="contact">Contact number : </label>
+                <input id="contact"value="{{ result['ContactNumber'] }}" name="contactno" type="" required>
             </p>
             <p>
-                <label>Address : </label>
-                <input value="{{ result['Address'] }}" name="address" type="text" required>
+                <label for="add">Address : </label>
+                <input id="add"value="{{ result['Address'] }}" name="address" type="text" required>
             </p>
             <p>
-                <label>Password : </label>
-                <input value="{{ result['Password'] }}" name="password" type="password" required>
+                <label for="pass">Password : </label>
+                <input id="pass"value="{{ result['Password'] }}" name="password" type="password" required>
             </p>
             <br>
             <input type="submit" value="Submit">

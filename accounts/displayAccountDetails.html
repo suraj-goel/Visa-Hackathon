@@ -1,37 +1,72 @@
 {% include "./common/header.html" %}
+<link rel="stylesheet" href="{{ url_for('static',filename='./accounts/accounts.css') }}">\
+<style>
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+    button {
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        background-color: #fdbb0a;
+    }
+
+    button:hover {
+        cursor: pointer;
+    }
+
+    label{
+        font-size: 100%;
+    }
+</style>
+<script>
+    function editAccount() {
+        var x = "/editaccountinfo/";
+        return window.location = x;
+    }
+</script>
 <body>
-    <h1>Account Details</h1>
-    <div>
+<center>
+    <h1 style="color:#faaa13; font-weight: bold;">Account Details</h1>
+</center>
+    <div class="containerForm">
         <p>
             <label>Name : </label>
-            <label>{{ result['Name'] }}</label>
+            <label style="width: 50%;">{{ result['Name'] }}</label>
         </p>
         <p>
             <label>Registered Name : </label>
-            <label>{{ result['RegisteredName'] }}</label>
+            <label style=" width: 50%;" >{{ result['RegisteredName'] }}</label>
         </p>
         <p>
             <label>Email id : </label>
-            <label>{{ result['EmailID'] }}</label>
+            <label style=" width: 50%;">{{ result['EmailID'] }}</label>
         </p>
         <p>
             <label>Contact Number : </label>
-            <label>{{ result['ContactNumber'] }}</label>
+            <label style="width: 50%;">{{ result['ContactNumber'] }}</label>
         </p>
         <p>
             <label>Address : </label>
-            <label>{{ result['Address'] }}</label>
+            <label style="  width: 50%;">{{ result['Address'] }}</label>
         </p>
         <p>
             <label>Password : </label>
-            <label>
+            <label style=" width: 50%;">
             {% for i in result['Password'] %}
                 *
             {% endfor %}
             </label>
         </p>
         <br>
-        <button><a href="{{ url_for('editAccountDetails') }}" style="text-decoration:None;">Edit Above Details</a></button>
+        <button onclick="editAccount()">Edit Above Details</button>
         <!--<input type="button" value="Edit Details" onclick="window.open('editUserDetails.html','_self')" /> -->
         <br>
     </div>
