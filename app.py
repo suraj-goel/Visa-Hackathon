@@ -44,7 +44,7 @@ app = Flask(__name__, static_folder='')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader, jinja2.FileSystemLoader(['.'])])
 app.config['GOOGLEMAPS_KEY'] = ""
 app.secret_key = os.urandom(24)
-app.permanent_session_lifetime = timedelta(minutes=5)
+app.permanent_session_lifetime = timedelta(minutes=300)
 mysql = set_connection(app)
 geocode_api_key = 'AIzaSyAntxrxhQu11TxFD9wEe7JxxW1UZ0HQXR'
 geocode_url = 'https://maps.googleapis.com/maps/api/geocode/json'
@@ -57,9 +57,12 @@ def login_required(function_to_protect):
     @wraps(function_to_protect)
     def wrapper(*args, **kwargs):
         print("Login check")
+        #print(session['merchantID'])
         if 'merchantID' in session:
+            print(session['merchantID'])
             id = session['merchantID']
             if 'pay_type' in session:
+                print("pay_type")
                 return function_to_protect(*args, **kwargs)
             else:
                 c = checkPayType(mysql, id)
@@ -79,6 +82,7 @@ def login_required(function_to_protect):
 
 
 @app.route('/login/', methods=['GET', 'POST'])
+@login_required
 def login():
     if request.method == 'POST':
         session.pop('merchantID', None)
@@ -125,12 +129,25 @@ def register():
             flash('Email already registered')
             return redirect(url_for('register'))
         else:
-            session.permanent = True
-            id = registerNewMerchant(mysql, email, password,merchantName,address,contactNumber,registeredName)
-            session['merchantID'] = id
-            latlong = getCoordinates(address)
-            insertLocation(mysql,latlong['lat'],latlong['lng'],id)
 
+            try:
+                geocode_res = getCoordinates(address)
+                print(geocode_res)
+                if len(geocode_res) == 0:
+                    flash('Enter Valid Location')
+                    return redirect(url_for('register'))
+                print(len(geocode_res) ==0)
+                #print(geocode_res[0] == None)
+                latlong = geocode_res[0]['geometry']['location']
+
+            except requests.exceptions.RequestException as e:
+                flash('Enter Valid Location')
+                return redirect(url_for('register'))
+
+            session.permanent = True
+            id = registerNewMerchant(mysql, email, password, merchantName, address, contactNumber, registeredName)
+            insertLocation(mysql, latlong['lat'], latlong['lng'], id)
+            session['merchantID'] = id
             register_merchant(mysql, session['merchantID'])
             return redirect(url_for('registerCyber'))
     print("get")
