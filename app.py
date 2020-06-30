@@ -125,16 +125,6 @@ def register():
             flash('Email already registered')
             return redirect(url_for('register'))
         else:
-            '''params = {'address': "1600 Amphitheatre Parkway, Mountain View, CA",'key':geocode_api_key}
-            r = requests.get(geocode_url, params=params)
-            print(r)
-            print(r.url)
-            print(r.json())
-            results = r.json()['results']
-            print(results)
-            #location = results[0]['geometry']['location']
-            #print(location)'''
-            #return redirect(url_for('register')) #why this line?@Praj
             session.permanent = True
             id = registerNewMerchant(mysql, email, password,merchantName,address,contactNumber,registeredName)
             session['merchantID'] = id
