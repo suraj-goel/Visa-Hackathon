@@ -618,8 +618,7 @@ def b2bpay():
 @login_required
 def negotiation():
     choice = 'R'
-    #merchant_id = session['merchantID']
-    merchant_id = '1'
+    merchant_id = session['merchantID']
     allNegotiation =[]
     productList = []
     contactInfo = []
