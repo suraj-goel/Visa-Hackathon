@@ -173,9 +173,19 @@
             </div>
         </div>
         <div class="item">
+            <div class="carousel-caption">
+                <h1>Let's get connect Merchants</h1>
+                <br>
+                <button type="button" class="btn btn-default" onclick="getLogin()">Get Started</button>
+            </div>
             <img src="{{ url_for('static',filename='../common/img/snow.png') }}">
         </div>
         <div class="item">
+            <div class="carousel-caption">
+                <h1>Let's get connect Merchants</h1>
+                <br>
+                <button type="button" class="btn btn-default" onclick="getLogin()">Get Started</button>
+            </div>
             <img src="{{ url_for('static',filename='../common/img/red.png') }}">
         </div>
     </div>
@@ -199,7 +209,7 @@
             <img src="{{ url_for('static',filename='../common/img/visa.jpg') }}" class="img-responsive blink_me">
         </div>
         <div class="col-md-6">
-            <div class="card mt-100">
+            <div class="card mt-100" style="background-color: #f2f2f2">
                 <div class="card-body">
                     {% with messages = get_flashed_messages() %}
                     {% if messages %}
@@ -353,7 +363,7 @@
 
     }
     $('.carousel').carousel({
-        interval: 1000
+        interval: 500
     })
 </script>
 </body>

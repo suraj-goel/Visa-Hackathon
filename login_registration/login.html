@@ -121,9 +121,19 @@
         </div>
     </div>
         <div class="item">
+            <div class="carousel-caption">
+                <h1>Let's get connect Merchants</h1>
+                <br>
+                <button type="button" class="btn btn-default" onclick="getLogin()">Get Started</button>
+            </div>
              <img src="{{ url_for('static',filename='../common/img/snow.png') }}">
         </div>
         <div class="item">
+            <div class="carousel-caption">
+                <h1>Let's get connect Merchants</h1>
+                <br>
+                <button type="button" class="btn btn-default" onclick="getLogin()">Get Started</button>
+            </div>
             <img src="{{ url_for('static',filename='../common/img/red.png') }}">
         </div>
     </div>
@@ -140,11 +150,12 @@
 <div class="container" id="login/register">
     <div class="row">
         <div class="col-md-6">
+
             <img src="{{ url_for('static',filename='../common/img/visa.jpg') }}" class="img-responsive blink_me">
         </div>
-
         <div class="col-md-6">
-            <div class="card mt-100">
+            <h3 style="color: #faaa13;font-weight: bold"> LOGIN HERE! </h3>
+            <div class="card mt-100" style="background-color: #f2f2f2">
                 <div class="card-body ">
                     {% with messages = get_flashed_messages() %}
                     {% if messages %}
@@ -167,7 +178,7 @@
     </div>
 </div>
 <div class="container text-center">
-    <h2>What We Provide</h2>
+    <h2>What We Provide!</h2>
     <div class="row">
         <div class="col-sm-4">
             <img src="{{ url_for('static',filename='../common/img/html5.png') }}" id="icon">
@@ -288,7 +299,7 @@
 
     }
     $('.carousel').carousel({
-        interval: 1000
+        interval: 500
     })
 </script>
 </body>
