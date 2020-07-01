@@ -50,7 +50,14 @@ def insertLocation(mysql, lat, long, mid):
   mysql.connection.commit()
   cur.close()
 
-
+def updateLocation(mysql, lat, long, mid):
+  id = str(uuid.uuid1().int)
+  id = id[:20]
+  print(id)
+  cur = mysql.connection.cursor()
+  cur.execute(f"""UPDATE Location SET LocationID="{id}", Latitude="{lat}", Longitude="{long}" where MerchantID="{mid}";""")
+  mysql.connection.commit()
+  cur.close()
 
 
 

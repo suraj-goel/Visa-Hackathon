@@ -14,7 +14,7 @@ from search_merchants.searchMerchant import getCurrentLocation
 from place_order.displayProduct import displayAllProducts, displayAllOffers
 from search_merchants.searchProducts import getSearchResults
 # from place_order.displayCart import displayALLCart
-from login_registration.registerMerchant import checkIfExistingMerchant, registerNewMerchant, checkPayType, insertLocation
+from login_registration.registerMerchant import checkIfExistingMerchant, registerNewMerchant, checkPayType, insertLocation, updateLocation
 from login_registration.addressconversion import getCoordinates
 from accounts.validate_accounts import validation  # validate_accounts.py
 from place_order.displayCart import addToCart
@@ -358,7 +358,8 @@ def modify():
 @login_required
 def showCart(merchant_id):
     totalQuantity = 0
-    seller_id = session['mid']
+    seller_id = merchant_id
+    session['mid'] = seller_id
     qty = []
     ProductID = []
     Name = []
@@ -396,6 +397,7 @@ def showCart(merchant_id):
                 emailID = data[0]
                 contact = data[1]
                 pf = '1'
+                session['payment_flag'] =pf
                 l = len(qty)
                 for i in range(0,l):
                     totalQuantity += int(qty[i])
@@ -407,18 +409,20 @@ def showCart(merchant_id):
                 Name = session['Name']
                 Description = session['Description']
                 Price = session['Price']
-                Offers.append("No Discount")
                 discountPrice = session['discountPrice']
                 data = getMerchantInfo(mysql,seller_id)
                 emailID = data[0]
                 contact = data[1]
                 pf = '2'
+                session['payment_flag'] =pf
                 l = len(qty)
+
                 for i in range(0,l):
                     totalQuantity += int(qty[i])
                     totalCost += (int)(Price[i])
                     totalDiscountCost += (int)(discountPrice[i])
             elif type == 'negotiate':
+                print("I m here")
                 qty = session['qty']
                 ProductID = session['ProductID']
                 Name = session['Name']
@@ -429,11 +433,11 @@ def showCart(merchant_id):
                 emailID = data[0]
                 contact = data[1]
                 pf = '3'
+                session['payment_flag'] = pf
                 totalDiscountCost = session['finalPriceChange']
                 l = len(qty)
                 for i in range(0,l):
                     totalQuantity += int(qty[i])
-                    totalCost += (int)(Price[i])
 
         except Exception as e:
             print("exception details " + str(e))
@@ -467,7 +471,8 @@ def showCart(merchant_id):
         session['finalDiscountPrice'] = finalDiscountPrice
         session['fqty']=qty
         session['fProductID']=ProductID
-        session['payment_flag']= pf
+
+        print(session['payment_flag'])
         if (Type == 'Process Payment'):
             amount = finalDiscountPrice
             return render_template('./payment/payment.html', amount=amount)
@@ -512,7 +517,23 @@ def editAccountDetails():
             if "'" in password:
                 a, c = password.split("'")
                 password = a+chr(39)+c
+            try:
+                geocode_res = getCoordinates(address)
+                print(geocode_res)
+                if len(geocode_res) == 0:
+                    flash('Enter Valid Location')
+                    result = r[0]
+                    return render_template("./accounts/editAccountDetails.html", result=result)
+                print(len(geocode_res) ==0)
+                #print(geocode_res[0] == None)
+                latlong = geocode_res[0]['geometry']['location']
 
+            except requests.exceptions.RequestException as e:
+                flash('Enter Valid Location')
+                result = r[0]
+                return render_template("./accounts/editAccountDetails.html", result=result)
+
+            updateLocation(mysql, latlong['lat'], latlong['lng'], merchant_id)
             cur.execute(f"""update Merchant set Name = "{name}", RegisteredName = "{registeredName}", EmailID = "{email}", ContactNumber = "{contactno}", Address = "{address}", password = "{password}" where MerchantID="{merchant_id}";""")
             mysql.connection.commit()
             return redirect('/accounts/')
@@ -617,7 +638,7 @@ def cybersource():
             elif (session['payment_flag'] == '2'):
                 addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['requirementid'])
             else:
-                addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['negotiationid'])
+                addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['negotiationID'])
             updateSupplierInventory(mysql, ProductID,qty) #productID=ProductList
             return redirect(url_for('showAll'))
         else:
@@ -649,9 +670,11 @@ def b2bpay():
             if (session['payment_flag'] == '1'):
                 addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'))
             elif (session['payment_flag'] == '2'):
+                print("GOT"+ session['requirementid'])
                 addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['requirementid'])
             elif (session['payment_flag'] == '3'):
-                addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['negotiationid'])
+                print("GOT"+ session['negotiationID'])
+                addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['negotiationID'])
             updateSupplierInventory(mysql, ProductID,qty) #productID=ProductList
             return redirect(url_for('showAll'))
         else:
@@ -718,6 +741,7 @@ def negotiation():
             seller_id = request.form['supplier']
             session['mid'] = seller_id
             session['totalCost'] = request.form['Amount1']
+            print("SEND "+session['negotiationID'])
             return redirect(url_for('showCart',merchant_id=seller_id))
         except Exception as e:
             print("a1"+str(e))

@@ -5,7 +5,7 @@ import uuid
 # 2 is from requirement id is requirementid
 # 3 is from negotiation id is negotiation id
 # we need this to update negotiation and requirement table to say that payment is done
-def addToOrders(mysql,qty,ProductID,merchant_id,amount,currentDate,payment_flag='1',id=''):
+def addToOrders(mysql,qty,ProductID,merchant_id,amount,currentDate,payment_flag,id=''):
     orderID = uuid.uuid1()
     cart_id = uuid.uuid1()
     cur = mysql.connection.cursor()
@@ -13,7 +13,7 @@ def addToOrders(mysql,qty,ProductID,merchant_id,amount,currentDate,payment_flag=
     try:
         # print('INSERT INTO Cart(CartID, Total,Status, MerchantID) VALUES(%s,%s,%s,%s)',(cart_id,finalDiscountPrice,status,merchant_id))
         print(cart_id,amount,'P',merchant_id)
-        cur.execute("INSERT INTO Cart(CartID, Total,Status, MerchantID) VALUES(%s,%s,%s,%s)",(cart_id,amount,'P',merchant_id))
+        cur.execute("INSERT INTO Cart(CartID, Total,Status, MerchantID) VALUES('{}','{}','{}','{}')".format(cart_id,amount,'P',merchant_id))
         mysql.connection.commit()
         print("Added to Cart Table")
 
@@ -26,7 +26,7 @@ def addToOrders(mysql,qty,ProductID,merchant_id,amount,currentDate,payment_flag=
     for i in range(0,loop):
         try:
             if int(qty[i])>0:
-                cur.execute('INSERT INTO ProductCart(CartID, ProductID,Quantity) VALUES(%s,%s,%s)',(cart_id,ProductID[i],qty[i]))
+                cur.execute("INSERT INTO ProductCart(CartID, ProductID,Quantity) VALUES('{}','{}','{}')".format(cart_id,ProductID[i],qty[i]))
                 mysql.connection.commit()
         except Exception as e:
             print('*****')
@@ -39,12 +39,12 @@ def addToOrders(mysql,qty,ProductID,merchant_id,amount,currentDate,payment_flag=
         print("Added to Orders table")
         if payment_flag=='2' and id!='':
             # requirement update
-            cur.execute("update Requirement set Status='Done' where RequirementID=%s;",(id))
+            cur.execute("update Requirement set Status='Done' where RequirementID='{}'".format(id))
             mysql.connection.commit()
             print('completed requirement')
         elif payment_flag=='3' and id!='':
             #negotiation update
-            cur.execute("update Negotiation set Status='done' where NegotiationID=%s;",(id))
+            cur.execute("update Negotiation set Status='done' where NegotiationID='{}'".format(id))
             mysql.connection.commit()
             print('completed negotiation')
     except Exception as e:
@@ -52,3 +52,4 @@ def addToOrders(mysql,qty,ProductID,merchant_id,amount,currentDate,payment_flag=
         print("Problem in inserting in db"+ str(e))
         return None
     cur.close()
+    print("SUCCESSFUL PAYMENT")

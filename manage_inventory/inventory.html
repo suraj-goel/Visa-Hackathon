@@ -1,6 +1,20 @@
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./manage_inventory/inventory.css') }}">
 <script type="text/javascript" src="{{url_for('static',filename='./manage_inventory/inventory.js') }}"></script>
+
+<style>
+    .star::after {
+        background-color: #fff;
+        color: gold;
+        content: "\2605";
+        display: block;
+        font-size: 15px;
+        height: 25px;
+        text-align: center;
+        width: 25px;
+    }
+</style>
+
 <center>
     {% if message=='yes' %}
     <span style="color:green">Successfully added product</span>
@@ -101,7 +115,7 @@
                 <td style="background-color: white; border: none;"></td>
             </tr>
             <tr class="header">
-                <td colspan="2">
+                <td class="text" colspan="2">
                     <h4>{{item['Name']}}</h4> <br>
                     Description: {{item['Description']}} <br>
                     Category: {{item['Category']}} <br>
