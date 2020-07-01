@@ -4,7 +4,7 @@ def validation(mysql,mid,mname,regname,email,contact,address,password):
 		The details are entered in editAccountDetails.html by user
 		Validations include checking if username, email, door address, shop registered name is already existing
 	"""
-	flag = [0,0,0,0,0,0]
+	flag = [0,0,0,0,0]
 	cur = mysql.connection.cursor()
 	r = [{},[],0]
 	cur.execute("select * from Merchant where MerchantID = '"+mid+"';")
@@ -53,17 +53,6 @@ def validation(mysql,mid,mname,regname,email,contact,address,password):
 			flag[4]=1
 		else:
 			r[0]['Address'] = address
-	if result['Password']!=password:
-		if result['Password'] != password:
-			if "'" in password:
-				a, c = password.split("'")
-				password = a+chr(39)+c
-		cur.execute(f'''select * from Merchant where Password = "{password}";''')
-		res = cur.fetchone()
-		if res != None:
-			flag[5]=1
-		else:
-			r[0]['Password'] = password
 	for i in flag:
 		if i:
 			r[2] = 1
