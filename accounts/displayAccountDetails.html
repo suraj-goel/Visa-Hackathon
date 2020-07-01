@@ -1,30 +1,64 @@
 {% include "./common/header.html" %}
-<link rel="stylesheet" href="{{ url_for('static',filename='./accounts/accounts.css') }}">\
 <style>
 
     body {
         font-family: Arial, Helvetica, sans-serif;
-        font-size: 20px;
     }
 
-    * {
+    input[type="text"],input[type='email'],input[type='password'],
+    select,
+    textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
         box-sizing: border-box;
+        margin-top: 6px;
+        margin-bottom: 16px;
+        resize: vertical;
     }
-    button {
+
+    select{
+        width: 250px;
+    }
+
+    input[type="number"] {
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-top: 6px;
+        margin-bottom: 16px;
+        resize: vertical;
+    }
+
+    input[type="submit"] {
         color: white;
         padding: 12px 20px;
         border: none;
         border-radius: 4px;
         cursor: pointer;
         background-color: #fdbb0a;
+        width: 50%;
     }
 
-    button:hover {
+    input[type="submit"]:hover {
         cursor: pointer;
     }
+    table
+    {
+        padding: 10px;
+        border: 50px;
+        border-radius: 10px;
+        background-color: #f2f2f2;
+        box-shadow: #555555;
+        text-align: center;
+    }
 
-    label{
-        font-size: 100%;
+    .containerForm {
+        box-sizing: border-box;
+        border-radius: 5px;
+        padding: 15px;
     }
 </style>
 <script>
@@ -36,40 +70,65 @@
 <body>
 <center>
     <h1 style="color:#1a1f71; font-weight: bold;">Account Details</h1>
+
+        <div id="newForm" class="containerForm">
+            <table style="border-spacing: 40px 20px; border-collapse: initial;">
+                <tr>
+                    <td>
+                        <h4><label for="Name" style="font-weight: bold">Name : </label> </h4>
+                    </td>
+                    <td><h4> <label id="Name" style="width: 50%; background-color: white">{{ result['Name'] }}</label></h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4><label for="rName" style="font-weight: bold">Registered Name : </label> </h4>
+                    </td>
+                    <td><h4><label id="rName" style=" width: 50%; background-color: white " >{{ result['RegisteredName'] }}</label> </h4></td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4><label for="email" style="font-weight: bold">Email id : </label></h4>
+                    </td>
+                    <td>
+                        <h4><label id="email" style=" width: 50%; background-color: white">{{ result['EmailID'] }}</label></h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4><label for="contact" style="font-weight: bold">Contact number : </label></h4>
+                    </td>
+                    <td><h4><label id="contact" style="width: 50%; background-color: white">{{ result['ContactNumber'] }}</label></h4>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4><label for="add" style="font-weight: bold">Address : </label></h4>
+                    </td>
+                    <td><h4> <label id="add" style="width: 50%; background-color: white">{{ result['Address'] }}</label></h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4><label for="pass" style="font-weight: bold">Password : </label> </h4>
+                    </td>
+                    <td><h4>  <label id="pass" style=" width: 50%; background-color: white">
+                        {% for i in result['Password'] %}
+                        *
+                        {% endfor %}
+                    </label></h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6"><h4><input type="submit" onclick="editAccount()" value="Edit Above Details" ></h4>
+                    </td>
+                </tr>
+
+            </table>
+
+        </div>
+
 </center>
-    <div class="containerForm">
-        <p>
-            <label style="color: #1a1f71">Name : </label>
-            <label style="width: 50%; color: #fdbb0a">{{ result['Name'] }}</label>
-        </p>
-        <p>
-            <label style="color: #1a1f71">Registered Name : </label>
-            <label style=" width: 50%;color: #fdbb0a  " >{{ result['RegisteredName'] }}</label>
-        </p>
-        <p>
-            <label style="color: #1a1f71">Email id : </label>
-            <label style=" width: 50%;color: #fdbb0a">{{ result['EmailID'] }}</label>
-        </p>
-        <p>
-            <label style="color: #1a1f71">Contact Number : </label>
-            <label style="width: 50%;color: #fdbb0a">{{ result['ContactNumber'] }}</label>
-        </p>
-        <p>
-            <label style="color: #1a1f71">Address : </label>
-            <label style="width: 50%;color: #fdbb0a">{{ result['Address'] }}</label>
-        </p>
-        <p>
-            <label style="color: #1a1f71">Password : </label>
-            <label style=" width: 50%;color: #fdbb0a">
-            {% for i in result['Password'] %}
-                *
-            {% endfor %}
-            </label>
-        </p>
-        <br>
-        <button onclick="editAccount()">Edit Above Details</button>
-        <!--<input type="button" value="Edit Details" onclick="window.open('editUserDetails.html','_self')" /> -->
-        <br>
-    </div>
 </body>
 </html>
