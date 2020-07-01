@@ -1,4 +1,3 @@
-#import random
 import uuid
 
 def checkIfExistingMerchant(mysql,merchantEmail):

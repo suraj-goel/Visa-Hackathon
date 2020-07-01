@@ -1,9 +1,6 @@
 <!--
 Function of page:
-registration page 
-
-Description:
-Details include Merchant name, Registered shop name, email, password , contact number and address
+Registration and landing page
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -16,10 +13,11 @@ Details include Merchant name, Registered shop name, email, password , contact n
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static',filename='./register/register.css') }}">
 </head>
 <body onload="getLogin()">
 <nav class="navbar" style="background-color: #1a1f71; color:#FFF; height: 100px;">
-    <h2> BUSINESS LINKEDIN</h2>
+    <h2>BUSINESS LINKEDIN</h2>
 </nav>
 <!---slider-->
 <div id="myCarousel" class="carousel slide" data-ride="carousel" style="opacity: 75%;">
