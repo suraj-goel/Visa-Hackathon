@@ -26,12 +26,16 @@
         <ul class="nav navbar-nav navbar-center">
         <h2> BUSINESS LINKEDIN</h2>
         </ul>
+      <!--  <ul class="navbar-nav ml-auto">
+            <button id="myBtn1" type="button" class="btn btn-block btn-primary btn-lg" style=" transform: translatex(732%);background-color: #faaa13">Signup</button>
+        </ul>  -->
+
         <ul class="navbar-nav ml-auto">
-            <button id="myBtn" type="button" class="btn btn-block btn-primary btn-lg" style=" transform: translatex(-20%);background-color: #faaa13">SIGN IN</button>
+            <button id="myBtn" type="button" class="btn btn-block btn-primary btn-lg" style=" transform: translatex(-20%);background-color: #faaa13">Login</button>
         </ul>
     </nav>
 
-    <div id="myCarousel" class="carousel slide" data-ride="carousel" style="opacity: 75%;">
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
         <!---slider-->
 
         <ol class="carousel-indicators">
@@ -42,24 +46,31 @@
         <div class="carousel-inner" role="listbox">
 
             <div class="item active">
-                <img src="{{ url_for('static',filename='../common/img/mountains.png') }}">
+                <img src="{{ url_for('static',filename='../common/img/visa.jpg') }}" style="height: 500px;width: 100%">
                 <div class="carousel-caption">
-                    <h1>Let's get connect Merchants</h1>
+                  <!--  <h1>Let's get connect Merchants</h1>-->
                 </div>
             </div>
             <div class="item">
                 <div class="carousel-caption">
-                    <h1>Let's get connect Merchants</h1>
-
+                  <!--  <h1>Let's get connect Merchants</h1>
+                     -->
                 </div>
-                <img src="{{ url_for('static',filename='../common/img/snow.png') }}">
+                <img src="{{ url_for('static',filename='../common/img/inv22.jpg') }}" style="height: 500px;width: 100%">
             </div>
             <div class="item">
                 <div class="carousel-caption">
-                    <h1>Let's get connect Merchants</h1>
-
+                <!--    <h1>Let's get connect Merchants</h1>
+                     -->
                 </div>
-                <img src="{{ url_for('static',filename='../common/img/red.png') }}">
+                <img src="{{ url_for('static',filename='../common/img/inv1.png') }}" style="height: 500px;width: 100%">
+            </div>
+            <div class="item">
+                <div class="carousel-caption">
+                    <!--    <h1>Let's get connect Merchants</h1>
+                         -->
+                </div>
+                <img src="{{ url_for('static',filename='../common/img/inv8.jpg') }}" style="height: 500px;width: 100%">
             </div>
         </div>
 
@@ -111,7 +122,7 @@
         </div>
     </div>
     <div class="container text-center">
-        <h2>What We Provide!</h2>
+        <h2 style="color: #1a1f71"><b>What We Provide </b></h2>
         <!-- <h2> <input type="submit" name="SIGN UP" value="SIGN UP" style="border: none"></h2> -->
     </div>
 
@@ -140,7 +151,8 @@
             </div>
             <div class="col-md-6">
 
-                <img src="{{ url_for('static',filename='../common/img/bootstrap2.jpg') }}" class="img-responsive">
+                <img src="{{ url_for('static',filename='../common/img/inv26.jpg') }}" class="img-responsive">
+                <img src="{{ url_for('static',filename='../common/img/inv18.png') }}" class="img-responsive" style="width: 200px;">
             </div>
 
         </div>
@@ -161,7 +173,8 @@
                 </p>
             </div>
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <img src="{{ url_for('static',filename='../common/img/sass.png') }}" class="img-responsive">
+                <img src="{{ url_for('static',filename='../common/img/inv3.png') }}" class="img-responsive">
+                <img src="{{ url_for('static',filename='../common/img/inv6.jpg') }}" class="img-responsive">
             </div>
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="div3">
                 <h4>ADD TEXT HERE</h4>
@@ -176,16 +189,16 @@
                 </p>
             </div>
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <img src="{{ url_for('static',filename='../common/img/less.png') }}" class="img-responsive">
+                <img src="{{ url_for('static',filename='../common/img/inv2.jpg') }}" class="img-responsive" style="height: 150px;">
+                <img src="{{ url_for('static',filename='../common/img/inv4.jpg') }}" class="img-responsive">
             </div>
 
         </div>
     </div>
     <div class="container">
         <div class="row">
-            <div class="card col-lg-3 col-md-3 col-sm-6 col-xs-12 " style="width: 16rem;">
-                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/less.png') }}"
-                    alt="Card image cap">
+            <div class="card col-lg-3 col-md-3 col-sm-6 col-xs-12 " style="width: 18rem;">
+                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/inv5.jpg') }}"style="height: 220px;alt="Card image cap">
                 <div class="card-body ">
                     <h5 class="card-title"><b>Card title</b></h5>
                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
@@ -198,9 +211,8 @@
 
                 </div>
             </div>
-            <div class="card col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 16rem;">
-                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/less.png') }}"
-                    alt="Card image cap">
+            <div class="card col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 18rem;">
+                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/inv13.jpg') }}" style="height: 220px;" alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title"><b>Card title</b></h5>
                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
@@ -212,9 +224,8 @@
 
                 </div>
             </div>
-            <div class="card col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 16rem;">
-                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/less.png') }}"
-                    alt="Card image cap">
+            <div class="card col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 18rem;">
+                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/inv14.jpg') }}"style="height: 220px;alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title"><b>Card title</b></h5>
                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
@@ -226,9 +237,8 @@
 
                 </div>
             </div>
-            <div class="card col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 16rem;">
-                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/less.png') }}"
-                    alt="Card image cap">
+            <div class="card col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 18rem;">
+                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/inv20.jpg') }}" style="height: 220px;" alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title"><b>Card title</b></h5>
                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
@@ -248,8 +258,16 @@
             <div class="col-sm-4">
                 <h3>Contact Us</h3>
                 <br>
-                <h4>Our contact and email info here. </h4>
-
+            <!--    <h4>OUR CONTACT AND EMAIL INFO HERE: </h4>
+                <div style="border: 1px solid #d2d2d2">
+                <h5>console.pay()</h5>
+                <h5>Suraj Goel</h5>
+                <h5>Sahana Srinivasan</h5>
+                <h5>Gaurav Srivastava</h5>
+                <h5>Sankalp Dayal</h5>
+                <h5>Haridher Pandiyan</h5>
+                <h5>Prajwal S Belagavi</h5>
+                </div>  -->
             </div>
             <div class="col-sm-4">
                 <h3>Connect With Us.</h3>
@@ -262,7 +280,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-4">
-                    <img src="{{ url_for('static',filename='../common/img/bunny.png') }}" class="icon">
+                    <img src="{{ url_for('static',filename='../common/img/shop.png') }}" style="width: 300px;height: 300px; transform: translatey(-20%)" class="icon">
 
                 </div>
             </div>
