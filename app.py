@@ -549,8 +549,6 @@ def editAccountDetails():
                 flash("Contact Number already exists, please enter a new one.")
             if (r[1][4]):
                 flash("Address already exists, please enter a new one.")
-            if (r[1][5]):
-                flash("Password already exists, please enter a new one.")
             return render_template("./accounts/editAccountDetails.html", result=result)
     merchant_id =session['merchantID']
     cur.execute("select * from Merchant where MerchantID='{}'".format(merchant_id))  # scope problem
