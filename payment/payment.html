@@ -63,9 +63,11 @@
                 
                 });
             V.on("payment.cancel", function(payment)
-              {alert(JSON.stringify(payment)); });
+              {alert('Payment Cancelled'); });
             V.on("payment.error", function(payment, error)
-              {alert(JSON.stringify(error)); });
+              {
+               //   alert(JSON.stringify(error)); 
+                 });
          }
       </script>
    </head>
