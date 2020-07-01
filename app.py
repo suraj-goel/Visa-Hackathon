@@ -664,6 +664,7 @@ def negotiation():
         except Exception as e:
             print("Nofiter"+str(e))
         try:
+            Delete = request.form['Delete']
             negotiationID = request.form["negotiationID"]
             deleteNegotiation(mysql,negotiationID)
             return redirect(request.url)
@@ -716,6 +717,7 @@ def negotiationsupplier():
             negotiationID = request.form['negotiationID']
             NegAmount  = request.form['NegPrice']
             status = "accepted"
+            updateNegotiation(mysql,negotiationID,status,NegAmount)
             groupList = showNegotiation(mysql, merchant_id)
             contactInfo = groupList[0]
             sellCart = groupList[1]
@@ -731,7 +733,7 @@ def negotiationsupplier():
             NegAmount = request.form['NegPrice']
             print(negotiationID)
             status = "rejected"
-            print(updateNegotiation(mysql,negotiationID,status,NegAmount),status)
+            updateNegotiation(mysql,negotiationID,status,NegAmount)
             groupList = showNegotiation(mysql, merchant_id)
             contactInfo = groupList[0]
             sellCart = groupList[1]

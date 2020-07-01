@@ -22,7 +22,7 @@ def displayAllNegotiation(mysql,merchant_id):
                         "ProductCart.ProductID".format(i['NegotiationID']))
             products = cur.fetchall()
             productCartList.append(products)
-            cur.execute("select * from Merchant where MerchantID='{}'".format(b[0]['Product.MerchantID']))
+            cur.execute("select * from Merchant where MerchantID='{}'".format(products[0]['Product.MerchantID']))
             merchants_info = cur.fetchall()
             contactInfo.append(merchants_info)
     return [negotiationCollection,productCartList,contactInfo]
@@ -56,7 +56,7 @@ def displayNegotiationType(mysql,merchant_id,status):
                     "ProductCart.ProductID".format(i['NegotiationID']))
         products = cur.fetchall()
         productCartList.append(products)
-        cur.execute("select * from Merchant where MerchantID='{}'".format(b[0]['Product.MerchantID']))
+        cur.execute("select * from Merchant where MerchantID='{}'".format(products[0]['Product.MerchantID']))
         merchants_info = cur.fetchall()
         contactInfo.append(merchants_info)
     cur.close()
