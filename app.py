@@ -648,8 +648,6 @@ def b2bpay():
 @login_required
 def negotiation():
     choice = 'R'
-    #merchantID = '1'
-    #session['merchantID'] = merchantID
     merchant_id = session['merchantID']
     allNegotiation =[]
     productList = []
@@ -715,8 +713,7 @@ def negotiation():
 @app.route('/negotiationsupplier',methods=['GET','POST'])
 @login_required
 def negotiationsupplier():
-    merchant_id = '1'
-    session['merchantID'] = merchant_id
+    merchant_id = session['merchantID']
     groupList = showNegotiation(mysql, merchant_id)
 
     contactInfo = groupList[0]
