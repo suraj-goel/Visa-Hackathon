@@ -368,11 +368,15 @@ def showCart(merchant_id):
     discountPrice = []
     emailID = ""
     contact = ""
-    type = 'simple'
+    type  = "simple"
+    try:
+        type=session['type']
+    except Exception as e:
+        print("simpletype")
     totalCost = 0
     totalDiscountCost = 0
     loggmerchant_id = session['merchantID']
-    print(type)
+    print("S"+str(type))
     print(request.form)
     session['merchantID'] = loggmerchant_id
     pf = '0'
