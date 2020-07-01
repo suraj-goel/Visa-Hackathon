@@ -1,5 +1,13 @@
+/*
+ChatBot to automate inventory management using DiagloFlow
+Bot is added in the search page and can perform the following:
+1. view all products and product information
+2. add products stock
+3. remove product stock
+ */
+
 'use strict';
- 
+
 const functions = require('firebase-functions');
 const {WebhookClient} = require('dialogflow-fulfillment');
 const {Card, Suggestion} = require('dialogflow-fulfillment');
@@ -214,9 +222,6 @@ function getProductDetails(agent){
     });
   });
 }
-
-
-
   
   let intentMap = new Map();
   intentMap.set('Default Welcome Intent', welcome);
