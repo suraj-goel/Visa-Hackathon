@@ -1,24 +1,17 @@
 from functools import wraps
-#from flask_googlemaps import GoogleMaps
-#from flask_googlemaps import Map
 from datetime import datetime
 import jinja2
 import os
-import uuid
 from datetime import timedelta
-from flask import Flask, render_template, request
 from flask import *
 from flask import session
 from services.db.db_connection import set_connection
 from search_merchants.searchMerchant import getCurrentLocation
 from place_order.displayProduct import displayAllProducts, displayAllOffers
 from search_merchants.searchProducts import getSearchResults
-# from place_order.displayCart import displayALLCart
 from login_registration.registerMerchant import checkIfExistingMerchant, registerNewMerchant, checkPayType, insertLocation, updateLocation
 from login_registration.addressconversion import getCoordinates
-from accounts.validate_accounts import validation  # validate_accounts.py
-from place_order.displayCart import addToCart
-from accounts.validate_accounts import validation  # validate_accounts.py
+from accounts.validate_accounts import validation
 from place_order.displayCart import addToCart, getMerchantInfo
 from manage_inventory.SearchInventory import *
 from manage_inventory.addProduct import addNewProduct, getCategories
@@ -35,12 +28,13 @@ from manage_inventory.supplierupdater import *
 from manage_offers.displayOffers import *
 from orders_management.orderHistory import Delivered, AddRating
 import requests
-import geocoder
 from delivery_management.delivery import getDelivery,YourRatings
 from search_merchants.searchMerchantCategory import *
 from merchant_performance.merchant_performance import getPerformanceStats
 from services.visa_api_services import registerOnVTC,getAvailableMerchantControls,getMerchantControlRules,addMerchantControlRule
 
+
+# set up controller, session configurations and maps configurations
 app = Flask(__name__, static_folder='')
 app.jinja_loader = jinja2.ChoiceLoader([app.jinja_loader, jinja2.FileSystemLoader(['.'])])
 app.config['GOOGLEMAPS_KEY'] = ""
@@ -49,29 +43,21 @@ app.permanent_session_lifetime = timedelta(minutes=300)
 mysql = set_connection(app)
 geocode_api_key = 'AIzaSyAntxrxhQu11TxFD9wEe7JxxW1UZ0HQXR'
 geocode_url = 'https://maps.googleapis.com/maps/api/geocode/json'
-#https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyAntxrxhQu11TxFD9wEe7JxxW1UZ0HQXRY
-#GoogleMaps(app)
 
 
-# auth decorator
+## LOGIN AND REGISTRATION ##
+# auth decorator to make sure user logs in before accessing contents of website
 def login_required(function_to_protect):
     @wraps(function_to_protect)
     def wrapper(*args, **kwargs):
-        print("Login check url:",request.url)
-        #print(session['merchantID'])
         if 'merchantID' in session:
-            print("loggedIn")
-            print(session['merchantID'])
             id = session['merchantID']
             if request.path == '/register/' or request.path == '/login/':
-                print("redirect login or register to search")
                 return redirect('/search')
             else:
                 if 'pay_type' in session:
-                    print("pay_type")
                     return function_to_protect(*args, **kwargs)
                 else:
-                    print("pay_type not present in session")
                     c = checkPayType(mysql, id)
                     if c==True:
                         session.permanent = True
@@ -81,14 +67,11 @@ def login_required(function_to_protect):
                         return function_to_protect(*args, **kwargs)
                     else:
                         return redirect(url_for('registerCyber'))
-
         elif request.path == '/register/' or request.path == '/login/':
             return function_to_protect(*args, **kwargs)
         else:
-            #flash("Please log in")
             return redirect(url_for('login'))
     return wrapper
-
 
 
 @app.route('/login/', methods=['GET', 'POST'])
@@ -96,10 +79,8 @@ def login_required(function_to_protect):
 def login():
     if request.method == 'POST':
         session.pop('merchantID', None)
-
         email = request.form.get('email')
         password = request.form.get('password')
-
         cur = mysql.connection.cursor()
         cur.execute("select * from Merchant where EmailID='{}' and Password='{}';".format(email, password))
         users = cur.fetchone()
@@ -111,17 +92,19 @@ def login():
         else:
             flash('Incorrect Email and Password combination')
             return redirect(url_for('login'))
-
-        return redirect(url_for('login'))
     return render_template("./login_registration/login.html")
+
+
+@app.route('/logout/')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
+
 
 @app.route('/register/', methods=['GET', 'POST'])
 @login_required
 def register():
-    print("register")
     if request.method == 'POST':
-        #session.pop('user_id', None)
-
         email = request.form.get('email')
         merchantName = request.form.get('merchant_name')
         password = request.form.get('password')
@@ -132,25 +115,18 @@ def register():
 
         if password != confirmPassword:
             flash('Passwords do not match')
-            print("passwords do not match")
             return redirect(url_for('register'))
 
         if checkIfExistingMerchant(mysql,email):
-            print("email already exists")
             flash('Email already registered')
             return redirect(url_for('register'))
         else:
-
             try:
                 geocode_res = getCoordinates(address)
-                print(geocode_res)
                 if len(geocode_res) == 0:
                     flash('Enter Valid Location')
                     return redirect(url_for('register'))
-                print(len(geocode_res) ==0)
-                #print(geocode_res[0] == None)
                 latlong = geocode_res[0]['geometry']['location']
-
             except requests.exceptions.RequestException as e:
                 flash('Enter Valid Location')
                 return redirect(url_for('register'))
@@ -159,36 +135,189 @@ def register():
             id = registerNewMerchant(mysql, email, password, merchantName, address, contactNumber, registeredName)
             insertLocation(mysql, latlong['lat'], latlong['lng'], id)
             session['merchantID'] = id
-            #register_merchant(mysql, session['merchantID'])
             return redirect(url_for('registerCyber'))
-    print("get")
     return render_template("./login_registration/register1.html")
 
-@app.route('/logout/')
-def logout():
-    session.clear()
-    print(session,"logged-out")
-    return redirect(url_for('login'))
 
-@app.route('/addproduct', methods=['POST', 'GET'])
+## SEARCH MERCHANTS, PRODUCTS AND CATEGORY ##
+@app.route('/', methods=['POST', 'GET'])
+@app.route('/search', methods=['POST', 'GET'])
 @login_required
-def addproduct():
-    if request.method == 'POST':
-        print(request.form)
-        name = request.form['name']
-        description = request.form['description']
-        price = request.form['price']
-        quantity = request.form['quantity']
-        category = request.form.get('category')
-        if category == 'others':
-            category = request.form['other_category']
-        sell = request.form['sell']
-        merchantID = session['merchantID']
-        message = addNewProduct(name, description, price, quantity, category, sell, merchantID, mysql)
-        session['message_product_add'] = message
-    return redirect(url_for('inventory'))
+def showAll():
+    currentMerchantID =  session['merchantID']
+    currentLocation = getCurrentLocation(mysql, currentMerchantID)
+    if request.method == "POST":
+        search_option = request.form['search']
+        filter = request.form.get('offerbox')
+        radius = request.form['radius']
+        product = request.form['name']
+        data = getSearchResults(mysql, currentMerchantID, product, search_option, filter, radius)
+        return render_template('./search_merchants/search.html', data=data, currentLocation=currentLocation,
+                               search_option=search_option)
+    data = getSearchResults(mysql, currentMerchantID)
+    return render_template("./search_merchants/search.html", currentLocation=currentLocation, data=data)
 
 
+@app.route('/searchbycategory',methods=['POST', 'GET'])
+@login_required
+def searchbycategory():
+    currentMerchantID = session['merchantID']
+    currentLocation = getCurrentLocation(mysql, currentMerchantID)
+    data=[]
+    if request.method == "POST":
+        data=[]
+        category = request.form["name"]
+        radius = str(request.form['radius'])
+        categorycode = getMerchantCategoryCode(mysql,category)
+        if(len(categorycode)):
+            code = str(categorycode[0]['Code'])
+            try:
+                data = getMerchantsByMLOCAPI(code,radius,currentMerchantID,currentLocation['Latitude'],currentLocation['Longitude'])
+            except Exception as e:
+                print(e)
+    return render_template('./search_merchants/searchbycategory.html',data=data,currentLocation=currentLocation)
+
+
+## ORDER PLACEMENT AND CART MANAGEMENT ##
+Check = False
+def modify():
+    global Check
+    Check = True
+
+
+@app.route('/merchant/<merchant_id>', methods=['GET', 'POST'])
+@login_required
+def showPlaceOrder(merchant_id):
+    if request.method == 'GET':
+        currentSelectedMerchantID = merchant_id
+        session['mid'] = currentSelectedMerchantID
+        products = displayAllProducts(mysql, currentSelectedMerchantID)
+        offers = displayAllOffers(mysql, currentSelectedMerchantID)
+        return render_template("./place_order/place_order.html", products=products, offers=offers, len=len(products),
+                               merchantID=merchant_id)
+    else:
+        session['qty'] = request.form.getlist("qty[]")
+        session['ProductID'] = request.form.getlist("ProductID[]")
+        session['Name'] = request.form.getlist("Name[]")
+        session['Description'] = request.form.getlist("Description[]")
+        session['Price'] = request.form.getlist("Price[]")
+        session['offers'] = request.form.getlist("offers[]")
+        session['discountPrice'] = request.form.getlist("discountPrice[]")
+        session['type'] = 'simple'
+        return redirect(url_for('showCart', merchant_id=merchant_id))
+
+
+@app.route("/merchant/<merchant_id>/cart", methods=['GET', 'POST'])
+@login_required
+def showCart(merchant_id):
+    totalQuantity = 0
+    seller_id = merchant_id
+    session['mid'] = seller_id
+    qty = []
+    ProductID = []
+    Name = []
+    Description = []
+    Price = []
+    Offers = []
+    discountPrice = []
+    emailID = ""
+    contact = ""
+    type = session['type']
+    totalCost = 0
+    totalDiscountCost = 0
+    loggmerchant_id = session['merchantID']
+    session['merchantID'] = loggmerchant_id
+    if request.method == 'GET':
+        try:
+            if type == 'simple':
+                qty = session['qty']
+                ProductID = session['ProductID']
+                Name = session['Name']
+                Description = session['Description']
+                Price = session['Price']
+                Offers = session['offers']
+                discountPrice = session['discountPrice']
+                data = getMerchantInfo(mysql, seller_id)
+                emailID = data[0]
+                contact = data[1]
+                pf = '1'
+                session['payment_flag'] = pf
+                l = len(qty)
+                for i in range(0, l):
+                    totalQuantity += int(qty[i])
+                    totalCost += (int)(Price[i]) * (int)(qty[i])
+                    totalDiscountCost += (int)(discountPrice[i])
+            elif type == 'request':
+                qty = session['qty']
+                ProductID = session['ProductID']
+                Name = session['Name']
+                Description = session['Description']
+                Price = session['Price']
+                discountPrice = session['discountPrice']
+                data = getMerchantInfo(mysql, seller_id)
+                emailID = data[0]
+                contact = data[1]
+                pf = '2'
+                session['payment_flag'] = pf
+                l = len(qty)
+
+                for i in range(0, l):
+                    totalQuantity += int(qty[i])
+                    totalCost += (int)(Price[i])
+                    totalDiscountCost += (int)(discountPrice[i])
+            elif type == 'negotiate':
+                qty = session['qty']
+                ProductID = session['ProductID']
+                Name = session['Name']
+                Description = session['Description']
+                totalCost = session['totalCost']
+                seller_id = session['mid']
+                data = getMerchantInfo(mysql, seller_id)
+                emailID = data[0]
+                contact = data[1]
+                pf = '3'
+                session['payment_flag'] = pf
+                totalDiscountCost = session['finalPriceChange']
+                l = len(qty)
+                for i in range(0, l):
+                    totalQuantity += int(qty[i])
+        except Exception as e:
+            print("exception details " + str(e))
+        return render_template("./place_order/cart.html", merchantID=merchant_id, qty=qty, ProductID=ProductID,
+                               Name=Name, Description=Description, Price=Price, Offers=Offers,
+                               discountPrice=discountPrice, len=len(qty), totalQuantity=totalQuantity, emailID=emailID,
+                               contact=contact, type=type, totalDiscountCost=totalDiscountCost, totalCost=totalCost)
+    else:
+        ProductID = request.form.getlist("ProductId[]")
+        qty = request.form.getlist("qty[]")
+        Name = request.form.getlist("Name[]")
+        Description = request.form.getlist("Description[]")
+        Price = request.form.getlist("discountPrice[]")
+        Type = request.form.get("type")
+        finalPrice = request.form.get('finalPrice')
+        finalDiscountPrice = request.form.get('finalDiscountPrice')
+        NegotitatedRequestAmount = request.form.get('NegotiatedRequestAmount')
+        status = 'N'
+        if (Type == 'Process Payment'):
+            status = 'P'
+        addToCart(mysql, qty, ProductID, Name, Description, Price, loggmerchant_id, status, finalPrice,
+                  finalDiscountPrice, NegotitatedRequestAmount)
+        session['qty'] = []
+        session['ProductID'] = []
+        session['type'] = type
+        session['mid'] = seller_id
+        session['merchantID'] = loggmerchant_id
+        session['finalDiscountPrice'] = finalDiscountPrice
+        session['fqty'] = qty
+        session['fProductID'] = ProductID
+        if (Type == 'Process Payment'):
+            amount = finalDiscountPrice
+            return render_template('./payment/payment.html', amount=amount)
+        else:
+            return redirect(url_for('negotiation'))
+
+
+## INVENTORY MANAGEMENT ##
 @app.route('/inventory/', methods=['POST', 'GET'])
 @login_required
 def inventory():
@@ -210,11 +339,29 @@ def inventory():
                                message=message)
 
 
+@app.route('/addproduct', methods=['POST', 'GET'])
+@login_required
+def addproduct():
+    if request.method == 'POST':
+        name = request.form['name']
+        description = request.form['description']
+        price = request.form['price']
+        quantity = request.form['quantity']
+        category = request.form.get('category')
+        if category == 'others':
+            category = request.form['other_category']
+        sell = request.form['sell']
+        merchantID = session['merchantID']
+        message = addNewProduct(name, description, price, quantity, category, sell, merchantID, mysql)
+        session['message_product_add'] = message
+    return redirect(url_for('inventory'))
+
+
 @app.route('/inventory/edit/<productID>', methods=['POST', 'GET'])
 @login_required
 def editProduct(productID):
     productID = productID
-    c = getCategories(mysql)
+    categories = getCategories(mysql)
     if request.method == 'POST':
         name = request.form['name']
         description = request.form['description']
@@ -233,8 +380,11 @@ def editProduct(productID):
         query = "SELECT * FROM Product WHERE ProductID = '{}'".format(productID)
         cur.execute(query)
         data = cur.fetchall()
-        return render_template("./manage_inventory/editProduct.html", data=data[0], category=c, productID=productID)
+        cur.close()
+        return render_template("./manage_inventory/editProduct.html", data=data[0], category=categories, productID=productID)
 
+
+## DELIVERY MANAGEMENT ##
 @app.route('/delivered', methods=['POST'])
 @login_required
 def delivered():
@@ -243,6 +393,7 @@ def delivered():
     Delivered(mysql,orderid,merchantid)
     return redirect(url_for('orders'))
 
+
 @app.route('/rating',methods=['POST','GET'])
 @login_required
 def ratings():
@@ -250,6 +401,7 @@ def ratings():
     order=request.form['orderidrated']
     AddRating(mysql,order,rating)
     return redirect(url_for('orders'))
+
 
 @app.route('/delivery_management', methods=['GET', 'POST'])
 @login_required
@@ -262,6 +414,8 @@ def delivery_management():
     avg_ratings=YourRatings(mysql,merchantid)
     return render_template('./delivery_management/delivery_management.html',history=delivery,avg_ratings=avg_ratings,filter=delivered_filter)
 
+
+## ORDERS MANAGEMENT ##
 @app.route('/orders', methods=['POST', 'GET'])
 @login_required
 def orders():
@@ -272,6 +426,8 @@ def orders():
     history = getOrders(mysql, merchantid, delivered_filter)
     return render_template('./orders_management/order_management.html', history=history, filter=delivered_filter)
 
+
+## MERCHANR PERFORMANCE ##
 @app.route('/performance', methods=['POST', 'GET'])
 @login_required
 def performance():
@@ -279,207 +435,8 @@ def performance():
     data=getPerformanceStats(mysql,merchantid)
     return render_template('./merchant_performance/merchant_performance.html',data=data)
 
-@app.route('/', methods=['POST', 'GET'])
-@app.route('/search', methods=['POST', 'GET'])
-@login_required
-def showAll():
-    currentMerchantID =  session['merchantID']
-    currentLocation = getCurrentLocation(mysql, currentMerchantID)
-    if request.method == "POST":
-        search_option = request.form['search']
-        filter = request.form.get('offerbox')
-        radius = request.form['radius']
-        product = request.form['name']
-        data = getSearchResults(mysql, currentMerchantID, product, search_option, filter, radius)
-        return render_template('./search_merchants/search.html', data=data, currentLocation=currentLocation,
-                               search_option=search_option)
-    data = getSearchResults(mysql, currentMerchantID)
-    return render_template("./search_merchants/search.html", currentLocation=currentLocation, data=data)
 
-@app.route('/searchbycategory',methods=['POST', 'GET'])
-@login_required
-def searchbycategory():
-    currentMerchantID = session['merchantID']
-    currentLocation = getCurrentLocation(mysql, currentMerchantID)
-    data=[]
-    if request.method == "POST":
-        category = request.form["name"]
-        radius = str(request.form['radius'])
-        categorycode = getMerchantCategoryCode(mysql,category)
-        if(len(categorycode)):
-            print(categorycode[0]['Code'])
-            code = str(categorycode[0]['Code'])
-            try:
-                data = getMerchantsByMLOCAPI(code,radius,currentMerchantID,currentLocation['Latitude'],currentLocation['Longitude'])
-            except Exception as e:
-                print(e)
-                data = []
-        else:
-            data=[]
-
-
-    print(data)
-    return render_template('./search_merchants/searchbycategory.html',data=data,currentLocation=currentLocation)
-
-
-@app.route('/merchant/<merchant_id>', methods=['GET', 'POST'])
-@login_required
-def showPlaceOrder(merchant_id):
-    if request.method == 'GET':
-        currentSelectedMerchantID = merchant_id
-        session['mid'] = currentSelectedMerchantID
-        # get the currentSelectedMerchantID from function
-        products = displayAllProducts(mysql, currentSelectedMerchantID)
-        offers = displayAllOffers(mysql, currentSelectedMerchantID)
-        return render_template("./place_order/place_order.html", products=products, offers=offers, len=len(products),
-                               merchantID=merchant_id)
-    else:
-        session['qty'] = request.form.getlist("qty[]")
-        session['ProductID'] = request.form.getlist("ProductID[]")
-        session['Name'] = request.form.getlist("Name[]")
-        session['Description'] = request.form.getlist("Description[]")
-        session['Price'] = request.form.getlist("Price[]")
-        session['offers'] = request.form.getlist("offers[]")
-        session['discountPrice'] = request.form.getlist("discountPrice[]")
-        #session['mid'] = merchant_id
-        session['type'] = 'simple'
-        print(session['discountPrice'])
-        return redirect(url_for('showCart', merchant_id=merchant_id))
-
-
-Check = False
-
-def modify():
-    global Check
-    Check = True
-
-
-@app.route("/merchant/<merchant_id>/cart", methods=['GET', 'POST'])
-@login_required
-def showCart(merchant_id):
-    totalQuantity = 0
-    seller_id = merchant_id
-    session['mid'] = seller_id
-    qty = []
-    ProductID = []
-    Name = []
-    Description = []
-    Price = []
-    Offers = []
-    discountPrice = []
-    emailID = ""
-    contact = ""
-    type  = "simple"
-    try:
-        type=session['type']
-    except Exception as e:
-        print("simpletype")
-    totalCost = 0
-    totalDiscountCost = 0
-    loggmerchant_id = session['merchantID']
-    print("S"+str(type))
-    print(request.form)
-    session['merchantID'] = loggmerchant_id
-    pf = '0'
-    if request.method == 'GET':
-        try:
-            if type=='simple':
-                qty = session['qty']
-                ProductID = session['ProductID']
-                Name = session['Name']
-                Description = session['Description']
-                Price = session['Price']
-                Offers = session['offers']
-                discountPrice = session['discountPrice']
-                print("HERE")
-                data = getMerchantInfo(mysql, seller_id)
-                print(data)
-                emailID = data[0]
-                contact = data[1]
-                pf = '1'
-                session['payment_flag'] =pf
-                l = len(qty)
-                for i in range(0,l):
-                    totalQuantity += int(qty[i])
-                    totalCost += (int)(Price[i])*(int)(qty[i])
-                    totalDiscountCost += (int)(discountPrice[i])
-            elif type =='request':
-                qty = session['qty']
-                ProductID = session['ProductID']
-                Name = session['Name']
-                Description = session['Description']
-                Price = session['Price']
-                discountPrice = session['discountPrice']
-                data = getMerchantInfo(mysql,seller_id)
-                emailID = data[0]
-                contact = data[1]
-                pf = '2'
-                session['payment_flag'] =pf
-                l = len(qty)
-
-                for i in range(0,l):
-                    totalQuantity += int(qty[i])
-                    totalCost += (int)(Price[i])
-                    totalDiscountCost += (int)(discountPrice[i])
-            elif type == 'negotiate':
-                print("I m here")
-                qty = session['qty']
-                ProductID = session['ProductID']
-                Name = session['Name']
-                Description = session['Description']
-                totalCost = session['totalCost']
-                seller_id = session['mid']
-                data = getMerchantInfo(mysql,seller_id)
-                emailID = data[0]
-                contact = data[1]
-                pf = '3'
-                session['payment_flag'] = pf
-                totalDiscountCost = session['finalPriceChange']
-                l = len(qty)
-                for i in range(0,l):
-                    totalQuantity += int(qty[i])
-
-        except Exception as e:
-            print("exception details " + str(e))
-
-        return render_template("./place_order/cart.html", merchantID=merchant_id, qty=qty, ProductID=ProductID,
-                               Name=Name, Description=Description, Price=Price, Offers=Offers,
-                               discountPrice=discountPrice, len=len(qty), totalQuantity=totalQuantity, emailID=emailID,
-                               contact=contact,type=type,totalDiscountCost=totalDiscountCost,totalCost=totalCost)
-    else:
-        ProductID = request.form.getlist("ProductId[]")
-        qty = request.form.getlist("qty[]")
-        Name = request.form.getlist("Name[]")
-        Description = request.form.getlist("Description[]")
-        Price = request.form.getlist("discountPrice[]")
-        Type = request.form.get("type")
-        finalPrice = request.form.get('finalPrice')
-        finalDiscountPrice = request.form.get('finalDiscountPrice')
-        NegotitatedRequestAmount = request.form.get('NegotiatedRequestAmount')
-
-        status = 'N'
-        if (Type == 'Process Payment'):
-            status = 'P'
-
-        addToCart(mysql, qty, ProductID, Name, Description, Price, loggmerchant_id, status, finalPrice,
-                      finalDiscountPrice, NegotitatedRequestAmount)
-        session['qty'] = []
-        session['ProductID'] = []
-        session['type']=type
-        session['mid'] = seller_id
-        session['merchantID'] = loggmerchant_id
-        session['finalDiscountPrice'] = finalDiscountPrice
-        session['fqty']=qty
-        session['fProductID']=ProductID
-
-        print(session['payment_flag'])
-        if (Type == 'Process Payment'):
-            amount = finalDiscountPrice
-            return render_template('./payment/payment.html', amount=amount)
-        else:
-            return redirect(url_for('negotiation'))
-
-
+## ACCOUNT MANAGEMENT ##
 @app.route('/accounts/', methods=['GET', 'POST'])
 @login_required
 def displayaccountsdetails():
@@ -504,12 +461,10 @@ def editAccountDetails():
         address = request.form['address']
         password = request.form['password']
         r = validation(mysql, merchant_id, name, registeredName, email, contactno, address, password)
-
         if r[2] == 0:
             if "'" in address:
                 a, c = address.split("'")
                 address = a+chr(39)+c
-
             if "'" in registeredName:
                 a, c = registeredName.split("'")
                 registeredName = a+chr(39)+c
@@ -519,20 +474,15 @@ def editAccountDetails():
                 password = a+chr(39)+c
             try:
                 geocode_res = getCoordinates(address)
-                print(geocode_res)
                 if len(geocode_res) == 0:
                     flash('Enter Valid Location')
                     result = r[0]
                     return render_template("./accounts/editAccountDetails.html", result=result)
-                print(len(geocode_res) ==0)
-                #print(geocode_res[0] == None)
                 latlong = geocode_res[0]['geometry']['location']
-
             except requests.exceptions.RequestException as e:
                 flash('Enter Valid Location')
                 result = r[0]
                 return render_template("./accounts/editAccountDetails.html", result=result)
-
             updateLocation(mysql, latlong['lat'], latlong['lng'], merchant_id)
             cur.execute(f"""update Merchant set Name = "{name}", RegisteredName = "{registeredName}", EmailID = "{email}", ContactNumber = "{contactno}", Address = "{address}", password = "{password}" where MerchantID="{merchant_id}";""")
             mysql.connection.commit()
@@ -551,18 +501,19 @@ def editAccountDetails():
                 flash("Address already exists, please enter a new one.")
             return render_template("./accounts/editAccountDetails.html", result=result)
     merchant_id =session['merchantID']
-    cur.execute("select * from Merchant where MerchantID='{}'".format(merchant_id))  # scope problem
-    # "select * from Merchant where MerchantID = '"+str(session['Merchantid'])+"';"
+    cur.execute("select * from Merchant where MerchantID='{}'".format(merchant_id))
     result = cur.fetchone()
     cur.close()
     return render_template("./accounts/editAccountDetails.html", result=result)
 
 
+
+## PAYMENT MANAGEMENT ##
 @app.route('/registerCyber/', methods=['GET', 'POST'])
 def registerCyber():
     if 'merchantID' not in session:
         return redirect(url_for('login'))
-    merchant_id = session['merchantID']  # retrieve from session
+    merchant_id = session['merchantID']
     cur = mysql.connection.cursor()
     cur.execute("select * from CybersourceMerchant where MerchantID='{}';".format(merchant_id))
     result = cur.fetchone()
@@ -580,7 +531,7 @@ def registerCyber():
             cur.execute("insert into CybersourceMerchant(AggregatorID,CardAcceptorID,Name,MerchantID) values (%s,%s,%s,%s);",(aggregatorID, cardAcceptorID, name, merchant_id))
             cur.execute("select * from PaymentType where MerchantID='{}';".format(merchant_id))
             r = cur.fetchone()
-            if r == None:#if b2b is True, this won't execute so not an issue
+            if r == None:
                 cur.execute("INSERT INTO PaymentType (MerchantID, PayType) VALUES (%s, %s);", (merchant_id, '1'))
                 register_merchant(mysql, merchant_id, funding_acc_number)
             else:
@@ -589,9 +540,6 @@ def registerCyber():
         else:
             cur.execute("update CybersourceMerchant set Name = '" + name + "', AggregatorID = '" + aggregatorID + "', CardAcceptorID = '" + cardAcceptorID + "' where MerchantID='" + merchant_id + "';")
         mysql.connection.commit()
-        #session.permanent = True
-        #session['register_cyber'] = True
-        #return redirect('/accounts/')
         return redirect(url_for('showAll'))
     return render_template("./accounts/cyberSourceDetails.html", result=result, b2b=b2b)
 
@@ -614,14 +562,11 @@ def cybersource():
     ProductID=session['fProductID']
     sellerId = session['mid'] # why?
     merchant_id = session['merchantID']
-
     cur = mysql.connection.cursor()
     cur.execute("select AggregatorID,CardAcceptorID,Name from CybersourceMerchant where MerchantID='"+sellerId+"';")
     result = cur.fetchone()
     aggregatorID,cardAcceptorID,name = result['AggregatorID'],result['CardAcceptorID'],result['Name']
-
     if request.method == 'POST':
-        print(request.form)
         amount = request.form.getlist('amount')[0]
         username = request.form.getlist('username')[0]
         cardNumber = request.form.getlist('cardNumber')[0]
@@ -630,19 +575,16 @@ def cybersource():
         cvv = request.form.getlist('CVV')[0]
         status = simple_authorizationinternet(cardNumber,month,year,amount,aggregatorID,cardAcceptorID,username)
         if (status == 1):
-            print('Payment Authorized')
             if (session['payment_flag'] == '1'):
                 addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'))
             elif (session['payment_flag'] == '2'):
                 addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['requirementid'])
             else:
                 addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['negotiationID'])
-            updateSupplierInventory(mysql, ProductID,qty) #productID=ProductList
+            updateSupplierInventory(mysql, ProductID,qty)
             return redirect(url_for('showAll'))
         else:
-            print('Payment not authorized, please enter the correct details')
             flash("Some details were invalid, please enter the correct values.")
-        # pass the correct values recieved from session (refer this for more info @app.route("/merchant/<merchant_id>/cart",methods=['GET','POST']))
     return render_template("./payment/payment.html",amount=amount)
 
 
@@ -653,47 +595,64 @@ def b2bpay():
     qty = session['fqty']
     ProductID = session['fProductID']
     sellerId = session['mid']
-
     cur = mysql.connection.cursor()
     cur.execute("select AccountNumber from B2BDetails where MerchantID='"+sellerId+"';")
     accountNumber = cur.fetchone()['AccountNumber']
     if request.method == 'POST':
-        print(request.form)
         amount = request.form.getlist('amount')[0]
-        #buyerid = merchant_id, supplier_account_no = accountNumber
-        status = paymentProcessing(amount, merchant_id, accountNumber)#clientid is a default parameter but can be added
+        status = paymentProcessing(amount, merchant_id, accountNumber)
         if (status == 1):
-            print('Payment Authorized')
-            print(session['payment_flag'])
             if (session['payment_flag'] == '1'):
                 addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'))
             elif (session['payment_flag'] == '2'):
-                print("GOT"+ session['requirementid'])
                 addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['requirementid'])
             elif (session['payment_flag'] == '3'):
-                print("GOT"+ session['negotiationID'])
                 addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['negotiationID'])
-            updateSupplierInventory(mysql, ProductID,qty) #productID=ProductList
+            updateSupplierInventory(mysql, ProductID,qty)
             return redirect(url_for('showAll'))
         else:
-            print("Payment not authorized")
             flash("Error in payment, check account details again or try different payment")
     return render_template("./payment/payment.html",amount=amount)
 
+
+@app.route('/checkout', methods=['GET', 'POST'])
+@login_required
+def checkout():
+    qty=session['fqty']
+    ProductID=session['fProductID']
+    sellerId = session['mid'] # why?
+    merchant_id = session['merchantID']
+    amount  = session['finalDiscountPrice']
+    cur = mysql.connection.cursor()
+    status = 1
+    if (status == 1):
+        print('Payment Authorized')
+        if (session['payment_flag'] == '1'):
+            addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'))
+        elif (session['payment_flag'] == '2'):
+            addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['requirementid'])
+        else:
+            addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['negotiationID'])
+        updateSupplierInventory(mysql, ProductID, qty)  # productID=ProductList
+        return redirect(url_for('showAll'))
+    else:
+        print('Payment not authorized, please enter the correct details')
+        flash("Some details were invalid, please enter the correct values.")
+        # pass the correct values recieved from session (refer this for more info @app.route("/merchant/<merchant_id>/cart",methods=['GET','POST']))
+    return render_template("./payment/payment.html",amount=amount)
+
+
+## NEGOTIATION MANAGEMENT ##
 @app.route('/negotiation',methods=['GET','POST'])
 @login_required
 def negotiation():
     choice = 'E'
     merchant_id = session['merchantID']
-    allNegotiation =[]
-    productList = []
-    contactInfo = []
     gotList = displayAllNegotiation(mysql, merchant_id)
     productList = gotList[1]
     allNegotiation = gotList[0]
     contactInfo  = gotList[2]
     if (request.method == 'POST'):
-        print("nego")
         try:
             choice = request.form["filterbuyer"]
             if(choice!='E'):
@@ -705,14 +664,12 @@ def negotiation():
         except Exception as e:
             print("Nofiter"+str(e))
         try:
-            delete = request.form["Delete"]
             negotiationID = request.form["negotiationID"]
             deleteNegotiation(mysql,negotiationID)
             return redirect(request.url)
         except Exception as e:
             print("noD"+str(e))
         try:
-            gotToCart = request.form['addtocart2']
             session['type'] = 'negotiate'
             session['negotiationID'] = request.form['negotiationID']
             session['finalPriceChange'] = request.form['Amount2']
@@ -728,7 +685,6 @@ def negotiation():
             print("a2"+str(e))
 
         try:
-            goToCart = request.form['addtocart1']
             session['type'] = 'negotiate'
             session['negotiationID'] = request.form['negotiationID']
             session['finalPriceChange'] = request.form['Amount1']
@@ -739,7 +695,6 @@ def negotiation():
             seller_id = request.form['supplier']
             session['mid'] = seller_id
             session['totalCost'] = request.form['Amount1']
-            print("SEND "+session['negotiationID'])
             return redirect(url_for('showCart',merchant_id=seller_id))
         except Exception as e:
             print("a1"+str(e))
@@ -752,18 +707,15 @@ def negotiation():
 def negotiationsupplier():
     merchant_id = session['merchantID']
     groupList = showNegotiation(mysql, merchant_id)
-
     contactInfo = groupList[0]
     sellCart = groupList[1]
     Amount = groupList[2]
     loop = len(sellCart)
     if (request.method == 'POST'):
         try:
-            Approve = request.form['Approve']
             negotiationID = request.form['negotiationID']
             NegAmount  = request.form['NegPrice']
             status = "accepted"
-            print(updateNegotiation(mysql,negotiationID,status,NegAmount),status)
             groupList = showNegotiation(mysql, merchant_id)
             contactInfo = groupList[0]
             sellCart = groupList[1]
@@ -793,118 +745,8 @@ def negotiationsupplier():
     else:
         return render_template("./negotiation/negotiation.html",sup_items=sellCart,profile=1,contactInfo=contactInfo,loop=loop,Amount=Amount)
 
-@app.route('/search_requirement', methods=['POST'])
-@login_required
-def search_requirement():
-    merchantid=session['merchantID']
-    search=request.form['search_name']
-    print(search)
-    choice = 'P'
-    items = getSupplierRequestsSearch(mysql, merchantid,search)
-    sellProduct = allProductID(mysql,merchantid)
-    return render_template('./requirements/requirements.html', sup_items=items, choice=choice, profile=2,sellProduct=sellProduct)
 
-
-@app.route('/requirementssupplier', methods=['GET', 'POST'])
-@login_required
-def showsupplierrequirements():
-    merchantid = session['merchantID']
-    sellProduct = allProductID(mysql,merchantid)
-    items = getSupplierRequests(mysql, merchantid)
-    if request.method == 'POST':
-        try:
-            choice = request.form['filtersupplier']
-            items = getSupplierRequests(mysql, merchantid, choice)
-            print('$$', items)
-            return render_template('./requirements/requirements.html', sup_items=items, choice=choice, profile=2,sellProduct=sellProduct)
-        except Exception as e:
-            print("filtersupplier" + str(e))
-
-        try:
-            approve = request.form['Approve']
-            requirementid = request.form['requirementID']
-            productID = request.form['selectProduct']
-            approveDeal(mysql,requirementid,productID)
-            return redirect(request.url)
-        except Exception as e:
-            print("APPROVE" + str(e))
-
-        try:
-            reject = request.form['Reject']
-            requirementid = request.form['requirementID']
-            #rejectDeal(mysql,requirementid)
-            return redirect(request.url)
-        except Exception as e:
-            print("Reject" + str(e))
-        return render_template(url_for('requirements'))
-    else:
-        choice = 'P'
-        items = getSupplierRequests(mysql, merchantid, choice)
-        return render_template('./requirements/requirements.html', sup_items=items, choice=choice, profile=2,sellProduct=sellProduct)
-
-
-@app.route('/requirementsbuyer', methods=['GET', 'POST'])
-@login_required
-def showbuyerrequirements():
-    merchantid = session['merchantID']
-    items = getSupplierRequests(mysql, merchantid)
-    choice = 'R'
-    print("helloagain")
-    print(request.form)
-    if request.method == 'POST':
-        try:
-            choice = request.form['filterbuyer']
-            items = getBuyerRequests(mysql, merchantid, choice)
-            print(items)
-            return render_template('./requirements/requirements.html', buy_items=items, buyer_choice=choice, profile=3)
-        except Exception as e:
-            print("filterbuyer" + str(e))
-
-        try:
-            deleteRequest = request.form['Delete']
-            requirementID = request.form['requirementID']
-            deletePending(mysql,requirementID)
-            return redirect(request.url)
-        except Exception as e:
-            print("NO NOT DELETE"+ str(e))
-        try:
-            accept = request.form['request']
-            # acceptDeal(mysql,requirementID)
-            # change this to payment after payment module is finish
-            session['type'] = 'request'
-            session['requirement_payment']=True
-            session['ProductID'] = request.form.getlist('ProductID[]')
-            session['Name'] = request.form.getlist('Name[]')
-            session['Description'] = request.form.getlist('Description[]')
-            session['qty'] = request.form.getlist('qty[]')
-            #session['merchantID'] = request.form.get('merchantWhoAp')
-            session['PriceItem'] = request.form.getlist('PriceItem[]')
-            session['mid'] = request.form.get('merchantWhoAP')
-            session['requirementid'] = request.form.get('requirementID')
-            #session['mid'] = '1'
-            print(session['mid'])
-            seller_id = session['mid']
-            Price = []
-            print(session)
-            loop = len(session['PriceItem'])
-            print(loop)
-            print('yeah cart')
-            for i in range(0,loop):
-                Price.append((str)((int)(session['PriceItem'][i])*(int)(session['qty'][i])))
-            session['Price'] = Price
-            session['discountPrice'] = Price
-            return redirect(url_for('showCart',merchant_id=seller_id))
-        except Exception as e:
-            print("AC" + str(e))
-        return render_template(url_for("requirements"))
-
-    else:
-        choice = 'E'
-        items = getBuyerRequests(mysql, merchantid, choice)
-        print(items)
-    return render_template('./requirements/requirements.html', buy_items=items, buyer_choice=choice, profile=3)
-
-
+## REQUIREMENT MANAGEMENT ##
 @app.route('/requirements', methods=['GET', 'POST'])
 @login_required
 def requirements():
@@ -926,10 +768,94 @@ def requirements():
         return redirect(url_for('showbuyerrequirements'))
 
 
+@app.route('/search_requirement', methods=['POST'])
+@login_required
+def search_requirement():
+    merchantid=session['merchantID']
+    search=request.form['search_name']
+    choice = 'P'
+    items = getSupplierRequestsSearch(mysql, merchantid,search)
+    sellProduct = allProductID(mysql,merchantid)
+    return render_template('./requirements/requirements.html', sup_items=items, choice=choice, profile=2,sellProduct=sellProduct)
+
+
+@app.route('/requirementssupplier', methods=['GET', 'POST'])
+@login_required
+def showsupplierrequirements():
+    merchantid = session['merchantID']
+    sellProduct = allProductID(mysql,merchantid)
+    if request.method == 'POST':
+        try:
+            choice = request.form['filtersupplier']
+            items = getSupplierRequests(mysql, merchantid, choice)
+            print('$$', items)
+            return render_template('./requirements/requirements.html', sup_items=items, choice=choice, profile=2,sellProduct=sellProduct)
+        except Exception as e:
+            print("filtersupplier" + str(e))
+        try:
+            requirementid = request.form['requirementID']
+            productID = request.form['selectProduct']
+            approveDeal(mysql,requirementid,productID)
+            return redirect(request.url)
+        except Exception as e:
+            print("APPROVE" + str(e))
+        return render_template(url_for('requirements'))
+    else:
+        choice = 'P'
+        items = getSupplierRequests(mysql, merchantid, choice)
+        return render_template('./requirements/requirements.html', sup_items=items, choice=choice, profile=2,sellProduct=sellProduct)
+
+
+@app.route('/requirementsbuyer', methods=['GET', 'POST'])
+@login_required
+def showbuyerrequirements():
+    merchantid = session['merchantID']
+    if request.method == 'POST':
+        try:
+            choice = request.form['filterbuyer']
+            items = getBuyerRequests(mysql, merchantid, choice)
+            return render_template('./requirements/requirements.html', buy_items=items, buyer_choice=choice, profile=3)
+        except Exception as e:
+            print("filterbuyer" + str(e))
+        try:
+            requirementID = request.form['requirementID']
+            deletePending(mysql,requirementID)
+            return redirect(request.url)
+        except Exception as e:
+            print("NO NOT DELETE"+ str(e))
+        try:
+            session['type'] = 'request'
+            session['requirement_payment']=True
+            session['ProductID'] = request.form.getlist('ProductID[]')
+            session['Name'] = request.form.getlist('Name[]')
+            session['Description'] = request.form.getlist('Description[]')
+            session['qty'] = request.form.getlist('qty[]')
+            session['PriceItem'] = request.form.getlist('PriceItem[]')
+            session['mid'] = request.form.get('merchantWhoAP')
+            session['requirementid'] = request.form.get('requirementID')
+            seller_id = session['mid']
+            Price = []
+            loop = len(session['PriceItem'])
+            for i in range(0,loop):
+                Price.append((str)((int)(session['PriceItem'][i])*(int)(session['qty'][i])))
+            session['Price'] = Price
+            session['discountPrice'] = Price
+            return redirect(url_for('showCart',merchant_id=seller_id))
+        except Exception as e:
+            print("AC" + str(e))
+        return render_template(url_for("requirements"))
+
+    else:
+        choice = 'E'
+        items = getBuyerRequests(mysql, merchantid, choice)
+    return render_template('./requirements/requirements.html', buy_items=items, buyer_choice=choice, profile=3)
+
+
+## OFFER MANAGEMENT ##
 @app.route('/offers',methods=['GET', 'POST'])
 @login_required
 def showoffers():
-    merchantID = session['merchantID'] #is equal to logged in user
+    merchantID = session['merchantID']
     data = displayOffersPage(mysql,merchantID)
     cur=mysql.connection.cursor()
     cur.execute("SELECT Name FROM Product WHERE MerchantID = '{}'".format(merchantID))
@@ -941,27 +867,27 @@ def showoffers():
     product=[i['Name'] for i in list(cur.fetchall())]
     return render_template("./manage_offers/offers.html",data=data,product=product,message=message)
 
+
 @app.route('/addoffer',methods=['GET', 'POST'])
 @login_required
 def addoffer():
     if(request.method=='POST'):
-        # print(request.form)
         discount = request.form['percentage']
         info = request.form['info']
         date=request.form['date']
         quantity = request.form['quantity']
         selectedProducts = request.form.getlist('selectedProducts')
-        merchantID = session['merchantID'] #get from session when user is logged in
+        merchantID = session['merchantID']
         message = addoffersindb(mysql,merchantID,discount,info,date,quantity,selectedProducts)
         session['message_offer_add'] = message
     return redirect(url_for('showoffers'))
+
 
 @app.route('/offers/edit/<OfferID>',methods=['GET', 'POST'])
 @login_required
 def editoffer(OfferID):
     merchantID = session['merchantID'] #get from session
     if(request.method=='GET'):
-
         offerID = OfferID
         data = getOffer(mysql,offerID)
         productChecked=[i['Name'] for i in list(data['Products'])]
@@ -976,46 +902,16 @@ def editoffer(OfferID):
         date=request.form['date']
         quantity = request.form['quantity']
         selectedProducts = request.form.getlist('selectedProducts')
-        merchantID = session['merchantID'] #get from session when user is logged in
-        print(request.form)
+        merchantID = session['merchantID']
         message = updateoffersindb(mysql,merchantID,discount,info,date,quantity,selectedProducts,OfferID)
-        print(message)
         session['message_offer_add'] = message
         return redirect(url_for('showoffers'))
 
-@app.route('/checkout', methods=['GET', 'POST'])
-@login_required
-def checkout():
-    qty=session['fqty']
-    ProductID=session['fProductID']
-    sellerId = session['mid'] # why?
-    merchant_id = session['merchantID']
-    amount  = session['finalDiscountPrice']
-    cur = mysql.connection.cursor()
-    status = 1
-    if (status == 1):
-        print('Payment Authorized')
-        if (session['payment_flag'] == '1'):
-            addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'))
-        elif (session['payment_flag'] == '2'):
-            addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['requirementid'])
-        else:
-            addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['negotiationID'])
-        updateSupplierInventory(mysql, ProductID, qty)  # productID=ProductList
-        return redirect(url_for('showAll'))
-    else:
-        print('Payment not authorized, please enter the correct details')
-        flash("Some details were invalid, please enter the correct values.")
-        # pass the correct values recieved from session (refer this for more info @app.route("/merchant/<merchant_id>/cart",methods=['GET','POST']))
-    return render_template("./payment/payment.html",amount=amount)
 
-
-
-
+## TRANSACTION CONTROL MANAGEMENT ##
 @app.route('/vtc', methods=['GET', 'POST'])
 @login_required
 def vtc():
-
     data=[]
     if('pan' in session):
         pan = session['pan']
@@ -1061,7 +957,6 @@ def vtc():
                 decline = "true"
             else:
                 decline = "false"
-            print(alertThreshold,declineThreshold,selectedCategory,enabled,decline)
             controlRule = None
             if(selectedCategory == "global"):
                 controlRuleString = '''
@@ -1101,16 +996,11 @@ def vtc():
             if(controlRule):
                 addMerchantControlRule(documentID,controlRule)
                 msg = "yes"
-                
-
         except Exception as e:
             print(e)
             alertmsg = "problem adding control"
-        
-        
-
     return render_template("./transactionControl/transactionControl.html",pan=pan,items=data,alertmsg=alertmsg,categories = categories,msg=msg)
 
 if __name__ == '__main__':
-    # threaded allows multiple users (for hosting)
+    # threaded allows multiple users
     app.run(debug=True, threaded=True, port=5000)
