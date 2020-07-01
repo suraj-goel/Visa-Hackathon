@@ -34,10 +34,16 @@
         <button type="submit">Filter<i class="fa fa-filter"></i>
         </button>
     </form>
+
     {% if history %}
     <div class="container">
         <table class="table table-bordered">
             {% for item in history %}
+
+            <tr style="all: none;">
+                <td style="background-color: white; border: none;"></td>
+            </tr>
+
             <tr class="header">
                 <td colspan="2">
 
