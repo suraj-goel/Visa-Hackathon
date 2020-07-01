@@ -638,7 +638,7 @@ def cybersource():
             elif (session['payment_flag'] == '2'):
                 addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['requirementid'])
             else:
-                addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['negotiationid'])
+                addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['negotiationID'])
             updateSupplierInventory(mysql, ProductID,qty) #productID=ProductList
             return redirect(url_for('showAll'))
         else:
@@ -670,8 +670,10 @@ def b2bpay():
             if (session['payment_flag'] == '1'):
                 addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'))
             elif (session['payment_flag'] == '2'):
+                print("GOT"+ session['requirementid'])
                 addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['requirementid'])
             elif (session['payment_flag'] == '3'):
+                print("GOT"+ session['negotiationID'])
                 addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['negotiationID'])
             updateSupplierInventory(mysql, ProductID,qty) #productID=ProductList
             return redirect(url_for('showAll'))
@@ -739,6 +741,7 @@ def negotiation():
             seller_id = request.form['supplier']
             session['mid'] = seller_id
             session['totalCost'] = request.form['Amount1']
+            print("SEND "+session['negotiationID'])
             return redirect(url_for('showCart',merchant_id=seller_id))
         except Exception as e:
             print("a1"+str(e))
