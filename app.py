@@ -995,8 +995,13 @@ def checkout():
     status = 1
     if (status == 1):
         print('Payment Authorized')
-        addToOrders(mysql,qty,ProductID,merchant_id,amount,datetime.today().strftime('%Y-%m-%d'))
-        updateSupplierInventory(mysql, ProductID,qty) #productID=ProductList
+        if (session['payment_flag'] == '1'):
+            addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'))
+        elif (session['payment_flag'] == '2'):
+            addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['requirementid'])
+        else:
+            addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['negotiationid'])
+        updateSupplierInventory(mysql, ProductID, qty)  # productID=ProductList
         return redirect(url_for('showAll'))
     else:
         print('Payment not authorized, please enter the correct details')
