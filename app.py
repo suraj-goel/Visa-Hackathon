@@ -452,6 +452,7 @@ def showCart(merchant_id):
         finalPrice = request.form.get('finalPrice')
         finalDiscountPrice = request.form.get('finalDiscountPrice')
         NegotitatedRequestAmount = request.form.get('NegotiatedRequestAmount')
+
         status = 'N'
         if (Type == 'Process Payment'):
             status = 'P'
@@ -466,7 +467,7 @@ def showCart(merchant_id):
         session['finalDiscountPrice'] = finalDiscountPrice
         session['fqty']=qty
         session['fProductID']=ProductID
-        session['payment_flag']= '1'
+        session['payment_flag']= pf
         if (Type == 'Process Payment'):
             amount = finalDiscountPrice
             return render_template('./payment/payment.html', amount=amount)
