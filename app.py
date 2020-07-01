@@ -1000,7 +1000,7 @@ def checkout():
         elif (session['payment_flag'] == '2'):
             addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['requirementid'])
         else:
-            addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['negotiationid'])
+            addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['negotiationID'])
         updateSupplierInventory(mysql, ProductID, qty)  # productID=ProductList
         return redirect(url_for('showAll'))
     else:
