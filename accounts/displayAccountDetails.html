@@ -1,66 +1,12 @@
+<!--
+Function of page:
+To view and edit personal account details
+
+Description:
+Details include Merchant name, Registered shop name, email, password , contact number and address
+-->
 {% include "./common/header.html" %}
-<style>
-
-    body {
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
-    input[type="text"],input[type='email'],input[type='password'],
-    select,
-    textarea {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box;
-        margin-top: 6px;
-        margin-bottom: 16px;
-        resize: vertical;
-    }
-
-    select{
-        width: 250px;
-    }
-
-    input[type="number"] {
-        padding: 12px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box;
-        margin-top: 6px;
-        margin-bottom: 16px;
-        resize: vertical;
-    }
-
-    input[type="submit"] {
-        color: white;
-        padding: 12px 20px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        background-color: #fdbb0a;
-        width: 50%;
-    }
-
-    input[type="submit"]:hover {
-        cursor: pointer;
-    }
-    table
-    {
-        padding: 10px;
-        border: 50px;
-        border-radius: 10px;
-        background-color: #f2f2f2;
-        box-shadow: #555555;
-        text-align: center;
-    }
-
-    .containerForm {
-        box-sizing: border-box;
-        border-radius: 5px;
-        padding: 15px;
-    }
-</style>
+<link rel="stylesheet" href="{{ url_for('static',filename='./accounts/accounts.css') }}">
 <script>
     function editAccount() {
         var x = "/editaccountinfo/";
@@ -75,14 +21,14 @@
             <table style="border-spacing: 40px 20px; border-collapse: initial;">
                 <tr>
                     <td>
-                        <h4><label for="Name" style="font-weight: bold">Name : </label> </h4>
+                        <h4><label for="Name" style="font-weight: bold">Merchant name : </label> </h4>
                     </td>
                     <td><h4> <label id="Name" style="width: 50%; background-color: white">{{ result['Name'] }}</label></h4>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <h4><label for="rName" style="font-weight: bold">Registered Name : </label> </h4>
+                        <h4><label for="rName" style="font-weight: bold">Registered shop name : </label> </h4>
                     </td>
                     <td><h4><label id="rName" style=" width: 50%; background-color: white " >{{ result['RegisteredName'] }}</label> </h4></td>
                 </tr>
@@ -124,11 +70,8 @@
                     <td colspan="6"><h4><input type="submit" onclick="editAccount()" value="Edit Above Details" ></h4>
                     </td>
                 </tr>
-
             </table>
-
         </div>
-
 </center>
 </body>
 </html>

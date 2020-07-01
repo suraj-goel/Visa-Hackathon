@@ -1,4 +1,9 @@
 def validation(mysql,mid,mname,regname,email,contact,address,password):
+	"""
+		To perform validations on editing account details
+		The details are entered in editAccountDetails.html by user
+		Validations include checking if username, email, door address, shop registered name is already existing
+	"""
 	flag = [0,0,0,0,0,0]
 	cur = mysql.connection.cursor()
 	r = [{},[],0]
@@ -22,7 +27,7 @@ def validation(mysql,mid,mname,regname,email,contact,address,password):
 		if res != None:
 			flag[1]=1
 		else:
-			r[0]['RgisteredName'] = regname
+			r[0]['RegisteredName'] = regname
 	if result['EmailID']!=email:
 		cur.execute("select * from Merchant where EmailID ='"+email+"';")
 		res = cur.fetchone()
