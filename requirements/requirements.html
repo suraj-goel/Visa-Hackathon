@@ -93,23 +93,25 @@
                 padding: 15px;
             }
         </style>
+
         <center>
             <h1 style="color:#1a1f71">Create Your Request</h1>
         </center>
+
         <form name="requirementForm" action="" onsubmit="return validateForm()" method="post">
 
             <div id="requestForm" class="containerForm ">
-                <label for="title1" style="color: #1a1f71;">Title: </label>
+                <label for="title1">Title: </label>
                 <input type="text" name="title" id="title1" placeholder="Item Name" required /><br>
 
-                <label for="description" style="color: #1a1f71;">Description: </label><br>
+                <label for="description">Description: </label><br>
                 <textarea id="description" name="description" placeholder="Write About Your Requirement..."></textarea>
 
-                <label for="Quantity" style="color: #1a1f71;">Quantity Required: </label>
+                <label for="Quantity">Quantity Required: </label>
                 <input type="number" name="Quantity" id="Quantity" style="height:50px;width: 20%;" min="1"
                     placeholder="Quantity Required" required /> <br>
 
-                <label for="Price" style="color: #1a1f71;">Amount in Rs: &emsp;&ensp; </label>
+                <label for="Price">Amount in Rs: &emsp;&ensp; </label>
                 <input type="number" name="ExpectPrice" id="Price" style="height:50px;width: 20%"
                     placeholder="Expected Amount" />
                 <br><br>
@@ -148,17 +150,17 @@
                 </select>
                 <input type="submit" class="button" onclick="javascript: form.action='/requirementssupplier';"
                     value="Submit">
-            </form><br><br><br>
+            </form><br>
             {% if choice=='A' %}
-            <h1 style="color: #1a1f71;">Approved by buyer</h1>
+            <h3>Approved by buyer</h3>
             {% elif choice=='R' %}
-            <h1 style="color: #1a1f71;">Rejected by buyer</h1>
+            <h3>Rejected by buyer</h3>
             {% elif choice=='W' %}
-            <h1 style="color: #1a1f71;">Approved by you and pending buyer's response</h1>
+            <h3>Approved by you and pending buyer's response</h3>
             {% elif choice=='E' %}
-            <h1 style="color: #1a1f71;">All Approved by you</h1>
+            <h3>All Approved by you</h3>
             {% else %}
-            <h1 style="color: #1a1f71;">Open posts</h1><br>
+            <h3>Open posts</h3><br>
             <form class="navbar-form" action="/search_requirement" method="post">
                 <input type="text" name="search_name" placeholder="Search by requirement name" id="check">
                 <button type="submit" style="height: 7%; width: 10%; margin-top:6px;" id="search"> Search &nbsp; <i
@@ -295,8 +297,7 @@
                 </table>
             </div>
             {% else%}
-            <br /><br /><br />
-            <h2 style="color: #1a1f71;"> Could not find any match</h2>
+            <h3> Could not find any match</h3>
 
             {% endif %}
         </div>
@@ -326,18 +327,18 @@
                     onclick="javascript: form.action='/requirementsbuyer';">
             </form>
             {% if buyer_choice=='A' %}
-            <h2 style="color: #1a1f71;">Accepted</h2>
+            <h3>Accepted</h3>
             {% elif buyer_choice=='D' %}
-            <h2 style="color: #1a1f71;">Completed requests</h2>
+            <h3>Completed requests</h3>
             {% elif buyer_choice=='E' %}
-            <h2 style="color: #1a1f71;">All requests</h2>
+            <h3>All requests</h3>
             {% elif buyer_choice=='R' %}
-            <h2 style="color: #1a1f71;">Requests pending</h2>
+            <h3>Requests pending</h3>
             {% else %}
-            <h2 style="color: #1a1f71;">Requests pending</h2>
+            <h3>Requests pending</h3>
             {% endif %}
             {% if buy_items %}
-            <h2 style="color: #1a1f71;"></h2>
+            <h3></h3>
             <div class="container">
                 <table class="table table-bordered">
                     {% for item in buy_items %}
@@ -414,7 +415,7 @@
                 </table>
             </div>
             {% else %}
-            <h2 style="color: #1a1f71;"> Could not find any match</h2>
+            <h3> Could not find any match</h3>
             {% endif %}
         </div>
     </center>
