@@ -261,14 +261,14 @@ def MerchantMeasurement(MCC = '5812'):
     }
     }
     ''')
-    r = requests.post(url,
-                      cert=cert,
-                      headers=header,
-                      auth=auth,
-                      json=p)
-    res=r.json()
-    data={}
     try:
+        r = requests.post(url,
+                          cert=cert,
+                          headers=header,
+                          auth=auth,
+                          json=p,timeout=1)
+        res=r.json()
+        data={}
         res = res['response']['responseData'][0]
         data['fraud_checked_sales_growth']=res['fraudChbktoSalesGrowthYoY']
         data['fraud_checked_to_Sales_Ratio']=res['fraudChbktoSalesRatio']
