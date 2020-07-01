@@ -685,7 +685,7 @@ def b2bpay():
 @app.route('/negotiation',methods=['GET','POST'])
 @login_required
 def negotiation():
-    choice = 'R'
+    choice = 'E'
     merchant_id = session['merchantID']
     allNegotiation =[]
     productList = []
