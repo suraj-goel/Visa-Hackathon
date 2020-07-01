@@ -358,7 +358,6 @@ def modify():
 @login_required
 def showCart(merchant_id):
     totalQuantity = 0
-    session['mid'] = merchant_id
     seller_id = session['mid']
     qty = []
     ProductID = []
