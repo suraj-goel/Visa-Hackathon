@@ -1,16 +1,19 @@
+<!--
+Function of page:
+To edit product present in inventory.
+-->
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./manage_inventory/inventory.css') }}">
 <script type="text/javascript" src="{{url_for('static',filename='./manage_inventory/inventory.js') }}"></script>
-<center>
+<body>
+    <center>
     {% if message=='yes' %}
-    <span style="color:green">Successfully Edited product</span>
+        <span style="color:green">Successfully Edited product</span>
     {% endif %}
     {% if message=='no' %}
-    <span style="color:red;"> Already exists. Edit the product to change the quantity or sell options </span>
+        <span style="color:red;"> Already exists. Edit the product to change the quantity or sell options </span>
     {% endif %}
     <h1 style="color: #1a1f71;">Edit Product</h1>
-    
-
     <form id="form" method="post" style="border: none;">
         <div id="newForm" class="containerForm">
             <table border="0" style="border-spacing: 10px 15px; border-collapse: initial;">
@@ -18,29 +21,32 @@
                     <td>
                         <h4>Product name </h4>
                     </td>
-                    <td> <input type="text" name="name" required value="{{data['Name']}}">
+                    <td>
+                        <input type="text" name="name" required value="{{data['Name']}}">
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <h4>Product Description</h4>
                     </td>
-                    <td><textarea name="description" required>{{data["Description"]}}</textarea></td>
+                    <td>
+                        <textarea name="description" required>{{data["Description"]}}</textarea>
+                    </td>
                 </tr>
                 <tr>
                     <td>
                         <h4>Price per piece</h4>
                     </td>
-                    <td> <input type="number" min='0' name="price" id='price' value="{{data['Price']}}"
-                            onchange="validate(this.id)" required>
+                    <td>
+                        <input type="number" min='0' name="price" id='price' value="{{data['Price']}}" onchange="validate(this.id)" required>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <h4>Quantity</h4>
                     </td>
-                    <td><input type="number" min='0' name="quantity" id='quantity' value="{{data['Quantity']}}"
-                            onchange="validate(this.id)" required>
+                    <td>
+                        <input type="number" min='0' name="quantity" id='quantity' value="{{data['Quantity']}}" onchange="validate(this.id)" required>
                     </td>
                 </tr>
                 <tr>
@@ -53,9 +59,9 @@
                                 onchange="checkvalue(this.value)">
                                 <option value="{{data['Category']}}">{{data['Category']}}</option>
                                 {% for i in category %}
-                                <option value="{{i}}">{{i}}</option>
+                                    <option value="{{i}}">{{i}}</option>
                                 {% endfor %}
-                                <option value="others">Others</option>
+                                    <option value="others">Others</option>
                             </select>
                         </span>
                     </td>
@@ -65,7 +71,6 @@
                 <h4 for="other_category">Enter your category</h4><br>
                 <input type="text" name="other_category" value=''>
             </div><br><br>
-
             <input type="radio" name="sell" value="1" checked> <b> Show as selling to other merchants</b><br>
             <input type="radio" name="sell" value="0"> <b> Add to inventory without showing to other
                 merchants</b><br><br>
@@ -73,4 +78,5 @@
         </div>
     </form>
 </center>
+</body>
 </html>

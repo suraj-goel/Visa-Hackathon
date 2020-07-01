@@ -323,9 +323,20 @@ textarea {
 .star {
   display: inline-block;
   float: left;
-  height: 25px;
+  height: 30px;
   margin: 0;
-  width: 25px;
+  width: 30px;
+}
+
+.star::after {
+  background-color: #ffffff;
+  color: gold;
+  content: "\2605";
+  display: block;
+  font-size: 20px;
+  height: 30px;
+  text-align: center;
+  width: 30px;
 }
 
 .star:checked::after {
@@ -338,12 +349,12 @@ textarea {
 }
 
 .star-rating:hover .star::after {
-  color: gold;
+  color: #1a1f71;
   content: "\2606"; /* use an open star on hover */
   font-size: 15px;
 }
 
-.star1 {
+.bigstar {
   display: inline-block;
   float: left;
   height: 45px;
@@ -351,22 +362,18 @@ textarea {
   width: 45px;
 }
 
-.star1::after {
-  background-color: #fff;
+.bigstar::after {
   color: #1a1f71;
-  content: "\2605";
-  display: block;
-  font-size: 45px;
+  font-size: 35px;
   height: 45px;
-  text-align: center;
   width: 45px;
 }
 
-.star1:checked::after {
+.bigstar:checked::after {
   color: #1a1f71;
 }
 
-.star1:checked ~ .star1::after,
-.star-rating:hover .star1:hover ~ .star1::after {
+.bigstar:checked ~ .bigstar::after,
+.star-rating:hover .bigstar:hover ~ .bigstar::after {
   color: grey;
 }

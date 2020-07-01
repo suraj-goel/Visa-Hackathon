@@ -1,0 +1,89 @@
+.navbar {
+    margin-bottom: 0;
+    border-radius: 0;
+    background-color: #1a1f71;
+    color: #FFF;
+    padding: 1% 0;
+    font-size: 1.2em;
+    border: 0;
+}
+.navbar-brand{
+    float: left;
+    min-height: 55px;
+    padding: 0 15px 5px;
+}
+.navbar-inverse .navbar-nav .active a, .navbar-inverse .navbar-nav .active a:focus,
+.navbar-inverse .navbar-nav .active a:hover{
+    color: #FFF;
+    background-color: #1a1f71;
+}
+.carousel-caption {
+    top: 50%;
+    transform: translateY(-50%);
+    text-transform: uppercase;
+}
+.btn {
+    font-size: 18px;
+    color: #FFF;
+    padding: 12px 22px;
+    background: #1a1f71;
+    border: 2px solid #FFF;
+}
+
+.container {
+    margin: 4% auto;
+
+}
+#icon {
+    max-width: 200px;
+    margin: 1% auto;
+    min-height: 200px;
+    max-height: 400px;
+}
+footer {
+    width: 100%;
+    background-color: #fdbb0a;
+    padding: 5%;
+    color: #FFF;
+}
+.fa {
+    padding: 15px;
+    font-size: 25px;
+    color: #FFF;
+}
+.fa:hover {
+    color: #D5D5D5;
+    text-decoration: none;
+}
+.blink_me {
+    animation: blinker 1s linear infinite;
+}
+input[type="submit"]:hover{
+    background-color: #faaa13;
+    text-decoration: none;
+    border: #faaa13;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
+@media(max-width: 900px) {
+    .fa {
+        font-size: 20px;
+        padding: 10px;
+    }
+
+}
+@media(max-width: 600px) {
+    .carousel-caption {
+        display: none;
+    }
+    #icon{
+        max-width: 150px;
+    }
+    h2{
+        font-size: 1.7em;
+    }
+}

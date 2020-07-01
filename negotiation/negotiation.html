@@ -1,52 +1,54 @@
+<!--
+Function of page:
+To display buyer and supplier profile for complete negotiation handling including displaying details and actions
+-->
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./negotiation/negotiation.css') }}">
 <script type="text/javascript" src="{{url_for('static',filename='./negotiation/negotiation.js') }}"></script>
+<script>
+    function goLocation1() {
+        return window.location.href = "/negotiationsupplier";
+    }
+    function goLocation2() {
+        return window.location.href = "/negotiation";
+    }
+    function justUpdate(id1, id2, id3) {
+        var x1 = document.getElementById("negotiationID");
+        x1.value = id1;
+        var x2 = document.getElementById("neg");
+        x2.value = id2;
+        var x3 = document.getElementById("total");
+        x3.value = id3;
+    }
+    function NameChange(Name) {
+        console.log(Name);
+        document.getElementById("formName").name = Name;
+    }
+</script>
 
 <body onload="showThis({{profile}})">
-
+    <!--side bar -->
     <div>
-        <ul class="split left">
-            <br><br>
+        <ul class="split left"><br><br>
             <li>
                 <div class="dropdown1">
                     <button class="dropbtn1" onclick=" goLocation1()">Supplier Profile</button>
                 </div>
-            </li>
-            <br><br><br>
+            </li><br><br><br>
             <li>
                 <div class="dropdown1">
                     <button class="dropbtn1" onclick="goLocation2()">Buyer Profile&emsp;</button>
                 </div>
             </li>
-
         </ul>
-        <script>
-            function goLocation1() {
-                return window.location.href = "/negotiationsupplier";
-            }
-            function goLocation2() {
-                return window.location.href = "/negotiation";
-            }
-        </script>
     </div>
-    <script>
-        function justUpdate(id1, id2, id3) {
-            var x1 = document.getElementById("negotiationID");
-            x1.value = id1;
-            var x2 = document.getElementById("neg");
-            x2.value = id2;
-            var x3 = document.getElementById("total");
-            x3.value = id3;
-        }
-    </script>
     <center>
+        <!--supplier profile -->
         <div id="thisDiv1" style="display: none" class="split1 right">
-            <h1>Your supplier profile for requirements</h1>
-            <br><br><br>
-            <h1>Negotiation Requests</h1><br>
-
+            <h1 style="color: #1a1f71;">Your supplier profile for requirements</h1>
+            <br>
+            <h3>Negotiation Requests</h3><br>
             {% if contactInfo %}
-
             <div class="container">
                 <table class="table table-bordered">
                     {% for item in contactInfo %}
@@ -55,7 +57,6 @@
                     </tr>
                     <tr class="header">
                         <td colspan="4">
-
                             <h3><b>Negotiation Amount Request: {{sup_items[loop.index-1][0]['Price']}} </b></h3><span
                                 style="float:right;"></span>
 
@@ -65,7 +66,6 @@
                                 {% else %}{{item[0]['RegisteredName']}} {% endif %}
                             </h5>
                         </td>
-
                     </tr>
                     <tr>
                         <td colspan="4"> Cart Details: </td>
@@ -73,8 +73,8 @@
                     <tr>
                         <td colspan="2">Name </td>
                         <td colspan="2">Quantity </td>
-
-                        {% for items in sup_items[loop.index-1] %}
+                    </tr>
+                    {% for items in sup_items[loop.index-1] %}
                     <tr>
                         <td colspan="2">
                             {{items['Name']}}
@@ -83,17 +83,16 @@
                             {{items['Quantity']}}
                         </td>
                     </tr>
-
                     {%endfor%}
                     <tr>
-
                         <form method="post" action="">
                             <input type="hidden" id="negotiationID" name="negotiationID"
                                 value="{{sup_items[loop.index-1][0]['NegotiationID']}}">
                             <td colspan="2"> <input type="submit" name="Approve" value="Approve">
                                 &nbsp; &nbsp; Negotiate Amount Rs:
                                 <input type="number" id="neg" name="NegPrice" style="width: 20%"
-                                    value="{{sup_items[loop.index-1][0]['Price']}}"> &nbsp; &nbsp; Original Amount: Rs <b id="total">
+                                    value="{{sup_items[loop.index-1][0]['Price']}}"> &nbsp; &nbsp; Original Amount: Rs
+                                <b id="total">
                                     {{sup_items[loop.index-1][0]['Total']}}</b> </td>
                             <td colspan="2"> <input type="submit" name="Reject" value="Reject"></td>
                         </form>
@@ -102,12 +101,12 @@
                 </table>
             </div>
             {% else %}
-            <h2> No Requests</h2>
+            <h3> No Requests</h3>
             {% endif %}
         </div>
+        <!--buyer profile -->
         <div id="thisDiv2" style="display: none" class="split1 right">
-
-            <h1>Your buyer profile for Negotiation</h1>
+            <h1 style="color: #1a1f71;">Your buyer profile for Negotiation</h1>
             <form method="post" action="">
                 <select name="filterbuyer">
                     {% if buyer_choice=='R' %}
@@ -130,18 +129,18 @@
                 <input type="submit" value="filter" class="button" onclick="javascript: form.action='/negotiation';">
             </form>
             {% if buyer_choice=='A' %}
-            <h2>Accepted by Supplier</h2>
+            <h3>Accepted by Supplier</h3>
             {% elif buyer_choice=='D' %}
-            <h2>Rejected by Supplier</h2>
+            <h3>Rejected by Supplier</h3>
             {% elif buyer_choice=='E' %}
-            <h2>All unprocessed negotiation</h2>
+            <h3>All unprocessed negotiation</h3>
             {% elif buyer_choice=='R' %}
-            <h2>Pending Negotiations</h2>
+            <h3>Pending Negotiations</h3>
             {% else %}
-            <h2>All unprocessed negotiation</h2>
+            <h3>All unprocessed negotiation</h3>
             {% endif %}
             {% if buy_items %}
-            <h2 style="color: #1a1f71;"></h2>
+            <h3></h3>
             <div class="container">
                 <table class="table table-bordered">
                     {% for item in buy_items %}
@@ -170,18 +169,17 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="6"><b>Cart Details: </b>
+                        <td colspan="6">
+                            <b>Cart Details: </b>
                         </td>
                     </tr>
                     <tr>
-
                         <td colspan="3">
                             <h5><b>Name</b> </h5>
                         </td>
                         <td colspan="3">
                             <h5><b>Quantity</b> </h5>
                         </td>
-
                     </tr>
                     <form method="post" action="">
                         {% for products in productList[loop.index-1] %}
@@ -219,22 +217,14 @@
 
                             {%endif %}
                     </form>
-                    <script>
-                        function NameChange(Name) {
-                            console.log(Name);
-                            document.getElementById("formName").name = Name;
-                        }
-                    </script>
                     </td>
                     </tr>
-
-
                     </tr>
                     {% endfor %}
                 </table>
             </div>
             {% else %}
-            <h2> Could not find any match</h2>
+            <h3> Could not find any match</h3>
             {% endif %}
         </div>
     </center>

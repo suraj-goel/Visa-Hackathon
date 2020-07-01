@@ -3,99 +3,106 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
     .star-rating {
-  display: inline-block;
-  padding: 0;
-  width: auto;
-}
+        display: inline-block;
+        padding: 0;
+        width: auto;
+    }
 
-.star {
-  display: inline-block;
-  float: left;
-  height: 25px;
-  margin: 0;
-  width: 25px;
-}
+    .star {
+        display: inline-block;
+        float: left;
+        height: 25px;
+        margin: 0;
+        width: 25px;
+    }
 
-.star::after {
-  background-color: #fff;
-  color: gold;
-  content: "\2605";
-  display: block;
-  font-size: 15px;
-  height: 25px;
-  text-align: center;
-  width: 25px;
-}
+    .star::after {
+        background-color: #fff;
+        color: gold;
+        content: "\2605";
+        display: block;
+        font-size: 15px;
+        height: 25px;
+        text-align: center;
+        width: 25px;
+    }
 
-.star:checked::after {
-  color: gold;
-}
+    .star:checked::after {
+        color: gold;
+    }
 
-.star:checked ~ .star::after,
-.star-rating:hover .star:hover ~ .star::after {
-  color: grey;
-}
+    .star:checked~.star::after,
+    .star-rating:hover .star:hover~.star::after {
+        color: grey;
+    }
 
-.star-rating:hover .star::after {
-  color: gold;
-  content: "\2606"; /* use an open star on hover */
-  font-size: 15px;
-}
-
-
+    .star-rating:hover .star::after {
+        color: gold;
+        content: "\2606";
+        /* use an open star on hover */
+        font-size: 15px;
+    }
 </style>
+
 <body>
+    <center>
+        <h1 style="color: #1a1f71;"> Search By Category </h1>
+    </center>
     <div>
-        <form method="get" action="/"><center><button type="submit" class="button" id="submitButton"><span> Search By Product/Merchant </span></button></center></form>
+        <form method="get" action="/">
+            <center><button type="submit" class="button" id="submitButton"><span> Search By Product/Merchant
+                    </span></button></center>
+        </form>
     </div>
     <center>
         <form class="example" method="post" action="/searchbycategory" style="margin:auto;max-width:600px">
             <input type="number" name="radius" placeholder="Search radius in km">
             <br><br>
 
-            
+
             <br><br>
             <div class="example">
                 <input type="text" placeholder="Search by Category" name="name" id="check">
                 <button type="submit" id="submitButton"><i class="fa fa-search"></i>
                 </button>
             </div><br><br>
-            
+
 
         </form>
         <br><br><br><br><br>
 
         <div id="map"></div>
 
-        
-    <div id="testChat">
-        <div class="message-div" id="minimizeChatbox">
-            <span class="minimize">Inventory Assistant</span>
-            <i class="fa fa-window-minimize" id="minimizeChat"></i>
+
+        <div id="testChat">
+            <div class="message-div" id="minimizeChatbox">
+                <span class="minimize">Inventory Assistant</span>
+                <i class="fa fa-window-minimize" id="minimizeChat"></i>
+            </div>
+
+            <iframe id="chatbox" width="350" height="430" allow="microphone;"
+                src="https://console.dialogflow.com/api-client/demo/embedded/33d94654-7c6f-473a-abde-6f0da2f227de"
+                style="display: none;"></iframe>
         </div>
 
-        <iframe id="chatbox" width="350" height="430" allow="microphone;"
-            src="https://console.dialogflow.com/api-client/demo/embedded/33d94654-7c6f-473a-abde-6f0da2f227de" style="display: none;"></iframe>
-    </div>
-    
-    <script>
-        $(document).ready(function () {
-            //Fixing jQuery Click Events for the iPad
-            var ua = navigator.userAgent,
-                event = (ua.match(/iPad/i)) ? "touchstart" : "click";
-            if ($('.table').length > 0) {
-                $('.table .header').on(event, function () {
-                    $(this).toggleClass("active", "").nextUntil('.header').css('display', function (i, v) {
-                        return this.style.display === 'table-row' ? 'none' : 'table-row';
+        <script>
+            $(document).ready(function () {
+                //Fixing jQuery Click Events for the iPad
+                var ua = navigator.userAgent,
+                    event = (ua.match(/iPad/i)) ? "touchstart" : "click";
+                if ($('.table').length > 0) {
+                    $('.table .header').on(event, function () {
+                        $(this).toggleClass("active", "").nextUntil('.header').css('display', function (i, v) {
+                            return this.style.display === 'table-row' ? 'none' : 'table-row';
+                        });
                     });
-                });
-            }
+                }
 
-            $("#minimizeChat").click(function () {
-                $("#chatbox").toggle();
+                $("#minimizeChat").click(function () {
+                    $("#chatbox").toggle();
+                });
             });
-        });
-    </script>
+        </script>
 </body>
 
 </html>
@@ -111,7 +118,7 @@
 
 
     var data = '{{ data|tojson }}';
-    
+
     var currentLocation = '{{ currentLocation|tojson }}'
     var jsonData = JSON.parse(data);
     var currentLocationJSONData = JSON.parse(currentLocation)
@@ -123,14 +130,14 @@
             lng: 78.9629
         };
         var map;
-        
-            map = new google.maps.Map(
-                document.getElementById('map'), {
-                zoom: 7,
-                center: {
-                    lat:parseFloat(currentLocationJSONData.Latitude), lng :parseFloat(currentLocationJSONData.Longitude)
-                }
-            });
+
+        map = new google.maps.Map(
+            document.getElementById('map'), {
+            zoom: 7,
+            center: {
+                lat: parseFloat(currentLocationJSONData.Latitude), lng: parseFloat(currentLocationJSONData.Longitude)
+            }
+        });
 
 
         var infowindow = new google.maps.InfoWindow();
@@ -151,7 +158,7 @@
             google.maps.event.addListener(marker, 'mouseover', (function (marker, i) {
                 return function () {
                     var info = "Store Name : " + jsonData[i].visaStoreName + "\n";
-                    info+="Distance : " + jsonData[i].distance + "\n";
+                    info += "Distance : " + jsonData[i].distance + "\n";
                     infowindow.setContent(info);
                     infowindow.open(map, marker);
                 }

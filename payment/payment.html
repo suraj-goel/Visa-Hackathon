@@ -1,29 +1,35 @@
-
 <!doctype html>
 <html>
    <head>
       <meta charset='utf-8'>
       <meta name='viewport' content='width=device-width, initial-scale=1'>
-      <title>Payment</title>
       <link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' rel='stylesheet'>
       <link href='https://use.fontawesome.com/releases/v5.8.1/css/all.css' rel='stylesheet'>
+      <link rel=" icon" href="{{ url_for('static',filename='../common/img/icon-img.png') }}" type="image/icon">
+    <title>SBM</title>
       <style>body {
-         background: #f5f5f5
+      background-color:#f7f7f7
          }
          .rounded {
          border-radius: 1rem
          }
          .nav-pills .nav-link {
-         color: #555
+         color: #1a1f71
          }
          .nav-pills .nav-link.active {
-         color: white
+         color: white;
          }
          input[type="radio"] {
          margin-right: 5px
          }
          .bold {
          font-weight: bold
+         }
+         span,h6{
+         color:#1a1f71;
+         }
+         .btn-name{
+         color:#1a1f71;
          }
       </style>
       <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
@@ -57,31 +63,40 @@
                 
                 });
             V.on("payment.cancel", function(payment)
-              {alert(JSON.stringify(payment)); });
+              {alert('Payment Cancelled'); });
             V.on("payment.error", function(payment, error)
-              {alert(JSON.stringify(error)); });
+              {
+               //   alert(JSON.stringify(error)); 
+                 });
          }
       </script>
    </head>
-   <body>
+                                                   <div class="hamburger-menu" style="float:left">
+                            <img src="{{ url_for('static',filename='../common/img/shop.png') }}">
+                        </div>
+   <body><br><br>
       <div class="container py-5">
       <!-- For demo purpose -->
          <div class="row mb-4">
             <div class="col-lg-8 mx-auto text-center">
-               <h1 class="display-4"></h1>
+                  <center> <h2 style="color:#1a1f71">Payment details</h2>
+                     <h4>Total amount: 	&#8377; {{ amount }}</h4>
+                  <h4 style="color:grey"> Choose payment method</h4>
+                  </center>
             </div>
          </div>
+
          <!-- End -->
-         <div class="row">
+         <div class="row" >
             <div class="col-lg-6 mx-auto">
-               <div class="card ">
+               <div class="card " style="background-color:#C0DAE1;padding-bottom:30px;padding-top:30px">
                   <div class="card-header">
-                     <div class="bg-white shadow-sm pt-4 pl-2 pr-2 pb-2">
+                     <div class="shadow-sm pt-4 pl-2 pr-2 pb-2" style="background-color:#d5eef4">
                      <!-- Credit card form tabs -->
-                        <ul role="tablist" class="nav bg-light nav-pills rounded nav-fill mb-3">
-                           <li class="nav-item"> <a data-toggle="pill" href="#credit-card" class="nav-link active "> <i class="fas fa-credit-card mr-2"></i> Credit Card </a> </li>
-                           <li class="nav-item"> <a data-toggle="pill" href="#checkout" class="nav-link "> <i class="fab  mr-2"></i> Checkout </a> </li>
-                           <li class="nav-item"> <a data-toggle="pill" href="#net-banking" class="nav-link "> <i class="fas  mr-2"></i> Visa B2B </a> </li>
+                        <ul role="tablist"  class="nav bg-light nav-pills rounded nav-fill mb-3" >
+                           <li class="nav-item" style="background-color:#C0DAE1;"> <a data-toggle="pill" href="#credit-card" class="nav-link active" > <i class="fas fa-credit-card mr-2"></i>Credit Card </a> </li>
+                           <li class="nav-item" style="background-color:#C0DAE1;"> <a data-toggle="pill" href="#checkout" class="nav-link "> <i class="fab  mr-2"></i> <span class="btn-name">Checkout</span> </a> </li>
+                           <li class="nav-item" style="background-color:#C0DAE1;"> <a data-toggle="pill" href="#net-banking" class="nav-link "> <i class="fas  mr-2"></i> <span class="btn-name">Visa B2B</span> </a> </li>
                         </ul>
                      </div>
                      <!-- End -->
@@ -129,7 +144,7 @@
                                     </div>
                                  </div>
                               </div>
-                              <div class="card-footer"> <button type="submit" class="subscribe btn btn-primary btn-block shadow-sm" "> Confirm Payment </button>
+                              <div class="card-footer"> <button type="submit" class="subscribe btn btn-primary btn-block shadow-sm" style="background-color:#1a1f71"> Confirm Payment </button>
                                  <!-- On click () open some prompt saying u okay to paying this much -->
                            </form>
                         </div>
@@ -146,7 +161,7 @@
                      <div id="net-banking" class="tab-pane fade pt-3">
                         <form action="/b2bpay/" method="post">
                            <input type="hidden" name="amount" value="{{ amount }}">
-                           <div class="card-footer"> <button type="submit" class="subscribe btn btn-primary btn-block shadow-sm" "> Confirm Payment </button>
+                           <div class="card-footer" > <button type="submit" class="subscribe btn btn-primary btn-block shadow-sm" style="background-color:#1a1f71"> Confirm Payment </button>
                         </form>
                      </div>
                      <!-- End -->
@@ -159,7 +174,7 @@
                   {%if messages %}
                       {% for category, message in messages %}
                           <div class="alert alert-{{ category }}">
-                              <p style="font-size: 24px;">{{ message }}</p>
+                              <p style="font-size: 15px;color:red;">{{ message }}</p>
                           </div>
                       {% endfor %}
                   {% endif %}

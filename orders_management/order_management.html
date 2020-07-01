@@ -2,19 +2,6 @@
 <link rel="stylesheet" href="{{ url_for('static',filename='./manage_inventory/inventory.css') }}">
 <script type="text/javascript" src="{{url_for('static',filename='./manage_inventory/inventory.js') }}"></script>
 
-<style>
-    .star::after {
-        background-color: #1a1f71;
-        color: gold;
-        content: "\2605";
-        display: block;
-        font-size: 15px;
-        height: 25px;
-        text-align: center;
-        width: 25px;
-    }
-</style>
-
 <center>
     <h1 style="color: #1a1f71;">Orders</h1>
     <form class="example" method="post" action="" style="margin:auto;max-width:600px">
@@ -57,7 +44,7 @@
 
                     {% if not item['Rated'] %}
                     <form method="post">
-                        <fieldset class="star-rating" id="rate-item-12343" style="padding-left:580px">
+                        <fieldset class="star-rating" id="rate-item-12343" style="padding-left:750px">
                             <input class="star" name="rating" type="radio" checked="checked" value="1" />
                             <input class="star" name="rating" type="radio" value="2" />
                             <input class="star" name="rating" type="radio" value="3" />
@@ -70,7 +57,7 @@
                         </button><br>
                     </form><br>
                     {% else %}
-                    <div style="padding-left:750px">
+                    <div style="padding-left:720px">
                         Your rating : {{ item['Rated'] }}<br>
                         <fieldset>
                             {% if item['Rated']=='1' %}
@@ -116,7 +103,7 @@
                     <span style="color:red">To be delivered</span>
                     {% endif %}
 
-
+                </td>
             </tr>
             <tr>
                 <td colspan="4" style="background-color:rgba(253, 187, 10, 0.6)">
