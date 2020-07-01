@@ -91,6 +91,7 @@ def createBuyerAccount(mysql,buyerid,pool_id,clientid="B2BWS_1_1_9999"):
                       auth=auth,
                       json=p)
     result=r.json()
+    print(result)
     account_number=result['accountNumber']
     print('Account number set up for buyer')
     cur = mysql.connection.cursor()
@@ -186,7 +187,8 @@ def paymentProcessing(amount,buyerid,supplier_account_no ,clientid='B2BWS_1_1_99
 
 def register_merchant(mysql,mid,funding_acc_number):
     #first we need to create a buyer profile for the merchant for which we need any unique number called buyerid
-    buyerid,supplier_id,pool_id = mid,mid,mid
+    buyerid,supplier_id,pool_id = mid,mid,mid[:19]
+    print(len(pool_id),'pools')
     createBuyer(mysql,buyerid)
     # we need to create a funding account for this buyer and then a proxy pool for this buyer id
     #CreateFundingAccount(funding_acc_number,buyerid)
