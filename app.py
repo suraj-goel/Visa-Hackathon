@@ -369,7 +369,7 @@ def showCart(merchant_id):
     discountPrice = []
     emailID = ""
     contact = ""
-    type = session['type']
+    type = 'simple'
     totalCost = 0
     totalDiscountCost = 0
     loggmerchant_id = session['merchantID']
@@ -387,7 +387,9 @@ def showCart(merchant_id):
                 Price = session['Price']
                 Offers = session['offers']
                 discountPrice = session['discountPrice']
+                print("HERE")
                 data = getMerchantInfo(mysql, seller_id)
+                print(data)
                 emailID = data[0]
                 contact = data[1]
                 pf = '1'
@@ -455,7 +457,6 @@ def showCart(merchant_id):
                       finalDiscountPrice, NegotitatedRequestAmount)
         session['qty'] = []
         session['ProductID'] = []
-        totalQuantity = 0
         session['type']=type
         session['mid'] = seller_id
         session['merchantID'] = loggmerchant_id
