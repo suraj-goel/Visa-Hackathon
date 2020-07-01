@@ -1,3 +1,7 @@
+<!--
+Function of page:
+Search page to search by merchant name or product name based n merchant location
+-->
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./search_merchants/search.css') }}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -41,57 +45,49 @@
   content: "\2606"; /* use an open star on hover */
   font-size: 15px;
 }
-
-
 </style>
 <body>
     <div>
-    <form method="get" action="/searchbycategory"><center><button type="submit" class="button" id="submitButton"><span> Search By Category </span></button></center></form>
+        <form method="get" action="/searchbycategory">
+            <center>
+                <button type="submit" class="button" id="submitButton">
+                <span> Search By Category </span>
+                </button>
+            </center>
+        </form>
     </div>
-        <center>
+    <center>
         <form class="example" method="post" action="" style="margin:auto;max-width:600px">
-            <input type="number" name="radius" placeholder="Search radius in km">
-            <br><br>
-
+            <input type="number" name="radius" placeholder="Search radius in km"><br><br>
             <span class="custom-dropdown custom-dropdown--white">
                 <select name="search" class="custom-dropdown__select custom-dropdown__select--white">
                     {% if search_option=='merchant' %}
-                    <option value="product">Search by Product</option>
-                    <option value="merchant" selected>Search by Merchant</option>
+                        <option value="product">Search by Product</option>
+                        <option value="merchant" selected>Search by Merchant</option>
                     {% else %}
-                    <option value="product" selected>Search by Product</option>
-                    <option value="merchant">Search by Merchant</option>
-                    {% endif %}
-                    <br>
+                        <option value="product" selected>Search by Product</option>
+                        <option value="merchant">Search by Merchant</option>
+                    {% endif %}<br>
                 </select>
-            </span>
-            <br><br>
+            </span><br><br>
             <div class="example">
                 <input type="text" placeholder="Search by name" name="name" id="check">
-                <button type="submit" id="submitButton"><i class="fa fa-search"></i>
-                </button>
+                <button type="submit" id="submitButton"><i class="fa fa-search"></i></button>
             </div><br><br>
             <label style="color: #1a1f71;">
-                <input type="checkbox" name="offerbox" value="True">
-                Only display results of merchants who give offers
+                <input type="checkbox" name="offerbox" value="True">Only display results of merchants who give offers
             </label><br>
-
-        </form>
-        <br><br><br><br><br>
-
+        </form><br><br><br><br><br>
         <div id="map"></div>
-
         {% if data %}
-        <h2 style="color: #1a1f71;">
-            Search results:
-        </h2>
-        <div class="container">
-            <table class="table table-bordered">
-                {% for item in data %}
-                <tr style="all: none;">
-                    <td style="background-color: white; border: none;"></td>
-                </tr>
-                <tr class="header">
+            <h2 style="color: #1a1f71;">Search results:</h2>
+            <div class="container">
+                <table class="table table-bordered">
+                    {% for item in data %}
+                        <tr style="all: none;">
+                            <td style="background-color: white; border: none;"></td>
+                        </tr>
+                        <tr class="header">
                     <td colspan="3">
                         {% if search_option=='product' %}<h4>{{item['Product.Name']}} at cost:{{item['Price']}} rupees
                             <span style="float:right;">{{'%0.2f'| format(item['distance']|float)}} kms away</span></h4>
@@ -155,20 +151,23 @@
                     </td>
 
                 </tr>
-                {% if item['Offers'] %} {% for x in item['Offers'] %}
-                <tr>
-                    <td colspan="2">Product : {{x['Name']}}</td>
-                    <td colspan="1">{{x['Information']}}</td>
-                </tr>
-                {% endfor %} {% else %}
-                <tr>
-                    <td colspan="3">No discounts available</td>
-                </tr>
-                {% endif %} {% endfor %}
-            </table>
-        </div>
+                            {% if item['Offers'] %}
+                                {% for x in item['Offers'] %}
+                                    <tr>
+                                        <td colspan="2">Product : {{x['Name']}}</td>
+                                        <td colspan="1">{{x['Information']}}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                        <tr>
+                            <td colspan="3">No discounts available</td>
+                        </tr>
+                              {% endif %}
+                    {% endfor %}
+                </table>
+            </div>
         {% else %}
-        <h1> Could not find any match</h1>
+            <h1> Could not find any match</h1>
         {% endif %}
     </center>
     <br>
@@ -177,107 +176,103 @@
             <span class="minimize">Inventory Assistant</span>
             <i class="fa fa-window-minimize" id="minimizeChat"></i>
         </div>
-
         <iframe id="chatbox" width="350" height="430" allow="microphone;"
             src="https://console.dialogflow.com/api-client/demo/embedded/33d94654-7c6f-473a-abde-6f0da2f227de" style="display: none;"></iframe>
     </div>
-    
-    <script>
-        $(document).ready(function () {
-            //Fixing jQuery Click Events for the iPad
-            var ua = navigator.userAgent,
-                event = (ua.match(/iPad/i)) ? "touchstart" : "click";
-            if ($('.table').length > 0) {
-                $('.table .header').on(event, function () {
-                    $(this).toggleClass("active", "").nextUntil('.header').css('display', function (i, v) {
-                        return this.style.display === 'table-row' ? 'none' : 'table-row';
-                    });
-                });
-            }
-
-            $("#minimizeChat").click(function () {
-                $("#chatbox").toggle();
-            });
-        });
-    </script>
-</body>
-
+  </body>
 </html>
 <script>
-
-    (() => {
-        let customSelects = document.querySelectorAll(".custom-dropdown__select");
-        customSelects.forEach(el => {
-            if (el.disabled)
-                el.parentNode.classList.add("custom-dropdown--disabled");
-        })
-    })();
-
-
-    var data = '{{ data|tojson }}';
-    var currentLocation = '{{ currentLocation|tojson }}'
-    var jsonData = JSON.parse(data);
-    var currentLocationJSONData = JSON.parse(currentLocation)
-    console.log(currentLocationJSONData)
-    function initMap() {
-
-        var india = {
-            lat: 20.5937,
-            lng: 78.9629
-        };
-        var map;
-        
-            map = new google.maps.Map(
-                document.getElementById('map'), {
-                zoom: 7,
-                center: {
-                    lat:parseFloat(currentLocationJSONData.Latitude), lng :parseFloat(currentLocationJSONData.Longitude)
-                }
+$(document).ready(function () {
+    //Fixing jQuery Click Events for the iPad
+    var ua = navigator.userAgent,
+        event = (ua.match(/iPad/i)) ? "touchstart" : "click";
+    if ($('.table').length > 0) {
+        $('.table .header').on(event, function () {
+            $(this).toggleClass("active", "").nextUntil('.header').css('display', function (i, v) {
+                return this.style.display === 'table-row' ? 'none' : 'table-row';
             });
+        });
+    }
+
+    $("#minimizeChat").click(function () {
+        $("#chatbox").toggle();
+    });
+});
+</script>
+<script>
+(() => {
+    let customSelects = document.querySelectorAll(".custom-dropdown__select");
+    customSelects.forEach(el => {
+        if (el.disabled)
+            el.parentNode.classList.add("custom-dropdown--disabled");
+    })
+})();
 
 
-        var infowindow = new google.maps.InfoWindow();
+var data = '{{ data|tojson }}';
+var currentLocation = '{{ currentLocation|tojson }}'
+var jsonData = JSON.parse(data);
+var currentLocationJSONData = JSON.parse(currentLocation)
+console.log(currentLocationJSONData)
+function initMap() {
 
-        var marker, i;
+    var india = {
+        lat: 20.5937,
+        lng: 78.9629
+    };
+    var map;
 
-        for (i = 0; i < jsonData.length; i++) {
-            marker = new google.maps.Marker({
-                position: new google.maps.LatLng(parseFloat(jsonData[i].Latitude), parseFloat(jsonData[i].Longitude)),
-                map: map
-            });
-            if (parseFloat(jsonData[i].distance) === 0) {
-
-                marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png')
+        map = new google.maps.Map(
+            document.getElementById('map'), {
+            zoom: 7,
+            center: {
+                lat:parseFloat(currentLocationJSONData.Latitude), lng :parseFloat(currentLocationJSONData.Longitude)
             }
+        });
 
 
-            google.maps.event.addListener(marker, 'mouseover', (function (marker, i) {
-                return function () {
-                    infowindow.setContent(jsonData[i].RegisteredName);
-                    infowindow.open(map, marker);
-                }
-            })(marker, i));
+    var infowindow = new google.maps.InfoWindow();
 
-            google.maps.event.addListener(marker, 'mouseout', (function (marker, i) {
-                return function () {
-                    infowindow.close();
-                }
-            })(marker, i));
+    var marker, i;
 
-
-            google.maps.event.addListener(marker, 'click', (function (marker, i) {
-                return function () {
-                    if (parseInt(jsonData[i].distance) !== 0)
-                        window.location.href = '/merchant/' + jsonData[i].MerchantID;
-                }
-            })(marker, i));
-        }
+    for (i = 0; i < jsonData.length; i++) {
         marker = new google.maps.Marker({
-            position: new google.maps.LatLng(parseFloat(currentLocationJSONData.Latitude), parseFloat(currentLocationJSONData.Longitude)),
+            position: new google.maps.LatLng(parseFloat(jsonData[i].Latitude), parseFloat(jsonData[i].Longitude)),
             map: map
         });
-        marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png')
+        if (parseFloat(jsonData[i].distance) === 0) {
+
+            marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png')
+        }
+
+
+        google.maps.event.addListener(marker, 'mouseover', (function (marker, i) {
+            return function () {
+                infowindow.setContent(jsonData[i].RegisteredName);
+                infowindow.open(map, marker);
+            }
+        })(marker, i));
+
+        google.maps.event.addListener(marker, 'mouseout', (function (marker, i) {
+            return function () {
+                infowindow.close();
+            }
+        })(marker, i));
+
+
+        google.maps.event.addListener(marker, 'click', (function (marker, i) {
+            return function () {
+                if (parseInt(jsonData[i].distance) !== 0)
+                    window.location.href = '/merchant/' + jsonData[i].MerchantID;
+            }
+        })(marker, i));
     }
+    marker = new google.maps.Marker({
+        position: new google.maps.LatLng(parseFloat(currentLocationJSONData.Latitude), parseFloat(currentLocationJSONData.Longitude)),
+        map: map
+    });
+    marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png')
+}
 </script>
 <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAntxrxhQu11TxFD9wEe7JxxW1UZ0HQXRY&callback=initMap"></script>

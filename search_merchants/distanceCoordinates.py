@@ -1,5 +1,12 @@
 import math
+
+
 def distanceInKMBetweenCoordinates(lat1,long1,lat2,long2):
+    """
+    :param lat1, long1: coordinates for first location
+    :param lat2, long2: coordinates for second location
+    :return: distance in kms between both locations
+    """
     earthRadiusKm =float(6371)
     dLat = math.radians(float(lat2)-float(lat1))
     dLon = math.radians(float(long2)-float(long1))
