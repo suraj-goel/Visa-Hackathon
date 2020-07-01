@@ -501,9 +501,19 @@ def editAccountDetails():
         r = validation(mysql, merchant_id, name, registeredName, email, contactno, address, password)
 
         if r[2] == 0:
-            cur.execute(
-                'update Merchant set Name = "{}", RegisteredName = "{}", EmailID = "{}", ContactNumber = "{}", Address = "{}", password = "{}" where MerchantID="{}";'.format(
-                    name, registeredName, email, contactno, address, password, merchant_id))
+            if "'" in address:
+                a, c = address.split("'")
+                address = a+chr(39)+c
+
+            if "'" in registeredName:
+                a, c = registeredName.split("'")
+                registeredName = a+chr(39)+c
+
+            if "'" in password:
+                a, c = password.split("'")
+                password = a+chr(39)+c
+
+            cur.execute(f"""update Merchant set Name = "{name}", RegisteredName = "{registeredName}", EmailID = "{email}", ContactNumber = "{contactno}", Address = "{address}", password = "{password}" where MerchantID="{merchant_id}";""")
             mysql.connection.commit()
             return redirect('/accounts/')
         else:
