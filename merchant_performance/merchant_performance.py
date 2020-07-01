@@ -10,6 +10,7 @@ def getPerformanceStats(mysql,merchantid):
     #   ORDERS REQUESTED FROM U
     data['total_trasactions']=TotalTransaction(mysql,merchantid)
     data['total_transactions_monthly']=TotalTransactionsMonthnly(mysql,merchantid)
+    print(data)
     return data
 
 def TotalSpendings(mysql,merchantid):
@@ -60,7 +61,8 @@ def getCategoryPerformance(mysql,merchantid):
     mcc=cur.fetchone()['MCC']
     cur.close()
     data = MerchantMeasurement(mcc)
-    data['category_name']=getCategoryName(mysql,mcc)
+    name=getCategoryName(mysql,mcc)
+    data['category_name']=name
     return data
 
 def getCategoryName(mysql,mcc):

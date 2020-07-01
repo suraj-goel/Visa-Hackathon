@@ -280,7 +280,7 @@ def MerchantMeasurement(MCC = '5812'):
         return data
     except:
         print('no data added for this code')
-        return "error"
+        return {}
 
 #data=MerchantMeasurement()
 #print(data)
