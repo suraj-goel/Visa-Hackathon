@@ -358,7 +358,8 @@ def modify():
 @login_required
 def showCart(merchant_id):
     totalQuantity = 0
-    seller_id = session['mid']
+    seller_id = merchant_id
+    session['mid'] = seller_id
     qty = []
     ProductID = []
     Name = []
@@ -396,6 +397,7 @@ def showCart(merchant_id):
                 emailID = data[0]
                 contact = data[1]
                 pf = '1'
+                session['payment_flag'] =pf
                 l = len(qty)
                 for i in range(0,l):
                     totalQuantity += int(qty[i])
@@ -407,18 +409,20 @@ def showCart(merchant_id):
                 Name = session['Name']
                 Description = session['Description']
                 Price = session['Price']
-                Offers.append("No Discount")
                 discountPrice = session['discountPrice']
                 data = getMerchantInfo(mysql,seller_id)
                 emailID = data[0]
                 contact = data[1]
                 pf = '2'
+                session['payment_flag'] =pf
                 l = len(qty)
+
                 for i in range(0,l):
                     totalQuantity += int(qty[i])
                     totalCost += (int)(Price[i])
                     totalDiscountCost += (int)(discountPrice[i])
             elif type == 'negotiate':
+                print("I m here")
                 qty = session['qty']
                 ProductID = session['ProductID']
                 Name = session['Name']
@@ -429,11 +433,11 @@ def showCart(merchant_id):
                 emailID = data[0]
                 contact = data[1]
                 pf = '3'
+                session['payment_flag'] = pf
                 totalDiscountCost = session['finalPriceChange']
                 l = len(qty)
                 for i in range(0,l):
                     totalQuantity += int(qty[i])
-                    totalCost += (int)(Price[i])
 
         except Exception as e:
             print("exception details " + str(e))
@@ -467,7 +471,8 @@ def showCart(merchant_id):
         session['finalDiscountPrice'] = finalDiscountPrice
         session['fqty']=qty
         session['fProductID']=ProductID
-        session['payment_flag']= pf
+
+        print(session['payment_flag'])
         if (Type == 'Process Payment'):
             amount = finalDiscountPrice
             return render_template('./payment/payment.html', amount=amount)
@@ -641,7 +646,7 @@ def b2bpay():
             elif (session['payment_flag'] == '2'):
                 addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['requirementid'])
             elif (session['payment_flag'] == '3'):
-                addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['negotiationid'])
+                addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['negotiationID'])
             updateSupplierInventory(mysql, ProductID,qty) #productID=ProductList
             return redirect(url_for('showAll'))
         else:
