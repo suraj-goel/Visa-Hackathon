@@ -1,74 +1,10 @@
 {% include "./common/header.html" %}
-<style>
-
-
-    body {
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
-    input[type="text"],input[type='email'],input[type='password'],
-    select,
-    textarea {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box;
-        margin-top: 6px;
-        margin-bottom: 16px;
-        resize: vertical;
-    }
-
-    select{
-        width: 250px;
-    }
-
-    input[type="number"] {
-        padding: 12px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box;
-        margin-top: 6px;
-        margin-bottom: 16px;
-        resize: vertical;
-    }
-
-    input[type="submit"] {
-        color: white;
-        padding: 12px 20px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        background-color: #fdbb0a;
-        width: 50%;
-    }
-
-    input[type="submit"]:hover {
-        cursor: pointer;
-    }
-    table
-    {
-        padding: 10px;
-        border: 10px;
-        border-radius: 10px;
-        background-color: #f2f2f2;
-        box-shadow: #555555;
-        text-align: center;
-    }
-
-    .containerForm {
-        box-sizing: border-box;
-        border-radius: 5px;
-        padding: 15px;
-    }
-
-</style>
+<link rel="stylesheet" href="{{ url_for('static',filename='./accounts/accounts.css') }}">
 <script>
     function goBack() {
         return window.location='/';
 
     }
-
 </script>
 <body>
 <center>
@@ -80,14 +16,17 @@
                     <td>
                         <h4><label for="Name" style="font-weight: bold">Name : </label> </h4>
                     </td>
-                    <td>  <input id="Name" value="{{ result['Name'] }}" name="name" type="text" required></h4>
+                    <td>
+                        <input id="Name" value="{{ result['Name'] }}" name="name" type="text" required></h4>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <h4><label for="rName" style="font-weight: bold">Registered Name : </label> </h4>
                     </td>
-                    <td> <input id="rName"value="{{ result['RegisteredName'] }}" name="registeredName" type="text" required></td>
+                    <td>
+                        <input id="rName"value="{{ result['RegisteredName'] }}" name="registeredName" type="text" required>
+                    </td>
                 </tr>
                 <tr>
                     <td>
@@ -101,7 +40,8 @@
                     <td>
                         <h4><label for="contact" style="font-weight: bold">Contact number : </label></h4>
                     </td>
-                    <td> <input id="contact"value="{{ result['ContactNumber'] }}" name="contactno" type="text" required>
+                    <td>
+                        <input id="contact"value="{{ result['ContactNumber'] }}" name="contactno" type="text" required>
 
                     </td>
                 </tr>
@@ -109,23 +49,23 @@
                     <td>
                         <h4><label for="add" style="font-weight: bold">Address : </label></h4>
                     </td>
-                    <td> <input id="add"value="{{ result['Address'] }}" name="address" type="text" required>
+                    <td>
+                        <input id="add"value="{{ result['Address'] }}" name="address" type="text" required>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <h4><label for="pass" style="font-weight: bold">Password : </label> </h4>
                     </td>
-                    <td><input id="pass"value="{{ result['Password'] }}" name="password" type="password" required>
+                    <td>
+                        <input id="pass"value="{{ result['Password'] }}" name="password" type="password" required>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="6"><h4><input type="submit" value="Confirm Changes" ></h4>
                     </td>
                 </tr>
-
             </table>
-
         </div>
     </form>
     <div>
@@ -140,6 +80,5 @@
         {% endwith %}
     </div>
 </center>
-
 </body>
 </html>
