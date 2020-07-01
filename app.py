@@ -916,7 +916,7 @@ def addoffer():
         date=request.form['date']
         quantity = request.form['quantity']
         selectedProducts = request.form.getlist('selectedProducts')
-        merchantID = session['merchantid'] #get from session when user is logged in
+        merchantID = session['merchantID'] #get from session when user is logged in
         message = addoffersindb(mysql,merchantID,discount,info,date,quantity,selectedProducts)
         session['message_offer_add'] = message
     return redirect(url_for('showoffers'))
