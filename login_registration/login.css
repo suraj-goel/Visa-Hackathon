@@ -11,6 +11,11 @@ body {
   font-size: 1.2em;
   border: 0;
 }
+.navbar-nav.navbar-center {
+  position: absolute;
+  left: 50%;
+  transform: translatex(-50%);
+}
 
 .navbar-brand {
   float: left;

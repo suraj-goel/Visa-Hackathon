@@ -13,13 +13,22 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static',filename='./login_registration/login.css') }}">
     <style>
+        .navbar-nav.navbar-center {
+            position: absolute;
+            left: 50%;
+            transform: translatex(-50%);
+        }
     </style>
 </head>
 
 <body>
-    <nav class="navbar" style="background-color: #1a1f71; color:#FFF; height: 100px;">
+    <nav class="navbar navbar-default" style="background-color: #1a1f71; color:#FFF; height: 100px;">
+        <ul class="nav navbar-nav navbar-center">
         <h2> BUSINESS LINKEDIN</h2>
-
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <button id="myBtn" type="button" class="btn btn-block btn-primary btn-lg" style=" transform: translatex(-20%);background-color: #faaa13">SIGN IN</button>
+        </ul>
     </nav>
 
     <div id="myCarousel" class="carousel slide" data-ride="carousel" style="opacity: 75%;">
@@ -36,23 +45,19 @@
                 <img src="{{ url_for('static',filename='../common/img/mountains.png') }}">
                 <div class="carousel-caption">
                     <h1>Let's get connect Merchants</h1>
-                    <br>
-                    <button type="button" class="btn btn-default" onclick="getLogin()">Get Started</button>
                 </div>
             </div>
             <div class="item">
                 <div class="carousel-caption">
                     <h1>Let's get connect Merchants</h1>
-                    <br>
-                    <button type="button" class="btn btn-default" onclick="getLogin()">Get Started</button>
+
                 </div>
                 <img src="{{ url_for('static',filename='../common/img/snow.png') }}">
             </div>
             <div class="item">
                 <div class="carousel-caption">
                     <h1>Let's get connect Merchants</h1>
-                    <br>
-                    <button type="button" class="btn btn-default" onclick="getLogin()">Get Started</button>
+
                 </div>
                 <img src="{{ url_for('static',filename='../common/img/red.png') }}">
             </div>
@@ -68,12 +73,11 @@
         </a>
     </div>
     <!--slider-->
+     <!-- <center><button id="myBtn" class="button">LOGIN</button></center>-->
 
-
-    <center><button id="myBtn" class="button">LOGIN</button></center>
 
     <div class="modal" id="login/register">
-        <div class="modal-content">
+        <div class="modal-content" >
             <div class="modal-header">
                 <h2> LOGIN HERE! </h2>
                 <!-- <img src="{{ url_for('static',filename='../common/img/visa.jpg') }}" class="img "> -->
@@ -106,25 +110,6 @@
             </div>
         </div>
     </div>
-    <!--<div class="container text-center">
-    <h2>What We Provide!</h2>
-    <div class="row">
-        <div class="col-sm-4">
-            <img src="{{ url_for('static',filename='../common/img/html5.png') }}" id="icon">
-            <h4>HTML5</h4>
-
-        </div>
-        <div class="col-sm-4">
-            <img src="{{ url_for('static',filename='../common/img/amazon.jpg') }}" id="icon">
-            <h4>AMAZON</h4>
-
-        </div>
-        <div class="col-sm-4">
-            <img src="{{ url_for('static',filename='../common/img/css3.png') }}" id="icon">
-            <h4>CSS3</h4>
-        </div>
-    </div>
-</div> -->
     <div class="container text-center">
         <h2>What We Provide!</h2>
         <!-- <h2> <input type="submit" name="SIGN UP" value="SIGN UP" style="border: none"></h2> -->
