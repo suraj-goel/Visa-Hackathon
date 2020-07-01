@@ -53,7 +53,7 @@
                 {% if filter=='no' %}
                 <option value="no" selected>Not delivered</option>
                 {% else %}
-                <option value="no">Not delivered</option> {% endif %}
+                <option value="no">Pending delivery</option> {% endif %}
                 {% if filter=='all' %}
                 <option value="all" selected>All</option>
                 {% else %}
@@ -126,6 +126,8 @@
                     {% endif %}
                     {% endif %}
                     Total: &#8377;{{item['Total']}} 	<br>
+                    Supplier: {{item['Merchant_Ordered']['RegisteredName']}} ,{{item['Merchant_Ordered']['Address']}}<br>
+                    Contact Number: {{item['Merchant_Ordered']['ContactNumber']}}<br><br>
                     Was ordered on {{ item['OrderedDate'] }} <br>
                     {% if item['DeliveredDate'] %}
                     <span style="color:green">Was delivered on {{item['DeliveredDate']}}</span>

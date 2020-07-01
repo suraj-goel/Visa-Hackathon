@@ -17,11 +17,14 @@ def getOrders(mysql,merchantid,delivered_filter):
         data=i
         cartid=i['CartID']
         cur.execute("select * from Cart,Product,ProductCart where Product.ProductID=ProductCart.ProductID and ProductCart.CartID=Cart.CartID and Cart.CartID='"+str(cartid)+"';")
-        data['Products_list']=list(cur.fetchall())
+        products=cur.fetchall()
+        data['Products_list']=list(products)
+        cur.execute("select * from Merchant where MerchantID=%s;",(products[0]['Product.MerchantID'],))
+        merchant_info=cur.fetchone()
+        data['Merchant_Ordered']=merchant_info
         if IsRated(mysql,i['OrderID']):
             data['Rated']=IsRated(mysql,i['OrderID'])
         res.append(data)
-    print(res)
     return res
 
 def Delivered(mysql,orderid,merchantid):
