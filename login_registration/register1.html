@@ -104,7 +104,7 @@
 
     </style>
 </head>
-<body>
+<body onload="getLogin()">
 <nav class="navbar" style="background-color: #1a1f71; color:#FFF; height: 100px;">
     <h2> BUSINESS LINKEDIN</h2>
 </nav>
@@ -123,14 +123,14 @@
             <div class="carousel-caption">
                 <h1>Let's get connect Merchants</h1>
                 <br>
-                <button type="button" class="btn btn-default" onclick="getLogin()">Get Started</button>
+                <button type="button" class="btn btn-default" onclick="getLogin1()">Get Started</button>
             </div>
         </div>
         <div class="item">
             <div class="carousel-caption">
                 <h1>Let's get connect Merchants</h1>
                 <br>
-                <button type="button" class="btn btn-default" onclick="getLogin()">Get Started</button>
+                <button type="button" class="btn btn-default" onclick="getLogin1()">Get Started</button>
             </div>
             <img src="{{ url_for('static',filename='../common/img/snow.png') }}">
         </div>
@@ -138,7 +138,7 @@
             <div class="carousel-caption">
                 <h1>Let's get connect Merchants</h1>
                 <br>
-                <button type="button" class="btn btn-default" onclick="getLogin()">Get Started</button>
+                <button type="button" class="btn btn-default" onclick="getLogin1()">Get Started</button>
             </div>
             <img src="{{ url_for('static',filename='../common/img/red.png') }}">
         </div>
@@ -311,7 +311,12 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 <script>
-
+    function getLogin() {
+        window.scrollBy(0, 790);
+    }
+    function getLogin1() {
+        window.scrollBy(0, 790);
+    }
     $('.carousel').carousel({
         interval: 500
     })
