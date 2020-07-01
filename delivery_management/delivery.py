@@ -1,16 +1,16 @@
 def getDelivery(mysql, merchantid, delivered_filter):
     cur = mysql.connection.cursor()
     if delivered_filter == 'all':
-        cur.execute("select distinct ProductCart.CartID,Orders.OrderID, Orders.DeliveredDate ,Orders.OrderedDate, Cart.Total from Cart, "
-                    "Orders,ProductCart,Product where Orders.CartID=ProductCart.CartID and ProductCart.ProductID="
+        cur.execute("select distinct Merchant.Name ,Merchant.Address ,Merchant.RegisteredName, Merchant.ContactNumber,ProductCart.CartID,Orders.OrderID, Orders.DeliveredDate ,Orders.OrderedDate, Cart.Total from Cart, "
+                    "Orders,ProductCart,Product,Merchant where Cart.MerchantID=Merchant.MerchantID and Orders.CartID=ProductCart.CartID and ProductCart.ProductID="
                     "Product.ProductID and Product.MerchantID=%s and Cart.CartID=ProductCart.CartID" ,(merchantid,))
     elif delivered_filter == 'no':
-        cur.execute("select distinct ProductCart.CartID,Orders.OrderID, Orders.DeliveredDate ,Orders.OrderedDate, Cart.Total from Cart, "
-                    "Orders,ProductCart,Product where Orders.CartID=ProductCart.CartID and ProductCart.ProductID="
+        cur.execute("select distinct Merchant.Name ,Merchant.Address ,Merchant.RegisteredName, Merchant.ContactNumber,ProductCart.CartID,Orders.OrderID, Orders.DeliveredDate ,Orders.OrderedDate, Cart.Total from Cart, "
+                    "Orders,ProductCart,Product,Merchant where Cart.MerchantID=Merchant.MerchantID and Orders.CartID=ProductCart.CartID and ProductCart.ProductID="
                     "Product.ProductID and Product.MerchantID=%s and Orders.DeliveredDate is null and Cart.CartID=ProductCart.CartID" , (merchantid,))
     else:
-        cur.execute("select distinct ProductCart.CartID,Orders.OrderID, Orders.DeliveredDate ,Orders.OrderedDate,Cart.Total from Cart, "
-                    "Orders,ProductCart,Product where Orders.CartID=ProductCart.CartID and ProductCart.ProductID="
+        cur.execute("select distinct Merchant.Name ,Merchant.Address ,Merchant.RegisteredName, Merchant.ContactNumber,ProductCart.CartID,Orders.OrderID, Orders.DeliveredDate ,Orders.OrderedDate,Cart.Total from Cart, "
+                    "Orders,ProductCart,Product,Merchant where Cart.MerchantID=Merchant.MerchantID and Orders.CartID=ProductCart.CartID and ProductCart.ProductID="
                     "Product.ProductID and Product.MerchantID=%s and Orders.DeliveredDate is not null and Cart.CartID=ProductCart.CartID" , (merchantid,))
     res = []
     carts=cur.fetchall()
@@ -25,6 +25,7 @@ def getDelivery(mysql, merchantid, delivered_filter):
             data['Rated'] = IsRated(mysql, i['OrderID'])
         res.append(data)
     cur.close()
+    print(res)
     return res
 
 

@@ -12,8 +12,12 @@ def validation(mysql,mid,mname,regname,email,contact,address,password):
 			flag[0] = 1
 		else:
 			r[0]['Name'] = mname
-	if result['RegisteredName']!=regname:
-		cur.execute("select * from Merchant where RegisteredName ='"+regname+"';")
+	if result['RegisteredName'] != regname:
+		if result['RegisteredName'] != regname:
+			if "'" in regname:
+				a, c = regname.split("'")
+				regname = a+chr(39)+c
+		cur.execute(f'''select * from Merchant where RegisteredName = "{regname}";''')
 		res = cur.fetchone()
 		if res != None:
 			flag[1]=1
@@ -34,14 +38,22 @@ def validation(mysql,mid,mname,regname,email,contact,address,password):
 		else:
 			r[0]['ContactNumber'] = contact
 	if result['Address']!=address:
-		cur.execute("select * from Merchant where Address ='"+address+"';")
+		if result['Address'] != address:
+			if "'" in address:
+				a, c = address.split("'")
+				address = a+chr(39)+c
+		cur.execute(f'''select * from Merchant where Address = "{address}";''')
 		res = cur.fetchone()
 		if res != None:
 			flag[4]=1
 		else:
 			r[0]['Address'] = address
 	if result['Password']!=password:
-		cur.execute("select * from Merchant where Password ='"+password+"';")
+		if result['Password'] != password:
+			if "'" in password:
+				a, c = password.split("'")
+				password = a+chr(39)+c
+		cur.execute(f'''select * from Merchant where Password = "{password}";''')
 		res = cur.fetchone()
 		if res != None:
 			flag[5]=1

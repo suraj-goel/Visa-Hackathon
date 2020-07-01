@@ -75,9 +75,9 @@
        {% if data['total_earnings'] %}<h4><b>Total earnings:</b> &#8377;{{data['total_earnings']}}</h4>{% endif %}
        {% if data['total_earnings'] and data['total_spendings'] %}
        {% if data['total_spendings']|float > data['total_earnings']|float %}
-       You are at loss<i class="fa fa-chevron-circle-down" style="font-size:28px;color:red;float:right"></i>
+       You are at loss<i class="fa fa-chevron-circle-down" style="font-size:28px;color:red;float:none;"></i>
        {% else %}
-       You are in profit!!<i class="fa fa-chevron-circle-up" style="font-size:28px;color:green;float:right"></i>
+       You are in profit!!<i class="fa fa-chevron-circle-up" style="font-size:28px;color:green;float:none;"></i>
        {% endif %}
        {% endif %}
        <hr>
