@@ -1,16 +1,19 @@
+<!--
+Function of page:
+To add and display offer information for a supplier merchant
+-->
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./manage_offers/offers.css') }}">
 <script type="text/javascript" src="{{url_for('static',filename='./manage_offers/offers.js') }}"></script>
-<center>
+<body>
+    <center>
     {% if message=='yes' %}
-    <span style="color:green">Successfully added/edited offer</span>
-    {% endif %}
-    {% if message=='no' %}
-    <span style="color:red;"> Already exists. Edit the offer </span>
+        <span style="color:green">Successfully added/edited offer</span>
+    {% elif message=='no' %}
+        <span style="color:red;"> Offer already exists. Edit the offer </span>
     {% endif %}
     <h1 style="color: #1a1f71;">Offers</h1>
     <button type="button" class="button" id="formButton"><span> Add Offer </span></button>
-
     <form id="form1" method="post" style="border: none;">
         <div id="newForm" class="containerForm">
             <table border="0" style="border-spacing: 10px 15px; border-collapse: initial;">
@@ -18,14 +21,17 @@
                     <td>
                         <h4>Discount Percentage</h4>
                     </td>
-                    <td> <input type="text" name="percentage" required></h4>
+                    <td>
+                        <input type="text" name="percentage" required></h4>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <h4>Information</h4>
                     </td>
-                    <td><textarea name="info" required></textarea></td>
+                    <td>
+                        <textarea name="info" required></textarea>
+                    </td>
                 </tr>
                 <tr>
                     <td>
@@ -39,8 +45,7 @@
                     <td>
                         <h4>Quantity Required</h4>
                     </td>
-                    <td><input type="number" min='0' name="quantity" id='quantity' onchange="validate(this.id)"
-                            required>
+                    <td><input type="number" min='0' name="quantity" id='quantity' onchange="validate(this.id)" required>
                     </td>
                 </tr>
                 <tr>
@@ -49,12 +54,11 @@
                     </td>
                     <td>
                         {% if product %}
-                        
-                        {% for i in product %}
-                            <input type="checkbox" value="{{i}}" name='selectedProducts'> {{i}} <br>
-                        {% endfor %}
+                            {% for i in product %}
+                                <input type="checkbox" value="{{i}}" name='selectedProducts'> {{i}} <br>
+                            {% endfor %}
                         {% else %}
-                        No Product in your inventory
+                            No Product in your inventory
                         {% endif %}
                     </td>
                 </tr>
@@ -106,5 +110,5 @@
     </div>
     {% endif %}
 </center>
-
+</body>
 </html>
