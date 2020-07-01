@@ -14,7 +14,7 @@ from search_merchants.searchMerchant import getCurrentLocation
 from place_order.displayProduct import displayAllProducts, displayAllOffers
 from search_merchants.searchProducts import getSearchResults
 # from place_order.displayCart import displayALLCart
-from login_registration.registerMerchant import checkIfExistingMerchant, registerNewMerchant, checkPayType, insertLocation
+from login_registration.registerMerchant import checkIfExistingMerchant, registerNewMerchant, checkPayType, insertLocation, updateLocation
 from login_registration.addressconversion import getCoordinates
 from accounts.validate_accounts import validation  # validate_accounts.py
 from place_order.displayCart import addToCart
@@ -512,7 +512,23 @@ def editAccountDetails():
             if "'" in password:
                 a, c = password.split("'")
                 password = a+chr(39)+c
+            try:
+                geocode_res = getCoordinates(address)
+                print(geocode_res)
+                if len(geocode_res) == 0:
+                    flash('Enter Valid Location')
+                    result = r[0]
+                    return render_template("./accounts/editAccountDetails.html", result=result)
+                print(len(geocode_res) ==0)
+                #print(geocode_res[0] == None)
+                latlong = geocode_res[0]['geometry']['location']
 
+            except requests.exceptions.RequestException as e:
+                flash('Enter Valid Location')
+                result = r[0]
+                return render_template("./accounts/editAccountDetails.html", result=result)
+
+            updateLocation(mysql, latlong['lat'], latlong['lng'], merchant_id)
             cur.execute(f"""update Merchant set Name = "{name}", RegisteredName = "{registeredName}", EmailID = "{email}", ContactNumber = "{contactno}", Address = "{address}", password = "{password}" where MerchantID="{merchant_id}";""")
             mysql.connection.commit()
             return redirect('/accounts/')
