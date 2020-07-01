@@ -30,7 +30,7 @@ def registerNewMerchant(mysql, email, password, merchantName, address, contactNu
   :return: adds new merchant details to database and returns unique merchant identifier
   """
   id = str(uuid.uuid1().int)
-  id = id[:20]
+  id = id[:19]
   address = address[:100]
   cur = mysql.connection.cursor()
   query = """INSERT INTO Merchant (MerchantID,Name,RegisteredName,EmailID,ContactNumber,Address,Password)VALUES(%s, 
