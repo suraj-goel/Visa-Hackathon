@@ -266,7 +266,7 @@ def MerchantMeasurement(MCC = '5812'):
                           cert=cert,
                           headers=header,
                           auth=auth,
-                          json=p,timeout=1)
+                          json=p,timeout=3)
         res=r.json()
         data={}
         res = res['response']['responseData'][0]
