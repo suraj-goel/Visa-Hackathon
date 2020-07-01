@@ -42,10 +42,6 @@
             background: #1a1f71;
             border: 2px solid #FFF;
         }
-        .btn:hover{
-            color:#1a1f71;
-            text-decoration: none;
-        }
        .container {
            margin: 4% auto;
 
@@ -98,6 +94,11 @@
                 font-size: 1.7em;
             }
         }
+       input[type="submit"]:hover{
+           background-color: #faaa13;
+           text-decoration: none;
+           border: #faaa13;
+       }
 
 
     </style>
@@ -173,7 +174,7 @@
                         <input type="email" name="email" class="form-control" required><br>
                         <label>Password</label><br>
                         <input type="password" name="password" class="form-control" required><br><br>
-                        <input type="submit" class="btn btn-primary btn-block btn-lg" value="Login">
+                        <input type="submit" class="btn btn-primary btn-block btn-lg"  value="Login">
                     </form>
                     <p class="mt-2">Not a member? <a href="/register">Create Account</a></p>
                 </div>
