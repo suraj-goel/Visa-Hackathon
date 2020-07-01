@@ -1,6 +1,10 @@
 from flask_mysqldb import MySQL
 
 def set_connection(app):
+    """
+    :param app: controller object
+    :return: database connection
+    """
     print('connecting to database....')
     app.config['MYSQL_HOST'] = 'SG-visahackathon-2575-master.servers.mongodirector.com'
     app.config['MYSQL_USER'] = 'sgroot'
