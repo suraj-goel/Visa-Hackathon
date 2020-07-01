@@ -1,8 +1,13 @@
+<!--
+Function of page:
+To display merchant performance and compare performance with global performance using merchant measurement API
+-->
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./manage_inventory/inventory.css') }}">
 <script type="text/javascript" src="{{url_for('static',filename='./manage_inventory/inventory.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!--display graphs using Chart.js-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
 <style>
     td{
@@ -14,97 +19,97 @@
     padding-left:6px;
     }
 </style>
+<body>
    <center>
-    <h1>Performance</h1>
-<hr style="height:2px;border-width:0;color:yellow;background-color:gold">
-           <h3 style="color: #1a1f71;">Stat from Visa measurement API for your merchant category</h3>
-       <h4>Category: {{data['category_name']}} </h4><br>
-       {% if data['fraud_checked_to_Sales_Ratio'] %}
-<table border="1">
-    <tr>
+        <h1>Performance</h1>
+        <hr style="height:2px;border-width:0;color:yellow;background-color:gold">
+        <h3 style="color: #1a1f71;">Statistics from Visa merchant measurement API for your merchant category</h3>
+        <h4>Category: {{data['category_name']}} </h4><br>
+        {% if data['fraud_checked_to_Sales_Ratio'] %}
+            <table border="1">
+            <tr>
                 <td>fraud checked to Sales Ratio</td>
-        <td>{{data['fraud_checked_to_Sales_Ratio']}}</td>
-    </tr>
-    <tr>
+                <td>{{data['fraud_checked_to_Sales_Ratio']}}</td>
+            </tr>
+            <tr>
                 <td>non fraud checked to Sales Ratio</td>
-        <td>{{data['non_fraud_checked_to_Sales_Ratio']}}
-        </td>
-    </tr>
-        <tr>
-        <td>fraud checked sales growth</td>
-
-        <td>{{data['fraud_checked_sales_growth']}}
-        {% if data['fraud_checked_sales_growth']|float < 0 %} <i class="fa fa-chevron-circle-down" style="font-size:28px;color:red"></i>
-        {% else %} <i class="fa fa-chevron-circle-up" style="font-size:28px;color:green"></i> {% endif %}
-        </td>  </tr>
-        <tr>
-                <td>sales transaction growth this month</td>
-        <td>{{data['sales_transaction_growth_monthly']}}
-                {% if data['sales_transaction_growth_monthly']|float < 0 %} <i class="fa fa-chevron-circle-down" style="font-size:28px;color:red"></i>
-        {% else %} <i class="fa fa-chevron-circle-up" style="font-size:28px;color:green"></i> {% endif %}
-        </td>
-    </tr>
-    <tr>
-        <td>sales transaction growth this year</td>
-        <td>{{data['sales_transaction_growth_yearly']}}
-                {% if data['sales_transaction_growth_yearly']|float < 0 %} <i class="fa fa-chevron-circle-down" style="font-size:28px;color:red"></i>
-        {% else %} <i class="fa fa-chevron-circle-up" style="font-size:28px;color:green"></i> {% endif %}
-        </td>
-    </tr>
-    <tr>
-                <td>sales volume growth this month</td>
-        <td>{{data['sales_volume_growth_monthly']}}
-                {% if data['sales_volume_growth_monthly']|float < 0 %} <i class="fa fa-chevron-circle-down" style="font-size:28px;color:red;float:right"></i>
-        {% else %} <i class="fa fa-chevron-circle-up" style="font-size:28px;color:green"></i> {% endif %}
-        </td>
-    </tr>
-    <tr>
-        <td>sales volume growth this year</td>
-        <td>{{data['sales_volume_growth_yearly']}}
-                {% if data['sales_volume_growth_yearly']|float < 0 %} <i class="fa fa-chevron-circle-down" style="font-size:28px;color:red;float:right"></i>
-        {% else %} <i class="fa fa-chevron-circle-up" style="font-size:28px;color:green;float:right"></i> {% endif %}
-        </td>
-    </tr>
-</table>{% else %}
-       <h3>Unable to fetch data<br>Refresh or try again later</h3>
-              {% endif %}
+                <td>{{data['non_fraud_checked_to_Sales_Ratio']}}
+                </td>
+            </tr>
+            <tr>
+                <td>fraud checked sales growth</td>
+                <td>{{data['fraud_checked_sales_growth']}}
+                {% if data['fraud_checked_sales_growth']|float < 0 %} <i class="fa fa-chevron-circle-down" style="font-size:28px;color:red"></i>
+                {% else %} <i class="fa fa-chevron-circle-up" style="font-size:28px;color:green"></i> {% endif %}
+                </td>  </tr>
+                <tr>
+                        <td>sales transaction growth this month</td>
+                <td>{{data['sales_transaction_growth_monthly']}}
+                        {% if data['sales_transaction_growth_monthly']|float < 0 %} <i class="fa fa-chevron-circle-down" style="font-size:28px;color:red"></i>
+                {% else %} <i class="fa fa-chevron-circle-up" style="font-size:28px;color:green"></i> {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>sales transaction growth this year</td>
+                <td>{{data['sales_transaction_growth_yearly']}}
+                        {% if data['sales_transaction_growth_yearly']|float < 0 %} <i class="fa fa-chevron-circle-down" style="font-size:28px;color:red"></i>
+                {% else %} <i class="fa fa-chevron-circle-up" style="font-size:28px;color:green"></i> {% endif %}
+                </td>
+            </tr>
+            <tr>
+                        <td>sales volume growth this month</td>
+                <td>{{data['sales_volume_growth_monthly']}}
+                        {% if data['sales_volume_growth_monthly']|float < 0 %} <i class="fa fa-chevron-circle-down" style="font-size:28px;color:red;float:right"></i>
+                {% else %} <i class="fa fa-chevron-circle-up" style="font-size:28px;color:green"></i> {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>sales volume growth this year</td>
+                <td>{{data['sales_volume_growth_yearly']}}
+                        {% if data['sales_volume_growth_yearly']|float < 0 %} <i class="fa fa-chevron-circle-down" style="font-size:28px;color:red;float:right"></i>
+                {% else %} <i class="fa fa-chevron-circle-up" style="font-size:28px;color:green;float:right"></i> {% endif %}
+                </td>
+            </tr>
+        </table>
+        {% else %}
+            <h3>Unable to fetch data<br>Refresh or try again later</h3>
+        {% endif %}
        <hr style="height:2px;border-width:0;color:yellow;background-color:gold">
               <h3 style="color: #1a1f71;">Your earnings and spendings</h3>
        {% if data['total_spendings'] or data['total_earnings'] %}
        {% if data['total_spendings'] %}<h4><b>Total spending:</b> &#8377;{{data['total_spendings']}} </h4>{% endif %}
        {% if data['total_earnings'] %}<h4><b>Total earnings:</b> &#8377;{{data['total_earnings']}}</h4>{% endif %}
        {% if data['total_earnings'] and data['total_spendings'] %}
-       {% if data['total_spendings']|float > data['total_earnings']|float %}
-       You are at loss<i class="fa fa-chevron-circle-down" style="font-size:28px;color:red;float:none;"></i>
-       {% else %}
-       You are in profit!!<i class="fa fa-chevron-circle-up" style="font-size:28px;color:green;float:none;"></i>
-       {% endif %}
+           {% if data['total_spendings']|float > data['total_earnings']|float %}
+                You are at loss<i class="fa fa-chevron-circle-down" style="font-size:28px;color:red;float:none;"></i>
+           {% else %}
+                You are in profit!!<i class="fa fa-chevron-circle-up" style="font-size:28px;color:green;float:none;"></i>
+           {% endif %}
        {% endif %}
        <hr>
        <b><h4>Monthly summary</h4></b>
        {% if data['total_spendings_monthly']%}<h6 style="padding-left:10px;"><b>Monthly spending:</b>  &#8377;{{data['total_spendings_monthly'][-1]['Total']}} </h6>{% endif %}
        {% if data['total_earnings_monthly']%}<h6 style="padding-left:10px;"><b>Monthly earning:</b> &#8377;{{data['total_earnings_monthly'][-1]['Total']}}</h6>{% endif %}
-
        <hr>
        {% if data['total_spendings_monthly'] and  data['total_earnings_monthly'] %} <canvas id="myChart" width="600" height="400"></canvas> <h6>Month</h6>
        {% elif data['total_spendings_monthly'] %}<canvas id="spending" width="600" height="400"></canvas> <h6>Month</h6>
        {% elif data['total_earnings_monthly'] %}<canvas id="earning" width="600" height="400"></canvas> <h6>Month</h6>{% endif %}
        {% else %}No data available{% endif %}
-       <hr style="height:2px;border-width:0;color:yellow;background-color:gold">
-
+        <hr style="height:2px;border-width:0;color:yellow;background-color:gold">
         <h3 style="color: #1a1f71;">Transactions this month</h3>
-              {% if data['total_trasactions'] %}
-       <h4><b>Total transactions:</b> {{data['total_trasactions']}} </h4>
-       <h4><b>Total Transactions this month:</b> {{data['total_transactions_monthly'][-1]['orders']}}</h4><hr>
-        <canvas id="myChart2" width="600" height="400"></canvas>{% else %} No data available
+       {% if data['total_trasactions'] %}
+           <h4><b>Total transactions:</b> {{data['total_trasactions']}} </h4>
+           <h4><b>Total Transactions this month:</b> {{data['total_transactions_monthly'][-1]['orders']}}</h4><hr>
+            <canvas id="myChart2" width="600" height="400"></canvas>
+       {% else %}
+            No data available
        {% endif %}
+<!-- scripts for graphs -->
 <script>
 
-    // Global parameters:
-// do not resize the chart canvas when its container does (keep at 600x400px)
 Chart.defaults.global.responsive = false;
 
-// define the chart data
+// define the chart data for displaying monthly spendings
 var chartData = {
   labels : [{% for item in data['total_spendings_monthly'] %}
              "{{item['month']}}",
@@ -178,7 +183,7 @@ var myChart = new Chart(ctx, {
     }
 });
 </script>
-       <script>
+<script>
 
     // Global parameters:
 // do not resize the chart canvas when its container does (keep at 600x400px)
@@ -234,7 +239,7 @@ var myChart = new Chart(ctxA, {
     }
 });
 </script>
-              <script>
+<script>
 
     // Global parameters:
 // do not resize the chart canvas when its container does (keep at 600x400px)
@@ -290,7 +295,7 @@ var myChart = new Chart(ctxB, {
     }
 });
 </script>
-       <script>
+<script>
 var chartData2 = {
   labels : [{% for item in data['total_transactions_monthly'] %}
              "{{item['month']}}",
@@ -340,4 +345,6 @@ window.myChart2 = new Chart(ctx1, {
     }
 });
 </script>
-              </center>
+</center>
+</body>
+</html>
