@@ -41,9 +41,9 @@
     </script>
     <center>
         <div id="thisDiv1" style="display: none" class="split1 right">
-            <h1>Your supplier profile for requirements</h1>
+            <h1 style="color: #1a1f71;">Your supplier profile for requirements</h1>
             <br><br><br>
-            <h1>Negotiation Requests</h1><br>
+            <h1 style="color: #1a1f71;">Negotiation Requests</h1><br>
 
             {% if contactInfo %}
 
@@ -107,7 +107,7 @@
         </div>
         <div id="thisDiv2" style="display: none" class="split1 right">
 
-            <h1>Your buyer profile for Negotiation</h1>
+            <h1  style="color: #1a1f71;">Your buyer profile for Negotiation</h1>
             <form method="post" action="">
                 <select name="filterbuyer">
                     {% if buyer_choice=='R' %}
@@ -130,15 +130,15 @@
                 <input type="submit" value="filter" class="button" onclick="javascript: form.action='/negotiation';">
             </form>
             {% if buyer_choice=='A' %}
-            <h2>Accepted by Supplier</h2>
+            <h2 style="color: #1a1f71;">Accepted by Supplier</h2>
             {% elif buyer_choice=='D' %}
-            <h2>Rejected by Supplier</h2>
+            <h2 style="color: #1a1f71;">Rejected by Supplier</h2>
             {% elif buyer_choice=='E' %}
-            <h2>All unprocessed negotiation</h2>
+            <h2 style="color: #1a1f71;">All unprocessed negotiation</h2>
             {% elif buyer_choice=='R' %}
-            <h2>Pending Negotiations</h2>
+            <h2 style="color: #1a1f71;">Pending Negotiations</h2>
             {% else %}
-            <h2>All unprocessed negotiation</h2>
+            <h2 style="color: #1a1f71;">All unprocessed negotiation</h2>
             {% endif %}
             {% if buy_items %}
             <h2 style="color: #1a1f71;"></h2>
@@ -234,7 +234,7 @@
                 </table>
             </div>
             {% else %}
-            <h2> Could not find any match</h2>
+            <h2 style="color: #1a1f71;"> Could not find any match</h2>
             {% endif %}
         </div>
     </center>
