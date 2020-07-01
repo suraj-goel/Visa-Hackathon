@@ -462,8 +462,7 @@ def showCart(merchant_id):
         session['finalDiscountPrice'] = finalDiscountPrice
         session['fqty']=qty
         session['fProductID']=ProductID
-        session['payment_flag']= pf
-        pf = '0'
+        session['payment_flag']= '1'
         if (Type == 'Process Payment'):
             amount = finalDiscountPrice
             return render_template('./payment/payment.html', amount=amount)
@@ -631,11 +630,12 @@ def b2bpay():
         status = paymentProcessing(amount, merchant_id, accountNumber)#clientid is a default parameter but can be added
         if (status == 1):
             print('Payment Authorized')
+            print(session['payment_flag'])
             if (session['payment_flag'] == '1'):
                 addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'))
             elif (session['payment_flag'] == '2'):
                 addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['requirementid'])
-            else:
+            elif (session['payment_flag'] == '3'):
                 addToOrders(mysql, qty, ProductID, merchant_id, amount, datetime.today().strftime('%Y-%m-%d'),session['payment_flag'], session['negotiationid'])
             updateSupplierInventory(mysql, ProductID,qty) #productID=ProductList
             return redirect(url_for('showAll'))
