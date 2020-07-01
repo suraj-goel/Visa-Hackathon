@@ -340,7 +340,7 @@ textarea {
 }
 
 .star:checked::after {
-  color: grey;
+  color: gold;
 }
 
 .star:checked ~ .star::after,
@@ -370,7 +370,7 @@ textarea {
 }
 
 .bigstar:checked::after {
-  color: grey;
+  color: #1a1f71;
 }
 
 .bigstar:checked ~ .bigstar::after,
