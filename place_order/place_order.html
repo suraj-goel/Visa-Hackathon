@@ -3,13 +3,14 @@
     xmlns="http://www.w3.org/1999/html">
 <script type="text/javascript" src="{{url_for('static',filename='./place_order/place_order.js') }}"></script>
 
-<body onmouseover="validate()">
-    <h2 style="color:#1a1f71"> Place your Orders here </h2>
 
+<body onmouseover="validate()">
     {% if products %}
+        <h2 style="color:#1a1f71"> Place your Orders here </h2>
     <center>
         <div class="container">
             <form id="form" method="post" action="">
+
                 <table class="table table-bordered" id="tableID">
                     <tr>
                         <th> Product </th>
@@ -74,7 +75,10 @@
                 <button type="submit" form="form" value="ADD TO CART" class="button"/><span>Add to Cart</span></button>
             </form>
         </div>
+
     </center>
-    {% endif %}
+        {% else %}
+    <h2 style="color:#1a1f71"> No products available try some other merchant </h2>
+        {% endif %}
 
 </body>

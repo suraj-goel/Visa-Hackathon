@@ -358,7 +358,6 @@ def modify():
 @login_required
 def showCart(merchant_id):
     totalQuantity = 0
-    session['mid'] = merchant_id
     seller_id = session['mid']
     qty = []
     ProductID = []
@@ -499,7 +498,8 @@ def editAccountDetails():
 
         if r[2] == 0:
             cur.execute(
-                "update Merchant set Name = '" + name + "', RegisteredName = '" + registeredName + "', EmailID = '" + email + "', ContactNumber = '" + contactno + "', Address = '" + address + "', password = '" + password + "' where MerchantID='" + merchant_id + "';")
+                'update Merchant set Name = "{}", RegisteredName = "{}", EmailID = "{}", ContactNumber = "{}", Address = "{}", password = "{}" where MerchantID="{}";'.format(
+                    name, registeredName, email, contactno, address, password, merchant_id))
             mysql.connection.commit()
             return redirect('/accounts/')
         else:

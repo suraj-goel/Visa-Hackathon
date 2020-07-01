@@ -147,6 +147,7 @@ def createBuyer(mysql,buyerid,clientid="B2BWS_1_1_9999"):
 
 def paymentProcessing(amount,buyerid,supplier_account_no ,clientid='B2BWS_1_1_9999'):
     #fetch buyerid from database and supplier accunt number too
+    print(buyerid,supplier_account_no,amount)
     url = "https://sandbox.api.visa.com/vpa/v1/payment/ProcessPayments"
     a = amount
     p = json.loads(
@@ -154,12 +155,12 @@ def paymentProcessing(amount,buyerid,supplier_account_no ,clientid='B2BWS_1_1_99
     {
     "messageId": "2020-06-14T14:19:00.000Z",
     "clientId": "'''+clientid+'''",
-    "buyerId": '''+buyerid+''',
+    "buyerId": "'''+str(buyerid)+'''",
     "actionType": 1,
     "payment": {
-    "accountNumber": ''' + supplier_account_no + ''',
+    "accountNumber": "''' + str(supplier_account_no) + '''",
         "accountType": 2,
-        "accountLimit": 100,
+        "accountLimit": 100000,
         "paymentGrossAmount": ''' + str(a) + ''',
         "currencyCode": "INR",
         "paymentType": "CCC"
