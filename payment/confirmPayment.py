@@ -5,7 +5,7 @@ import uuid
 # 2 is from requirement id is requirementid
 # 3 is from negotiation id is negotiation id
 # we need this to update negotiation and requirement table to say that payment is done
-def addToOrders(mysql,qty,ProductID,merchant_id,amount,currentDate,payment_flag,id=''):
+def addToOrders(mysql,qty,ProductID,merchant_id,amount,currentDate,payment_flag='1',id=''):
     orderID = uuid.uuid1()
     cart_id = uuid.uuid1()
     cur = mysql.connection.cursor()
