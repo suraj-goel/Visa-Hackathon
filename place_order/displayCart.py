@@ -33,9 +33,9 @@ def addToCart(mysql,qty,ProductID,Name,Description,Price,merchant_id,status,fina
     cur.close()
 
 
-def getMerchantInfo(mysql,merchantID):
+def getMerchantInfo(mysql: object, merchantID: object) -> object:
     cur = mysql.connection.cursor()
-    cur.execute('SELECT EmailID,ContactNumber FROM Merchant where MerchantID=%s',(merchantID))
+    cur.execute('SELECT EmailID,ContactNumber FROM Merchant where MerchantID=%s',(merchantID,))
     a = cur.fetchall()
     data = []
     data.append(a[0]['EmailID'])
