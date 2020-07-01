@@ -180,7 +180,10 @@
                                     <input class="star" name="rating5" type="radio" value="5" checked="checked" /><br> {% endif %}
                             </fieldset></div>
                     {% endif %}
-                    Total: &#8377;{{item['Total']}} 	<br>
+                    Total: &#8377;{{item['Total']}}<br>
+                    Buyer : {{item['Name']}}<br>
+                    Address: {{item['RegisteredName']}}, {{item['Address']}}<br>
+                    Contact : {{item['ContactNumber']}}<br><br>
                     Was ordered on {{ item['OrderedDate'] }} <br>
                     {% if item['DeliveredDate'] %}
                     <span style="color:green">Was delivered on {{item['DeliveredDate']}}</span>

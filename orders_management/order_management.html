@@ -69,13 +69,12 @@
             {% for item in history %}
             <tr class="header">
                 <td colspan="2">
-
+  <h3>Cart Details</h3>
                     <form action="/delivered" method="post">
                         <input type="hidden" value="{{item['OrderID']}}" name="orderid">
 {% if not item['DeliveredDate'] %} <button style="float:right" type="submit">Click if delivery done</button> {% else %}
 </form>
 
-                    <h3>Cart Details</h3>
                     {% if not item['Rated'] %}
                     <form method="post">
                             <fieldset class="star-rating" id="rate-item-12343" style="padding-left:580px">
