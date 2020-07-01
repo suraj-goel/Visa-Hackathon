@@ -57,4 +57,5 @@ def validation(mysql,mid,mname,regname,email,contact,address,password):
 		if i:
 			r[2] = 1
 	r[1] = flag
+	cur.close()
 	return r

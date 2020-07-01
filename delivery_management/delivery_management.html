@@ -1,157 +1,154 @@
+<!--
+Function of page:
+To manage deliver for the supplier merchant.
+
+Description:
+The page displays delivery information of orders made by buyer merchants for the supplier to keep track of.
+-->
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./manage_inventory/inventory.css') }}">
 <script type="text/javascript" src="{{url_for('static',filename='./manage_inventory/inventory.js') }}"></script>
-<style>
-</style>
-<center>
-	<h1 style="color: #1a1f71;">Product Delivery</h1>
-	{% if avg_ratings['stars'] %}
-	<h3>
-		Your average rating </h3><br>
-	{%set b=avg_ratings['Avg_rating']|float%}
-	{% set a= avg_ratings['stars']|int %}
-	<fieldset style="width: 225px;" title="{{avg_ratings['Avg_rating']}} for {{avg_ratings['Votes']}} deliveries">
-		{% if a==1 %}
-		<input class="star1" name="rating11" type="radio" value="1" checked="checked" />
-		<input class="star1" name="rating11" type="radio" value="2" disabled />
-		<input class="star1" name="rating11" type="radio" value="3" disabled />
-		<input class="star1" name="rating11" type="radio" value="4" disabled />
-		<input class="star1" name="rating11" type="radio" value="5" disabled /><br>
-		{% elif a==2 %}
-		<input class="star1" name="rating22" type="radio" value="1" disabled />
-		<input class="star1" name="rating22" type="radio" value="2" checked="checked" />
-		<input class="star1" name="rating22" type="radio" value="3" disabled />
-		<input class="star1" name="rating22" type="radio" value="4" disabled />
-		<input class="star1" name="rating22" type="radio" value="5" disabled /><br>
-		{% elif a==3 %}
-		<input class="star1" name="rating33" type="radio" value="1" disabled />
-		<input class="star1" name="rating33" type="radio" value="2" disabled />
-		<input class="star1" name="rating33" type="radio" value="3" checked="checked" />
-		<input class="star1" name="rating33" type="radio" value="4" disabled />
-		<input class="star1" name="rating33" type="radio" value="5" disabled /><br>
-		{% elif a==4 %}
-		<input class="star1" name="rating44" type="radio" value="1" disabled />
-		<input class="star1" name="rating44" type="radio" value="2" disabled />
-		<input class="star1" name="rating44" type="radio" value="3" disabled />
-		<input class="star1" name="rating44" type="radio" value="4" checked disabled />
-		<input class="star1" name="rating44" type="radio" value="5" disabled /><br>
-		{% elif a==5 %}
-		<input class="star1" name="rating55" type="radio" value="1" disabled />
-		<input class="star1" name="rating55" type="radio" value="2" disabled />
-		<input class="star1" name="rating55" type="radio" value="3" disabled />
-		<input class="star1" name="rating55" type="radio" value="4" disabled />
-		<input class="star1" name="rating55" type="radio" value="5" checked="checked" /><br>
+<body>
+	<center>
+		<h1 style="color: #1a1f71;">Product Delivery</h1>
+		{% if avg_ratings['stars'] %}
+			<h3>Your average rating </h3><br>
+			{% set b=avg_ratings['Avg_rating']|float%}
+			{% set a= avg_ratings['stars']|int %}
+			<fieldset style="width: 225px;" title="{{avg_ratings['Avg_rating']}} for {{avg_ratings['Votes']}} deliveries">
+				{% if a==1 %}
+				<input class="star1" name="rating11" type="radio" value="1" checked="checked" />
+				<input class="star1" name="rating11" type="radio" value="2" disabled />
+				<input class="star1" name="rating11" type="radio" value="3" disabled />
+				<input class="star1" name="rating11" type="radio" value="4" disabled />
+				<input class="star1" name="rating11" type="radio" value="5" disabled /><br>
+				{% elif a==2 %}
+				<input class="star1" name="rating22" type="radio" value="1" disabled />
+				<input class="star1" name="rating22" type="radio" value="2" checked="checked" />
+				<input class="star1" name="rating22" type="radio" value="3" disabled />
+				<input class="star1" name="rating22" type="radio" value="4" disabled />
+				<input class="star1" name="rating22" type="radio" value="5" disabled /><br>
+				{% elif a==3 %}
+				<input class="star1" name="rating33" type="radio" value="1" disabled />
+				<input class="star1" name="rating33" type="radio" value="2" disabled />
+				<input class="star1" name="rating33" type="radio" value="3" checked="checked" />
+				<input class="star1" name="rating33" type="radio" value="4" disabled />
+				<input class="star1" name="rating33" type="radio" value="5" disabled /><br>
+				{% elif a==4 %}
+				<input class="star1" name="rating44" type="radio" value="1" disabled />
+				<input class="star1" name="rating44" type="radio" value="2" disabled />
+				<input class="star1" name="rating44" type="radio" value="3" disabled />
+				<input class="star1" name="rating44" type="radio" value="4" checked disabled />
+				<input class="star1" name="rating44" type="radio" value="5" disabled /><br>
+				{% elif a==5 %}
+				<input class="star1" name="rating55" type="radio" value="1" disabled />
+				<input class="star1" name="rating55" type="radio" value="2" disabled />
+				<input class="star1" name="rating55" type="radio" value="3" disabled />
+				<input class="star1" name="rating55" type="radio" value="4" disabled />
+				<input class="star1" name="rating55" type="radio" value="5" checked="checked" /><br>
+				{% endif %}
+			</fieldset><br><br>
+			{% if b >= 3 %}
+				<span style="color:green;">{{avg_ratings['Avg_rating']}} for {{avg_ratings['Votes']}} deliveries<br>
+					Great job:)</span>
+			{% else %}
+				<span style="color:red;">{{avg_ratings['Avg_rating']}} for {{avg_ratings['Votes']}} deliveries<br>
+					You have to improve your ratings :(</span>
+			{% endif %}<br><br>
 		{% endif %}
-	</fieldset><br><br>
-	{% if b >= 3 %}
-	<span style="color:green;">{{avg_ratings['Avg_rating']}} for {{avg_ratings['Votes']}} deliveries<br> Great job
-		:)</span>
-
-	{% else %}
-	<span style="color:red;">{{avg_ratings['Avg_rating']}} for {{avg_ratings['Votes']}} deliveries<br> You have to
-		improve
-		your ratings :(</span>
-	{% endif %}<br><br>
-	{% endif %}
-	<form class="example" method="post" action="" style="margin:auto;max-width:600px">
-		<span class="custom-dropdown custom-dropdown--white">
-			<select name="filter" class="custom-dropdown__select" style="width: max-content;">
-				<option value="yes">Delivered to customer</option>
-				{% if filter=='no' %}
-				<option value="no" selected>Not delivered</option>
-				{% else %}
-				<option value="no">Not delivered</option> {% endif %}
-				{% if filter=='all' %}
-				<option value="all" selected>All</option>
-				{% else %}
-				<option value="all">All</option> {% endif %}
-			</select>
-		</span>
-		<button type="submit">Filter<i class="fa fa-filter"></i>
-		</button>
-	</form>
-	{% if history %}
-	<div class="container">
-		<table class="table table-bordered">
-			{% for item in history %}
-			<tr class="header">
-				<td colspan="2">
-
-					<h3>Cart Details</h3>
-					{% if not item['Rated'] and item['DeliveredDate'] %}
-					<span style="float:right;">You were not rated for this order</span>
-					{% elif item['DeliveredDate'] %}
-					<div style="float:right;">
-						Your rating : {{ item['Rated'] }}<br>
-						<fieldset>
-							{% if item['Rated']=='1' %}
-							<input class="star" name="rating1" type="radio" value="1" checked="checked" />
-							<input class="star" name="rating1" type="radio" value="2" disabled />
-							<input class="star" name="rating1" type="radio" value="3" disabled />
-							<input class="star" name="rating1" type="radio" value="4" disabled />
-							<input class="star" name="rating1" type="radio" value="5" disabled /><br>
-							{% elif item['Rated']=='2' %}
-							<input class="star" name="rating2" type="radio" value="1" disabled />
-							<input class="star" name="rating2" type="radio" value="2" checked="checked" />
-							<input class="star" name="rating2" type="radio" value="3" disabled />
-							<input class="star" name="rating2" type="radio" value="4" disabled />
-							<input class="star" name="rating2" type="radio" value="5" disabled /><br>
-							{% elif item['Rated']=='3' %}
-							<input class="star" name="rating3" type="radio" value="1" disabled />
-							<input class="star" name="rating3" type="radio" value="2" disabled />
-							<input class="star" name="rating3" type="radio" value="3" checked="checked" />
-							<input class="star" name="rating3" type="radio" value="4" disabled />
-							<input class="star" name="rating3" type="radio" value="5" disabled /><br>
-							{% elif item['Rated']=='4' %}
-							<input class="star" name="rating4" type="radio" value="1" disabled />
-							<input class="star" name="rating4" type="radio" value="2" disabled />
-							<input class="star" name="rating4" type="radio" value="3" disabled />
-							<input class="star" name="rating4" type="radio" value="4" checked="checked" />
-							<input class="star" name="rating4" type="radio" value="5" disabled /><br>
-							{% elif item['Rated']=='5' %}
-							<input class="star" name="rating5" type="radio" value="1" disabled />
-							<input class="star" name="rating5" type="radio" value="2" disabled />
-							<input class="star" name="rating5" type="radio" value="3" disabled />
-							<input class="star" name="rating5" type="radio" value="4" disabled />
-							<input class="star" name="rating5" type="radio" value="5" checked="checked" /><br>
-							{% endif %}
-						</fieldset>
-					</div>
-					{% endif %}
-					
-					Total: &#8377;{{item['Total']}}<br>
-					Buyer : {{item['Name']}}<br>
-					Address: {{item['RegisteredName']}}, {{item['Address']}}<br>
-					Contact : {{item['ContactNumber']}}<br><br>
-					Was ordered on {{ item['OrderedDate'] }} <br>
-					
-					{% if item['DeliveredDate'] %}
-					<span style="color:green">Was delivered on {{item['DeliveredDate']}}</span>
+		<form class="example" method="post" action="" style="margin:auto;max-width:600px">
+			<span class="custom-dropdown custom-dropdown--white">
+				<select name="filter" class="custom-dropdown__select" style="width: max-content;">
+					<option value="yes">Delivered to customer</option>
+					{% if filter=='no' %}
+						<option value="no" selected>Not delivered</option>
 					{% else %}
-					<span style="color:red">To be delivered</span>
+						<option value="no">Not delivered</option>
 					{% endif %}
-
-
-			</tr>
-			<tr>
-				<td colspan="4" style="background-color:rgba(253, 187, 10, 0.6)">
-					<center>Products ordered</center>
-				</td>
-			</tr>
-
-			</tr>
-			{% for x in item['Products_list'] %}
-			<tr>
-				<td>{{x['Name']}}</td>
-				<td>{{x['ProductCart.Quantity']}} pieces</td>
-			</tr>
-			{% endfor %} {% endfor %}
-		</table>
-	</div>
-	{% else %}
-	<h3>No deliveries found</h3>
-	{% endif %}
-</center>
+					{% if filter=='all' %}
+						<option value="all" selected>All</option>
+					{% else %}
+						<option value="all">All</option>
+					{% endif %}
+				</select>
+			</span>
+			<button type="submit">Filter<i class="fa fa-filter"></i></button>
+		</form>
+		{% if history %}
+		<div class="container">
+			<table class="table table-bordered">
+				{% for item in history %}
+					<tr class="header">
+						<td colspan="2">
+							<h3>Cart Details</h3>
+							{% if not item['Rated'] and item['DeliveredDate'] %}
+								<span style="float:right;">You were not rated for this order</span>
+							{% elif item['DeliveredDate'] %}
+								<div style="float:right;">
+							Your rating : {{ item['Rated'] }}<br>
+							<fieldset>
+								{% if item['Rated']=='1' %}
+								<input class="star" name="rating1" type="radio" value="1" checked="checked" />
+								<input class="star" name="rating1" type="radio" value="2" disabled />
+								<input class="star" name="rating1" type="radio" value="3" disabled />
+								<input class="star" name="rating1" type="radio" value="4" disabled />
+								<input class="star" name="rating1" type="radio" value="5" disabled /><br>
+								{% elif item['Rated']=='2' %}
+								<input class="star" name="rating2" type="radio" value="1" disabled />
+								<input class="star" name="rating2" type="radio" value="2" checked="checked" />
+								<input class="star" name="rating2" type="radio" value="3" disabled />
+								<input class="star" name="rating2" type="radio" value="4" disabled />
+								<input class="star" name="rating2" type="radio" value="5" disabled /><br>
+								{% elif item['Rated']=='3' %}
+								<input class="star" name="rating3" type="radio" value="1" disabled />
+								<input class="star" name="rating3" type="radio" value="2" disabled />
+								<input class="star" name="rating3" type="radio" value="3" checked="checked" />
+								<input class="star" name="rating3" type="radio" value="4" disabled />
+								<input class="star" name="rating3" type="radio" value="5" disabled /><br>
+								{% elif item['Rated']=='4' %}
+								<input class="star" name="rating4" type="radio" value="1" disabled />
+								<input class="star" name="rating4" type="radio" value="2" disabled />
+								<input class="star" name="rating4" type="radio" value="3" disabled />
+								<input class="star" name="rating4" type="radio" value="4" checked="checked" />
+								<input class="star" name="rating4" type="radio" value="5" disabled /><br>
+								{% elif item['Rated']=='5' %}
+								<input class="star" name="rating5" type="radio" value="1" disabled />
+								<input class="star" name="rating5" type="radio" value="2" disabled />
+								<input class="star" name="rating5" type="radio" value="3" disabled />
+								<input class="star" name="rating5" type="radio" value="4" disabled />
+								<input class="star" name="rating5" type="radio" value="5" checked="checked" /><br>
+								{% endif %}
+							</fieldset>
+						</div>
+							{% endif %}
+							Total: &#8377;{{item['Total']}}<br>
+							Buyer : {{item['Name']}}<br>
+							Address: {{item['RegisteredName']}}, {{item['Address']}}<br>
+							Contact : {{item['ContactNumber']}}<br><br>
+							Was ordered on {{ item['OrderedDate'] }} <br>
+							{% if item['DeliveredDate'] %}
+								<span style="color:green">Was delivered on {{item['DeliveredDate']}}</span>
+							{% else %}
+								<span style="color:red">To be delivered</span>
+							{% endif %}
+					</tr>
+					<tr>
+						<td colspan="4" style="background-color:rgba(253, 187, 10, 0.6)">
+							<center>Products ordered</center>
+						</td>
+					</tr>
+					{% for x in item['Products_list'] %}
+					<tr>
+						<td>{{x['Name']}}</td>
+						<td>{{x['ProductCart.Quantity']}} pieces</td>
+					</tr>
+					{% endfor %}
+				{% endfor %}
+			</table>
+		</div>
+		{% else %}
+			<h3>No deliveries found</h3>
+		{% endif %}
+	</center>
 </body>
-
 </html>

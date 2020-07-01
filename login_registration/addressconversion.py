@@ -1,12 +1,12 @@
-from datetime import datetime
 import googlemaps
-import json
+
 def getCoordinates(address):
-	
+	"""
+	:param address:  address of the merchant in words
+	:return: latitude and longitude coordinates for location using geocoding API
+	"""
 	gmaps = googlemaps.Client(key='AIzaSyAntxrxhQu11TxFD9wEe7JxxW1UZ0HQXRY')
 	geocode_result = gmaps.geocode(address)
-	
 	return geocode_result
-	#[0]['geometry']['location']
 
 
