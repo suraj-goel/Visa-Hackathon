@@ -368,7 +368,7 @@ def showCart(merchant_id):
     discountPrice = []
     emailID = ""
     contact = ""
-    type = session['type']
+    type = 'simple'
     totalCost = 0
     totalDiscountCost = 0
     loggmerchant_id = session['merchantID']
@@ -386,7 +386,9 @@ def showCart(merchant_id):
                 Price = session['Price']
                 Offers = session['offers']
                 discountPrice = session['discountPrice']
+                print("HERE")
                 data = getMerchantInfo(mysql, seller_id)
+                print(data)
                 emailID = data[0]
                 contact = data[1]
                 pf = '1'
@@ -454,7 +456,6 @@ def showCart(merchant_id):
                       finalDiscountPrice, NegotitatedRequestAmount)
         session['qty'] = []
         session['ProductID'] = []
-        totalQuantity = 0
         session['type']=type
         session['mid'] = seller_id
         session['merchantID'] = loggmerchant_id
@@ -647,8 +648,6 @@ def b2bpay():
 @login_required
 def negotiation():
     choice = 'R'
-    #merchantID = '1'
-    #session['merchantID'] = merchantID
     merchant_id = session['merchantID']
     allNegotiation =[]
     productList = []
@@ -714,8 +713,7 @@ def negotiation():
 @app.route('/negotiationsupplier',methods=['GET','POST'])
 @login_required
 def negotiationsupplier():
-    merchant_id = '1'
-    session['merchantID'] = merchant_id
+    merchant_id = session['merchantID']
     groupList = showNegotiation(mysql, merchant_id)
 
     contactInfo = groupList[0]
