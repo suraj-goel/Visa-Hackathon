@@ -209,7 +209,7 @@ textarea {
 }
 
 .table .header td:after {
-  content: "\002b";
+  content: "Show Products Ordered";
   position: relative;
   top: 1px;
   display: inline-block;
@@ -228,7 +228,15 @@ textarea {
 }
 
 .table .header.active td:after {
-  content: "\2212";
+  content: "Hide Products Ordered";
+}
+
+.table .header .text:after {
+  content: "Show Offers";
+}
+
+.table .header.active .text:after {
+  content: "Hide Offers";
 }
 
 .custom-dropdown {
@@ -304,4 +312,61 @@ textarea {
 
 .custom-dropdown--white::after {
   color: #1a1f71;
+}
+
+.star-rating {
+  display: inline-block;
+  padding: 0;
+  width: auto;
+}
+
+.star {
+  display: inline-block;
+  float: left;
+  height: 25px;
+  margin: 0;
+  width: 25px;
+}
+
+.star:checked::after {
+  color: gold;
+}
+
+.star:checked ~ .star::after,
+.star-rating:hover .star:hover ~ .star::after {
+  color: grey;
+}
+
+.star-rating:hover .star::after {
+  color: gold;
+  content: "\2606"; /* use an open star on hover */
+  font-size: 15px;
+}
+
+.star1 {
+  display: inline-block;
+  float: left;
+  height: 45px;
+  margin: 0;
+  width: 45px;
+}
+
+.star1::after {
+  background-color: #fff;
+  color: #1a1f71;
+  content: "\2605";
+  display: block;
+  font-size: 45px;
+  height: 45px;
+  text-align: center;
+  width: 45px;
+}
+
+.star1:checked::after {
+  color: #1a1f71;
+}
+
+.star1:checked ~ .star1::after,
+.star-rating:hover .star1:hover ~ .star1::after {
+  color: grey;
 }
