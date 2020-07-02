@@ -1,13 +1,17 @@
 # Small Business Merchants #
-### product name ###
-### team name: console.pay() ###
-### theme: small business merchants ###
+#### __Team name:__ console.pay() ####
+#### __Theme:__ Small business merchants ####
 
 ## Project description ##
 importance of this idea and overall project working in short
 ## Project features ##
 explain modulewise
 ## Visa APIs used and use cases ##
+1. Merchant locator API
+2. Merchant measurement API
+3. B2B virtual payment method
+4. Visa checkout
+5. CyberSource payment API
 
 ## project structure ##
 1. common : html, css and js needed for all packages
@@ -21,6 +25,3 @@ explain modulewise
 
 ### team members ###
 
-__deployment__
-heroku
-https://stackabuse.com/deploying-a-flask-application-to-heroku/
