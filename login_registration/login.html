@@ -26,9 +26,9 @@
 <body>
 
     <nav class="navbar navbar-default" style="background-color: #1a1f71; color:#FFF; height: 100px;">
-         <ul class="nav navbar-nav ">
+        <ul class="nav navbar-nav ">
 
-             <img height="80" width="80" src="{{ url_for('static',filename='../common/img/shop.png') }}">
+            <img height="80" width="80" src="{{ url_for('static',filename='../common/img/shop.png') }}">
         </ul>
 
         <ul class="nav navbar-nav navbar-center">
@@ -36,13 +36,13 @@
             <h2 style="color:gold"> MERCHANT CONNECT</h2>
         </ul>
         <ul class="navbar-nav ml-auto" style="padding-right:50px">
-            <button id="myBtn" type="button" class="btn btn-block btn-primary btn-lg"
-                style=" transform: translatex(732%);background-color: #faaa13">Signup</button>
+            <button id="myBtn2" type="button" class="btn btn-block btn-primary btn-lg"
+                style=" transform: translatex(702%);background-color: #faaa13"
+                onclick="window.location.href = '/register'" ;">Signup</button>
         </ul>
         <ul class="navbar-nav ml-auto">
-            <button id="myBtn1" type="button" class="btn btn-block btn-primary btn-lg"
-                style=" transform: translatex(-20%);background-color: #faaa13" onclick="window.location.href = '/login'"
-                ;">Login</button>
+            <button id="myBtn" type="button" class="btn btn-block btn-primary btn-lg"
+                style=" transform: translatex(-20%);background-color: #faaa13">Login</button>
         </ul>
     </nav>
 
@@ -57,7 +57,7 @@
         <div class="carousel-inner" role="listbox">
 
             <div class="item active">
-                <img src="{{ url_for('static',filename='../common/img/visa.jpg') }}" style="height: 500px;width: 100%">
+                <img src="{{ url_for('static',filename='../common/img/inv26.jpg') }}" style="height: 500px;width: 100%">
                 <div class="carousel-caption">
                     <!--  <h1>Let's get connect Merchants</h1>-->
                 </div>
@@ -135,7 +135,7 @@
         </div>
     </div>
 
-    <div class="container">
+  <!--  <div class="container">
         <div class="row">
             <div class="col-md-6 " id="div1">
                 <br /><br /><br />
@@ -188,6 +188,59 @@
                 <img src="{{ url_for('static',filename='../common/img/inv2.jpg') }}" class="img-responsive"
                     style="height: 150px;">
                 <img src="{{ url_for('static',filename='../common/img/inv4.jpg') }}" class="img-responsive">
+            </div>
+
+        </div>
+    </div>   -->
+    <div class="container">
+        <div class="row">
+            <div class="card col-lg-3 col-md-3 col-sm-6 col-xs-12 " style="width: 18rem;">
+                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/google-maps-marketing.jpg') }}"style="height: 220px;alt="Card image cap">
+                <div class="card-body ">
+                    <h5 class="card-title"><b style="color: #1a1f71">Connect with Merchants Globally with Visa Merchant Locator</b></h5>
+                    <p class="card-text">Flexible and secure payment method for B2B market segments using virtual accounts with <b style="color: #1a1f71">B2B Virtual Account Payment Method</b>.
+                        Deliver safe,simple and speedy online shopping checkout with <b style="color: #1a1f71">VISA CHECKOUT</b>
+                        Process credit, debit cards across the globe and across multiple channels with scalability and security.
+                        <b style="color: #1a1f71">CyberSource</b> supports an extensive list of payment cards and offers a wide choice of gateways and acquiring banks, all through one connection.
+
+                    </p>
+
+                </div>
+            </div>
+            <div class="card col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 18rem;">
+                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/inv3.png') }}" style="height: 220px;" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title"><b style="color: #1a1f71">Get Performance Analysis and Monthly Stats
+                        </b></h5>
+                    <p class="card-text">Provide the features to post your urgent requirement needs to all the Merchants.
+                        Feature of rejecting and approving requirements as a supplier based on their inventory.
+                        Get a chance as a buyer to choose from multiple deals approved by supplier and choose which deal suits you.
+                        Automatically categorising and updating your requirements.Providing you even requirements history to know about your previous requirements and supplier/buyer.
+                    </p>
+                </div>
+            </div>
+            <div class="card col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 18rem;">
+                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/inv2.jpg') }}"style="height: 220px;alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title"><b style="color: #1a1f71">Benefits of Easy Automatic Inventory Management</b></h5>
+                    <p class="card-text">Get a chance as a buyer to Negotiate about your final amount with supplier by contacting and requesting through our website.
+                        Suppliers receive negotiation request on the portals.They can reject, approve and even modify the final negotiated amount and provide the deal
+                        which are affordable to buyer.Feature of even automatically categorising your negotiation deals.
+                    </p>
+
+                </div>
+            </div>
+            <div class="card col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 18rem;">
+                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/inv4.jpg') }}" style="height: 220px;" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title"><b style="color: #1a1f71">Track Your Order and Delivery History in an efficient way</b></h5>
+                    <p class="card-text">Get a tracking feature on your previous orders and even have a facility to set limits, alerts
+                        on your credit cards for Specific Merchant Category with <b style="color: #1a1f71 ">Visa Transaction Control.</b>
+                        Visa Transaction Controls (VTC) provide a powerful and convenient way for cardholders to track and manage all payment activity on enrolled accounts and tokens.
+
+                    </p>
+
+                </div>
             </div>
 
         </div>
@@ -272,40 +325,27 @@
     <footer class="container-fluid text-center">
         <div class="row">
             <div class="col-sm-4">
-                <h3>Contact Us</h3>
+                <h3>Team Name</h3>
                 <h4>@console.pay()</h4>
-                <h4>OUR CONTACT AND EMAIL INFO HERE: </h4>
+                <h4>Team Members </h4>
                 <center>
-                    <table style="border: none">
-                        <tr>
-                            <td><b style="color:#1a1f71;">Suraj Goel</b></td>
-                        </tr>
-                        <tr>
-                            <td><b style="color:#1a1f71;">Sahana Srinivasan</b></td>
-                        </tr>
-                        <tr>
-                            <td><b style="color:#1a1f71;">Gaurav Srivastava</b></td>
-                        </tr>
-                        <tr>
-                            <td><b style="color:#1a1f71;">Sankalp Dayal</b></td>
-                        </tr>
-                        <tr>
-                            <td><b style="color:#1a1f71;">Haridher Pandyan</b></td>
-                        </tr>
-                        <tr>
-                            <td><b style="color:#1a1f71;">Prajwal S Belagavi</b></td>
-                        </tr>
-                    </table>
+                <table style="border: none">
+                    <tr>
+                        <td colspan="6">Suraj Goel    </td>         <td colspan="6">Sahana Srinivasan</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">Gaurav Srivastava &emsp;  </td>   <td colspan="6">Sankalp Dayal</td>
+                    </tr>
+                    <tr>
+
+                        <td colspan="6">Haridher Pandyan    </td>   <td colspan="6">Prajwal S Belagavi</td>
+                    </tr>
+                </table>
                 </center>
             </div>
 
+
             <div class="col-sm-4">
-                <h3>Connect With Us.</h3>
-                <a href="#" class="fa fa-facebook" style="color: #1a1f71"></a>
-                <a href="#" class="fa fa-twitter" style="color: #337ab7"></a>
-                <a href="#" class="fa fa-google-plus" style="color: red"></a>
-                <a href="#" class="fa fa-linkedin" style="color:dodgerblue"></a>
-                <a href="#" class="fa fa-youtube" style="color:red;"></a>
 
             </div>
             <div class="row">
