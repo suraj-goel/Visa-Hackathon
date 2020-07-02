@@ -23,14 +23,19 @@ Registration and landing page
 
 <body>
     <nav class="navbar navbar-default" style="background-color: #1a1f71; color:#FFF; height: 100px;">
-        <ul class="nav navbar-nav navbar-center">
-            <h2> Merchant CONNECT</h2>
+         <ul class="nav navbar-nav ">
+
+             <img height="80" width="80" src="{{ url_for('static',filename='../common/img/shop.png') }}">
         </ul>
-        <ul class="navbar-nav ml-auto">
+
+        <ul class="nav navbar-nav navbar-center">
+
+            <h2 style="color:gold"> MERCHANT CONNECT</h2>
+        </ul>
+        <ul class="navbar-nav ml-auto" style="padding-right:50px">
             <button id="myBtn" type="button" class="btn btn-block btn-primary btn-lg"
                 style=" transform: translatex(732%);background-color: #faaa13">Signup</button>
         </ul>
-
         <ul class="navbar-nav ml-auto">
             <button id="myBtn1" type="button" class="btn btn-block btn-primary btn-lg"
                 style=" transform: translatex(-20%);background-color: #faaa13" onclick="window.location.href = '/login'"
