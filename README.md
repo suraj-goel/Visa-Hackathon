@@ -11,9 +11,9 @@ Small businesses in general also find it difficult to find new suppliers and han
 are new to the business environment. 
 We have provided a solution to the small business merchants where they can connect with each other and manage their business effectively.
 
-## Project description 
+## Project Description
 
-## Project features 
+## Project Features
 explain modulewise
 
 ## Visa APIs: 
@@ -28,9 +28,7 @@ explain modulewise
 1. Google Dynamic Maps
 2. Google Geocoding
 
-
-
-## project structure ##
+## Project Structure 
 1. common : html, css and js needed for all packages
 2. modules: are made according to the user stories. Includes one html file for now.
 3. venu: virtual environment for project, contains all packages
@@ -40,6 +38,15 @@ explain modulewise
       - connection file
 5. app.py is the default controller for flask
 #### __Team name:__ console.pay() ####
+
 #### __Theme:__ Small business merchants ####
-### team members ###
+
+### Team Members ###
+ - Suraj Goel
+ - Sahana Srinivasan
+ - Sankalp Dayal
+ - Gaurav Srivastava
+ - Haridher Pandyan
+ - Prajwal S Belagavi
+
 
