@@ -62,8 +62,8 @@ Our web application provides a portal that can connect merchants that are lookin
 ## Hackathon Mentor:
 * [Virender Singh](https://github.com/virenderdayma)
 
-#### __Team name:__ 
+## __Team name:__ 
 console.pay() 
-#### __Theme:__
+## __Theme:__
 Small business merchants
 
