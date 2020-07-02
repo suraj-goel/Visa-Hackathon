@@ -385,7 +385,7 @@ def MerchantMeasurement(MCC = '5812'):
             }
             } ''')
     try:
-        r = requests.post(url,cert=cert,headers=header,auth=auth,json=p,timeout=5)
+        r = requests.post(url,cert=cert,headers=header,auth=auth,json=p,timeout=10)
         res=r.json()
         data={}
         res = res['response']['responseData'][0]

@@ -6,6 +6,11 @@ To display buyer and supplier profile for complete negotiation handling includin
 <link rel="stylesheet" href="{{ url_for('static',filename='./negotiation/negotiation.css') }}">
 <script type="text/javascript" src="{{url_for('static',filename='./negotiation/negotiation.js') }}"></script>
 <script>
+    x=document.getElementById('negotiation');
+    x.className="active";
+    </script>
+<script>
+
     function goLocation1() {
         return window.location.href = "/negotiationsupplier";
     }

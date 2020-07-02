@@ -1,8 +1,10 @@
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./requirements/requirements.css') }}">
 <script type="text/javascript" src="{{url_for('static',filename='./requirements/requirements.js') }}"></script>
-<style>
-</style>
+<script>
+    x=document.getElementById('requirements');
+    x.className="active";
+</script>
 <body onload="showThis({{profile}})">
 
     <div>

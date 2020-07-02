@@ -5,6 +5,10 @@ Display order information, allow merchant to rate and confirm a delivery
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./manage_inventory/inventory.css') }}">
 <script type="text/javascript" src="{{url_for('static',filename='./manage_inventory/inventory.js') }}"></script>
+<script>
+    x=document.getElementById('orders');
+    x.className="active";
+</script>
 <center>
     <h1 style="color: #1a1f71;">Orders</h1>
     <form class="example" method="post" action="" style="margin:auto;max-width:600px">
