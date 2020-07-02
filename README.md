@@ -23,6 +23,7 @@ Our web application provides a portal that can connect merchants that are lookin
 * Automated Inventory Management with support of chatbot and google assistant.
 * Check your performance based on your merchant category and your daily transactions.
 * Set Controls for merchant categories on your card payments.
+* A seperate module to manage offers for prouducts in merchant's inventory
 * An easy to use interface to help small businesses grow back in current conditions.
 
 
