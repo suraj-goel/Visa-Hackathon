@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>Merchant connect</title>
+    <title>Merchant Connect</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
@@ -24,19 +24,25 @@
 </head>
 
 <body>
+
     <nav class="navbar navbar-default" style="background-color: #1a1f71; color:#FFF; height: 100px;">
+         <ul class="nav navbar-nav ">
+
+             <img height="80" width="80" src="{{ url_for('static',filename='../common/img/shop.png') }}">
+        </ul>
+
         <ul class="nav navbar-nav navbar-center">
-            <h2>  Merchant connect</h2>
+
+            <h2 style="color:gold"> MERCHANT CONNECT</h2>
+        </ul>
+        <ul class="navbar-nav ml-auto" style="padding-right:50px">
+            <button id="myBtn" type="button" class="btn btn-block btn-primary btn-lg"
+                style=" transform: translatex(732%);background-color: #faaa13">Signup</button>
         </ul>
         <ul class="navbar-nav ml-auto">
             <button id="myBtn1" type="button" class="btn btn-block btn-primary btn-lg"
-                style=" transform: translatex(732%);background-color: #faaa13"
-                onclick="window.location.href = '/register'" ;">Signup</button>
-        </ul>
-
-        <ul class="navbar-nav ml-auto">
-            <button id="myBtn" type="button" class="btn btn-block btn-primary btn-lg"
-                style=" transform: translatex(-20%);background-color: #faaa13">Login</button>
+                style=" transform: translatex(-20%);background-color: #faaa13" onclick="window.location.href = '/login'"
+                ;">Login</button>
         </ul>
     </nav>
 
@@ -51,7 +57,7 @@
         <div class="carousel-inner" role="listbox">
 
             <div class="item active">
-                <img src="{{ url_for('static',filename='../common/img/inv26.jpg') }}" style="height: 500px;width: 100%">
+                <img src="{{ url_for('static',filename='../common/img/visa.jpg') }}" style="height: 500px;width: 100%">
                 <div class="carousel-caption">
                     <!--  <h1>Let's get connect Merchants</h1>-->
                 </div>
@@ -70,7 +76,13 @@
                 </div>
                 <img src="{{ url_for('static',filename='../common/img/inv1.png') }}" style="height: 500px;width: 100%">
             </div>
+            <div class="item">
+                <div class="carousel-caption">
+                    <h1>Connecting Small Business</h1>
 
+                </div>
+                <img src="{{ url_for('static',filename='../common/img/inv7.jpg') }}" style="height: 500px;width: 100%">
+            </div>
         </div>
 
         <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
@@ -89,7 +101,9 @@
     <div class="modal" id="login/register">
         <div class="modal-content">
             <div class="modal-header">
-                <h2> LOGIN HERE! </h2>
+                <center style="width: 100%;">
+                    <h2> LOGIN HERE! </h2>
+                </center>
                 <!-- <img src="{{ url_for('static',filename='../common/img/visa.jpg') }}" class="img "> -->
                 <span class="close">&times;</span>
 
@@ -120,12 +134,8 @@
             </div>
         </div>
     </div>
-    <center>
-         <div class="container">
-              SOMETHING ABOUT PRODUCT
-         </div>
-    </center>
-   <!-- <div class="container">
+
+    <div class="container">
         <div class="row">
             <div class="col-md-6 " id="div1">
                 <br /><br /><br />
@@ -166,6 +176,8 @@
                 <img src="{{ url_for('static',filename='../common/img/inv6.jpg') }}" class="img-responsive">
             </div>
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="div3">
+                <br />
+                <h4 style="color: #1a1f71;font-weight: bold;font-size: 30px;">Automatic Inventory Management with Order
                 <br /><br />
                 <h4 style="color: #1a1f71;font-weight: bold;font-size: 30px;">Automatic Inventory Management with  </h4>Order
                     and Delivery
@@ -315,9 +327,9 @@
     <footer class="container-fluid text-center">
         <div class="row">
             <div class="col-sm-4">
-                <h3><b>Team Name</b></h3>
+                <h3>Team Name</h3>
                 <h4>@console.pay()</h4>
-                <h4><b>Team Members: </b></h4>
+                <h4>Team Members </h4>
                 <center>
                 <table style="border: none">
                     <tr>
@@ -334,9 +346,7 @@
                 </center>
             </div>
 
-            <div class="col-sm-4">
 
-            </div>
             <div class="row">
                 <div class="col-sm-4">
                     <img src="{{ url_for('static',filename='../common/img/shop.png') }}"
