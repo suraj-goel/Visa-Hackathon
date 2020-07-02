@@ -12,6 +12,7 @@ are new to the business environment.
 We have provided a solution to the small business merchants where they can connect with each other and manage their business effectively.
 
 ## Project Description 
+Our web application provides a portal that can connect merchants that are looking for products to buy and to sell with each other and proactively manage their inventory as well as advertise themselves through the help of offers on their prodcuts. Using VISA Payment APIs, we can facilitate secure payments on purchase and automatic inventory updation. In times of pandemic, where finding local business would be in the best interest of both parties, the Merchant Locator API provides the means of locating nearby merchants. Merchant Measurement has also been used to study the trends in the transactions that occur on the platform. Finally a rating system and a chatbot have also been implemented.
 
 ## Project Features 
 explain modulewise
