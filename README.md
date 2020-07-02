@@ -59,6 +59,9 @@ Our web application provides a portal that can connect merchants that are lookin
 * [Haridher Pandiyan](https://github.com/haridher21)
 * [Prajwal S Belagavi](https://github.com/prajwal27)
 
+## Hackathon Mentor:
+* Virender Sir
+
 #### __Team name:__ 
 console.pay() 
 #### __Theme:__
