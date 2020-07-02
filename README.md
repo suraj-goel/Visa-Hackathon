@@ -11,16 +11,24 @@ Small businesses in general also find it difficult to find new suppliers and han
 are new to the business environment. 
 We have provided a solution to the small business merchants where they can connect with each other and manage their business effectively.
 
-## Project description ##
+## Project description 
 
-## Project features ##
+## Project features 
 explain modulewise
-## Visa APIs used and use cases ##
-1. Merchant locator API
-2. Merchant measurement API
-3. B2B virtual payment method
-4. Visa checkout
-5. CyberSource payment API
+
+## Visa APIs: 
+1. Merchant locator
+2. Merchant measurement 
+3. Visa Transaction Control 
+4. B2B virtual payment 
+5. Visa Checkout
+6. CyberSource Payments
+
+## Other APIs:
+1. Google Dynamic Maps
+2. Google Geocoding
+
+
 
 ## project structure ##
 1. common : html, css and js needed for all packages
