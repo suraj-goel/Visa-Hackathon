@@ -1,4 +1,8 @@
-# Small Business Merchants #
+<h1 align ="center">Merchant Connect</h1>
+<p align="center">
+<img src="common/img/shop.png"/>
+ </p>
+
 #### __Team name:__ console.pay() ####
 #### __Theme:__ Small business merchants ####
 
