@@ -12,7 +12,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static',filename='./login_registration/login.css') }}">
-        <link rel=" icon" href="{{ url_for('static',filename='../common/img/icon-img.png') }}" type="image/icon">
+    <link rel=" icon" href="{{ url_for('static',filename='../common/img/icon-img.png') }}" type="image/icon">
     <title>SBM</title>
     <style>
         .navbar-nav.navbar-center {
@@ -26,14 +26,17 @@
 <body>
     <nav class="navbar navbar-default" style="background-color: #1a1f71; color:#FFF; height: 100px;">
         <ul class="nav navbar-nav navbar-center">
-        <h2> BIZSPEAK CONNECT</h2>
+            <h2> BIZSPEAK CONNECT</h2>
         </ul>
         <ul class="navbar-nav ml-auto">
-            <button id="myBtn1" type="button" class="btn btn-block btn-primary btn-lg" style=" transform: translatex(732%);background-color: #faaa13" onclick="window.location.href = '/register'";">Signup</button>
+            <button id="myBtn1" type="button" class="btn btn-block btn-primary btn-lg"
+                style=" transform: translatex(732%);background-color: #faaa13"
+                onclick="window.location.href = '/register'" ;">Signup</button>
         </ul>
-
+        
         <ul class="navbar-nav ml-auto">
-            <button id="myBtn" type="button" class="btn btn-block btn-primary btn-lg" style=" transform: translatex(-20%);background-color: #faaa13">Login</button>
+            <button id="myBtn" type="button" class="btn btn-block btn-primary btn-lg"
+                style=" transform: translatex(-20%);background-color: #faaa13">Login</button>
         </ul>
     </nav>
 
@@ -50,19 +53,19 @@
             <div class="item active">
                 <img src="{{ url_for('static',filename='../common/img/visa.jpg') }}" style="height: 500px;width: 100%">
                 <div class="carousel-caption">
-                  <!--  <h1>Let's get connect Merchants</h1>-->
+                    <!--  <h1>Let's get connect Merchants</h1>-->
                 </div>
             </div>
             <div class="item">
                 <div class="carousel-caption">
-                  <!--  <h1>Let's get connect Merchants</h1>
+                    <!--  <h1>Let's get connect Merchants</h1>
                      -->
                 </div>
                 <img src="{{ url_for('static',filename='../common/img/inv22.jpg') }}" style="height: 500px;width: 100%">
             </div>
             <div class="item">
                 <div class="carousel-caption">
-                <!--    <h1>Let's get connect Merchants</h1>
+                    <!--    <h1>Let's get connect Merchants</h1>
                      -->
                 </div>
                 <img src="{{ url_for('static',filename='../common/img/inv1.png') }}" style="height: 500px;width: 100%">
@@ -86,11 +89,11 @@
         </a>
     </div>
     <!--slider-->
-     <!-- <center><button id="myBtn" class="button">LOGIN</button></center>-->
+    <!-- <center><button id="myBtn" class="button">LOGIN</button></center>-->
 
-
+    <!-- LOGIN -->
     <div class="modal" id="login/register">
-        <div class="modal-content" >
+        <div class="modal-content">
             <div class="modal-header">
                 <h2> LOGIN HERE! </h2>
                 <!-- <img src="{{ url_for('static',filename='../common/img/visa.jpg') }}" class="img "> -->
@@ -127,8 +130,11 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6 " id="div1">
-                <br/><br/><br/>
-                <h4 style="color: #1a1f71;font-weight: bold;font-size: 30px;">Connect with Merchants Globally by Searching Products/Merhchant Category on Maps by Visa Merchant Locator and get Bulk Trusted Offers on your Purchase </h4>
+                <br /><br /><br />
+                <h4 style="color: #1a1f71;font-weight: bold;font-size: 30px;">Connect with Merchants Globally by
+                    Searching
+                    Products/Merhchant Category on Maps by Visa Merchant Locator and get Bulk Trusted Offers on your
+                    Purchase </h4>
                 <p>
                 </p>
 
@@ -136,11 +142,13 @@
             <div class="col-md-6">
                 <img src="{{ url_for('static',filename='../common/img/inv26.jpg') }}" class="img-responsive">
                 <div class="row">
-                    <div class="column">  <img src="{{ url_for('static',filename='../common/img/inv30.png') }}" class="img-responsive" style="width: 200px;height: 200px;"></div>
-                    <div class="column">   <img src="{{ url_for('static',filename='../common/img/inv18.png') }}" class="img-responsive" style="width: 200px;height: 200px;"></div>
+                    <div class="column"> <img src="{{ url_for('static',filename='../common/img/inv30.png') }}"
+                            class="img-responsive" style="width: 200px;height: 200px;"></div>
+                    <div class="column"> <img src="{{ url_for('static',filename='../common/img/inv18.png') }}"
+                            class="img-responsive" style="width: 200px;height: 200px;"></div>
                 </div>
 
-                </div>
+            </div>
 
         </div>
     </div>
@@ -148,8 +156,10 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="div2">
-                <br/>
-                <h4 style="color: #1a1f71;font-weight: bold;font-size: 30px;">Get Performance Analysis and Monthly Stats to Know About Your Profit/Loss</h4>
+                <br />
+                <h4 style="color: #1a1f71;font-weight: bold;font-size: 30px;">Get Performance Analysis and Monthly Stats
+                    to Know About
+                    Your Profit/Loss</h4>
                 <p>
                 </p>
             </div>
@@ -158,13 +168,17 @@
                 <img src="{{ url_for('static',filename='../common/img/inv6.jpg') }}" class="img-responsive">
             </div>
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="div3">
-                <br/>
-                <h4 style="color: #1a1f71;font-weight: bold;font-size: 30px;">Automatic Inventory Management with Order and Delivery History </h4>
+                <br /><br />
+                <h4 style="color: #1a1f71;font-weight: bold;font-size: 30px;">Automatic Inventory Management with Order
+                    and Delivery
+                    History </h4>
                 <p>
+
                 </p>
             </div>
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <img src="{{ url_for('static',filename='../common/img/inv2.jpg') }}" class="img-responsive" style="height: 150px;">
+                <img src="{{ url_for('static',filename='../common/img/inv2.jpg') }}" class="img-responsive"
+                    style="height: 150px;">
                 <img src="{{ url_for('static',filename='../common/img/inv4.jpg') }}" class="img-responsive">
             </div>
 
@@ -173,47 +187,72 @@
     <div class="container">
         <div class="row">
             <div class="card col-lg-3 col-md-3 col-sm-6 col-xs-12 " style="width: 18rem;">
-                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/inv5.jpg') }}"style="height: 220px;alt="Card image cap">
+                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/inv5.jpg') }}"
+                    style="height: 220px;alt=" Card image cap">
                 <div class="card-body ">
                     <h5 class="card-title"><b style="color: #1a1f71">Secure and Easy Checkout With VISA Support</b></h5>
-                    <p class="card-text">Flexible and secure payment method for B2B market segments using virtual accounts with <b style="color: #1a1f71">B2B Virtual Account Payment Method</b>.
-                        Deliver safe,simple and speedy online shopping checkout with <b style="color: #1a1f71">VISA CHECKOUT</b>
-                        Process credit, debit cards across the globe and across multiple channels with scalability and security.
-                        <b style="color: #1a1f71">CyberSource</b> supports an extensive list of payment cards and offers a wide choice of gateways and acquiring banks, all through one connection.
+                    <p class="card-text">Flexible and secure payment method for B2B market segments using virtual
+                        accounts with <b style="color: #1a1f71">B2B Virtual Account Payment Method</b>.
+                        Deliver safe,simple and speedy online shopping checkout with <b style="color: #1a1f71">VISA
+                            CHECKOUT</b>
+                        Process credit, debit cards across the globe and across multiple channels with scalability and
+                        security.
+                        <b style="color: #1a1f71">CyberSource</b> supports an extensive list of payment cards and offers
+                        a wide choice of
+                        gateways and acquiring banks, all through one connection.
 
                     </p>
 
                 </div>
             </div>
             <div class="card col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 18rem;">
-                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/inv13.jpg') }}" style="height: 220px;" alt="Card image cap">
+                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/inv13.jpg') }}"
+                    style="height: 220px;" alt="Card image cap">
                 <div class="card-body">
-                    <h5 class="card-title"><b style="color: #1a1f71">Post and Get Your Urgent Requirements Fulfil</b></h5>
-                    <p class="card-text">Provide the features to post your urgent requirement needs to all the Merchants.
+                    <h5 class="card-title"><b style="color: #1a1f71">Post and Get Your Urgent Requirements Fulfil</b>
+                    </h5>
+                    <p class="card-text">Provide the features to post your urgent requirement needs to all the
+                        Merchants.
                         Feature of rejecting and approving requirements as a supplier based on their inventory.
-                        Get a chance as a buyer to choose from multiple deals approved by supplier and choose which deal suits you.
-                        Automatically categorising and updating your requirements.Providing you even requirements history to know about your previous requirements and supplier/buyer.
+                        Get a chance as a buyer to choose from multiple deals approved by supplier and choose which deal
+                        suits you.
+                        Automatically categorising and updating your requirements.Providing you even requirements
+                        history to know about your
+                        previous requirements and supplier/buyer.
                     </p>
+
                 </div>
             </div>
             <div class="card col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 18rem;">
-                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/inv14.jpg') }}"style="height: 220px;alt="Card image cap">
+                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/inv14.jpg') }}"
+                    style="height: 220px;alt=" Card image cap">
                 <div class="card-body">
-                    <h5 class="card-title"><b style="color: #1a1f71">Facility to Negotiate With Supplier and get Products at Affordable Rates</b></h5>
-                    <p class="card-text">Get a chance as a buyer to Negotiate about your final amount with supplier by contacting and requesting through our website.
-                        Suppliers receive negotiation request on the portals.They can reject, approve and even modify the final negotiated amount and provide the deal
+                    <h5 class="card-title"><b style="color: #1a1f71">Facility to Negotiate With Supplier and get
+                            Products at Affordable
+                            Rates</b></h5>
+                    <p class="card-text">Get a chance as a buyer to Negotiate about your final amount with supplier by
+                        contacting and
+                        requesting through our website.
+                        Suppliers receive negotiation request on the portals.They can reject, approve and even modify
+                        the final negotiated
+                        amount and provide the deal
                         which are affordable to buyer.Feature of even automatically categorising your negotiation deals.
                     </p>
 
                 </div>
             </div>
             <div class="card col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 18rem;">
-                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/inv20.jpg') }}" style="height: 220px;" alt="Card image cap">
+                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/inv20.jpg') }}"
+                    style="height: 220px;" alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title"><b style="color: #1a1f71">Track and Set Limits on Your Transactions</b></h5>
-                    <p class="card-text">Get a tracking feature on your previous orders and even have a facility to set limits, alerts
-                        on your credit cards for Specific Merchant Category with <b style="color: #1a1f71 ">Visa Transaction Control.</b>
-                        Visa Transaction Controls (VTC) provide a powerful and convenient way for cardholders to track and manage all payment activity on enrolled accounts and tokens.
+                    <p class="card-text">Get a tracking feature on your previous orders and even have a facility to set
+                        limits, alerts
+                        on your credit cards for Specific Merchant Category with <b style="color: #1a1f71 ">Visa
+                            Transaction Control.</b>
+                        Visa Transaction Controls (VTC) provide a powerful and convenient way for cardholders to track
+                        and manage all
+                        payment activity on enrolled accounts and tokens.
 
                     </p>
 
@@ -229,28 +268,29 @@
                 <h4>@console.pay()</h4>
                 <h4>OUR CONTACT AND EMAIL INFO HERE: </h4>
                 <center>
-                <table style="border: none">
-                    <tr>
-                        <td><b style="color:#1a1f71;">Suraj Goel</b></td>
-                    </tr>
-                    <tr>
-                        <td><b style="color:#1a1f71;">Sahana Srinivasan</b></td>
-                    </tr>
-                    <tr>
-                        <td><b style="color:#1a1f71;">Gaurav Srivastava</b></td>
-                    </tr>
-                    <tr>
-                        <td><b style="color:#1a1f71;">Sankalp Dayal</b></td>
-                    </tr>
-                    <tr>
-                        <td><b style="color:#1a1f71;">Haridher Pandyan</b></td>
-                    </tr>
-                    <tr>
-                        <td><b style="color:#1a1f71;">Prajwal S Belagavi</b></td>
-                    </tr>
-                </table>
+                    <table style="border: none">
+                        <tr>
+                            <td><b style="color:#1a1f71;">Suraj Goel</b></td>
+                        </tr>
+                        <tr>
+                            <td><b style="color:#1a1f71;">Sahana Srinivasan</b></td>
+                        </tr>
+                        <tr>
+                            <td><b style="color:#1a1f71;">Gaurav Srivastava</b></td>
+                        </tr>
+                        <tr>
+                            <td><b style="color:#1a1f71;">Sankalp Dayal</b></td>
+                        </tr>
+                        <tr>
+                            <td><b style="color:#1a1f71;">Haridher Pandyan</b></td>
+                        </tr>
+                        <tr>
+                            <td><b style="color:#1a1f71;">Prajwal S Belagavi</b></td>
+                        </tr>
+                    </table>
                 </center>
             </div>
+
             <div class="col-sm-4">
                 <h3>Connect With Us.</h3>
                 <a href="#" class="fa fa-facebook" style="color: #1a1f71"></a>
@@ -262,7 +302,8 @@
             </div>
             <div class="row">
                 <div class="col-sm-4">
-                    <img src="{{ url_for('static',filename='../common/img/shop.png') }}" style="width: 300px;height: 300px; transform: translatey(-20%)" class="icon">
+                    <img src="{{ url_for('static',filename='../common/img/shop.png') }}"
+                        style="width: 300px;height: 300px; transform: translatey(-20%)" class="icon">
 
                 </div>
             </div>
@@ -271,27 +312,15 @@
     </footer>
 
     <script>
-
-        // Get the modal
         var modal = document.getElementById("login/register");
-
-        // Get the button that opens the modal
         var btn = document.getElementById("myBtn");
-
-        // Get the <span> element that closes the modal
         var span = document.getElementsByClassName("close")[0];
-
-        // When the user clicks the button, open the modal 
         btn.onclick = function () {
             modal.style.display = "block";
         }
-
-        // When the user clicks on <span> (x), close the modal
         span.onclick = function () {
             modal.style.display = "none";
         }
-
-        // When the user clicks anywhere outside of the modal, close it
         window.onclick = function (event) {
             if (event.target == modal) {
                 modal.style.display = "none";

@@ -4,145 +4,361 @@ Registration and landing page
 -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>SMB</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="{{ url_for('static',filename='./login_registration/register.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static',filename='./login_registration/login.css') }}">
     <link rel=" icon" href="{{ url_for('static',filename='../common/img/icon-img.png') }}" type="image/icon">
 
 </head>
-<body>
-<nav class="navbar" style="background-color: #1a1f71; color:#FFF; height: 100px;">
-    <h2>BIZSPEAK CONNECT</h2>
-</nav>
-<center>
-<div class="model" id="login/register">
-    <div class="model-content">
-        <div class="model-header">
-              <h2 style="color: #1a1f71; font-weight: bold">REGISTER TO OUR WEBSITE!</h2>
 
-                             <span class="close">&times;</span>
+<body>
+    <nav class="navbar navbar-default" style="background-color: #1a1f71; color:#FFF; height: 100px;">
+        <ul class="nav navbar-nav navbar-center">
+            <h2> BIZSPEAK CONNECT</h2>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <button id="myBtn" type="button" class="btn btn-block btn-primary btn-lg"
+                style=" transform: translatex(732%);background-color: #faaa13">Signup</button>
+        </ul>
+
+        <ul class="navbar-nav ml-auto">
+            <button id="myBtn1" type="button" class="btn btn-block btn-primary btn-lg"
+                style=" transform: translatex(-20%);background-color: #faaa13" onclick="window.location.href = '/login'"
+                ;">Login</button>
+        </ul>
+    </nav>
+
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <!---slider-->
+
+        <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner" role="listbox">
+
+            <div class="item active">
+                <img src="{{ url_for('static',filename='../common/img/visa.jpg') }}" style="height: 500px;width: 100%">
+                <div class="carousel-caption">
+                    <!--  <h1>Let's get connect Merchants</h1>-->
+                </div>
+            </div>
+            <div class="item">
+                <div class="carousel-caption">
+                    <!--  <h1>Let's get connect Merchants</h1>
+                     -->
+                </div>
+                <img src="{{ url_for('static',filename='../common/img/inv22.jpg') }}" style="height: 500px;width: 100%">
+            </div>
+            <div class="item">
+                <div class="carousel-caption">
+                    <!--    <h1>Let's get connect Merchants</h1>
+                     -->
+                </div>
+                <img src="{{ url_for('static',filename='../common/img/inv1.png') }}" style="height: 500px;width: 100%">
+            </div>
+            <div class="item">
+                <div class="carousel-caption">
+                    <h1>Connecting Small Business</h1>
+
+                </div>
+                <img src="{{ url_for('static',filename='../common/img/inv7.jpg') }}" style="height: 500px;width: 100%">
+            </div>
+        </div>
+
+        <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+    <!--slider-->
+    <!-- <center><button id="myBtn" class="button">LOGIN</button></center>-->
+
+    <!-- REGISTER -->
+    <div class="modal" id="login/register" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>REGISTER TO OUR WEBSITE!</h2>
+                <span class="close">&times;</span>
+
+            </div>
+            <div class="modal-body">
+                <div class="card mt-100" style="background-color: #f2f2f2">
+                    <div class="card-body">
+                        {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        <div class="notification is-danger blink_me" style="color:red; font-weight: bold">
+                            {{ messages[0] }}
+                        </div>
+                        {% endif %}
+                        {% endwith %}
+                        <form class="form" method="post" action="/register/">
+                            <label>Email</label><br>
+                            <input type="email" class="form-control" name="email" required style="width: 50%"><br>
+                            <label>Password</label><br>
+                            <input type="password" class="form-control" name="password" required style="width: 50%"><br>
+                            <label>Confirm Password</label><br>
+                            <input type="password" class="form-control" name="confirm_password" required
+                                style="width: 50%"><br>
+                            <label>Merchant Name</label><br>
+                            <input type="text" class="form-control" name="merchant_name" required
+                                style="width: 50%"><br>
+                            <label>Registered Name</label><br>
+                            <input type="text" class="form-control" name="registered_name" required
+                                style="width: 50%"><br>
+                            <label>Contact Number</label><br>
+                            <input type="number" class="form-control" name="contact_number" required
+                                style="width: 50%"><br>
+                            <label>Address</label><br>
+                            <textarea class="form-control" name="address" required style="width: 50%;"></textarea><br>
+                            <input type="submit" class="button" value="Register">
+                            <!-- <label>Already a member?</label> <a href="/login" style="font-size: 16px;">Go To Home! </a> -->
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <h5>Already a member? <a href="/login">Go To Home!</a></h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 " id="div1">
+                <br /><br /><br />
+                <h4 style="color: black;font-weight: bold;font-size: 40px;">Connect with Merchants Globally by Searching
+                    Products/Category and get Bulk Trusted Offers on your Purchase </h4>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown
+                    printer took a galley of type and scrambled it to make a type specimen book.
+                    It has survived not only five centuries, but also the leap into electronic typesetting, remaining
+                    essentially unchanged.
+                    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
+                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem
+                    Ipsum.
+                </p>
+
+            </div>
+            <div class="col-md-6">
+                <img src="{{ url_for('static',filename='../common/img/inv26.jpg') }}" class="img-responsive">
+                <div class="row">
+                    <div class="column"> <img src="{{ url_for('static',filename='../common/img/inv30.png') }}"
+                            class="img-responsive" style="width: 200px;height: 200px;"></div>
+                    <div class="column"> <img src="{{ url_for('static',filename='../common/img/inv18.png') }}"
+                            class="img-responsive" style="width: 200px;height: 200px;"></div>
+                </div>
+
+            </div>
 
         </div>
-        <div class="model-body">
-            <div class="card mt-100" style="background-color: #f2f2f2">
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="div2">
+                <br /><br /><br />
+                <h4 style="color: black;font-weight: bold;font-size: 40px;">Get Performance Analysis and Monthly Stats
+                    to
+                    Know About Your Profit/Loss</h4>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown
+                    printer took a galley of type and scrambled it to make a type specimen book.
+                    It has survived not only five centuries, but also the leap into electronic typesetting, remaining
+                    essentially unchanged.
+                    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
+                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem
+                    Ipsum.
+                </p>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <img src="{{ url_for('static',filename='../common/img/inv3.png') }}" class="img-responsive">
+                <img src="{{ url_for('static',filename='../common/img/inv6.jpg') }}" class="img-responsive">
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="div3">
+                <br /><br /><br />
+                <h4 style="color: black;font-weight: bold;font-size: 40px;">Automatic Inventory Management with Order
+                    and
+                    Delivery History </h4>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown
+                    printer took a galley of type and scrambled it to make a type specimen book.
+                    It has survived not only five centuries, but also the leap into electronic typesetting, remaining
+                    essentially unchanged.
+                    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
+                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem
+                    Ipsum.
+                </p>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <img src="{{ url_for('static',filename='../common/img/inv2.jpg') }}" class="img-responsive"
+                    style="height: 150px;">
+                <img src="{{ url_for('static',filename='../common/img/inv4.jpg') }}" class="img-responsive">
+            </div>
+
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="card col-lg-3 col-md-3 col-sm-6 col-xs-12 " style="width: 18rem;">
+                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/inv5.jpg') }}"
+                    style="height: 220px;alt=" Card image cap">
+                <div class="card-body ">
+                    <h5 class="card-title"><b>Secure and Easy Checkout With VISA Support</b></h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                    </p>
+
+                </div>
+            </div>
+            <div class="card col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 18rem;">
+                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/inv13.jpg') }}"
+                    style="height: 220px;" alt="Card image cap">
                 <div class="card-body">
-                    {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                    <div class="notification is-danger blink_me" style="color:red; font-weight: bold">
-                        {{ messages[0] }}
-                    </div>
-                    {% endif %}
-                    {% endwith %}
-                    <form class="form" method="post" action="/register/">
-                        <label>Email</label><br>
-                        <input type="email" class="form-control" name="email" required style="width: 50%"><br>
-                        <label>Password</label><br>
-                        <input type="password" class="form-control" name="password" required style="width: 50%"><br>
-                        <label>Confirm Password</label><br>
-                        <input type="password" class="form-control" name="confirm_password" required style="width: 50%"><br>
-                        <label>Merchant Name</label><br>
-                        <input type="text" class="form-control" name="merchant_name" required style="width: 50%"><br>
-                        <label>Registered Name</label><br>
-                        <input type="text" class="form-control" name="registered_name" required style="width: 50%"><br>
-                        <label>Contact Number</label><br>
-                        <input type="number" class="form-control" name="contact_number" required style="width: 50%"><br>
-                        <label>Address</label><br>
-                        <textarea  class="form-control" name="address" required style="width: 50%;"></textarea><br>
-                        <input type="submit" class="btn btn-primary btn-lg" value="Register">
-                        <label>Already a member?</label> <a href="/login" style="font-size: 16px;">Go To Home! </a>
-                    </form>
+                    <h5 class="card-title"><b>Post and Get Your Urgent Requirements Fulfil</b></h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                    </p>
+
+                </div>
+            </div>
+            <div class="card col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 18rem;">
+                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/inv14.jpg') }}"
+                    style="height: 220px;alt=" Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title"><b>Facility to Negotiate With Supplier and get Products at Affordable
+                            Rates</b>
+                    </h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                    </p>
+
+                </div>
+            </div>
+            <div class="card col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 18rem;">
+                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/inv20.jpg') }}"
+                    style="height: 220px;" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title"><b>Track and Set Limits on Your Transactions</b></h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                    </p>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <footer class="container-fluid text-center">
+        <div class="row">
+            <div class="col-sm-4">
+                <h3>Contact Us</h3>
+                <br>
+                <!--    <h4>OUR CONTACT AND EMAIL INFO HERE: </h4>
+                <div style="border: 1px solid #d2d2d2">
+                <h5>console.pay()</h5>
+                <h5>Suraj Goel</h5>
+                <h5>Sahana Srinivasan</h5>
+                <h5>Gaurav Srivastava</h5>
+                <h5>Sankalp Dayal</h5>
+                <h5>Haridher Pandiyan</h5>
+                <h5>Prajwal S Belagavi</h5>
+                </div>  -->
+            </div>
+            <div class="col-sm-4">
+                <h3>Connect With Us.</h3>
+                <a href="#" class="fa fa-facebook" style="color: #1a1f71"></a>
+                <a href="#" class="fa fa-twitter" style="color: #337ab7"></a>
+                <a href="#" class="fa fa-google-plus" style="color: red"></a>
+                <a href="#" class="fa fa-linkedin" style="color:dodgerblue"></a>
+                <a href="#" class="fa fa-youtube" style="color:red;"></a>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <img src="{{ url_for('static',filename='../common/img/shop.png') }}"
+                        style="width: 300px;height: 300px; transform: translatey(-20%)" class="icon">
 
                 </div>
             </div>
         </div>
 
-    </div>
-</div>
+    </footer>
 
-<footer class="container-fluid text-center">
-    <div class="row">
-        <div class="col-sm-4">
-            <h3>Contact Us</h3>
-            <br>
-            <h4>Our contact and email info here. </h4>
-
-        </div>
-        <div class="col-sm-4">
-            <h3>Connect With Us.</h3>
-            <a href="#" class="fa fa-facebook"></a>
-            <a href="#" class="fa fa-twitter"></a>
-            <a href="#" class="fa fa-google-plus"></a>
-            <a href="#" class="fa fa-linkedin"></a>
-            <a href="#" class="fa fa-youtube"></a>
-
-        </div>
-        <div class="row">
-            <div class="col-sm-4">
-                <img src="{{ url_for('static',filename='../common/img/bunny.png') }}" class="icon">
-
-            </div>
-        </div>
-    </div>
-
-</footer>
-
-<script>
-
-    // Get the modal
-    var modal = document.getElementById("login/register");
-
-    // Get the button that opens the modal
-    var btn = document.getElementById("myBtn");
-
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-
-    // When the user clicks the button, open the modal
-    btn.onclick = function () {
-        modal.style.display = "block";
-    }
-
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function () {
-        modal.style.display = "none";
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
-        if (event.target == modal) {
+    <script>
+        var modal = document.getElementById("login/register");
+        var btn = document.getElementById("myBtn");
+        var span = document.getElementsByClassName("close")[0];
+        btn.onclick = function () {
+            modal.style.display = "block";
+        }
+        span.onclick = function () {
             modal.style.display = "none";
         }
-    }
-</script>
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
         crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
         crossorigin="anonymous"></script>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-<script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+    <script>
 
-    function getLogin1() {
-        window.scrollBy(0, 820);
-    }
-    $('.carousel').carousel({
-        interval: 500
-    })
-</script>
+        function getLogin1() {
+            window.scrollBy(0, 820);
+        }
+        $('.carousel').carousel({
+            interval: 500
+        })
+    </script>
 </body>
+
 </html>
