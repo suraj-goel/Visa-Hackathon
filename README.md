@@ -46,8 +46,8 @@ explain modulewise
 * [Sahana Srinivasan](https://github.com/sahana63)
 * [Gaurav Srivastava](https://github.com/gaurav3210)
 * [Sankalp Dayal](https://github.com/sankalpdayal5)
-* [Haridher](https://github.com/haridher21)
-* [Prajwal](https://github.com/prajwal27)
+* [P Haridher](https://github.com/haridher21)
+* [Prajwal S Belagavi](https://github.com/prajwal27)
 
 #### __Team name:__ console.pay() 
 #### __Theme:__ Small business merchants
