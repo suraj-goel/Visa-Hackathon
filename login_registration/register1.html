@@ -6,7 +6,7 @@ Registration and landing page
 <html lang="en">
 
 <head>
-      <title>Merchant connect</title>
+    <title>Merchant Connect</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
@@ -24,7 +24,7 @@ Registration and landing page
 <body>
     <nav class="navbar navbar-default" style="background-color: #1a1f71; color:#FFF; height: 100px;">
         <ul class="nav navbar-nav navbar-center">
-            <h2> Merchant CONNECT</h2>
+            <h2> Merchant Connect</h2>
         </ul>
         <ul class="navbar-nav ml-auto">
             <button id="myBtn" type="button" class="btn btn-block btn-primary btn-lg"
@@ -93,7 +93,9 @@ Registration and landing page
     <div class="modal" id="login/register" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>REGISTER TO OUR WEBSITE!</h2>
+                <center style="width: 100%;">
+                    <h2>REGISTER TO OUR WEBSITE!</h2>
+                </center>
                 <span class="close">&times;</span>
 
             </div>
@@ -113,17 +115,13 @@ Registration and landing page
                             <label>Password</label><br>
                             <input type="password" class="form-control" name="password" required><br>
                             <label>Confirm Password</label><br>
-                            <input type="password" class="form-control" name="confirm_password" required
-                               ><br>
+                            <input type="password" class="form-control" name="confirm_password" required><br>
                             <label>Merchant Name</label><br>
-                            <input type="text" class="form-control" name="merchant_name" required
-                               ><br>
+                            <input type="text" class="form-control" name="merchant_name" required><br>
                             <label>Registered Name</label><br>
-                            <input type="text" class="form-control" name="registered_name" required
-                               ><br>
+                            <input type="text" class="form-control" name="registered_name" required><br>
                             <label>Contact Number</label><br>
-                            <input type="number" class="form-control" name="contact_number" required
-                               ><br>
+                            <input type="number" class="form-control" name="contact_number" required><br>
                             <label>Address</label><br>
                             <textarea class="form-control" name="address" required style="width: 50%;"></textarea><br>
                             <input type="submit" class="button" value="Register">
@@ -139,33 +137,169 @@ Registration and landing page
         </div>
     </div>
 
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 " id="div1">
+                <br /><br /><br />
+                <h4 style="color: black;font-weight: bold;font-size: 40px;">Connect with Merchants Globally by Searching
+                    Products/Category and get Bulk Trusted Offers on your Purchase </h4>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown
+                    printer took a galley of type and scrambled it to make a type specimen book.
+                    It has survived not only five centuries, but also the leap into electronic typesetting, remaining
+                    essentially unchanged.
+                    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
+                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem
+                    Ipsum.
+                </p>
+
+            </div>
+            <div class="col-md-6">
+                <img src="{{ url_for('static',filename='../common/img/inv26.jpg') }}" class="img-responsive">
+                <div class="row">
+                    <div class="column"> <img src="{{ url_for('static',filename='../common/img/inv30.png') }}"
+                            class="img-responsive" style="width: 200px;height: 200px;"></div>
+                    <div class="column"> <img src="{{ url_for('static',filename='../common/img/inv18.png') }}"
+                            class="img-responsive" style="width: 200px;height: 200px;"></div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="div2">
+                <br /><br /><br />
+                <h4 style="color: black;font-weight: bold;font-size: 40px;">Get Performance Analysis and Monthly Stats
+                    to
+                    Know About Your Profit/Loss</h4>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown
+                    printer took a galley of type and scrambled it to make a type specimen book.
+                    It has survived not only five centuries, but also the leap into electronic typesetting, remaining
+                    essentially unchanged.
+                    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
+                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem
+                    Ipsum.
+                </p>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <img src="{{ url_for('static',filename='../common/img/inv3.png') }}" class="img-responsive">
+                <img src="{{ url_for('static',filename='../common/img/inv6.jpg') }}" class="img-responsive">
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="div3">
+                <br /><br /><br />
+                <h4 style="color: black;font-weight: bold;font-size: 40px;">Automatic Inventory Management with Order
+                    and
+                    Delivery History </h4>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown
+                    printer took a galley of type and scrambled it to make a type specimen book.
+                    It has survived not only five centuries, but also the leap into electronic typesetting, remaining
+                    essentially unchanged.
+                    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
+                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem
+                    Ipsum.
+                </p>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <img src="{{ url_for('static',filename='../common/img/inv2.jpg') }}" class="img-responsive"
+                    style="height: 150px;">
+                <img src="{{ url_for('static',filename='../common/img/inv4.jpg') }}" class="img-responsive">
+            </div>
+
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="card col-lg-3 col-md-3 col-sm-6 col-xs-12 " style="width: 18rem;">
+                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/inv5.jpg') }}"
+                    style="height: 220px;alt=" Card image cap">
+                <div class="card-body ">
+                    <h5 class="card-title"><b>Secure and Easy Checkout With VISA Support</b></h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                    </p>
+
+                </div>
+            </div>
+            <div class="card col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 18rem;">
+                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/inv13.jpg') }}"
+                    style="height: 220px;" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title"><b>Post and Get Your Urgent Requirements Fulfil</b></h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                    </p>
+
+                </div>
+            </div>
+            <div class="card col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 18rem;">
+                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/inv14.jpg') }}"
+                    style="height: 220px;alt=" Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title"><b>Facility to Negotiate With Supplier and get Products at Affordable
+                            Rates</b>
+                    </h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                    </p>
+
+                </div>
+            </div>
+            <div class="card col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 18rem;">
+                <img class="card-img-top" src="{{ url_for('static',filename='../common/img/inv20.jpg') }}"
+                    style="height: 220px;" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title"><b>Track and Set Limits on Your Transactions</b></h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                    </p>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
     <footer class="container-fluid text-center">
         <div class="row">
             <div class="col-sm-4">
-                <h3><b>Team Name</b></h3>
-                <h4>@console.pay()</h4>
-                <h4><b>Team Members: </b></h4>
-                <center>
-                    <table style="border: none">
-                        <tr>
-                            <td colspan="6">Suraj Goel    </td>         <td colspan="6">Sahana Srinivasan</td>
-                        </tr>
-                        <tr>
-                            <td colspan="6">Gaurav Srivastava &emsp;  </td>   <td colspan="6">Sankalp Dayal</td>
-                        </tr>
-                        <tr>
-
-                            <td colspan="6">Haridher Pandyan    </td>   <td colspan="6">Prajwal S Belagavi</td>
-                        </tr>
-                    </table>
-                </center>
+                <h3>Contact Us</h3>
+                <br>
+                <!--    <h4>OUR CONTACT AND EMAIL INFO HERE: </h4>
+                <div style="border: 1px solid #d2d2d2">
+                <h5>console.pay()</h5>
+                <h5>Suraj Goel</h5>
+                <h5>Sahana Srinivasan</h5>
+                <h5>Gaurav Srivastava</h5>
+                <h5>Sankalp Dayal</h5>
+                <h5>Haridher Pandiyan</h5>
+                <h5>Prajwal S Belagavi</h5>
+                </div>  -->
             </div>
             <div class="col-sm-4">
+                <h3>Connect With Us.</h3>
+                <a href="#" class="fa fa-facebook" style="color: #1a1f71"></a>
+                <a href="#" class="fa fa-twitter" style="color: #337ab7"></a>
+                <a href="#" class="fa fa-google-plus" style="color: red"></a>
+                <a href="#" class="fa fa-linkedin" style="color:dodgerblue"></a>
+                <a href="#" class="fa fa-youtube" style="color:red;"></a>
 
-            </div>
-            <div class="row">
-                <div class="col-sm-4">
-                    <img src="{{ url_for('static',filename='../common/img/shop.png') }}" style="width: 300px;height: 300px; transform: translatey(-20%)" class="icon">
             </div>
             <div class="row">
                 <div class="col-sm-4">
@@ -176,35 +310,6 @@ Registration and landing page
             </div>
         </div>
 
-    </footer>
-<script>
-
-    // Get the modal
-    var modal = document.getElementById("login/register");
-
-    // Get the button that opens the modal
-    var btn = document.getElementById("myBtn");
-
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-
-    // When the user clicks the button, open the modal
-    btn.onclick = function () {
-        modal.style.display = "block";
-    }
-
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function () {
-        modal.style.display = "none";
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-</script>
     </footer>
 
     <script>
