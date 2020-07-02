@@ -24,25 +24,19 @@
 </head>
 
 <body>
-
     <nav class="navbar navbar-default" style="background-color: #1a1f71; color:#FFF; height: 100px;">
-         <ul class="nav navbar-nav ">
-
-             <img height="80" width="80" src="{{ url_for('static',filename='../common/img/shop.png') }}">
-        </ul>
-
         <ul class="nav navbar-nav navbar-center">
-
-            <h2 style="color:gold"> MERCHANT CONNECT</h2>
-        </ul>
-        <ul class="navbar-nav ml-auto" style="padding-right:50px">
-            <button id="myBtn" type="button" class="btn btn-block btn-primary btn-lg"
-                style=" transform: translatex(732%);background-color: #faaa13">Signup</button>
+            <h2> Merchant Connect</h2>
         </ul>
         <ul class="navbar-nav ml-auto">
             <button id="myBtn1" type="button" class="btn btn-block btn-primary btn-lg"
-                style=" transform: translatex(-20%);background-color: #faaa13" onclick="window.location.href = '/login'"
-                ;">Login</button>
+                style=" transform: translatex(732%);background-color: #faaa13"
+                onclick="window.location.href = '/register'" ;">Signup</button>
+        </ul>
+
+        <ul class="navbar-nav ml-auto">
+            <button id="myBtn" type="button" class="btn btn-block btn-primary btn-lg"
+                style=" transform: translatex(-20%);background-color: #faaa13">Login</button>
         </ul>
     </nav>
 
@@ -176,7 +170,7 @@
                 <img src="{{ url_for('static',filename='../common/img/inv6.jpg') }}" class="img-responsive">
             </div>
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" id="div3">
-                <br /><br />
+                <br />
                 <h4 style="color: #1a1f71;font-weight: bold;font-size: 30px;">Automatic Inventory Management with Order
                     and Delivery
                     History </h4>
