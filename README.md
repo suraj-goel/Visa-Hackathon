@@ -23,6 +23,7 @@ Our web application provides a portal that can connect merchants that are lookin
 * Automated Inventory Management with support of chatbot and google assistant.
 * Check your performance based on your merchant category and your daily transactions.
 * Set Controls for merchant categories on your card payments.
+* A seperate module to manage offers for prouducts in merchant's inventory
 * An easy to use interface to help small businesses grow back in current conditions.
 
 
@@ -40,7 +41,7 @@ Our web application provides a portal that can connect merchants that are lookin
 
 
 
-## project structure ##
+## Project Structure ##
 1. common : html, css and js needed for all packages
 2. modules: are made according to the user stories. Includes one html file for now.
 3. venu: virtual environment for project, contains all packages
@@ -55,8 +56,8 @@ Our web application provides a portal that can connect merchants that are lookin
 * [Sahana Srinivasan](https://github.com/sahana63)
 * [Gaurav Srivastava](https://github.com/gaurav3210)
 * [Sankalp Dayal](https://github.com/sankalpdayal5)
-* [Haridher](https://github.com/haridher21)
-* [Prajwal](https://github.com/prajwal27)
+* [Haridher Pandiyan](https://github.com/haridher21)
+* [Prajwal S Belagavi](https://github.com/prajwal27)
 
 #### __Team name:__ 
 console.pay() 
