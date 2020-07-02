@@ -39,7 +39,7 @@ body {
 .button {
   display: inline-block;
   border-radius: 4px;
-  background-color: #1a1f71;
+  background-color: #faaa13;
   border: none;
   color: #ffffff;
   text-align: center;
@@ -226,7 +226,7 @@ img {
 
 /* The Close Button */
 .close {
-  color: #1a1f71;
+  color: #d18800;
   float: right;
   font-size: 28px;
   font-weight: bold;
@@ -241,8 +241,8 @@ img {
 
 .modal-header {
   padding: 2px 16px;
-  background-color: #faaa13;
-  color: white;
+  background-color: #ffffff;
+  color: #000000;
 }
 
 .modal-body {
@@ -251,6 +251,6 @@ img {
 
 .modal-footer {
   padding: 2px 16px;
-  background-color: #faaa13;
-  color: white;
+  background-color: #ffffff;
+  color: #000000;
 }
