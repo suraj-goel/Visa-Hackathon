@@ -11,9 +11,9 @@ Small businesses in general also find it difficult to find new suppliers and han
 are new to the business environment. 
 We have provided a solution to the small business merchants where they can connect with each other and manage their business effectively.
 
-## Project description 
+## Project Description 
 
-## Project features 
+## Project Features 
 explain modulewise
 
 ## Visa APIs: 
@@ -37,9 +37,17 @@ explain modulewise
 4. services: for database connection and Visa API calls. It contains
     - certificate and key for VDP
     - db : to manage all database functions 
-      - connection file
 5. app.py is the default controller for flask
-#### __Team name:__ console.pay() ####
-#### __Theme:__ Small business merchants ####
-### team members ###
+
+
+## Contributors:
+* [Suraj Goel](https://github.com/suraj-goel/)
+* [Sahana Srinivasan](https://github.com/sahana63)
+* [Gaurav Srivastava](https://github.com/gaurav3210)
+* [Sankalp Dayal](https://github.com/sankalpdayal5)
+* [Haridher](https://github.com/haridher21)
+* [Prajwal](https://github.com/prajwal27)
+
+#### __Team name:__ console.pay() 
+#### __Theme:__ Small business merchants
 
