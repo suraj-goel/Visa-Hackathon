@@ -60,7 +60,7 @@ Our web application provides a portal that can connect merchants that are lookin
 * [Prajwal S Belagavi](https://github.com/prajwal27)
 
 ## Hackathon Mentor:
-* Virender Sir
+* [Virender Singh](https://github.com/virenderdayma)
 
 #### __Team name:__ 
 console.pay() 
