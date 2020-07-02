@@ -6,6 +6,10 @@ To edit offers details and product mapping to offer
 <link rel="stylesheet" href="{{ url_for('static',filename='./manage_offers/offers.css') }}">
 <script type="text/javascript" src="{{url_for('static',filename='./manage_offers/offers.js') }}"></script>
 <body>
+<script>
+    x=document.getElementById('offers');
+    x.className="active";
+</script>
 <center>
     {% if message=='yes' %}
         <span style="color:green">Successfully added/edited offer</span>

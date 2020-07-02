@@ -9,6 +9,10 @@ CyberSource requires aggregator ID and Card Accepted ID for payment processing w
 
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./accounts/cybersource.css') }}">
+<script>
+    x=document.getElementById('profile');
+    x.className="w3-dropdown-hover w3-right active";
+    </script>
 <body>
 <center>
 <h1 style="color:#1a1f71; font-weight: bold;"><b>CyberSource {% if not b2b %}and B2B Payment{% endif %} Details</b></h1>

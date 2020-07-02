@@ -1,6 +1,10 @@
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./transactionControl/transactionControl.css') }}">
 <script type="text/javascript" src="{{url_for('static',filename='./transactionControl/transactionControl.js') }}"></script>
+<script>
+    x=document.getElementById('profile');
+    x.className="w3-dropdown-hover w3-right active";
+    </script>
 <center>
     {% if message=='yes' %}
     <span style="color:green">Successfully added Control</span>

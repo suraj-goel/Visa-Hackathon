@@ -8,6 +8,10 @@ Details include Merchant name, Registered shop name, email, password , contact n
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./accounts/accounts.css') }}">
 <script>
+    x=document.getElementById('profile');
+    x.className="w3-dropdown-hover w3-right active";
+    </script>
+<script>
     function editAccount() {
         var x = "/editaccountinfo/";
         return window.location = x;

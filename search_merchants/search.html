@@ -6,6 +6,11 @@ Search page to search by merchant name or product name based n merchant location
 {% include "./common/header.html" %}
 <link rel="stylesheet" href="{{ url_for('static',filename='./search_merchants/search.css') }}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script>
+    x=document.getElementById('search');
+    x.className="active";
+</script>
+
 <style>
     .star-rating {
         display: inline-block;
